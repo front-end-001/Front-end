@@ -1,7 +1,7 @@
 # 极客大学「前端训练营 · 北京」作业提交仓库
 
 ## 前端训练营《学习手册》
-请无比仔细阅读前端训练营学习手册：https://shimo.im/docs/wpkCGTqJqY9YXCTc
+请务必仔细阅读前端训练营学习手册：https://shimo.im/docs/wpkCGTqJqY9YXCTc
 
 ## 仓库目录结构说明
 
