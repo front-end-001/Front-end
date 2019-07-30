@@ -11,7 +11,7 @@
 
 1. 先将本仓库 `fork` 到自己的 GitHub 账号下。
 2. 将 `fork` 后的仓库 `clone` 到本地，然后在本地新建、修改自己的代码作业文件，**注意：** 仅允许在和自己学号对应的目录下新建或修改自己的代码作业。作业完成后，将相关代码 `push` 到自己的 GitHub 远程仓库。
-3. 提交 `Pull Request` 给本仓库，提交时需要按照`学号 - 星期`备注，如`002 - week 02`
+3. 提交 `Pull Request` 给本仓库，提交时必须按照`学号后三位 - 星期`备注，如`002 - week 02`
 
 ## 学习总结提交规则
 
@@ -25,6 +25,4 @@
 
 ## 注意事项
 
-1. **代码文件命名规则：**`项目名称_星期_学号`，比如学号为 `003` 的学员完成 `week 02` 组件开发的代码后，请将代码文件名保存为  `Component_week02_003.js`。
-2. 项目对应英文命名名称：黑白棋 - Othello，组件开发 - Compoment，“有好货”页面开发 - Page development
-3. 如果对 Git 和 GitHub 不太了解，请参考 [Git 官方文档](https://git-scm.com/book/zh/v2) 或者极客时间的[《玩转 Git 三剑客》](https://time.geekbang.org/course/intro/145)视频课程。
+如果对 Git 和 GitHub 不太了解，请参考 [Git 官方文档](https://git-scm.com/book/zh/v2) 或者极客时间的[《玩转 Git 三剑客》](https://time.geekbang.org/course/intro/145)视频课程。
