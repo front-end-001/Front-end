@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>黑白棋项目</title>
+  <link rel="stylesheet" href="normalize.css">
+  <style>
+    body {
+      font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+    }
+
+    #board {
+      font-size: 0;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    #board .chess-cell {
+      width: 30px;
+      height: 30px;
+      background-color: #ccc;
+      display: inline-block;
+      margin: 1px;
+    }
+
+    #tooltip {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .white::after {
+      content: ' ';
+      display: block;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: white;
+      margin: 2px;
+    }
+
+    .black::after {
+      content: ' ';
+      display: block;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: black;
+      margin: 2px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div id="board"></div>
+    <div id="tooltip">有请黑棋先手</div>
+    <script src="app.js"></script>
+  </div>
+</body>
+
+</html>
