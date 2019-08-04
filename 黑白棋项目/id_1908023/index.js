@@ -3,6 +3,7 @@ window.onload = function () {
   const container = document.querySelector('.container');
   const fragment = document.createDocumentFragment();
   const current = document.querySelector('#current');
+  const count = document.querySelector('#count');
 
   // 黑1 白2
   const chessData = [
@@ -23,6 +24,7 @@ window.onload = function () {
 
   function render() {
     current.innerText = color === 1 ? '黑方' : '白方';
+    count.innerText = `黑：${countData.black},白：${countData.white}`;
     // 渲染时把之前的节点清空
     container.innerHTML = '';
     // let 绑定了作用域，所以事件里面就不用使用闭包来传递变量了
@@ -52,19 +54,23 @@ window.onload = function () {
             let canmove = false;
             // j 表示横排, 相应的 x 是横排
             let [x, y] = [j, i];
+            // 找子逻辑
             while(true) {
               x += direction.x;
               y += direction.y;
+              // 判断边界情况
               if (x < 0 || x >= 8 || y < 0 || y >= 8) {
                 canmove = false;
                 break;
               }
+
+              // 如果是对方颜色说明还可以继续往前找
               if (chessData[y][x] === 3 - color) {
                 canmove = true;
-              // 遇到黑棋说明找到头了
+              // 遇到当前颜色说明找到头了
               } else if (chessData[y][x] === color) {
                 break;
-                // 如果左边的那个是空的也不能下子
+                // 如果是空的也不能下子
               } else if (chessData[y][x] === 0) {
                 canmove = false;
                 break;
@@ -75,18 +81,28 @@ window.onload = function () {
             if (canmove) {
               moveSuccess = true;
               while(true) {
+                // 反向翻转颜色
                 x -= direction.x;
                 y -= direction.y;
                 chessData[y][x] = color;
+                // x 和 y 回到当前格的时候，说明还原到原位了
                 if (x === j && y === i) {
                   break;
                 }
               }
             }
           }
+          // 如果成功下子后，交换选手下子颜色
           if (moveSuccess) {
             color = 3 - color;
           }
+
+          if (chessData[i][j] === 1) {
+            countData.black += 1;
+          } else if (chessData[i][j] === 2) {
+            countData.white += 1;
+          }
+            
           // 重新绘制一次棋盘
           render();
         });
