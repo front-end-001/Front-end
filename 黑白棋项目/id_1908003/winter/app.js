@@ -17,15 +17,26 @@ const deriction = {
 };
 
 /** 棋盘数据 */
+// let map = [
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 2, 1, 0, 0, 0],
+//   [0, 0, 0, 1, 2, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+// ];
+// 仅剩两个空格
 let map = [
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 2, 1, 0, 0, 0],
-  [0, 0, 0, 1, 2, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 2, 2, 1, 1, 2, 1, 1],
+  [2, 2, 1, 1, 2, 2, 0, 1],
+  [2, 1, 1, 0, 2, 2, 2, 1],
+  [1, 1, 1, 2, 2, 2, 1, 2],
+  [2, 1, 2, 1, 2, 1, 2, 1],
+  [1, 2, 2, 0, 1, 0, 2, 2],
+  [1, 2, 2, 1, 1, 1, 2, 2],
+  [2, 1, 2, 2, 1, 2, 1, 1],
 ];
 // pass 用例
 // let map = [
@@ -52,17 +63,7 @@ function nextTurn({ nextAvailable, needEnd = false }) {
   let msg;
   if (needEnd) {
     // 检测棋盘中哪种棋数量多
-    let countBlack = 0;
-    let countWhite = 0;
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        if (map[i][j] === WHITE) {
-          countWhite += 1;
-        } else if (map[i][j] === BLACK) {
-          countBlack += 1;
-        }
-      }
-    }
+    const { countBlack, countWhite } = countChess(map);
     if (countWhite > countBlack) {
       msg = `本轮结束, 白子赢`;
     } else if (countWhite < countBlack) {
@@ -93,7 +94,6 @@ function nextTurn({ nextAvailable, needEnd = false }) {
 
 /** 获取边界 */
 function checkPath() {
-  const recod = {};
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       Object.keys(deriction).forEach((key) => {
@@ -111,7 +111,7 @@ function checkPath() {
 }
 
 /** 检测边界是否有可落子的点 */
-function checkAvailable({ turnData }) {
+function checkAvailable({ turnData, currentMap }) {
   let canmove = false;
   for (let i = 0; i < 8; i++) {
     let needBreak = false;
@@ -121,9 +121,9 @@ function checkAvailable({ turnData }) {
       // 如果找到 则标志退出循环
       needBreak = Object.keys(deriction).some((key) => {
         // 判断下一轮的人员
-        const data = findOneWay({ i, j, currentTurn: turnData, deriction: deriction[key] });
+        const data = findOneWay({ i, j, selfData: turnData, deriction: deriction[key], currentMap });
         if (!data) return false;
-        console.log('找到可落子位置', data);
+        console.log('找到可落子位置', i, j);
         canmove = true;
         return true;
       });
@@ -144,7 +144,7 @@ function boundaryCheck(x, y) {
  * @param {object} param0 参数对象
  * @returns {boolean|object} 可吃的范围, 如果不可吃则返回 false
  */
-function findOneWay({ i, j, deriction, currentTurn }) {
+function findOneWay({ i, j, deriction, selfData, currentMap }) {
   // 往前走
   function next() {
     x += deriction[0];
@@ -154,14 +154,14 @@ function findOneWay({ i, j, deriction, currentTurn }) {
   let canmove = false;
   let x = i;
   let y = j;
-  let same = currentTurn;
-  let diffent = (currentTurn === WHITE) ? BLACK : WHITE;
+  let same = selfData;
+  let diffent = (selfData === WHITE) ? BLACK : WHITE;
   while (next(), boundaryCheck(x, y)) {
-    if (map[x][y] === diffent) {
+    if (currentMap[x][y] === diffent) {
       canmove = true;
-    } else if (map[x][y] === same) {
+    } else if (currentMap[x][y] === same) {
       break;
-    } else if (map[x][y] === 0) {
+    } else if (currentMap[x][y] <= 0) {
       canmove = false;
       break;
     }
@@ -182,12 +182,12 @@ function findOneWay({ i, j, deriction, currentTurn }) {
  * @param {object} param0 参数对象
  * @returns {boolean} 是否成功吃子, 某个方向吃即可
  */
-function eat({ i, j, currentTurn }) {
+function eat({ i, j, target, currentMap }) {
 
   // 吃子, 各个方向
   let canmove = false;
   Object.keys(deriction).forEach((key) => {
-    const data = findOneWay({ i, j, currentTurn, deriction: deriction[key] });
+    const data = findOneWay({ i, j, selfData: target, deriction: deriction[key], currentMap });
     if (!data) return;
 
     // 翻转/吃子
@@ -198,7 +198,7 @@ function eat({ i, j, currentTurn }) {
       y -= deriction[key][1];
     }
     while (back(), boundaryCheck(x, y)) {
-      map[x][y] = currentTurn;
+      currentMap[x][y] = target;
       if (x === i && y === j) {
         break;
       }
@@ -216,9 +216,17 @@ function render() {
       let cell = document.createElement('div');
       container.appendChild(cell)
       cell.classList.add('chess-cell');
+      if (map[i][j] === BLACK) {
+        cell.classList.add('black');
+      } else if (map[i][j] === WHITE) {
+        cell.classList.add('white');
+      } else if (map[i][j] === BOUNDARY) {
+        cell.classList.add('boundary');
+      }
+      if (map[i][j] > 0) continue;
       cell.addEventListener('click', (event) => {
         // 吃子
-        const canMove = eat({ i, j, currentTurn });
+        const canMove = eat({ i, j, target: currentTurn, currentMap: map });
 
         if (!canMove) {
           alert('必须要落在可以吃子的位置');
@@ -228,11 +236,11 @@ function render() {
         // 边界检测
         checkPath();
         const nextTurnData = (currentTurn === WHITE) ? BLACK : WHITE;
-        const ifAvailable = checkAvailable({ turnData: nextTurnData });
+        const ifAvailable = checkAvailable({ turnData: nextTurnData, currentMap: map });
         let ifEnd = false;
         // 如果对手无法落子, 检查自己是否可落子, 不可落子则游戏结束
         if (!ifAvailable) {
-          ifEnd = !checkAvailable({ turnData: currentTurn });
+          ifEnd = !checkAvailable({ turnData: currentTurn, currentMap: map });
         }
 
         // 进入下一轮, 切换对手
@@ -241,16 +249,88 @@ function render() {
         // 渲染
         render();
       });
-      if (map[i][j] === BLACK) {
-        cell.classList.add('black');
-      } else if (map[i][j] === WHITE) {
-        cell.classList.add('white');
-      } else if (map[i][j] === BOUNDARY) {
-        cell.classList.add('boundary');
-      }
     }
     container.appendChild(document.createElement('br'));
   }
+}
+
+/** 深度克隆 */
+function deepClone(data) {
+  return JSON.parse(JSON.stringify(data));
+}
+
+/** 统计棋盘信息 */
+function countChess(mapData) {
+  /** 黑棋计数 */
+  let countBlack = 0;
+  /** 白棋计数 */
+  let countWhite = 0;
+  /** 空位计数 */
+  let countEmpty = 0
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (mapData[i][j] === WHITE) {
+        countWhite += 1;
+      } else if (mapData[i][j] === BLACK) {
+        countBlack += 1;
+      } else {
+        countEmpty += 1;
+      }
+    }
+  }
+  return {
+    countBlack,
+    countWhite,
+    countEmpty,
+  };
+}
+
+/** 尝试某步, 返回尝试后的新 map 数据集 */
+function testStep({ currentMap, x, y, target}) {
+  const newMap = deepClone(currentMap);
+  const canMove = eat({ i: x, j: y, target, currentMap: newMap });
+  if (!canMove) {
+    return false;
+  }
+  return {
+    x,
+    y,
+    count: countChess(newMap),
+    map: newMap,
+  };
+}
+
+/** 给出建议步骤 */
+function getTip() {
+  console.group(`${ (currentTurn === BLACK) ? '黑子' : '白子' }下一步提示`);
+  const currentMap = map;
+  const testCollection = [];
+  for (let i = 0; i < 7; i += 1) {
+    for (let j = 0; j < 7; j += 1) {
+      if (currentMap[i][j] !== BOUNDARY) continue;
+      const testData = testStep({ currentMap, x: i, y: j, target: currentTurn})
+      if (testData) {
+        testCollection.push(testData)
+      }
+    }
+  }
+  if (testCollection.length === 0) {
+    console.log('没有可走的位置');
+    console.groupEnd();
+    return false;
+  }
+  let betterStep;
+  const key = (currentTurn === BLACK) ? 'countBlack' : 'countWhite';
+  testCollection.forEach((item) => {
+    betterStep = betterStep || item;
+    
+    if (betterStep.count[key] < item.count[key]) {
+      betterStep = item;
+    }
+  });
+  console.log('可走位置有', testCollection);
+  console.log('建议走', betterStep);
+  console.groupEnd();
 }
 
 render();
