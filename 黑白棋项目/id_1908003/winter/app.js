@@ -2,17 +2,6 @@
 const BLACK = 1;
 /** 2-白子 */
 const WHITE = 2;
-/** 吃子方向 */
-const deriction = {
-  left: [0, -1],
-  right: [0, 1],
-  up: [-1, 0],
-  down: [1, 0],
-  leftTop: [-1, -1],
-  leftDown: [1, -1],
-  rightTop: [-1, 1],
-  rightDown: [1, 1],
-};
 
 /** 棋盘数据 */
 let map = [
@@ -52,10 +41,11 @@ function nextTurn() {
 }
 
 /**
- * 吃子规则, stateless
+ * 某个方向的吃子规则, stateless
  * @param {object} param0 参数对象
+ * @returns {boolean} 是否成功吃子
  */
-function eat({ i, j, deriction, currentTurn }) {
+function eatOneWay({ i, j, deriction, currentTurn }) {
   // 往前走
   function next() {
     x += deriction[0];
@@ -95,6 +85,39 @@ function eat({ i, j, deriction, currentTurn }) {
       break;
     }
   }
+  return canmove;
+}
+
+/**
+ * 全方向的吃子规则, 8个方向
+ * @param {object} param0 参数对象
+ * @returns {boolean} 是否成功吃子, 某个方向吃即可
+ */
+function eat({ i, j, currentTurn }) {
+  /** 吃子方向 */
+  const deriction = {
+    left: [0, -1],
+    right: [0, 1],
+    up: [-1, 0],
+    down: [1, 0],
+    leftTop: [-1, -1],
+    leftDown: [1, -1],
+    rightTop: [-1, 1],
+    rightDown: [1, 1],
+  };
+  // 吃子, 各个方向
+  let canmove = false;
+  Object.keys(deriction).forEach((key) => {
+    if (eatOneWay({
+        i,
+        j,
+        currentTurn,
+        deriction: deriction[key],
+      })) {
+      canmove = true;
+    }
+  });
+  return canmove;
 }
 
 /** 渲染函数 */
@@ -106,24 +129,18 @@ function render() {
       container.appendChild(cell)
       cell.classList.add('chess-cell');
       cell.addEventListener('click', (event) => {
-        // 落子
-        map[i][j] = currentTurn;
+        // 吃子
+        const canMove = eat({ i, j, currentTurn });
 
-        // 吃子, 各个方向
-        Object.keys(deriction).forEach((key) => {
-          eat({
-            i,
-            j,
-            currentTurn,
-            deriction: deriction[key],
-           });
-        });
+        if (!canMove) {
+          alert('必须要落在可以吃子的位置');
+          return;
+        }
+        // 渲染
+        render();
 
         // 进入下一轮
         nextTurn();
-
-        // 渲染
-        render();
       });
       if (map[i][j] === BLACK) {
         cell.classList.add('black');
