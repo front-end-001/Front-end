@@ -11,11 +11,12 @@ function getItem(x,y,color){
     $('.box').html(trStr)
     var whitePieces = '<div class="Whiteqizi"></div>'
     var blackPieces = '<div class="blackqizi"></div>'
-    $('[data-y='+y+']').find('[data-x = '+x+']').append(color)
-    // $('[data-y=3]').find('[data-x = 4]').append(blackPieces)
-    // $('[data-y=4]').find('[data-x = 3]').append(blackPieces)
-    // $('[data-y=4]').find('[data-x = 4]').append(whitePieces)
+    // $('[data-y='+y+']').find('[data-x = '+x+']').append(color)
+    $('[data-y=3]').find('[data-x = 3]').append(whitePieces)
+    $('[data-y=3]').find('[data-x = 4]').append(blackPieces)
+    $('[data-y=4]').find('[data-x = 3]').append(blackPieces)
+    $('[data-y=4]').find('[data-x = 4]').append(whitePieces)
 }
-getItem(3,4,'whitePieces')      
+getItem(3,4)      
 
 
