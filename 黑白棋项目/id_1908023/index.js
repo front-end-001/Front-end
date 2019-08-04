@@ -24,7 +24,7 @@ window.onload = function () {
 
   function render() {
     current.innerText = color === 1 ? '黑方' : '白方';
-    count.innerText = `黑：${countData.black},白：${countData.white}`;
+    // count.innerText = `黑：${countData.black},白：${countData.white}`;
     // 渲染时把之前的节点清空
     container.innerHTML = '';
     // let 绑定了作用域，所以事件里面就不用使用闭包来传递变量了
