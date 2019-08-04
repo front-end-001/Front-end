@@ -10,11 +10,11 @@ window.onload = function () {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 2],
-    [0, 0, 0, 0, 0, 0, 2, 1],
   ];
 
   // 代表当前下棋的颜色，默认黑色
@@ -138,13 +138,10 @@ window.onload = function () {
         
         if (chessData[i][j] === 2) {
           emptyChessBox.className = 'chess-box chess-white';
-          fragment.appendChild(emptyChessBox);
         } else if (chessData[i][j] === 1) {
           emptyChessBox.className = 'chess-box chess-black';
-          fragment.appendChild(emptyChessBox);
-        } else {
-          fragment.appendChild(emptyChessBox);
         }
+        fragment.appendChild(emptyChessBox);
       }
     }
 

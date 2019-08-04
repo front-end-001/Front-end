@@ -1,7 +1,7 @@
 window.onload = function () {
   class OthelloPattern {
-    constructor() {
-      this.map = [
+    constructor(map) {
+      this.map = map || [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -87,29 +87,52 @@ window.onload = function () {
       }
       return true;
     }
+    
+    clone() {
+      return new OthelloPattern(this.map.map(line => line.slice()));
+    }
   }
 
   class OthelloGame {
     constructor() {
-      this.pattern = new OthelloPattern();
-      this.color = 1;
+      this.patterns = [new OthelloPattern()];
+      this.colors = [1];
+    }
+    get pattern() {
+      return this.patterns[this.patterns.length - 1];
+    }
+    get color() {
+      return this.colors[this.colors.length - 1];
     }
     move(i, j) {
-      if (this.pattern.move(i, j, this.color, false)) {
+      let pattern = this.pattern.clone();
+      let color = this.color;
+      if (pattern.move(i, j, color, false)) {
         // 交换选手颜色
-        this.color = 3 - this.color;
+        color = 3 - color;
         // 先检查一遍当前颜色的
-        if (this.pattern.checkPass(this.color)) {
+        if (pattern.checkPass(color)) {
           console.log('pass');
-          this.color = 3 - this.color;
+          color = 3 - color;
           // 再检查一遍对方颜色的
-          if (this.pattern.checkPass(this.color)) {
+          if (pattern.checkPass(color)) {
             alert('Game over!');
           }
         }
+        this.patterns.push(pattern);
+        this.colors.push(color);
         return true;
       }
     }
+
+    // 悔棋
+    revert() {
+      if (this.patterns.length > 1) {
+        this.patterns.pop();
+        this.colors.pop();
+      }
+    }
+
   }
 
   class OthelloView {
