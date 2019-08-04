@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Othello</title>
+    <meta name="author" content="Nan Jiang">
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        class OthelloPattern{
+            constructor(){
+                this.map = [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 1, 2, 0, 0, 0],
+                    [0, 0, 0, 2, 1, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ];
+            }
+            compare(i, j, a, b, color, move) {
+                    let canmove = 0;
+                    let [x,y] = [j,i];
+                    while (true) {
+                        x = x + a;
+                        y = y + b;
+                        if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                            canmove = 0;
+                            break;
+                        }
+                        if (this.map[y][x] === 3 - color) {
+                            canmove = 1;
+                        }
+                        else if (this.map[y][x] === color) {
+                            break;
+                        }
+                        else if (this.map[y][x] === 0) {
+                            canmove = 0;
+                            break;
+                        }
+                    };
+                    if (!move)
+                        return canmove;
+                    while (canmove === 1) {
+                        x = x - a;
+                        y = y - b;
+                        this.map[y][x] = color;
+                        if (x < 0 || x >= 8 || y < 0 || y >= 8)
+                            break;
+                        if (x === j && y === i) {
+                            break;
+                        }
+                    };
+                    return canmove;
+                }
+        
+            compareAll(i, j, color, move) {
+                if (this.map[j][i] !== 0) 
+                        return false;
+                let moveSuccess = this.compare(j, i, 1, 0, color, move)
+                    + this.compare(j, i, -1, 0, color, move)
+                    + this.compare(j, i, 0, 1, color, move)
+                    + this.compare(j, i, 0, -1, color, move)
+                    + this.compare(j, i, 1, 1, color, move)
+                    + this.compare(j, i, 1, -1, color, move)
+                    + this.compare(j, i, -1, 1, color, move)
+                    + this.compare(j, i, -1, -1, color, move);
+                if (moveSuccess > 0)
+                    return true;
+                else
+                    return false;
+            }
+            passTest(color) {
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        if (this.compareAll(i, j, color, false))
+                            return true;
+                    }
+                }
+                return false;
+            };
+        }
+        class OthelloGame{
+            constructor(pattern){
+                this.pattern = new OthelloPattern();
+                this.color = 1;
+            }
+
+            move(i,j){
+                if (this.pattern.compareAll(i, j, this.color, true)) {
+                    this.color = 3 - this.color;
+                    if (!this.pattern.passTest(this.color))
+                        this.color = 3 - this.color;
+                    if (!this.pattern.passTest(this.color)) {
+                        let black = 0, white = 0;
+                        for (i = 0; i < 8; i++) {
+                            for (j = 0; j < 8; j++) {
+                                if (this.pattern.map[i][j] === 1)
+                                    black++;
+                                else if (this.pattern.map[i][j] === 2)
+                                    white++;
+                            }
+                        }
+                        let message="Game Over\nblack: "+black+"\nWhite: "+white+"\nWinner is "+((black > white) ? "black" : "white");
+                        alert(message);
+                    }
+                }            
+            }
+        }
+        class OthelloView{
+            constructor(container, game){
+                this.container = container;
+                this.game = game;
+            }
+            render() {
+                this.container.innerHTML = "";
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        let cell = document.createElement("div");
+                        cell.addEventListener("click", (event) => {
+
+                            console.log("mover:", 3- this.game.color);
+                            this.game.move(j,i);
+                            this.render();
+                        });
+                        this.container.appendChild(cell);
+                        cell.style = "vertical-align:middle;margin:1px;width:30px;height:30px;background-color:lightgreen;display:inline-block";
+                        if (this.game.pattern.map[i][j] === 1) {
+                            let zi = document.createElement("div");
+                            zi.style = "border: black solid 1px;margin: 2px;border-radius:12px;width:24px;height:24px;background-color:black";
+                            cell.appendChild(zi);
+                        }
+                        else if (this.game.pattern.map[i][j] === 2) {
+                            let zi = document.createElement("div");
+                            zi.style = "border: black solid 1px;margin: 2px;border-radius:12px;width:24px;height:24px;background-color:white";
+                            cell.appendChild(zi);
+                        }
+                    }
+                    this.container.appendChild(document.createElement("br"));
+                }
+            }
+        }
+
+        new OthelloView(document.getElementById("container"),new OthelloGame()).render();
+    </script>
+    
+</body>
+</html>
