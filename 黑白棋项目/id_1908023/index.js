@@ -24,7 +24,24 @@ window.onload = function () {
 
   function render() {
     current.innerText = color === 1 ? '黑方' : '白方';
-    // count.innerText = `黑：${countData.black},白：${countData.white}`;
+
+    let black = [], white = [];
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (chessData[i][j] === 1) {
+          black.push(1);
+        }
+        if (chessData[i][j] === 2) {
+          white.push(2);
+        }
+      }
+    }
+    count.innerText = `黑：${black.length},白：${white.length}`;
+    if (black.length + white.length === 64) {
+      console.log('pass');
+    }
+
+
     // 渲染时把之前的节点清空
     container.innerHTML = '';
     // let 绑定了作用域，所以事件里面就不用使用闭包来传递变量了
@@ -39,13 +56,13 @@ window.onload = function () {
 
           // 设置找子方向
           let directions = [
-            {x: -1, y: -1},
             {x: -1, y: 0},
-            {x: -1, y: 1},
+            {x: 1, y: 0},
             {x: 0, y: -1},
             {x: 0, y: 1},
+            {x: -1, y: -1},
+            {x: -1, y: 1},
             {x: 1, y: -1},
-            {x: 1, y: 0},
             {x: 1, y: 1},
           ];
           let moveSuccess = false;
@@ -95,12 +112,6 @@ window.onload = function () {
           // 如果成功下子后，交换选手下子颜色
           if (moveSuccess) {
             color = 3 - color;
-          }
-
-          if (chessData[i][j] === 1) {
-            countData.black += 1;
-          } else if (chessData[i][j] === 2) {
-            countData.white += 1;
           }
             
           // 重新绘制一次棋盘
