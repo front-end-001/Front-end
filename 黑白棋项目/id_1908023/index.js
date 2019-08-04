@@ -24,29 +24,20 @@ window.onload = function () {
 
   function render() {
     current.innerText = color === 1 ? '黑方' : '白方';
-
+    // 渲染时把之前的节点清空
+    container.innerHTML = '';
     let black = [], white = [];
+    // let 绑定了作用域，所以事件里面就不用使用闭包来传递变量了
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
+        // 计数
         if (chessData[i][j] === 1) {
           black.push(1);
         }
         if (chessData[i][j] === 2) {
           white.push(2);
         }
-      }
-    }
-    count.innerText = `黑：${black.length},白：${white.length}`;
-    if (black.length + white.length === 64) {
-      console.log('pass');
-    }
 
-
-    // 渲染时把之前的节点清空
-    container.innerHTML = '';
-    // let 绑定了作用域，所以事件里面就不用使用闭包来传递变量了
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
         const emptyChessBox = document.createElement('div');
         emptyChessBox.className = 'chess-box';
         // 黑色吃子逻辑
@@ -113,7 +104,6 @@ window.onload = function () {
           if (moveSuccess) {
             color = 3 - color;
           }
-            
           // 重新绘制一次棋盘
           render();
         });
@@ -129,6 +119,12 @@ window.onload = function () {
         }
       }
     }
+
+    count.innerText = `黑：${black.length}，白：${white.length}`;
+    // if (black.length + white.length === 64) {
+    //   console.log('pass');
+    // }
+
     container.appendChild(fragment);
   }
 }
