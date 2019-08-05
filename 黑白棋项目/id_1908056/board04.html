@@ -20,11 +20,11 @@
                 [0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0],
-                [0,0,0,1,2,0,0,0],
-                [0,0,0,2,1,0,0,0],
                 [0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,0,0]
+                [0,0,0,0,0,0,0,2],
+                [0,0,0,0,0,0,1,1],
+                [0,0,0,0,0,0,2,1]
             ]
         }
 
@@ -112,7 +112,7 @@
         constructor() {
             this.patterns = [new OthelloPattern()];
             //定义本次要比对的基准棋子的颜色
-            this.colors = [2];
+            this.colors = [1];
         }
         get pattern() {
             return this.patterns[this.patterns.length -1];
@@ -170,12 +170,12 @@
                         this.render();
                     })
                     // console.log(this.game);
-                    if (this.game.patterns[this.game.patterns.length -1].map[i][j] > 0) {
+                    if (this.game.pattern.map[i][j] > 0) {
                         // debugger;
                         let disc = document.createElement("div");
                         disc.style = `margin:2px;border-radius:13px;
                     width:26px;height:26px;
-                    background-color:${this.game.patterns[this.game.patterns.length -1].map[i][j] == 1 ? 'black' : 'white'}`
+                    background-color:${this.game.pattern.map[i][j] == 1 ? 'black' : 'white'}`
                         cell.appendChild(disc);
                     }
 
@@ -207,11 +207,6 @@
 
     new OthelloView(document.getElementById("board"),
         new OthelloGame()).render();
-    new OthelloView(document.getElementById("board2"),
-        new OthelloGame()).render();
-
-
-
 
 </script>
 </body>
