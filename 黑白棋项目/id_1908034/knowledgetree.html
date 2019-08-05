@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="showTree"></div>
+<script>
+    let windowOwnProps = Object.getOwnPropertyNames(window);
+
+    let showTreeDiv = document.getElementById('showTree');
+
+    let ulD = document.createElement('ol');
+    ulD.textContent = `window -- OwnPropertyNames（${windowOwnProps.length}个）`;
+    for(let propStr of windowOwnProps) {
+        let liD = document.createElement('li');
+        liD.textContent = propStr;
+        ulD.appendChild(liD);
+    }
+    showTreeDiv.appendChild(ulD);
+</script>
+
+</body>
+</html>
