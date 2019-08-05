@@ -15,6 +15,16 @@ class Game {
         return this.pattern._computeWhiteAndBlackNumber().whiteNum
     }
 
+    get winner() {
+        if (this.blackNum > this.whiteNum) {
+            return '黑方'
+        } else if (this.blackNum < this.whiteNum) {
+            return '白方'
+        } else {
+            return '平局'
+        }
+    }
+
     bindEventClickEvent(view) {
         let blocks = es(".block");
         for (let block of blocks) {
@@ -25,10 +35,11 @@ class Game {
 
                 // 落子
                 this.move(oy, ox);
-                view.render();
-
+                
                 // check pass 是否有地方下子， 没有地方就pass
                 this.checkPass();
+
+                view.render();
             });
         }
 
@@ -70,7 +81,8 @@ class Game {
         if (!pattern.checkBoard()) {
             pattern.color = 3 - pattern.color;
             if (!pattern.checkBoard()) {
-                log("Game Over");
+                log('gameover')
+                this.gameover = true
             }
         }
     }

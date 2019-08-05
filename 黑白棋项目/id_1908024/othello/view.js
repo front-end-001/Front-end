@@ -69,8 +69,13 @@ class View {
 
         // present
         const presentDom = e('#present')
-        let presentHtml = `当前: ${this.game.pattern.color === 2 ? '黑方' : '白方'}`
-        presentDom.innerText = presentHtml
+        let presentText
+        if (this.game.gameover) {
+            presentText = `游戏结束，获胜方: ${this.game.winner}`
+        } else {
+            presentText = `当前: ${this.game.pattern.color === 2 ? '黑方' : '白方'}`
+        }
+        presentDom.innerText = presentText
 
         // score
         const scoreDom = e('#score')
