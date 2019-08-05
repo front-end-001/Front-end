@@ -2,23 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>用代码挖掘CSS属性</title>
+    <style>
+        h3 {
+            text-align: center;
+        }
+
+        div#showTree {
+            width: 1000px;
+            margin: 20px auto;
+        }
+
+        div#showTree p {
+            margin: 10px;
+            text-align: center;
+        }
+
+
+        div#showTree table thead tr th {
+            text-align: left;
+            background-color: #87CEFA;
+        }
+
+        div#showTree table thead tr th > div {
+            margin: 5px;
+        }
+
+        div#showTree table tbody tr td {
+            width: 600px;
+            border: 1px solid #87CEFA;
+        }
+
+        div#showTree table tbody tr td > div {
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
-<div id="showTree"></div>
+<div id="showTree">
+    <h3>找出 W3C 标准中的 CSS 属性</h3>
+    <p>
+        <a href="https://time.geekbang.org/column/article/93110" target="_blank">参考：重学前端-动手做，用代码挖掘CSS属性</a>
+    </p>
+    <table>
+        <thead>
+        <tr>
+            <th>
+                <div>standard</div>
+            </th>
+            <th>
+                <div>properties</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="item in treeList">
+            <td>
+                <div>{{ item[0] }}</div>
+            </td>
+            <td>
+                <div>{{ item[1] }}</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="./plugin/jquery.min.js"></script>
+<script src="./plugin/vue.min.js"></script>
 <script>
-    let windowOwnProps = Object.getOwnPropertyNames(window);
+    let showTree = new Vue({
+        el: '#showTree',
+        data: {
+            treeList: []
+        },
+        created: function () {
+            let that = this;
+            $.getJSON('./data/cssData.json').done(function (reps) {
+                that.treeList = reps;
+            });
+        },
+        mounted: function () {
 
-    let showTreeDiv = document.getElementById('showTree');
-
-    let ulD = document.createElement('ol');
-    ulD.textContent = `window -- OwnPropertyNames（${windowOwnProps.length}个）`;
-    for(let propStr of windowOwnProps) {
-        let liD = document.createElement('li');
-        liD.textContent = propStr;
-        ulD.appendChild(liD);
-    }
-    showTreeDiv.appendChild(ulD);
+        }
+    });
+    $.getJSON('./data/cssData.json').done(function (reps) {
+        console.log(reps);
+    });
 </script>
 
 </body>
