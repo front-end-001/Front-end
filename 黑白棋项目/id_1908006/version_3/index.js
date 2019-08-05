@@ -3,8 +3,8 @@ let othello_board = document.getElementById("othello_board")
 
 // 可以理解为Model,  eat 和 checkIsPass 可以理解为 Model 的 method
 class OthelloPattern {
-    constructor() {
-        this.board = [
+    constructor(board) {
+        this.board = board || [
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
@@ -115,30 +115,60 @@ class OthelloPattern {
         return true;
     }
 
+    clone() {
+        return new OthelloPattern(this.board.map(line => line.slice())); // 也可以使用 [...line], es6扩展
+        // 参考 https://www.html.cn/archives/10024
+        // https://juejin.im/entry/58217da92f301e005c2de257
+    }
+
 }
 
 
 // 实现业务逻辑的封装，类似controller
+// 由于需要悔棋，那每一步的数据都要保存到js的数组中
 class OthelloGame {
     constructor() {
-        this.pattern = new OthelloPattern();
-        this.color = 1;
+        this.patterns = [new OthelloPattern()];
+        this.colors = [1];
+    }
+
+    get pattern() {
+        return this.patterns[this.patterns.length - 1]; // 返回最后一个值，即最新的局面 
+    }
+
+    get color() {
+        return this.colors[this.colors.length - 1]; // 返回最后一个棋局应该落子的颜色 
     }
 
     eat(i, j) {
-        if (this.pattern.eat(i, j, this.color, false)) {
-            this.color = 3 - this.color;
-            console.log("next color: ", this.color);
-            if (this.pattern.checkIsPass(this.color)) {
-                console.log(this.color + " : is pass");
-                this.color = 3 - this.color;
+        let pattern = this.pattern.clone(); // 第一个就是构造函数中patterns的第一个实例 的 clone，拷贝了board数组
+        let color = this.color; // 同上，确定当前的颜色
+        if (pattern.eat(i, j, color, false)) {
+            color = 3 - color;
+            console.log("next color: ", color);
+            if (pattern.checkIsPass(color)) {
+                console.log(color + " : is pass");
+                color = 3 - color;
                 console.log("check again!");
-                console.log("current color: " + this.color);
-                if (this.pattern.checkIsPass(this.color)) {
+                console.log("current color: " + color);
+                if (pattern.checkIsPass(color)) {
                     alert("Game Over!");
                 }
             }
+
+            this.patterns.push(pattern); // 这个参数pattern中的board已经被move修改过了，成了当前的棋局
+            this.colors.push(color); // 这个是经过3-color的以后，反转的颜色，表示下一步的颜色，衔接上了get color，为一下次准备
             return true;
+        }
+    }
+
+    // 悔棋
+    revert() {
+        if (this.patterns.length > 1) {
+            this.patterns.pop();
+            this.colors.pop();
+        }else {
+            console.log("revert to init layout!")
         }
     }
 }
@@ -185,6 +215,15 @@ class OthelloView {
             let brElem = document.createElement("br");
             this.container.appendChild(brElem)
         }
+
+        let regretBtn = document.createElement("button");
+        regretBtn.innerText="悔棋";
+        regretBtn.addEventListener("click", event => {
+            this.game.revert();
+            this.renderBoard();
+        });
+
+        this.container.appendChild(regretBtn);
     }
 
 }
