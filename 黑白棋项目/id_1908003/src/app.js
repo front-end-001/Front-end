@@ -377,6 +377,25 @@ class ChessGameView {
     textEle.classList.add('tooltip');
     textEle.textContent = this.game.getTip();
     this.container.appendChild(textEle);
+
+    /** 操作按钮 */
+    const controlEle = document.createElement('div');
+    controlEle.classList.add('control');
+    const backBtn = document.createElement('button');
+    backBtn.textContent = '回退';
+    backBtn.addEventListener('click', () => {
+      this.game.moveBack();
+      this.render();
+    });
+    controlEle.appendChild(backBtn);
+    const restartBtn = document.createElement('button');
+    restartBtn.textContent = '重新开始';
+    restartBtn.addEventListener('click', () => {
+      this.game.moveBack();
+      this.render();
+    });
+    controlEle.appendChild(restartBtn);
+    this.container.appendChild(controlEle);
   }
 
   goBack() {
