@@ -114,6 +114,7 @@
         }
 
         class OthelloGame {
+            
             constructor(pattern, color) {
                 this.pattern = new OthelloPattern;
                 this.color = 1;
@@ -128,7 +129,6 @@
                             alert('over');
                         }
                     }
-                    return true;
                 }
             }
 
@@ -174,10 +174,7 @@
             }
         }
 
-        new OthelloView(document.getElementById("board"),
-            new OthelloGame()).render();
-
-
+        new OthelloView(document.getElementById("board"),new OthelloGame()).render();
     </script>
 </body>
 
