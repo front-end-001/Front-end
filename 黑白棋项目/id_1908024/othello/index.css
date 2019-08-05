@@ -21,3 +21,42 @@
 .disc-black {
     background: black;
 }
+
+#information {
+    width: 420px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+#regret {
+    outline: none;
+    cursor: pointer;
+    color: #fff !important;
+    text-decoration: none;
+    background: #ed3330;
+    padding: 20px;
+    border-radius: 5px;
+    display: inline-block;
+    border: none;
+    transition: all 0.4s ease 0s;
+}
+
+#regret:hover {
+    background: #434343;
+    box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+    transition: all 0.4s ease 0s;
+}
+
+#present {
+    display: inline-block;
+    margin: 0;
+    line-height: 50px;
+}
+
+#score {
+    display: inline-block;
+    line-height: 50px;
+}

@@ -7,6 +7,14 @@ class Game {
         return this.patterns[this.patterns.length - 1];
     }
 
+    get blackNum() {
+        return this.pattern._computeWhiteAndBlackNumber().blackNum
+    }
+
+    get whiteNum() {
+        return this.pattern._computeWhiteAndBlackNumber().whiteNum
+    }
+
     bindEventClickEvent(view) {
         let blocks = es(".block");
         for (let block of blocks) {
@@ -25,7 +33,7 @@ class Game {
         }
 
         // 悔棋部分
-        let regret = e(".regret");
+        let regret = e("#regret");
         bindEvent(regret, "click", () => {
             this.revert();
             view.render();
@@ -62,7 +70,7 @@ class Game {
         if (!pattern.checkBoard()) {
             pattern.color = 3 - pattern.color;
             if (!pattern.checkBoard()) {
-                console.log("Game Over");
+                log("Game Over");
             }
         }
     }

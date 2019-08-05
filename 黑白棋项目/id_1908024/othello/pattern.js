@@ -99,4 +99,23 @@ class Pattern {
     clone() {
         return new Pattern(this.board.map(line => line.slice()), this.color);
     }
+
+    _computeWhiteAndBlackNumber() {
+        let blackNum = 0,
+            whiteNum = 0;
+        for (let y = 0; y < 8; y++) {
+            for (let x = 0; x < 8; x++) {
+                if (this.board[y][x] == 2) {
+                    blackNum++;
+                } else if (this.board[y][x] == 1) {
+                    whiteNum++;
+                }
+            }
+        }
+
+        return {
+            blackNum,
+            whiteNum
+        };
+    }
 }

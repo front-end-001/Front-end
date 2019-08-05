@@ -16,16 +16,33 @@ class View {
             this.container.appendChild(document.createElement("br"));
         }
 
+        const information = document.createElement('div')
+        information.setAttribute("id", "information");
+        this.container.appendChild(information);
+
+        // present black or white?
+        let present = document.createElement('p')
+        present.setAttribute("id", "present");
+        information.appendChild(present);
+
+
+        // score
+        let score = document.createElement('section')
+        score.setAttribute("id", "score");
+        information.appendChild(score);
+
         // 悔棋部分
         let regret = document.createElement("button");
-        regret.setAttribute("class", "regret");
+        regret.setAttribute("id", "regret");
         regret.innerText = "悔棋";
-        this.container.appendChild(regret);
+        information.appendChild(regret);
 
         this.game.bindEventClickEvent(this);
+
     }
 
     render() {
+        // 棋盘
         let disc;
         let board = this.game.pattern.board;
         for (let y = 0; y < 8; y++) {
@@ -49,6 +66,16 @@ class View {
                 }
             }
         }
+
+        // present
+        const presentDom = e('#present')
+        let presentHtml = `当前: ${this.game.pattern.color === 2 ? '黑方' : '白方'}`
+        presentDom.innerText = presentHtml
+
+        // score
+        const scoreDom = e('#score')
+        let scoreHtml = `黑子: ${this.game.blackNum}, 白子: ${this.game.whiteNum}`
+        scoreDom.innerText = scoreHtml
     }
 
     _addDisc(color) {
