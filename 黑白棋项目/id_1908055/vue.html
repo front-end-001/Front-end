@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #app {
+      margin: 0 auto;
+      font-size: 0;
+      width: 800px;
+    }
+
+    .chess {
+      background-color: skyblue;
+      border: 1px solid #fff;
+      display: inline-block;
+      height: 98px;
+      width: 98px;
+    }
+
+    .white::after,
+    .black::after
+
+    /* .optional::after  */
+      {
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+    }
+
+    .white::after,
+    .black::after {
+      height: 100%;
+      width: 100%;
+    }
+
+    .white::after {
+      background-color: #fff;
+    }
+
+    .black::after {
+      background-color: #000;
+    }
+
+    .optional::after {
+      height: 20px;
+      width: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <template v-for="(map, i) in maps">
+      <div v-for="(v, j) in map" class="chess" :class="{black: v === 1, white : v === 2}" @click="dropChess(i, j)">
+      </div>
+    </template>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        maps: [
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 2, 1, 0, 0, 0],
+          [0, 0, 0, 1, 2, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+      },
+      methods: {
+        dropChess(i, j) {
+          this.c = false
+          let canmove = false;
+          let [x, y] = [j, i];
+          // const directions = [
+          //   { x: -1, y: -1 },
+          //   { x: -1, y: 0 },
+          //   { x: -1, y: 1 },
+          //   { x: 0, y: -1 },
+          //   { x: 0, y: 1 },
+          //   { x: 1, y: -1 },
+          //   { x: 1, y: 0 },
+          //   { x: 1, y: 1 }
+          // ];
+
+          // while (true) {
+          while (--x > 0) {
+            if (x < 0 || x >= this.maps.length || y < 0 || y >= this.maps.length) {
+              canmove = false;
+              break;
+            }
+            if (this.maps[y][x] === 2) {
+              canmove = true
+            } else if (this.maps[y][x] === 1) {
+              break;
+            } else if (this.maps[y][x] === 0) {
+              canmove = false
+              break;
+            }
+          }
+          if (i === 0) {
+            return;
+          }
+          while (canmove && ++x <= j) {
+            this.$set(this.maps[y], x, 1)
+          }
+
+          while (++x > 0) {
+            if (x < 0 || x >= this.maps.length || y < 0 || y >= this.maps.length) {
+              canmove = false;
+              break;
+            }
+            if (this.maps[y][x] === 2) {
+              canmove = true
+            } else if (this.maps[y][x] === 1) {
+              break;
+            } else if (this.maps[y][x] === 0) {
+              canmove = false
+              break;
+            }
+          }
+          if (i === 0) {
+            return;
+          }
+          while (canmove && --x >= j) {
+            this.$set(this.maps[y], x, 1)
+          }
+        },
+      },
+      watch: {
+      },
+      created() {
+
+      },
+      mounted() {
+
+      },
+    })
+  </script>
+</body>
+
+</html>
