@@ -6,11 +6,72 @@
 <body>
 <div id="information"> 黑白棋-黑棋先走 </div>
 <div id="gamecontainer"></div>
+<br></br>
+<div id="gamecontainer2"></div>
 </body>
 <script type="text/javascript">
-    let color=1;  // 先走棋子颜色
-    // 1 代表是黑棋 2 代表是白旗
-    let map=[
+class PieceView{
+    constructor(containtor,game){
+        this.containtor=containtor;
+        this.game=game;
+    }
+    render(){
+        this.containtor.innerHTML="";
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                let node=document.createElement("div");
+                node.addEventListener("click",event=>{
+                    this.game.move(i,j);
+                    this.render();
+                });
+                // 渲染棋盘的方法，这个部分万年不动的
+                node.style=`vertical-align:middle;width:30px;margin:1px;height:30px;background-color:#F9CD9F;display:inline-block`;
+                //node.innerText=""+i+"-"+j+"";
+                this.containtor.appendChild(node);
+                if( this.game.pattern.map[i][j] === 1 ){
+                    let blackpiece=document.createElement("div");
+                    blackpiece.style=`margin:2px;border-radius:13px;width:26px;height:26px;background-color:black`;
+                    node.appendChild(blackpiece);
+                }
+                if(this.game.pattern.map[i][j]===2){
+                    let whitepiece=document.createElement("div");
+                    whitepiece.style=`margin:2px;border-radius:13px;width:26px;height:26px;background-color:white`;
+                    node.appendChild(whitepiece);
+                }
+            }
+            let br=document.createElement("br");
+            this.containtor.appendChild(br);
+        }
+    }
+    
+
+}
+
+class PieceGame{
+    constructor(){
+        this.pattern=new PiecePattern();
+        this.color=1;
+    }
+    move(i,j){
+        if(this.pattern.coverpiece(i,j,this.color,false)===1){
+            this.color=3-this.color;// 上一把吃子成功了，转换一下身份
+            if(!this.pattern.checkpass(this.color)){// 检查切换身份后能不能走子
+                alert("该 Color "+ this.color +"无子可走，Pass！");
+                this.color=3-this.color;
+                alert("请 Color "+ this.color +"走子!");
+                if(!checkpass(this.color)){
+                    alert("Game Over!");
+                }
+            }
+        };
+    }
+
+}
+
+class PiecePattern{
+    constructor(){
+        // 1 代表是黑棋 2 代表是白旗
+        this.map=[
         [0,0,0,0,0,0,0,0],
         [0,0,0,1,0,0,0,0],
         [0,0,0,1,2,0,0,0],
@@ -19,19 +80,19 @@
         [0,1,1,1,0,1,2,0],
         [0,0,0,0,2,2,0,0],
         [0,0,0,0,0,0,0,0]
-    ];
-    let content=document.getElementById("gamecontainer");
-    function coverpiece(i,j,color,testonly){
+        ];
+    }
+    coverpiece(i,j,color,testonly){
         console.log("当前点击位置"+i+j);
         let dects=[
-                  {x:-1, y:-1},
-                  {x:-1, y:0},
-                  {x:-1, y:1},
-                  {x:0, y:-1},
-                  {x:0, y:1},
-                  {x:1, y:-1},
-                  {x:1, y:0},
-                  {x:1, y:1}
+                {x:-1, y:-1},
+                {x:-1, y:0},
+                {x:-1, y:1},
+                {x:0, y:-1},
+                {x:0, y:1},
+                {x:1, y:-1},
+                {x:1, y:0},
+                {x:1, y:1}
         ]; // 吃子的八个方向
         let movesuccess=false; // 标记是否可以切换棋子颜色去走子
         let havechose=false;// 标记是否存在一种可能可以走子，只要找到一种即可置为true
@@ -41,7 +102,6 @@
             let clicklocation={x:i,y:j}; // 记录下点击的位置
             let checkpoint={x:i,y:j}; // 开始检查的时间点
             let canmove=false; // 标识是否存在可以改变棋子顺序的变量
-            
             while(true){
                 // 和老师学会的方法，如果条件很复杂的话可以死循环然后在条件中break，条件中方法的箭头函数的，还是不理解
                 // 向左方向去移动找看看有没有子可以吃，找到可以吃的最末端的子记录下来位置，然后翻折数组
@@ -51,16 +111,16 @@
                     canmove=false;
                     break
                 }
-                if(map[checkpoint.x][checkpoint.y]===3-color){
+                if(this.map[checkpoint.x][checkpoint.y]===3-color){
                     // 找到和自己不一样的棋子，继续找下一个
                     canmove=true;
                 }
-                if(map[checkpoint.x][checkpoint.y]===color){
+                if(this.map[checkpoint.x][checkpoint.y]===color){
                     // 和自己一样的棋子，跳过不用找了
                     console.log("找到可以吃的最后一个位置或者和自己是一样的，不用找了"+checkpoint.x+checkpoint.y);
                     break
                 }
-                if(map[checkpoint.x][checkpoint.y]===0){
+                if(this.map[checkpoint.x][checkpoint.y]===0){
                     // 旁边没有子
                     console.log("旁边没有子了，不用找了"+checkpoint.x+checkpoint.y);
                     canmove=false;
@@ -76,7 +136,7 @@
                 let backpoint={x:checkpoint.x,y:checkpoint.y};
                 while(!(clicklocation.x===backpoint.x && clicklocation.y===backpoint.y)){
                     backpoint={x:backpoint.x+(-dect.x),y:backpoint.y+(-dect.y)};
-                    map[backpoint.x][backpoint.y]=color;
+                    this.map[backpoint.x][backpoint.y]=color;
                     // 如果代码走到这个位置了说明一定是吃过子了，所以可以切换下一步走子的身份了
                     movesuccess=true;
                 }
@@ -94,13 +154,13 @@
         }
     }
     // 检查是否当轮到对方棋子时是否可以走子
-    function checkpass(color){
+    checkpass(color){
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(map[i][j]===0){
+                if(this.map[i][j]===0){
                     // 只循环是0的位置看下能否走子
                     console.log("当前尝试走子 color "+color);
-                    if(coverpiece(i,j,color,true)){
+                    if(this.coverpiece(i,j,color,true)){
                         console.log("checkpass=>  color方"+color+"  ("+i+","+j+") 可以走子！");
                         return true;// 可以走子
                     }
@@ -109,44 +169,10 @@
         }
         return false;// 无子可走
     }
-    render();
-    function render(){
-        content.innerHTML="";
-        for(let i=0;i<8;i++){
-            for(let j=0;j<8;j++){
-                let node=document.createElement("div");
-                node.addEventListener("click",event=>{
-                    if(coverpiece(i,j,color,false)===1){
-                        color=3-color;// 上一把吃子成功了，转换一下身份
-                        if(!checkpass(color)){// 检查切换身份后能不能走子
-                            alert("该 Color "+ color +"无子可走，Pass！");
-                            color=3-color;
-                            alert("请 Color "+ color +"走子!");
-                            if(!checkpass(color)){
-                                alert("Game Over!");
-                            }
-                        }
-                    };
-                    render();
-                });
-                // 渲染棋盘的方法，这个部分万年不动的
-                node.style=`vertical-align:middle;width:30px;margin:1px;height:30px;background-color:#F9CD9F;display:inline-block`;
-                //node.innerText=""+i+"-"+j+"";
-                content.appendChild(node);
-                if( map[i][j] === 1 ){
-                    let blackpiece=document.createElement("div");
-                    blackpiece.style=`margin:2px;border-radius:13px;width:26px;height:26px;background-color:black`;
-                    node.appendChild(blackpiece);
-                }
-                if(map[i][j]===2){
-                    let whitepiece=document.createElement("div");
-                    whitepiece.style=`margin:2px;border-radius:13px;width:26px;height:26px;background-color:white`;
-                    node.appendChild(whitepiece);
-                }
-            }
-            let br=document.createElement("br");
-            content.appendChild(br);
-        }
-    }
+}
+
+new PieceView(document.getElementById("gamecontainer"),new PieceGame()).render();
+new PieceView(document.getElementById("gamecontainer2"),new PieceGame()).render();
+
 </script>
 </html>
