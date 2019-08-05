@@ -5,32 +5,69 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>黑白棋项目</title>
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="normalize.css">
+  <style>
+    body {
+      font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+    }
+
+    .chess {
+      font-size: 0;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .chess .chess-cell {
+      width: 30px;
+      height: 30px;
+      background-color: #ccc;
+      display: inline-block;
+      margin: 1px;
+    }
+
+    .tooltip {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .control {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .show-boundary .chess .boundary {
+      background-color: aquamarine;
+    }
+
+    .chess .chess-cell.white::after {
+      content: ' ';
+      display: block;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: white;
+      margin: 2px;
+    }
+
+    .chess .chess-cell.black::after {
+      content: ' ';
+      display: block;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: black;
+      margin: 2px;
+    }
+
+  </style>
 </head>
 
 <body>
   <div id="app">
-    <div class="chess">
-      <div class="chess-row">
-        <div class="chess-cell">1</div>
-        <div class="chess-cell">1</div>
-        <div class="chess-cell">1</div>
-      </div>
-      <div class="chess-row">
-        <div class="chess-cell">1</div>
-        <div class="chess-cell">1</div>
-        <div class="chess-cell">1</div>
-      </div>
-      <div class="chess-row">
-        <div class="chess-cell">1</div>
-        <div class="chess-cell">1</div>
-        <div class="chess-cell">1</div>
-      </div>
-    </div>
+    <div id="game1" class="show-boundary"></div>
+    <div id="game2" class=""></div>
+    <script src="app.js"></script>
   </div>
-  <script src="lib/jquery-3.4.1.min.js"></script>
-  <script src="js/app.js"></script>
 </body>
 
 </html>
