@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>黑白棋</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .qipanjiazi {
+            /* width: 100%;
+            height: 640px; */
+            background-color: #000;
+        }
+
+        .qipan {
+            /* width: 647px;
+            height: 647px; */
+            margin: 0 auto;
+        }
+
+        .gezi {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            border-right: 1px solid #000;
+            border-bottom: 1px solid #000;
+            border-top: 0;
+            border-left: 0;
+            background-color: greenyellow;
+        }
+
+        /* .gezi:nth-child(8n) {
+            border-right: none;
+        } */
+        .qizi {
+            width: 50px;
+            height: 50px;
+            margin: 15px;
+            border-radius: 50%
+        }
+
+        /*
+        *挑战
+        */
+        /* .gezi.baiqi::after {
+            content: "";
+            width: 50px;
+            height: 50px;
+            margin: 15px;
+            border-radius: 50%;
+            background-color: #fff
+        }
+        .gezi.heiqi::after {
+            content: "";
+            width: 50px;
+            height: 50px;
+            margin: 15px;
+            border-radius: 50%;
+            background-color: #000
+        } */
+        /*
+        *挑战
+        */
+        .baiqi {
+            background-color: #fff
+        }
+
+        .heiqi {
+            background-color: #000
+        }
+    </style>
+</head>
+
+<body>
+    <div class="qipanjiazi">
+        <div class="qipan" id="qipan"></div>
+    </div>
+</body>
+<script>
+    class patten {
+        constructor(geziArr) {
+            // 1是白的，2是黑的
+            this.geziArr = geziArr || [
+                [0, 0, 0, 0, 0, 0, 0, 0, ],
+                [0, 0, 0, 0, 0, 0, 0, 0, ],
+                [0, 0, 0, 0, 0, 0, 0, 0, ],
+                [0, 0, 0, 1, 2, 0, 0, 0, ],
+                [0, 0, 0, 2, 1, 0, 0, 0, ],
+                [0, 0, 0, 0, 0, 0, 0, 0, ],
+                [0, 0, 0, 0, 0, 0, 0, 0, ],
+                [0, 0, 0, 0, 0, 0, 0, 0, ]
+            ];
+        }
+
+        move(i, j, color, checkOnly) {
+            // 有子的位置不能下
+            if (this.geziArr[i][j] > 0) {
+                return
+            }
+            // 定义方向
+            let directions = [{
+                    x: -1,
+                    y: -1
+                },
+                {
+                    x: -1,
+                    y: 0
+                },
+                {
+                    x: -1,
+                    y: 1
+                },
+                {
+                    x: 0,
+                    y: -1
+                },
+                {
+                    x: 0,
+                    y: 1
+                },
+                {
+                    x: 1,
+                    y: 0
+                },
+                {
+                    x: 1,
+                    y: -1
+                },
+                {
+                    x: 1,
+                    y: 1
+                },
+            ]
+            // 用于判断是否可以行动
+            let moveSuccess = false
+            // 从8个方向去找可以改变的棋子
+            for (let direction of directions) {
+                let canmove = false;
+                let [x, y] = [j, i];
+                while (true) {
+                    x += direction.x;
+                    y += direction.y;
+                    if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                        canmove = false
+                        break
+                    }
+                    if (this.geziArr[y][x] == 3 - color) {
+                        canmove = true
+                    } else if (this.geziArr[y][x] == color) {
+                        break
+                    } else if (this.geziArr[y][x] == 0) {
+                        canmove = false
+                        break
+                    }
+                }
+                moveSuccess = moveSuccess || canmove
+                // checkOnly是判断当前是执行落子改变，还是仅仅检查当前下子的反方是否还可以走下一步
+                if (canmove && !checkOnly) {
+                    // 确定落子之后，从落子位置往右找
+                    while (true) {
+                        x -= direction.x
+                        y -= direction.y
+                        this.geziArr[y][x] = color
+                        if (x == j && y == i) {
+                            break
+                        }
+                    }
+                }
+            }
+            return moveSuccess
+        }
+
+        // 检查是否为pass局面
+        checkPass(color) {
+            let pass = true
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    if (this.move(i, j, color, true)) {
+                        return false
+                    }
+                }
+            }
+            return true
+        }
+
+        clone() {
+            return new patten(this.geziArr.map(line => line.slice()))
+        }
+    }
+
+    class game {
+        constructor() {
+            this.pattens = [new patten()]
+            this.colors = [1]
+        }
+        get patten() {
+            return this.pattens[this.pattens.length - 1]
+        }
+        get color() {
+            return this.colors[this.colors.length - 1]
+        }
+        move(i, j) {
+            let patten = this.patten.clone()
+            let color = this.color
+            if (patten.move(i, j, color, false)) {
+                color = 3 - color
+                if (patten.checkPass(color)) {
+                    color = 3 - color;
+                    if (patten.checkPass(color)) {
+                        alert("Game over!");
+                    }
+                }
+                this.pattens.push(patten);
+                this.colors.push(color);
+                return true;
+            }
+        }
+
+        revert() {
+            if (this.pattens.length > 1) {
+                this.pattens.pop();
+                this.colors.pop();
+            }
+        }
+    }
+
+    class view {
+        constructor(container, game) {
+            this.container = container
+            this.game = game
+        }
+        render() {
+            this.container.innerHTML = ''
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    let gezi = document.createElement("div")
+                    gezi.classList.add('gezi')
+                    this.container.appendChild(gezi)
+                    gezi.addEventListener("click", event => {
+                        console.log(i, j)
+                        this.game.move(i, j)
+                        this.render()
+
+                    })
+                    if (this.game.patten.geziArr[i][j] == 1) {
+                        let qizi = document.createElement("div")
+                        qizi.classList.add("qizi", "baiqi")
+                        gezi.appendChild(qizi)
+                        // gezi.classList.add("baiqi")
+                    }
+                    if (this.game.patten.geziArr[i][j] == 2) {
+                        let qizi = document.createElement("div")
+                        qizi.classList.add("qizi", "heiqi")
+                        gezi.appendChild(qizi)
+                        //gezi.classList.add("heiqi")
+                    }
+                }
+                this.container.appendChild(document.createElement("br"))
+            }
+            let regret = document.createElement('button');
+            regret.innerText = "悔棋";
+            regret.addEventListener('click', event => {
+                this.game.revert();
+                this.render();
+            })
+            this.container.appendChild(regret);
+        }
+    }
+
+    new view(document.getElementById('qipan'), new game()).render()
+</script>
+
+</html>
