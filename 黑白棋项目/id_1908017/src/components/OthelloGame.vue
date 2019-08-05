@@ -8,6 +8,7 @@
       <span v-show="curTurn.isPass">pass</span>
     </p>
     <p v-if="curTurn.isGameEnd">游戏结束</p>
+    <p><button @click="regret">悔棋</button></p>
   </div>
 </template>
 
@@ -28,14 +29,14 @@ export default {
           [
             /* eslint-disable prettier/prettier */
 
-          //     0, 0, 0, 0, 0, 0, 0, 0,
-          //     0, 0, 0, 0, 0, 0, 0, 0,
-          //     0, 0, 0, 0, 0, 0, 0, 0,
-          //     0, 0, 0, 2, 1, 0, 0, 0,
-          //     0, 0, 0, 1, 2, 0, 0, 0,
-          //     0, 0, 0, 0, 0, 0, 0, 0,
-          //     0, 0, 0, 0, 0, 0, 0, 0,
-          //     0, 0, 0, 0, 0, 0, 0, 0
+              0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 2, 1, 0, 0, 0,
+              0, 0, 0, 1, 2, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0
 
             //   0, 0, 0, 0, 0, 0, 0, 1,
             //   0, 0, 0, 0, 0, 0, 1, 0,
@@ -46,14 +47,15 @@ export default {
             //   2, 1, 1, 1, 1, 1, 1, 2, 
             //   0, 2, 2, 2, 2, 2, 2, 2,
 
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 1,
-              0, 0, 0, 0, 0, 0, 1, 2
+            //测试pass
+              // 0, 0, 0, 0, 0, 0, 0, 0,
+              // 0, 0, 0, 0, 0, 0, 0, 0,
+              // 0, 0, 0, 0, 0, 0, 0, 0,
+              // 0, 0, 0, 0, 0, 0, 0, 0,
+              // 0, 0, 0, 0, 0, 0, 0, 0,
+              // 0, 0, 0, 0, 0, 0, 0, 0,
+              // 0, 0, 0, 0, 0, 0, 0, 1,
+              // 0, 0, 0, 0, 0, 0, 1, 2
             ],
           1, false)
         ] };
@@ -75,18 +77,24 @@ export default {
          handler(curTurn){
             if(curTurn.isPass){
                 console.log('pass turn ',this.turns.length);
-                setTimeout(()=>this.turns.push( OthelloTurn.createFromPath(curTurn.paths[0])),3000);
+                setTimeout(()=>this.turns.push( OthelloTurn.createFromMove(curTurn.moves[0])),3000);
             }
         }
         }
     },
     methods:{
         cellClick(i){
-            const move = this.curTurn.paths.find(({pos})=>pos===i);
+            const move = this.curTurn.moves.find(({pos})=>pos===i);
             if(move){
-                this.turns.push( OthelloTurn.createFromPath(move));
+                this.turns.push( OthelloTurn.createFromMove(move));
             }
+        },
+        regret(){
+          if(this.turns.length>1){
+            this.turns.pop();
+          }
         }
+
     }
 }
 </script>

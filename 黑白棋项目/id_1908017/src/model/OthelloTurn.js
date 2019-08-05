@@ -4,7 +4,7 @@ export default class OthelloTurn {
     this.color = color;
     this._computedStatus = computedStatus(board, color, preIsPass);
   }
-  static createFromPath({ pos, board, color }) {
+  static createFromMove({ pos, board, color }) {
     const class$ = this;
     return new class$(board, color, pos < 0);
   }
@@ -14,36 +14,36 @@ export default class OthelloTurn {
   get isGameEnd() {
     return this._computedStatus.isGameEnd;
   }
-  get paths() {
-    return this._computedStatus.paths;
+  get moves() {
+    return this._computedStatus.moves;
   }
 }
 
 function computedStatus(board, color, preIsPass) {
   let isPass = false,
     isGameEnd = false,
-    paths = [];
+    moves = [];
 
   const nextTurnColor = 3 - color;
-  const movePaths = getMoves(board, color);
-  if (preIsPass && movePaths.length === 0) {
+  const movesNoPass = getMoves(board, color);
+  if (preIsPass && movesNoPass.length === 0) {
     isGameEnd = true;
   } else if (!board.some(c => c <= 0)) {
     //没有空白格子了
     isGameEnd = true;
   }
   if (!isGameEnd) {
-    isPass = movePaths.length === 0;
+    isPass = movesNoPass.length === 0;
     if (isPass) {
-      paths.push({ pos: -1, board, color: nextTurnColor });
+      moves.push({ pos: -1, board, color: nextTurnColor });
     } else {
-      for (const { pos, board } of movePaths) {
-        paths.push({ pos, board, color: nextTurnColor });
+      for (const { pos, board } of movesNoPass) {
+        moves.push({ pos, board, color: nextTurnColor });
       }
     }
   }
 
-  return { isPass, isGameEnd, paths };
+  return { isPass, isGameEnd, moves };
 }
 
 function getMoves(board, color) {
