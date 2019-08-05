@@ -36,6 +36,9 @@
         div#showTree table tbody tr td > div {
             margin: 5px;
         }
+        [v-cloak]{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -44,7 +47,7 @@
     <p>
         <a href="https://time.geekbang.org/column/article/93110" target="_blank">参考：重学前端-动手做，用代码挖掘CSS属性</a>
     </p>
-    <table>
+    <table v-cloak>
         <thead>
         <tr>
             <th>
