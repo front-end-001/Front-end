@@ -1,25 +1,25 @@
 class OthelloPattern {
   constructor(
-    arr = [
-      [1, 1, 1, 1, 1, 1, 1, 1],
-      [0, 2, 1, 1, 2, 1, 2, 2],
-      [1, 1, 1, 1, 1, 2, 2, 2],
-      [1, 2, 1, 1, 2, 2, 2, 2],
-      [1, 2, 1, 1, 0, 2, 1, 0],
-      [1, 1, 1, 2, 1, 2, 2, 2],
-      [1, 1, 1, 1, 1, 1, 2, 2],
-      [2, 2, 2, 2, 2, 2, 2, 2]
-    ]
     // arr = [
-    //   [0, 0, 0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 1, 2, 0, 0, 0],
-    //   [0, 0, 0, 2, 1, 0, 0, 0],
-    //   [0, 0, 0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 0, 0, 0, 0, 0]
+    //   [1, 1, 1, 1, 1, 1, 1, 1],
+    //   [0, 2, 1, 1, 2, 1, 2, 2],
+    //   [1, 1, 1, 1, 1, 2, 2, 2],
+    //   [1, 2, 1, 1, 2, 2, 2, 2],
+    //   [1, 2, 1, 1, 0, 2, 1, 0],
+    //   [1, 1, 1, 2, 1, 2, 2, 2],
+    //   [1, 1, 1, 1, 1, 1, 2, 2],
+    //   [2, 2, 2, 2, 2, 2, 2, 2]
     // ]
+    arr = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 2, 0, 0, 0],
+      [0, 0, 0, 2, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
   ) {
     this.arr = arr;
   }
@@ -188,43 +188,66 @@ class OthelloGame {
   }
 }
 
-class Ai {
-  constructor() {
-    this.pattern = new OthelloPattern();
-    this.check = [];
-  }
+// class Ai {
+//   constructor() {
+//     this.pattern = new OthelloPattern();
+//     this.check = [];
+//     this.result = [];
+//   }
 
-  ai(
-    portability = [
-      { i: 0, x: 0, y: 1 },
-      { i: 1, x: 4, y: 4 },
-      { i: 2, x: 7, y: 4 },
-    ],
-    arr = this.pattern.arr,
-    color = 2,
-    check = this.check
-  ) {
-    for (let [i, position] of portability.entries()) {
-      let copy = arr.map(item => item.slice());
-      let copyPattern = new OthelloPattern(copy);
-      check = [];
-      copyPattern.move(position.x, position.y, color, false);
-      for (let y = 0; y < copyPattern.arr.length; y++) {
-        for (let x = 0; x < copyPattern.arr[y].length; x++) {
-          let move = copyPattern.move(x, y, 3 - color, true);
-          if (move.canMove) {
-            check.push({
-              i,
-              x,
-              y
-            });
-          }
-        }
-      }
-      if (check.length) {
-        this.ai(check, copy, 3 - color, []);
-      }
-    }
-    console.log(check)
-  }
-}
+//   count(arr) {
+//     let white = 0;
+//     let black = 0;
+//     for (let y = 0; y < arr.length; y++) {
+//       for (let x = 0; x < arr[y].length; x++) {
+//         switch (arr[y][x]) {
+//           case 1:
+//             white++;
+//             break;
+//           case 2:
+//             black++;
+//             break;
+//         }
+//       }
+//     }
+//     return { white, black };
+//   }
+
+// ai(
+//   portability = [
+//     { i: 0, x: 0, y: 1 },
+//     { i: 1, x: 4, y: 4 },
+//     { i: 2, x: 7, y: 4 }
+//   ],
+//   arr = this.pattern.arr,
+//   color = 2,
+//   check = this.check
+// ) {
+//   for (let [i, position] of portability.entries()) {
+//     let copy = arr.map(item => item.slice());
+//     let copyPattern = new OthelloPattern(copy);
+//     check = [];
+//     copyPattern.move(position.x, position.y, color, false);
+//     for (let y = 0; y < copyPattern.arr.length; y++) {
+//       for (let x = 0; x < copyPattern.arr[y].length; x++) {
+//         let move = copyPattern.move(x, y, 3 - color, true);
+//         if (move.canMove) {
+//           check.push({
+//             i,
+//             x,
+//             y,
+//             num:
+//               3 - color === 1
+//                 ? this.count(copyPattern.arr).white + move.count
+//                 : this.count(copyPattern.arr).black + move.count
+//           });
+//         }
+//       }
+//     }
+//     if (check.length) {
+//       console.log(check);
+//       this.ai(check, copy, 3 - color, []);
+//     }
+//   }
+// }
+// }
