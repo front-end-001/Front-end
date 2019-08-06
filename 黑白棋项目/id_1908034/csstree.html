@@ -13,7 +13,7 @@
             margin: 20px auto;
         }
 
-        div#showTree p {
+        div#showTree div {
             margin: 10px;
             text-align: center;
         }
@@ -36,17 +36,33 @@
         div#showTree table tbody tr td > div {
             margin: 5px;
         }
-        [v-cloak]{
+
+        [v-cloak] {
             display: none;
+        }
+
+        .my-checkbox {
+            margin: 5px;
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+        }
+        .my-label {
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
 <div id="showTree">
     <h3>找出 W3C 标准中的 CSS 属性</h3>
-    <p>
+    <div>
         <a href="https://time.geekbang.org/column/article/93110" target="_blank">参考：重学前端-动手做，用代码挖掘CSS属性</a>
-    </p>
+    </div>
+    <div>
+        <label for="myCheckbox" class="my-label">隐藏属性为空的行</label>
+        <input type="checkbox" v-model="isHiddenEmpty" class="my-checkbox" id="myCheckbox" @change="handleHiddenEmptyLine">
+        <span v-text="'显示【' + treeList.length + '】行'" style="vertical-align: middle;"></span>
+    </div>
     <table v-cloak>
         <thead>
         <tr>
@@ -76,7 +92,8 @@
     let showTree = new Vue({
         el: '#showTree',
         data: {
-            treeList: []
+            treeList: [],
+            isHiddenEmpty: false
         },
         created: function () {
             let that = this;
@@ -86,10 +103,20 @@
         },
         mounted: function () {
 
+        },
+        methods: {
+            handleHiddenEmptyLine: function () {
+                let that = this;
+                if(this.isHiddenEmpty) {
+                    this.treeList = this.treeList.filter(item=>item[1].length>0);
+                } else {
+                    $.getJSON('./data/cssData.json').done(function (reps) {
+                        that.treeList = reps;
+                    });
+                }
+
+            }
         }
-    });
-    $.getJSON('./data/cssData.json').done(function (reps) {
-        console.log(reps);
     });
 </script>
 
