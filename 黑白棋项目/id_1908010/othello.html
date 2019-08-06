@@ -8,84 +8,83 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
         <title>Othello</title>
         <style>
-                .cell {
-                    border:solid 1px white;
-                    width:50px;
-                    height:50px;
-                    background-color:darkgreen;
-                    display:inline-block;
-                    vertical-align:bottom;
-                    position: relative;
-                }
-        
-                .cell.black::after {
-                    content: " ";
-                    border-radius:20px;
-                    width:40px;
-                    height:40px;
-                    margin-top:5px;
-                    margin-left:5px;
-                    background-color:black;
-                    display: block;
-                }
-        
-                .cell.white::after {
-                    content: " ";
-                    border-radius:20px;
-                    width:40px;
-                    height:40px;
-                    margin-top:5px;
-                    margin-left:5px;
-                    background-color:white;
-                    display: block;
-                }
-               
-                .step.black::before { 
-                    content: " ";
-                    width: 30px;
-                    height: 2px;
-                    left: 10px;
-                    top: 50%;
-                    background-color:black;
-                    display: block;
-                    position: absolute;
-                }
-        
-                .step.black::after {
-                    content: " ";
-                    width: 2px;
-                    height: 30px;
-                    left: 40%;
-                    top: 6px;
-                    background-color:black;
-                    display: block;
-                    position: absolute;
-        
-                }
-        
-                .step.white::before {
-                    content: " ";
-                    width: 30px;
-                    height: 1px;
-                    left: 10px;
-                    top: 50%;
-                    background-color:white;
-                    display: block;
-                    position: absolute;
-                }
-        
-                .step.white::after {
-                    content: " ";
-                    width: 1px;
-                    height: 30px;
-                    left: 40%;
-                    top: 6px;
-                    background-color:white;
-                    display: block;
-                    position: absolute;
-                }
-        
-            </style>
+            .cell {
+                border:solid 1px white;
+                width:50px;
+                height:50px;
+                background-color:darkgreen;
+                display:inline-block;
+                vertical-align:bottom;
+                position: relative;
+            }
+    
+            .cell.black::after {
+                content: " ";
+                border-radius:20px;
+                width:40px;
+                height:40px;
+                margin-top:5px;
+                margin-left:5px;
+                background-color:black;
+                display: block;
+            }
+    
+            .cell.white::after {
+                content: " ";
+                border-radius:20px;
+                width:40px;
+                height:40px;
+                margin-top:5px;
+                margin-left:5px;
+                background-color:white;
+                display: block;
+            }
+            
+            .step.black::before { 
+                content: " ";
+                width: 30px;
+                height: 2px;
+                left: 10px;
+                top: 50%;
+                background-color:black;
+                display: block;
+                position: absolute;
+            }
+    
+            .step.black::after {
+                content: " ";
+                width: 2px;
+                height: 30px;
+                left: 40%;
+                top: 6px;
+                background-color:black;
+                display: block;
+                position: absolute;
+    
+            }
+    
+            .step.white::before {
+                content: " ";
+                width: 30px;
+                height: 1px;
+                left: 10px;
+                top: 50%;
+                background-color:white;
+                display: block;
+                position: absolute;
+            }
+    
+            .step.white::after {
+                content: " ";
+                width: 1px;
+                height: 30px;
+                left: 40%;
+                top: 6px;
+                background-color:white;
+                display: block;
+                position: absolute;
+            }
+        </style>
     </head>
     <body>
         <div id="board"></div>
@@ -239,6 +238,11 @@
                         this.colors.pop();
                     }
                 }
+
+                reset() {
+                    this.patterns = [new OthelloPattern()];
+                    this.colors = [1];
+                }
             }
     
             class OthelloView {
@@ -270,6 +274,13 @@
                         this.show();
                     });
                     this.container.appendChild(regret);
+                    let reset = document.createElement("button");
+                    reset.innerText = "重新开始";
+                    reset.addEventListener('click', (event) => {
+                        this.game.reset();
+                        this.show();
+                    });
+                    this.container.appendChild(reset);
                 }
             }
     
