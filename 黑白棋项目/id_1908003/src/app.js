@@ -391,7 +391,7 @@ class ChessGameView {
     const restartBtn = document.createElement('button');
     restartBtn.textContent = '重新开始';
     restartBtn.addEventListener('click', () => {
-      this.game.moveBack();
+      this.game.reStart();
       this.render();
     });
     controlEle.appendChild(restartBtn);
