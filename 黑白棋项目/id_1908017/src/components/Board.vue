@@ -3,14 +3,15 @@ import Piece from "./Piece";
 export default {
   functional: true,
   render(h, context) {
-    const { props } = context;
+    const { props, listeners } = context;
     return (
       <div class="board">
         {props.cells.map((color, pos) => (
           <Piece
             key={pos}
             color={color}
-            onClick={() => props.cellClick && props.cellClick(pos)}
+            nativeOn={{ click: () => props.cellClick && props.cellClick(pos) }}
+            on={{ flipEnd: listeners.flipEnd }}
           />
         ))}
       </div>
