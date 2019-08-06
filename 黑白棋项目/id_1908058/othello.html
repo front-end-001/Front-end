@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>奥赛罗</title>
+</head>
+<style>
+    .add::after{
+        content: '';
+        background: black;
+        width: 40px;
+        height: 40px;
+        display: block;
+        border-radius: 20px;
+        margin: 5px;
+    }
+    .black{
+        width:40px;height:40px;margin: 5px;background-color:black;border-radius: 20px;
+    }
+    .white{
+        width:40px;height:40px;border-radius:20px;background-color:white;margin:5px;
+    }
+    .revert-btn{
+        width: 80px;
+        font-size: 16px;
+        background-color:#00bcd4;
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        box-shadow: 10px;
+        box-shadow: 2px 2px 2px black;
+        margin-top: 10px;
+    }
+</style>
+<body>
+
+<div id="board"></div>
+
+
+<script>
+
+void function(){
+
+let container = document.getElementById('board');
+
+class OthelloView{
+    constructor(container, game){
+        this.container = container;
+        this.game = game;
+    }
+    render(){
+        container.innerHTML = '';
+        for(let i =0; i < 8; i++){
+            for(let j=0; j < 8; j++){
+                let cell = document.createElement('div');
+                
+                container.appendChild(cell);
+                cell.style="width:50px;height:50px;background-color:#24a6e0;display:inline-block;vertical-align:middle;margin: 1px ";
+                
+                cell.addEventListener('click', event => {
+                    this.game.move(i, j);
+                    this.render();
+                });
+
+                if(this.game.pattern.CHESSBOARD[i][j] > 0 ){
+                    let disc = document.createElement('div');
+            
+                    disc.style=`width:40px;height:40px;margin: 5px;background-color:${this.game.pattern.CHESSBOARD[i][j] === 1 ? 'black' : 'white'};border-radius: 20px;`
+                    cell.appendChild(disc);
+                }
+                
+            }
+            container.appendChild(document.createElement('br'));
+        } 
+        var btn = document.createElement('button');
+        btn.textContent = "悔棋";
+        btn.className="revert-btn"
+        btn.addEventListener('click', event => {
+            this.game.revert();
+            this.render();
+        });
+        container.appendChild(btn);
+    }
+
+}
+//OthelloPattern 状态
+class OthelloPattern{
+    constructor(CHESSBOARD){
+        this.CHESSBOARD = CHESSBOARD || [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+        ]
+    }
+    move(i, j, color, checkOnly){
+        let DIRECTION = [
+            [1, 0], [1, 1], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1],
+        ];
+        let moveSuccess = false;
+        let _nextMoveSuccess = null;
+        if(this.CHESSBOARD[i][j] !== 0){
+            return
+        }
+        
+
+        DIRECTION.map((direction)=>{
+            let canmove = false;
+            let [x, y] = [j, i];
+            let directionX = direction[0];
+            let directionY = direction[1];
+                
+            while( true ){
+                x += directionX;
+                y += directionY;
+
+                if(x < 0 || x >= 8 || y < 0 || y >= 8) {
+                    canmove = false;
+                    break;
+                }
+                if(this.CHESSBOARD[y][x] == 3 - color) {
+                    canmove = true;
+                } else if(this.CHESSBOARD[y][x] == color) {
+                    break
+                } else if(this.CHESSBOARD[y][x] == 0) {
+                    canmove = false;
+                    break;
+                }
+
+            }
+
+            if(canmove ){
+                moveSuccess = true;
+                while(true && !checkOnly){
+                    x -= directionX;
+                    y -= directionY;
+                    this.CHESSBOARD[y][x]= color;
+                    if(x == j && y == i){
+                        break;
+                    }
+                }
+            }
+
+        });
+        return moveSuccess
+    }
+    checkPass(color){
+        for(let i =0 ;i <8; i++){
+            for(let j=0; j<8; j++){
+                if(this.move(i, j, color, true)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    clone(){
+        return new OthelloPattern( this.CHESSBOARD.map(line => line.slice()) );
+    }
+}
+
+class OthelloGame{
+    constructor(){
+        this.patterns = [new OthelloPattern()];
+        this.colors = [1];
+    }
+    get pattern(){
+        return this.patterns[this.patterns.length - 1];
+    }
+    get color(){
+        return this.colors[this.colors.length - 1];
+    }
+    move(i, j){
+        let pattern = this.pattern.clone();
+        let color = this.color;
+
+        if(pattern.move(i, j, color, false)){
+            color = 3 - color;
+            if(pattern.checkPass(color)) {
+                color = 3 - color;
+                if(pattern.checkPass(color)) {
+                    alert("Game over!");
+                }
+            }
+            this.patterns.push(pattern);
+            this.colors.push(color);
+            return true;
+        };
+    }
+    revert(){
+        if(this.patterns.length > 1){
+            this.patterns.pop();
+            this.colors.pop();
+        }
+    }
+} 
+
+new OthelloView(document.getElementById('board'), new OthelloGame()).render();
+
+
+}()
+
+
+</script>
+</body>
+</html>
