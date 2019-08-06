@@ -1,0 +1,180 @@
+<div id="board"></div>
+<br />
+
+<script>
+  //TODO 历史状态与游戏实例需要分离吗
+  class OthelloRecord {
+    constructor(initMap) {
+      this.records = [initMap];
+    }
+
+    pushRecord(map, color) {
+      this.records.push({ map, color });
+      console.log(this.records);
+    }
+
+    popRecord() {
+      return this.records.pop();
+    }
+  }
+
+  class OthelloPattern {
+    constructor() {
+      this.map = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 1, 0, 0, 0],
+        [0, 0, 0, 1, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]
+      ];
+    }
+    move(i, j, color, checkOnly) {
+      if (this.map[i][j] > 0) return;
+      let directions = [
+        { x: -1, y: -1 },
+        { x: -1, y: 0 },
+        { x: -1, y: 1 },
+        { x: 0, y: -1 },
+        { x: 0, y: 1 },
+        { x: 1, y: -1 },
+        { x: 1, y: 0 },
+        { x: 1, y: 1 }
+      ];
+      let moveSuccess = false;
+      for (let direction of directions) {
+        let canmove = false;
+        let [x, y] = [j, i];
+        while (true) {
+          x += direction.x;
+          y += direction.y;
+          if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+            canmove = false;
+            break;
+          }
+          if (this.map[y][x] == 3 - color) {
+            canmove = true;
+          } else if (this.map[y][x] == color) {
+            break;
+          } else if (this.map[y][x] == 0) {
+            canmove = false;
+            break;
+          }
+        }
+
+        moveSuccess = moveSuccess || canmove;
+
+        if (canmove && !checkOnly) {
+          while (true) {
+            x -= direction.x;
+            y -= direction.y;
+
+            this.map[y][x] = color;
+            if (x == j && y == i) break;
+          }
+        }
+      }
+
+      return moveSuccess;
+    }
+    checkPass(color) {
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          if (this.move(i, j, color, true)) return false;
+        }
+      }
+      return true;
+    }
+
+    clone() {
+      return this.map.slice();
+    }
+
+    setMap(map) {
+      this.map = map.slice();
+    }
+    setColor(color) {
+      this.color = color;
+    }
+  }
+
+  class OthelloGame {
+    constructor() {
+      this.pattern = new OthelloPattern();
+      this.color = 1;
+      this.record = new OthelloRecord({
+        map: this.pattern.clone(),
+        color: this.color
+      });
+    }
+    move(i, j) {
+      if (this.pattern.move(i, j, this.color, false)) {
+        this.color = 3 - this.color;
+        if (this.pattern.checkPass(this.color)) {
+          this.color = 3 - this.color;
+          if (this.pattern.checkPass(this.color)) {
+            alert("Game over!");
+          }
+        }
+        return true;
+      }
+    }
+    revert() {
+      if (this.record.records.length > 0) {
+        console.log(this.record);
+        const last = this.record.popRecord();
+        this.pattern.setMap(last.map);
+        this.pattern.setColor(last.color);
+      }
+    }
+  }
+  class OthelloView {
+    constructor(container, game) {
+      this.container = container;
+      this.game = game;
+    }
+    render() {
+      this.container.innerHTML = "";
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          let cell = document.createElement("div");
+          this.container.appendChild(cell);
+          cell.style = `vertical-align:middle;width:30px;margin:1px;
+                  height:30px;background-color:darkgreen;
+                  display:inline-block`;
+          cell.addEventListener("click", event => {
+            //TODO 放在这里不合适，明天再改
+            this.game.record.pushRecord(
+              this.game.pattern.clone(),
+              this.game.color
+            );
+            this.game.move(i, j);
+            this.render();
+          });
+          if (this.game.pattern.map[i][j] > 0) {
+            let disc = document.createElement("div");
+            disc.style = `margin:2px;border-radius:13px;
+                      width:26px;height:26px;
+                      background-color:${
+                        this.game.pattern.map[i][j] == 1 ? "black" : "white"
+                      }`;
+            cell.appendChild(disc);
+          }
+        }
+        this.container.appendChild(document.createElement("br"));
+      }
+      let button = document.createElement("button");
+      button.innerText = "悔棋";
+      button.setAttribute("style", "display:none");
+      this.container.appendChild(button);
+      button.addEventListener("click", event => {
+        this.game.revert();
+        this.render();
+      });
+    }
+  }
+
+  new OthelloView(document.getElementById("board"), new OthelloGame()).render();
+</script>
