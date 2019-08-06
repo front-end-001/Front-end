@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>优化和抽取</title>
+</head>
+<body>
+<div id="board">
+
+</div>
+<div id="board2">
+
+</div>
+<script type="text/javascript">
+    console.log("1是黑色");
+    console.log("2是白色");
+    class OthelloPattern {
+        constructor(map) {
+            this.map = map || [
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,2],
+                [0,0,0,0,0,0,1,1],
+                [0,0,0,0,0,0,2,1]
+            ]
+        }
+
+        move (i, j, color, checkOnly) {
+            // console.log(color, checkOnly);
+            //如果该位置有棋子不能落子
+            if (this.map[i][j] > 0) {
+                return;
+            }
+            //定义八个方向
+            let directions = [
+                {x:-1, y:-1},	//左上
+                {x:-1, y:0},	//左
+                {x:-1, y:1},	//左下
+                {x:0, y:-1},	//上
+                {x:0, y:1},		//下
+                {x:1, y:-1},	//右上
+                {x:1, y:0},		//右
+                {x:1, y:1}		//右下
+            ]
+            //全部方向是否可以落子
+            let moveSuccess = false;
+            //循环八个方向
+            for (let direction of directions) {
+                //单方向是否可以落子
+                let canmove = false;
+                //反方位赋值让x,y更符合横纵坐标的常规认知
+                let [x, y] = [j, i];
+                while(true) {
+                    x += direction.x;
+                    y += direction.y;
+                    if (x < 0 || x>= 8 || y < 0 || y>=8 ) {
+                        //越界后结束循环,不准落子
+                        canmove = false;
+                        break;
+                    }
+                    if (this.map[y][x] == 3 - color) {
+                        //如果与基准棋子颜色不一样,则可以落子
+                        canmove = true;
+                    } else if (this.map[y][x] == color) {
+                        //如果与基准棋子颜色一样,则不可以落子
+                        break
+                    } else if(this.map[y][x] == 0) {
+                        //如果没有棋了结束循环不能落子
+                        canmove = false;
+                        break;
+                    }
+                }
+                //赋值是否要交换落子权,可以落子就交换落子权
+                moveSuccess = moveSuccess || canmove;
+                //可以落子且不是检查
+                if (canmove && !checkOnly) {
+                    // debugger;
+                    while (true){
+                        //进行回路
+                        x -= direction.x;
+                        y -= direction.y;
+                        //将棋子置成与基准棋子一样颜色的棋子
+                        this.map[y][x] = color;
+                        if (x == j && y== i) {
+                            //回到基准棋子,停止循环
+                            break;
+                        }
+                    }
+                }
+            }
+            //返回八个方向是否有成功落子的位置
+            return moveSuccess;
+        }
+        checkPass(color) {
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    if( this.move(i, j, color, true))
+                        return false;
+                }
+            }
+            return true;
+        }
+        clone(){
+            return new OthelloPattern(this.map.map(line => line.slice()));
+        }
+    }
+
+    class OthelloGame {
+        constructor() {
+            this.patterns = [new OthelloPattern()];
+            //定义本次要比对的基准棋子的颜色
+            this.colors = [1];
+        }
+        get pattern() {
+            return this.patterns[this.patterns.length -1];
+        }
+        get color(){
+            return this.colors[this.colors.length - 1];
+        }
+        move(i, j) {
+            // console.log(i, j);
+            let pattern = this.pattern.clone();
+            let color = this.color;
+            //正常下棋,非检查
+            if (pattern.move(i, j, color, false)) {
+                //成功落子,交换颜色
+                color = 3 - color;
+                //第一次检查当前颜色是否pass
+                if (pattern.checkPass(color)) {
+                    // console.log("pass");
+                    //交换颜色,进行第二次pass
+                    color = 3 - color;
+                    if (pattern.checkPass(color)) {
+                        //经过两次pass,游戏结束
+                        alert("Game over!");
+                    }
+                }
+                this.patterns.push(pattern);
+                this.colors.push(color);
+                return true;
+            };
+        }
+        revert() {
+            if (this.patterns.length > 1) {
+                this.patterns.pop();
+                this.colors.pop();
+            }
+        }
+    }
+    class OthelloView {
+        constructor(container, game) {
+            this.container = container;
+            this.game = game;
+        }
+        render(){
+            this.container.innerHTML = "";
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j< 8; j++) {
+                    let cell = document.createElement("div");
+                    this.container.appendChild(cell);
+                    cell.style = `vertical-align:middle;width:30px;margin:1px;
+										height:30px;background-color:darkgreen;
+										display:inline-block`;
+                    cell.addEventListener("click", event => {
+                        // console.log("click");
+                        this.game.move(i, j);
+                        this.render();
+                    })
+                    // console.log(this.game);
+                    if (this.game.pattern.map[i][j] > 0) {
+                        // debugger;
+                        let disc = document.createElement("div");
+                        disc.style = `margin:2px;border-radius:13px;
+                    width:26px;height:26px;
+                    background-color:${this.game.pattern.map[i][j] == 1 ? 'black' : 'white'}`
+                        cell.appendChild(disc);
+                    }
+
+                    /* //黑色棋子
+                    if (map[i][j] == 1) {
+                        let disc = document.createElement("div");
+                        disc.style = "margin: 2px; border-radius:13px; width: 26px; height: 26px;"+
+                        "background-color: black;";
+                        cell.appendChild(disc);
+                    }
+                    //白色棋子
+                    if (map[i][j] == 2) {
+                        let disc = document.createElement("div");
+                        disc.style = "margin: 2px; border-radius:13px; width: 26px; height: 26px; background-color: white;";
+                        cell.appendChild(disc);
+                    } */
+                }
+                this.container.appendChild(document.createElement("br"));
+            }
+            let regret = document.createElement("button");
+            regret.innerText = "悔棋";
+            regret.addEventListener('click', event => {
+                this.game.revert();
+                this.render();
+            })
+            this.container.appendChild(regret);
+        }
+    }
+
+    new OthelloView(document.getElementById("board"),
+        new OthelloGame()).render();
+
+</script>
+</body>
+</html>
