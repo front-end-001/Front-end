@@ -37,8 +37,8 @@ function computedStatus(board, color, preIsPass) {
     if (isPass) {
       moves.push({ pos: -1, board, color: nextTurnColor });
     } else {
-      for (const { pos, board } of movesNoPass) {
-        moves.push({ pos, board, color: nextTurnColor });
+      for (const { pos, board, diff } of movesNoPass) {
+        moves.push({ pos, board, diff, color: nextTurnColor });
       }
     }
   }
@@ -52,10 +52,10 @@ function getMoves(board, color) {
     const result = getEatResult(pos, color, board);
     if (result.length > 0) {
       const changeBoard = board.slice();
-      for (const changePos of result) {
+      for (const changePos of flattenDeep(result)) {
         changeBoard[changePos] = color;
       }
-      moves.push({ pos, board: changeBoard });
+      moves.push({ pos, diff: result, board: changeBoard });
     }
   }
   // return [{ pos, board, color }];
@@ -87,7 +87,7 @@ function getEatResult(pos, color, board) {
         break;
       } else if (nextColor === color) {
         //同色 吃中间的子
-        eats.push.apply(eats, preEats);
+        preEats.length && eats.push(preEats);
         break;
       } else {
         //异色 preEats.push(异色)
@@ -97,9 +97,9 @@ function getEatResult(pos, color, board) {
   }
 
   if (eats.length > 0) {
-    return [...eats, pos]; //改变： 吃掉掉子和 当前落子
+    return [pos, eats]; //diff: 吃掉掉子和 当前落子
   } else {
-    return []; //没有改变
+    return []; //no diff
   }
 }
 
@@ -125,4 +125,8 @@ function posToXy(pos) {
   const x = pos % 8,
     y = Math.floor(pos / 8);
   return { x, y };
+}
+
+function flattenDeep(arr) {
+  return Array.isArray(arr) ? arr.flatMap(flattenDeep) : arr;
 }
