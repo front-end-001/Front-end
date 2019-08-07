@@ -1,0 +1,1 @@
+1.othello-vue是vue版的，根目录打开，运行npm install 成功后，运行npm run serve,即可查看效果。
