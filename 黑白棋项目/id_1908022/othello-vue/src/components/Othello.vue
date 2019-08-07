@@ -20,11 +20,14 @@
             </div>
 
       </div>
+    </div>
+    <div class="buttons">
       <button>先手</button>
       <button>后手</button>
       <button @click="backOrGoStep(-1)">悔棋</button>
       <button @click="backOrGoStep(1)">撤销悔棋</button>
     </div>
+    
   </div>
 </template>
 
@@ -234,6 +237,7 @@
   .box {
     width: 266px;
     background: #fff;
+    float: left;
   }
   .grid {
     width: 30px;
@@ -270,5 +274,9 @@
   button:hover{
     /*opacity: .5;*/
     color: #000;
+  }
+  .buttons{
+    width: 100px;
+    float: left;
   }
 </style>
