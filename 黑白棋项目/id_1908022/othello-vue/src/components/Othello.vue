@@ -22,8 +22,8 @@
       </div>
     </div>
     <div class="buttons">
-      <button>先手</button>
-      <button>后手</button>
+      <!-- <button >先手</button> -->
+      <button @click="AIGO" :disabled="alreadyGo" >后手</button>
       <button @click="backOrGoStep(-1)">悔棋</button>
       <button @click="backOrGoStep(1)">撤销悔棋</button>
     </div>
@@ -104,11 +104,42 @@
   function checkPass(e){
     for(let i = 0; i < 8;i++){
       for(let j = 0; j < 8;j++){
-        if(move(i,j,e,true)) return false;
+        if(move(i,j,e,true)) {
+          e.AICoordinate.x = i;
+          e.AICoordinate.y = j;
+          return false;
+        }
       }
     }
     return true;
   }
+  function go(m,n,global) {
+      global.AICanGo = false;
+      global.alreadyGo = true;
+      stepArrs.splice( global.step + 1 );
+      stepArrs = JSON.parse(JSON.stringify(stepArrs));
+      global.switchRecord.splice( global.step + 1 );
+      if(move(m, n, global, false)){
+        let grids = JSON.parse(JSON.stringify(global.grids));
+        stepArrs.push(grids);
+        global.step++;
+        global.switch = 3 - global.switch;
+        global.AICanGo = true;
+        if(checkPass(global)){
+          global.switch = 3 - global.switch;
+          global.AICanGo = false;
+          if(checkPass(global)){
+            console.log("gameover");
+            setTimeout(() => {
+              resultAnnounce(global.grids);
+            }, 100)
+          }
+        }
+        global.switchRecord.push(global.switch);
+      }
+      
+  }
+
   function move(m, n, e, isChecked) {
     if (e.grids[m * 8 + n].z > 0) return;
     e.checkedResult = false;
@@ -189,7 +220,10 @@
         switch: 2,
         stepArrs: [initStepGrids],
         switchRecord: [2],
-        step: 0
+        step: 0,
+        alreadyGo: false,
+        AICoordinate: {x: 0,y: 0},
+        AICanGo: false
       };
     },
     methods: {
@@ -198,35 +232,28 @@
         if (move(m, n, this, true)) this.grids[m * 8 + n].isHover = true;
       },
       mouseClick(m, n) {
-        stepArrs.splice( this.step + 1 );
-        stepArrs = JSON.parse(JSON.stringify(stepArrs));
-        this.switchRecord.splice( this.step + 1 );
-        if(move(m, n, this, false)){
-            let grids = JSON.parse(JSON.stringify(this.grids));
-            stepArrs.push(grids);
-            this.step++;
-            this.switch = 3 - this.switch;
-            if(checkPass(this)){
-              this.switch = 3 - this.switch;
-              if(checkPass(this)){
-                console.log("gameover");
-                setTimeout(() => {
-                  resultAnnounce(this.grids);
-                }, 100)
-              }
-            }
-            this.switchRecord.push(this.switch);
-        }
+        go(m,n,this);
+        if( this.AICanGo){
+          setTimeout(() => {
+            this.AIGO();
+          },500)
+        } 
       },
       backOrGoStep(direction){
-        this.step += direction;
+        this.step += direction * 2;
+        if(this.step == 0) this.alreadyGo = false;
         if(this.step < 0 || this.step > stepArrs.length - 1 ){
-          this.step -= direction;
-          this.step == 0 ? alert('已经是最初的状态了') : alert('已经是最后的状态了');
+          this.step -= direction * 2;
+          this.step <= 1 ? alert('已经是最初的状态了') : alert('已经是最后的状态了');
           return;
         }
         this.grids = stepArrs[this.step];
         this.switch = this.switchRecord[this.step];
+      },
+      AIGO() {
+        if(!checkPass(this)){
+          go(this.AICoordinate.x,this.AICoordinate.y,this,false);
+        }
       }
     }
   };
