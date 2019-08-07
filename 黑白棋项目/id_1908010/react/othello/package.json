@@ -2,6 +2,7 @@
   "name": "othello",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://lcl22hope.github.io/Front-end/tree/master/黑白棋项目/id_1908010/react/othello",
   "dependencies": {
     "antd": "^3.21.2",
     "classnames": "^2.2.6",
