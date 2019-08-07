@@ -23,11 +23,11 @@
     </div>
     <div class="buttons">
       <!-- <button >先手</button> -->
-      <button @click="AIGO" :disabled="alreadyGo" >后手</button>
+      <button @click="owner=1;AIGO()" :disabled="alreadyGo" >后手</button>
       <button @click="backOrGoStep(-1)">悔棋</button>
       <button @click="backOrGoStep(1)">撤销悔棋</button>
     </div>
-    
+
   </div>
 </template>
 
@@ -114,30 +114,30 @@
     return true;
   }
   function go(m,n,global) {
-      global.AICanGo = false;
+      global.oppositeCanGo = false;
       global.alreadyGo = true;
-      stepArrs.splice( global.step + 1 );
-      stepArrs = JSON.parse(JSON.stringify(stepArrs));
+      global.stepArrs.splice( global.step + 1 );
+      global.stepArrs = JSON.parse(JSON.stringify(global.stepArrs));
       global.switchRecord.splice( global.step + 1 );
       if(move(m, n, global, false)){
         let grids = JSON.parse(JSON.stringify(global.grids));
-        stepArrs.push(grids);
+        global.stepArrs.push(grids);
         global.step++;
         global.switch = 3 - global.switch;
-        global.AICanGo = true;
+        global.oppositeCanGo = true;
         if(checkPass(global)){
           global.switch = 3 - global.switch;
-          global.AICanGo = false;
+          global.oppositeCanGo = false;
           if(checkPass(global)){
             console.log("gameover");
             setTimeout(() => {
-              resultAnnounce(global.grids);
+              resultAnnounce( 3 - global.grids );
             }, 100)
           }
         }
         global.switchRecord.push(global.switch);
       }
-      
+
   }
 
   function move(m, n, e, isChecked) {
@@ -223,7 +223,8 @@
         step: 0,
         alreadyGo: false,
         AICoordinate: {x: 0,y: 0},
-        AICanGo: false
+        oppositeCanGo: false,
+        owner: 2
       };
     },
     methods: {
@@ -232,27 +233,39 @@
         if (move(m, n, this, true)) this.grids[m * 8 + n].isHover = true;
       },
       mouseClick(m, n) {
-        go(m,n,this);
-        if( this.AICanGo){
-          setTimeout(() => {
-            this.AIGO();
-          },500)
-        } 
+        if(!checkPass(this)){
+          go(m,n,this);
+          if( this.oppositeCanGo ){
+            setTimeout(() => {
+              this.AIGO();
+            },500)
+          }
+        }else{
+          this.switch = 3 - this.switch;
+          this.AIGO();
+        }
+
       },
       backOrGoStep(direction){
-        this.step += direction * 2;
-        if(this.step == 0) this.alreadyGo = false;
-        if(this.step < 0 || this.step > stepArrs.length - 1 ){
-          this.step -= direction * 2;
-          this.step <= 1 ? alert('已经是最初的状态了') : alert('已经是最后的状态了');
-          return;
+        while(true){
+          this.step += direction;
+          if(this.switchRecord[this.step] == this.owner){
+            this.grids = this.stepArrs[this.step];
+            this.switch = this.switchRecord[this.step];
+            break;
+          }
+          // if(this.step == 0) this.alreadyGo = false;
+          if(this.step < 0 || this.step > this.stepArrs.length - 1 ){
+            this.step -= direction;
+            this.step <= 1 ? alert('已经是最初的状态了') : alert('已经是最后的状态了');
+            return;
+          }
         }
-        this.grids = stepArrs[this.step];
-        this.switch = this.switchRecord[this.step];
       },
       AIGO() {
         if(!checkPass(this)){
           go(this.AICoordinate.x,this.AICoordinate.y,this,false);
+          if(!this.oppositeCanGo) this.AIGO();
         }
       }
     }
