@@ -186,10 +186,25 @@ class OthelloView {
 
         // console.log(this.game.pattern.flips, this.flippings);
         element.addEventListener('click', () => {
-          this.game.move(x, y)
-          // if (this.game.move(x, y)) {
+          if (this.game.move(x, y)) {
             this.render();
-          // }
+            let i = 0;
+            for (let ele of this.flippings) {
+              i++;
+              let flipping = false;
+              setTimeout(() => {
+                if (flipping) return;
+                ele.classList.add('flip');
+                flipping = true;
+                ele.addEventListener('transitionend', handleFlip);
+                function handleFlip() {
+                  flipping = false;
+                  ele.classList.remove('flip');
+                  ele.removeEventListener('transitionend', handleFlip);
+                }
+              }, 300 + i * 10);
+            }
+          }
         });
         this.container.appendChild(element);
       }
