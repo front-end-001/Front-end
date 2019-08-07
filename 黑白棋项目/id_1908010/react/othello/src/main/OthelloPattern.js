@@ -90,15 +90,15 @@ class OthelloPattern {
 
     showWin() {
         let temp = this.board.flat();
-        let blackCount = temp.filter(a => a == 1).length;
-        let whiteCount = temp.filter(a => a == 2).length;
+        let blackCount = temp.filter(a => a === 1).length;
+        let whiteCount = temp.filter(a => a === 2).length;
         console.log(`game over, black:${blackCount}, white:${whiteCount}, ${blackCount > whiteCount ? "Black Win" : "White Win"}`);
     }
 
     showCurrent() {
         let temp = this.board.flat();
-        let blackCount = temp.filter(a => a == 1).length;
-        let whiteCount = temp.filter(a => a == 2).length;
+        let blackCount = temp.filter(a => a === 1).length;
+        let whiteCount = temp.filter(a => a === 2).length;
         console.log("white: ", whiteCount, "\nblack: ", blackCount);
     }
 
