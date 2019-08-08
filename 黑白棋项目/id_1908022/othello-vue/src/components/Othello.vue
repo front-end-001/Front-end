@@ -131,7 +131,7 @@
           if(checkPass(global)){
             console.log("gameover");
             setTimeout(() => {
-              resultAnnounce( 3 - global.grids );
+              resultAnnounce( global.grids );
             }, 100)
           }
         }
