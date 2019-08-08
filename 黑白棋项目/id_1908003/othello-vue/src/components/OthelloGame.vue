@@ -1,21 +1,27 @@
 <template>
   <div class="othello-container">
-    <div class="othello-container-board">
+    <div class="othello-board">
       <template v-for="(item, row) in mapData">
         <div
           v-for="(subItem, colum) in item"
           :key="`cell-${row}-${colum}`"
-          class="othello-container-cell"
+          class="othello-cell"
           :class="getClassName(subItem)"
           @click="move(row, colum)" />
         <br :key="`breakline-${row}`">
       </template>
     </div>
+    <div class="othello-tooltip">
+      {{ tooltip }}
+    </div>
+    <div class="othello-control">
+      <button @click="moveBack">回退</button>
+      <button @click="reStart">重新开始</button>
+    </div>
   </div>
 </template>
 
 <script>
-// import { deepClone } from '@/assets/js/utils.js';
 import OthelloGame from '../model/OthelloGame';
 
 export default {
@@ -23,6 +29,7 @@ export default {
   data() {
     return {
       mapData: [],
+      tooltip: '',
     };
   },
   created() {
@@ -48,17 +55,29 @@ export default {
     },
     update() {
       this.mapData = this.gameInstance.getMap();
+      this.tooltip = this.gameInstance.getTip();
+    },
+    moveBack() {
+      this.gameInstance.moveBack();
+      this.update();
+    },
+    reStart() {
+      this.gameInstance.reStart();
+      this.update();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.othello-container {
-  font-size: 0;
-  margin-top: 30px;
+.othello {
+  &-container {
+    font-size: 0;
+    padding: 20px;
+  }
 
   &-tooltip {
+    font-size: 14px;
     text-align: center;
     margin-top: 16px;
   }

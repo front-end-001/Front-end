@@ -140,7 +140,7 @@ export class ChessPattern {
         needBreak = Object.keys(this.derictions).some((key) => {
           const data = this.findOneWay({ x: i, y: j, target, deriction: this.derictions[key] });
           if (!data) return false;
-          console.log(`找到${(target === WHITE) ? '白' : '黑'}子可落子位置(${i},${j})`);
+          // console.log(`找到${(target === WHITE) ? '白' : '黑'}子可落子位置(${i},${j})`);
           canmove = true;
           return true;
         });
@@ -248,9 +248,9 @@ export default class ChessGame {
    */
   getTip() {
     let msg = '';
+    const { countBlack, countWhite } = this.countChess();
     switch (this.status) {
       case 0:
-        const { countBlack, countWhite } = this.countChess();
         if (countBlack !== countWhite) {
           msg = `游戏已结束, ${ (countBlack > countWhite) ? '黑' : '白' }棋赢!`;
         } else {
@@ -325,100 +325,6 @@ export default class ChessGame {
     };
   }
 }
-
-class ChessGameView {
-  constructor(container) {
-    /** @type {Element} 游戏容器 */
-    this.container = container;
-    this.game = new ChessGame();
-  }
-
-  render() {
-    this.container.innerHTML = '';
-    /** 渲染棋盘 */
-    const boardEle = document.createElement('div');
-    boardEle.classList.add('chess');
-    const mapData = this.game.getMap();
-
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        const cell = document.createElement('div');
-        boardEle.appendChild(cell);
-        
-        cell.classList.add('chess-cell');
-        if (mapData[i][j] === BLACK) {
-          cell.classList.add('black');
-        } else if (mapData[i][j] === WHITE) {
-          cell.classList.add('white');
-        } else if (mapData[i][j] === BOUNDARY) {
-          cell.classList.add('boundary');
-        }
-        if (mapData[i][j] > 0) continue;
-        cell.addEventListener('click', () => {
-          const moveResult = this.game.move(i, j);
-
-          if (typeof moveResult === 'string') {
-            alert(moveResult);
-            return;
-          }
-          // 渲染
-          this.render();
-        });
-      }
-      boardEle.appendChild(document.createElement('br'));
-    }
-
-    this.container.appendChild(boardEle);
-
-    /** 渲染提示 */
-    const textEle = document.createElement('div');
-    textEle.classList.add('tooltip');
-    textEle.textContent = this.game.getTip();
-    this.container.appendChild(textEle);
-
-    /** 操作按钮 */
-    const controlEle = document.createElement('div');
-    controlEle.classList.add('control');
-    const backBtn = document.createElement('button');
-    backBtn.textContent = '回退';
-    backBtn.addEventListener('click', () => {
-      this.game.moveBack();
-      this.render();
-    });
-    controlEle.appendChild(backBtn);
-    const restartBtn = document.createElement('button');
-    restartBtn.textContent = '重新开始';
-    restartBtn.addEventListener('click', () => {
-      this.game.reStart();
-      this.render();
-    });
-    controlEle.appendChild(restartBtn);
-    this.container.appendChild(controlEle);
-  }
-
-  goBack() {
-    this.game.moveBack();
-    this.render();
-  }
-
-  reStart() {
-    this.game.reStart();
-    this.render();
-  }
-}
-
-// /** @type {Element} 棋盘容器元素 */
-// let contianer1 = document.getElementById("game1");
-
-// const game1 = new ChessGameView(contianer1);
-
-// game1.render();
-
-// /** @type {Element} 棋盘容器元素 */
-// let contianer2 = document.getElementById("game2");
-
-// const game2 = new ChessGameView(contianer2);
-// game2.render();
 
 // // 仅剩两个空格
 // let map = [
