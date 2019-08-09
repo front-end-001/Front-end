@@ -17,10 +17,10 @@ export class ChessPattern {
   defaultData = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, -1, -1, -1, -1, 0, 0],
+    [0, 0, -1, 2, 1, -1, 0, 0],
+    [0, 0, -1, 1, 2, -1, 0, 0],
+    [0, 0, -1, -1, -1, -1, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ];
@@ -276,6 +276,14 @@ export default class ChessGame {
     /** @type {object[]} */
     this.patterns = [];
     this.record();
+
+    if (player === WHITE) {
+      this.block = true;
+      // 模拟 AI 走棋时间
+      setTimeout(() => {
+        this.doNextTurn(this.pattern.autoMove(this.currentTarget));
+      }, 1000);
+    }
   }
 
   getMap() {
@@ -293,40 +301,42 @@ export default class ChessGame {
     // 吃子
     const moveResult = this.pattern.move({ x, y, target: this.currentTarget });
 
-    const doNextTurn = (moveResult) => {
-      if (typeof moveResult === 'string') {
-        return moveResult;
-      }
+    return this.doNextTurn(moveResult);
+  }
 
-      // 进入下一轮, 切换对手
-      if (moveResult.ifNextAvailable) {
-        this.currentTarget = (this.currentTarget === WHITE) ? BLACK : WHITE;
-        this.status = 2;
-      } else if (moveResult.ifEnd) {
-        this.status = 0;
-      } else {
-        this.status = 3;
-      }
-
-      // 记录当前步
-      this.record();
-
-      // 判断下一步是AI 自动走下一步
-      if (this.currentTarget !== this.player) {
-        this.block = true;
-        // 模拟 AI 走棋时间
-        setTimeout(() => {
-          doNextTurn(this.pattern.autoMove(this.currentTarget));
-        }, 2000);
-      } else {
-        this.block = false;
-      }
-
-      this.notify();
+  /** 
+   * 根据结果自动触发 AI 走棋
+   */
+  doNextTurn(moveResult) {
+    if (typeof moveResult === 'string') {
+      return moveResult;
     }
-    
-    doNextTurn(moveResult);
-    return true;
+
+    // 进入下一轮, 切换对手
+    if (moveResult.ifNextAvailable) {
+      this.currentTarget = (this.currentTarget === WHITE) ? BLACK : WHITE;
+      this.status = 2;
+    } else if (moveResult.ifEnd) {
+      this.status = 0;
+    } else {
+      this.status = 3;
+    }
+
+    // 记录当前步
+    this.record();
+
+    // 判断下一步是AI 自动走下一步
+    if (this.currentTarget !== this.player) {
+      this.block = true;
+      // 模拟 AI 走棋时间
+      setTimeout(() => {
+        this.doNextTurn(this.pattern.autoMove(this.currentTarget));
+      }, 1000);
+    } else {
+      this.block = false;
+    }
+
+    this.notify();
   }
 
   /**
@@ -361,7 +371,7 @@ export default class ChessGame {
   /** 重新开始 */
   reStart() {
     if (this.block) return;
-    
+
     this.currentTarget = BLACK;
     this.status = 1;
     this.pattern.setMap();
@@ -383,7 +393,7 @@ export default class ChessGame {
    */
   moveBack() {
     if (this.block) return;
-    if (this.patterns.length === 1) {
+    if (this.patterns.length < 3) {
       return false;
     }
 
@@ -409,7 +419,7 @@ export default class ChessGame {
     if (!this.updateNotify) return;
     try {
       this.updateNotify(this);
-    } catch(err) {
+    } catch (err) {
       // eslint-disable-next-line
       console.error(err);
     }
