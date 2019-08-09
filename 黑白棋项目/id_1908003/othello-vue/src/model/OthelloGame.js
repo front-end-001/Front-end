@@ -352,10 +352,19 @@ export default class ChessGame {
 
     if (this.status === 0) {
       const { countBlack, countWhite } = this.countChess();
-      if (countBlack !== countWhite) {
-        msg = `游戏已结束, ${ currentText }赢!`;
-      } else {
+      if (countBlack === countWhite) {
         msg = '游戏结束, 平局';
+      } else {
+        if (countBlack > countWhite) {
+          msg = `游戏已结束, 黑棋赢!`;
+        } else {
+          msg = `游戏已结束, 白棋赢!`;
+        }
+        if ((this.player === BLACK && countBlack > countWhite) || (this.player === WHITE && countBlack < countWhite)) {
+          msg += ' 玩家胜利!';
+        } else {
+          msg += ' AI胜利!';
+        }
       }
     } else if (this.status === 1) {
       msg = `${currentRoleText}轮: 开局, 黑棋先手`;
