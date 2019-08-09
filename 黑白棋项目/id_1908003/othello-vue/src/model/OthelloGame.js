@@ -43,6 +43,8 @@ export class ChessPattern {
    * @returns {string|{map: number[][], ifNextAvailable: boolean, ifEnd: boolean}} 返回字符串表示走棋失败, 字符串内容是说明
    */
   move({ x, y, target }) {
+    if (this.map[x][y] > 0) return '当前位置不可落子';
+
     /** 移动标记 */
     let hasMove = false;
     // 吃子, 各个方向
@@ -98,6 +100,36 @@ export class ChessPattern {
     }
 
     return result;
+  }
+
+  /**
+   * 自动走棋
+   * @param {1|2} target 角色
+   */
+  autoMove(target) {
+    let canmove = false;
+    let x;
+    let y;
+    for (let i = 0, needBreak = false; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.map[i][j] !== BOUNDARY) continue;
+        // 各个方向确认是否可吃子
+        // 如果找到 则标志退出循环
+        needBreak = Object.keys(this.derictions).some((key) => {
+          const data = this.findOneWay({ x: i, y: j, target, deriction: this.derictions[key] });
+          if (!data) return false;
+          // console.log(`找到${(target === WHITE) ? '白' : '黑'}子可落子位置(${i},${j})`);
+          x = i;
+          y = j;
+          canmove = true;
+          return true;
+        });
+        if (needBreak) break;
+      }
+      if (needBreak) break;
+    }
+    if (!canmove) return false;
+    return this.move({ x, y, target });
   }
 
   setMap(mapData) {
@@ -194,14 +226,51 @@ export class ChessPattern {
     /** 找到的坐标 */
     return { x: newX, y: newY };
   }
+
+  /** 统计棋盘信息 */
+  countChess() {
+    /** 黑棋计数 */
+    let countBlack = 0;
+    /** 白棋计数 */
+    let countWhite = 0;
+    /** 空位计数 */
+    let countEmpty = 0
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.map[i][j] === WHITE) {
+          countWhite += 1;
+        } else if (this.map[i][j] === BLACK) {
+          countBlack += 1;
+        } else {
+          countEmpty += 1;
+        }
+      }
+    }
+    return {
+      countBlack,
+      countWhite,
+      countEmpty,
+    };
+  }
 }
 export default class ChessGame {
-  constructor() {
+  /**
+   * 构造函数
+   * @param {1|2} player 玩家选择的
+   * @param {function} updateCb 更新回调, 用于通知更新
+   */
+  constructor(player, updateCb) {
+    this.player = player;
     /** @type {1|2} 当前轮 */
     this.currentTarget = BLACK;
     /** @type {1|2|3|0} 1-游戏开局, 2-游戏进行中, 3-pass规则生效中, 0-游戏结束 */
     this.status = 1;
+    /** 是否锁定, true-锁定,不可操作 false-非锁定,可操作 */
+    this.block = false;
     this.pattern = new ChessPattern();
+    if (typeof updateCb === 'function') {
+      this.updateNotify = updateCb;
+    }
 
     // 过程缓存
     /** @type {object[]} */
@@ -214,31 +283,49 @@ export default class ChessGame {
   }
 
   /**
-   * 走棋
+   * 玩家走棋
    * @param {number} x 行
    * @param {number} y 列
    * @returns {true|string} 走棋成功返回 true, 走棋失败返回失败原因
    */
   move(x, y) {
+    if (this.block) return '请稍等...';
     // 吃子
     const moveResult = this.pattern.move({ x, y, target: this.currentTarget });
 
-    if (typeof moveResult === 'string') {
-      return moveResult;
-    }
+    const doNextTurn = (moveResult) => {
+      if (typeof moveResult === 'string') {
+        return moveResult;
+      }
 
-    // 进入下一轮, 切换对手
-    if (moveResult.ifNextAvailable) {
-      this.currentTarget = (this.currentTarget === WHITE) ? BLACK : WHITE;
-      this.status = 2;
-    } else if (moveResult.ifEnd) {
-      this.status = 0;
-    } else {
-      this.status = 3;
-    }
+      // 进入下一轮, 切换对手
+      if (moveResult.ifNextAvailable) {
+        this.currentTarget = (this.currentTarget === WHITE) ? BLACK : WHITE;
+        this.status = 2;
+      } else if (moveResult.ifEnd) {
+        this.status = 0;
+      } else {
+        this.status = 3;
+      }
 
-    // 记录当前步
-    this.record();
+      // 记录当前步
+      this.record();
+
+      // 判断下一步是AI 自动走下一步
+      if (this.currentTarget !== this.player) {
+        this.block = true;
+        // 模拟 AI 走棋时间
+        setTimeout(() => {
+          doNextTurn(this.pattern.autoMove(this.currentTarget));
+        }, 2000);
+      } else {
+        this.block = false;
+      }
+
+      this.notify();
+    }
+    
+    doNextTurn(moveResult);
     return true;
   }
 
@@ -247,35 +334,38 @@ export default class ChessGame {
    * @returns {string} 当前游戏提示文字
    */
   getTip() {
+    /** 提示文案 */
     let msg = '';
-    const { countBlack, countWhite } = this.countChess();
-    switch (this.status) {
-      case 0:
-        if (countBlack !== countWhite) {
-          msg = `游戏已结束, ${ (countBlack > countWhite) ? '黑' : '白' }棋赢!`;
-        } else {
-          msg = '游戏结束, 平局';
-        }
-        break;
-      case 1:
-        msg = '开局, 黑棋先手';
-        break;
-      case 2:
-        msg =  `${ (this.currentTarget === WHITE) ? '白' : '黑' }棋轮`;
-        break;
-      case 3:
-        msg =  `PASS: ${ (this.currentTarget === WHITE) ? '白' : '黑' }棋继续走`;
-        break;
-      default:
+    /** 当前轮文字 */
+    const currentText = (this.currentTarget === WHITE) ? '白棋' : '黑棋';
+    const currentRoleText = (this.currentTarget === this.player) ? '玩家' : 'AI';
+
+    if (this.status === 0) {
+      const { countBlack, countWhite } = this.countChess();
+      if (countBlack !== countWhite) {
+        msg = `游戏已结束, ${ currentText }赢!`;
+      } else {
+        msg = '游戏结束, 平局';
+      }
+    } else if (this.status === 1) {
+      msg = `${currentRoleText}轮: 开局, 黑棋先手`;
+    } else if (this.status === 2) {
+      msg = `${currentRoleText}轮: 请${ currentText }落子`;
+    } else if (this.status === 3) {
+      msg = `${currentRoleText}轮: PASS! ${ currentText }继续落子`;
     }
+
     return msg;
   }
 
   /** 重新开始 */
   reStart() {
+    if (this.block) return;
+    
     this.currentTarget = BLACK;
     this.status = 1;
     this.pattern.setMap();
+    this.notify();
   }
 
   /** 缓存当前步 */
@@ -287,42 +377,46 @@ export default class ChessGame {
     });
   }
 
-  /** 回退 */
+  /**
+   * 回退
+   * 回退应该回到同一个颜色上次落子的时机
+   */
   moveBack() {
+    if (this.block) return;
     if (this.patterns.length === 1) {
       return false;
     }
-    this.patterns.pop();
-    const step = this.patterns[this.patterns.length - 1];
+
+    let step;
+    while (this.patterns.length > 1) {
+      this.patterns.pop();
+      step = this.patterns[this.patterns.length - 1];
+      if (step.currentTarget === this.currentTarget) break;
+    }
     this.currentTarget = step.currentTarget;
     this.status = step.status;
     this.pattern.setMap(step.map);
+    this.notify();
   }
 
   /** 统计棋盘信息 */
   countChess() {
-    /** 黑棋计数 */
-    let countBlack = 0;
-    /** 白棋计数 */
-    let countWhite = 0;
-    /** 空位计数 */
-    let countEmpty = 0
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        if (this.pattern.map[i][j] === WHITE) {
-          countWhite += 1;
-        } else if (this.pattern.map[i][j] === BLACK) {
-          countBlack += 1;
-        } else {
-          countEmpty += 1;
-        }
-      }
+    return this.pattern.countChess();
+  }
+
+  /** 更新主动通知 */
+  notify() {
+    if (!this.updateNotify) return;
+    try {
+      this.updateNotify(this);
+    } catch(err) {
+      // eslint-disable-next-line
+      console.error(err);
     }
-    return {
-      countBlack,
-      countWhite,
-      countEmpty,
-    };
+  }
+
+  isBlock() {
+    return false;
   }
 }
 
