@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-05 09:37:10
+ * @LastEditTime: 2019-08-09 18:06:07
+ * @LastEditors: Please set LastEditors
+ -->
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
@@ -23,8 +30,13 @@
               let cross = document.createElement("div");
               cross.className = "grid";
               cross.addEventListener("click", () => {
-                this.game.move(x, y);
-                this.render();
+                if (this.game.staus) {
+                  this.game.move(x, y);
+                  this.render();
+                  this.game.ai();
+                } else {
+                  alert("请稍等");
+                }
               });
               if (this.game.pattern.arr[y][x] === 1) {
                 let round = document.createElement("div");
@@ -36,12 +48,14 @@
                 round.className = "black";
                 cross.appendChild(round);
               }
-              for (let portability of this.game.portability) {
-                if (portability.x === x && portability.y === y) {
-                  let round = document.createElement("div");
-                  round.className = "tips";
-                  round.innerHTML = portability.num;
-                  cross.appendChild(round);
+              if (this.game.color === 2) {
+                for (let portability of this.game.portability) {
+                  if (portability.x === x && portability.y === y) {
+                    let round = document.createElement("div");
+                    round.className = "tips";
+                    round.innerHTML = portability.num;
+                    cross.appendChild(round);
+                  }
                 }
               }
               root.appendChild(cross);
@@ -70,6 +84,7 @@
       );
       v.game.checkPass();
       v.render();
+      window.v = v;
     </script>
   </body>
 </html>

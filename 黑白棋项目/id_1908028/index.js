@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-05 09:37:10
+ * @LastEditTime: 2019-08-09 18:05:19
+ * @LastEditors: Please set LastEditors
+ */
 class OthelloPattern {
   constructor(
     // arr = [
@@ -32,7 +39,7 @@ class OthelloPattern {
   move(x, y, color, checkOnly = false) {
     let ox = x;
     let oy = y;
-    let count = 1;
+    let count = 0;
     if (this.arr[y][x] !== 0) {
       return false;
     }
@@ -111,6 +118,17 @@ class OthelloGame {
       { color: 2, arr: this.pattern.arr.map(item => item.slice()) }
     ];
     this.optimal = void 0;
+    this.Fraction = [
+      [500, -25, 10, 5, 5, 10, -25, 500],
+      [-25, -45, 1, 1, 1, 1, -45, -25],
+      [10, 1, 3, 2, 2, 3, 1, 10],
+      [5, 1, 2, 1, 1, 2, 1, 5],
+      [5, 1, 2, 1, 1, 2, 1, 5],
+      [10, 1, 3, 2, 2, 3, 1, 10],
+      [-25, -45, 1, 1, 1, 1, -45, -25],
+      [500, -25, 10, 5, 5, 10, -25, 500]
+    ];
+    this.staus = true;
   }
   checkPass() {
     let check = [];
@@ -121,10 +139,7 @@ class OthelloGame {
           check.push({
             x,
             y,
-            num:
-              this.color === 1
-                ? this.count().white + move.count
-                : this.count().black + move.count
+            num: move.count
           });
         }
       }
@@ -176,6 +191,7 @@ class OthelloGame {
         arr: this.pattern.arr.map(item => item.slice())
       });
       this.color = 3 - this.color;
+      this.staus = false;
     }
     if (this.checkPass()) {
       console.log("passed");
@@ -183,10 +199,36 @@ class OthelloGame {
         console.log("Game Over");
       } else {
         this.color = 3 - this.color;
+        this.staus = false;
       }
     }
   }
+
+  sum(arr = this.pattern.arr, color = 1) {
+    let sum = 0;
+    for (let y = 0; y < arr.length; y++) {
+      for (let x = 0; x < arr[y].length; x++) {
+        if (arr[y][x] === color) {
+          sum = sum + this.Fraction[y][x] * (color === 1 ? 1 : -1);
+        }
+      }
+    }
+    return sum;
+  }
+
+  ai() {
+    setTimeout(function(){
+      this.staus = false;
+    },5000)
+  }
 }
+
+// class Ai extends OthelloGame{
+//   constructor(){
+//     super()
+//   }
+
+// }
 
 // class Ai {
 //   constructor() {
