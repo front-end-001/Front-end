@@ -1,8 +1,8 @@
 {
-  "name": "othello2",
+  "name": "othello",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lcl22hope.github.io/Front-end/tree/master/黑白棋项目/id_1908010/react/othello",
+  "homepage": "https://lcl22hope.github.io/othelloReact",
   "dependencies": {
     "antd": "^3.21.2",
     "classnames": "^2.2.6",
@@ -15,8 +15,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -b master -d build"
+
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,6 +35,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^2.1.0"
+    "gh-pages": "^2.0.1"
   }
 }
