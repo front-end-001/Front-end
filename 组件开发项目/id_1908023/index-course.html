@@ -14,9 +14,10 @@
       border: 1px solid #ccc;
       box-sizing: border-box;
       margin: 50px auto;
-      overflow: hidden;
-      position: relative;
+      /* overflow: hidden; */
+      overflow: visible;
       white-space: nowrap;
+      outline: 1px solid blue;
     }
     .carousel>img {
       width: 100%;
@@ -58,14 +59,39 @@
         let children = Array.prototype.slice.call(this._container.children);
         let position = 0;
         let nextFrame = () => {
-          position++;
-          position = position % children.length;
-          for (let child of children) {
-            child.style.transform = `translate(${-100 * position}%)`;
-          }
-          this._handler = setTimeout(nextFrame, 3000);
+          // position++;
+          let nextPosition = position + 1;
+          nextPosition = nextPosition % children.length;
+          // position = position % children.length;
+          
+          let current = children[position];
+          let next = children[nextPosition];
+
+          //把next摆到正确的位置
+          next.style.transition = 'ease 0';
+          next.style.transform = `translate(${-100 - 100 * nextPosition}%)`;
+
+          setTimeout(() => {
+            //把current挪出视口
+            current.style.transition = ""; //transition置空，css中的属性就会生效
+            current.style.transform = `translate(${- 100 - 100 * position}%)`
+            //把next挪进视口
+            next.style.transition = "";
+            next.style.transform = `translate(${- 100 * nextPosition}%)`
+            position = nextPosition;
+          }, 16);
+
+
+          
+
+
+          // for (let child of children) {
+            // child.style.transform = `translate(${-100 * position}%)`;
+          // }
+          
+          setTimeout(nextFrame, 3000);
         }
-        this._handler = setTimeout(nextFrame, 3000);
+        setTimeout(nextFrame, 3000);
       }
     }
 
