@@ -8,7 +8,7 @@
   <title>Document</title>
   <!-- <link rel="stylesheet" href="style.css"> -->
   <style>
-    #carousel {
+    .carousel {
       width: 400px;
       height: 200px;
       border: 1px solid #ccc;
@@ -16,39 +16,24 @@
       margin: 50px auto;
       overflow: hidden;
       position: relative;
+      white-space: nowrap;
+    }
+    .carousel>img {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      transition: ease .5s;
     }
 
-    #container {
-      overflow: hidden;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    #container .item {
-      width: 400px;
-      height: 200px;
-      margin-right: 20px;
-      background: gray;
-      float: left;
-    }
   </style>
 </head>
 
 <body>
 
-  <div id="carousel">
-    <div id="container">
-      <div class="item">1111111</div>
-      <div class="item">22222222</div>
-      <div class="item">33333333</div>
-      <div class="item">44444444</div>
-      <div class="item">55555555</div>
-    </div>
+  <div id="container">
+
   </div>
 
-
-  <!-- <script src="index.js"></script> -->
   <script>
     let data = [
       "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
@@ -60,13 +45,32 @@
     class Carousel {
       constructor(container) {
         this._container = container;
+        this._container.classList.add('carousel');
+        this._handler = null;
+        this.data = null;
       }
       render() {
-
+        for(let d of this.data) {
+          let e = document.createElement('img');
+          e.src = d;
+          this._container.appendChild(e);
+        }
+        let children = Array.prototype.slice.call(this._container.children);
+        let position = 0;
+        let nextFrame = () => {
+          position++;
+          position = position % children.length;
+          for (let child of children) {
+            child.style.transform = `translate(${-100 * position}%)`;
+          }
+          this._handler = setTimeout(nextFrame, 3000);
+        }
+        this._handler = setTimeout(nextFrame, 3000);
       }
     }
 
-    let carousel = new Carousel(document.getElementById('carousel'));
+    let carousel = new Carousel(document.getElementById('container'));
+    carousel.data = data;
     carousel.render();
 
 
