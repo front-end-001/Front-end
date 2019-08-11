@@ -1,4 +1,4 @@
-# 学习笔记
+# 三大框架组件化学习笔记
 
 ## Vue组件规范
 摘自：https://cn.vuejs.org/v2/guide/components.html
