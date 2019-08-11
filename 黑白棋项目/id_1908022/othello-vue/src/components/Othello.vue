@@ -249,17 +249,30 @@
       backOrGoStep(direction){
         while(true){
           this.step += direction;
-          if(this.switchRecord[this.step] == this.owner){
-            this.grids = this.stepArrs[this.step];
-            this.switch = this.switchRecord[this.step];
+          if(this.switchRecord[this.step]){
+            if(this.switchRecord[this.step] == this.owner){
+              this.grids = this.stepArrs[this.step];
+              this.switch = this.switchRecord[this.step];
+              break;
+            }
+          } else {
+            while(true){
+              this.step -= direction;
+              if(this.switchRecord[this.step] == this.owner){
+                this.grids = this.stepArrs[this.step];
+                this.switch = this.switchRecord[this.step];
+                this.step <= 1 ? alert('已经是最初的状态了') : alert('已经是最后的状态了');
+                break;
+              }
+            }
             break;
           }
           // if(this.step == 0) this.alreadyGo = false;
-          if(this.step < 0 || this.step > this.stepArrs.length - 1 ){
+          /*if(this.step < 0 || this.step > this.stepArrs.length - 1 ){
             this.step -= direction;
             this.step <= 1 ? alert('已经是最初的状态了') : alert('已经是最后的状态了');
             return;
-          }
+          }*/
         }
       },
       AIGO() {
