@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>黑白棋项目</title>
+  <link rel="stylesheet" href="normalize.css">
+  <style>
+    body {
+      font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+    }
+
+    .chess {
+      font-size: 0;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .chess .chess-cell {
+      width: 30px;
+      height: 30px;
+      background-color: #ccc;
+      display: inline-block;
+      margin: 1px;
+    }
+
+    .tooltip {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .control {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .show-boundary .chess .boundary {
+      background-color: aquamarine;
+    }
+
+    .chess .chess-cell.white::after {
+      content: ' ';
+      display: block;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: white;
+      margin: 2px;
+    }
+
+    .chess .chess-cell.black::after {
+      content: ' ';
+      display: block;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: black;
+      margin: 2px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div id="game1"></div>
+    <div style="text-align: center; margin-top: 50px;">展示边缘计算</div>
+    <div id="game2" class="show-boundary"></div>
+    <script src="app.js"></script>
+  </div>
+</body>
+
+</html>
