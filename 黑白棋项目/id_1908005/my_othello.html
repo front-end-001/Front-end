@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .box {
+      display: flex;
+      flex-wrap: wrap;
+      width: 240px;
+    }
+
+    .cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #fff;
+      box-sizing: border-box;
+      background: #b1c0ce;
+    }
+
+    .w::before,
+    .b::before {
+      content: " ";
+      display: block;
+      width: 25px;
+      height: 25px;
+      background: #fff;
+      border: 0px;
+      border-radius: 50%;
+    }
+
+    .b::before {
+      background: #000;
+    }
+
+    .canClick::before {
+      content: " ";
+      display: block;
+      width: 30px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box1" class="box"></div>
+  <div id="box2" class="box"></div>
+  <script>
+    let box = document.createElement("div");
+    box.classList.add("box");
+
+    class Pattern {
+      constructor(map) {
+        this.map = map || [
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 1, 2],
+          [0, 0, 0, 0, 0, 0, 2, 1]
+        ];
+        this.directions = [{
+            x: -1,
+            y: -1
+          },
+          {
+            x: -1,
+            y: 0
+          },
+          {
+            x: -1,
+            y: 1
+          },
+          {
+            x: 0,
+            y: -1
+          },
+          {
+            x: 0,
+            y: 1
+          },
+          {
+            x: 1,
+            y: -1
+          },
+          {
+            x: 1,
+            y: 0
+          },
+          {
+            x: 1,
+            y: 1
+          }
+        ];
+      }
+
+      move = (i, j, color, show, canClick) => {
+        if (this.map[i][j] > 0) {
+          return
+        }
+        let moveSuccess = false
+        for (let direction of this.directions) {
+          let canMove = false;
+          let [x, y] = [j, i];
+          while (true) {
+            x += direction.x;
+            y += direction.y;
+            if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+              canMove = false
+              break
+            }
+            if (this.map[y][x] === 3 - color) {
+              canMove = true
+            } else if (this.map[y][x] === color) {
+              break
+            } else if (this.map[y][x] === 0) {
+              canMove = false
+              break
+            }
+            if (x < 0) {
+              canMove = false;
+            }
+          }
+          moveSuccess = canMove || moveSuccess;
+          if (canMove && show) {
+            if (show === 3) {} else {
+              while (true) {
+                x -= direction.x;
+                y -= direction.y;
+                this.map[y][x] = color;
+                if (y === i && x === j) {
+                  break
+                }
+              }
+            }
+          }
+        }
+        return moveSuccess
+      }
+      canAdd = color => {
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 8; j++) {
+            this.move(i, j, color, 3)
+          }
+        }
+      }
+      checkPass = (color) => {
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 8; j++) {
+            if (this.move(i, j, color, false)) {
+              return false
+            }
+          }
+        }
+        return true
+      }
+      clone = () => {
+        return new Pattern(this.map.map(line => line.slice()));
+      }
+    }
+
+    class Game {
+      constructor() {
+        this.patterns = [new Pattern()];
+        this.colors = [1];
+      }
+      get pattern() {
+        return this.patterns[this.patterns.length - 1];
+      }
+      get color() {
+        return this.colors[this.colors.length - 1];
+      }
+      move = (i, j) => {
+        let pattern = this.pattern.clone();
+        let color = this.color
+        if (pattern.move(i, j, color, true)) {
+          color = 3 - color;
+          if (pattern.checkPass(color)) {
+            color = 3 - color;
+            if (pattern.checkPass(color)) {
+              alert("挂了挂了 游戏结束")
+            }
+          } else {
+            pattern.canAdd(color)
+          }
+          this.patterns.push(pattern);
+          this.colors.push(color);
+          return true;
+        }
+      }
+      revert = () => {
+        if (this.patterns.length > 1) {
+          this.patterns.pop();
+          this.colors.pop();
+        }
+      }
+    }
+    class View {
+      constructor(propsBox, game) {
+        this.box = propsBox;
+        this.game = game;
+      }
+      render() {
+        this.box.innerHTML = "";
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 8; j++) {
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            this.box.appendChild(cell);
+            cell.addEventListener("click", (e) => {
+              this.game.move(i, j)
+              this.render()
+            });
+            switch (this.game.pattern.map[i][j]) {
+              case 0:
+                cell.classList.add("none");
+                break;
+              case 1:
+                cell.classList.add("b");
+                break;
+              case 2:
+                cell.classList.add("w");
+                break;
+              case 3:
+                cell.classList.add("canClick");
+                break;
+              default:
+                break;
+            }
+          }
+        }
+        let regret = document.createElement('button');
+        regret.innerText = "悔棋";
+        regret.addEventListener('click', event => {
+          this.game.revert();
+          this.render();
+        })
+        this.box.appendChild(regret);
+      }
+    }
+
+
+
+    new View(document.getElementById("box1"), new Game()).render()
+    new View(document.getElementById("box2"), new Game()).render()
+  </script>
+</body>
+
+</html>
