@@ -145,3 +145,8 @@ P1:
      4.1 鼠标悬停展示向左和向右翻页按钮
       4.1.1 P2: 第一张图没有向左按钮，最后一张图没有向右按钮
      4.2 点击向左按钮向前播放，点击向右按钮向后播放
+
+9. 轮播组件实战
+链接
+[不带拖拽的轮播效果](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/no-drag.html)
+[拖拽的效果](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/drag.html)
