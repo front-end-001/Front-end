@@ -58,13 +58,17 @@
     ]
     
     class Carousel {
-      constructor() {
-
+      constructor(container) {
+        this._container = container;
       }
       render() {
-        
+
       }
     }
+
+    let carousel = new Carousel(document.getElementById('carousel'));
+    carousel.render();
+
 
   </script>
 </body>
