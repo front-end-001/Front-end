@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #app {
+      margin: 0 auto;
+      font-size: 0;
+      width: 800px;
+    }
+
+    .chess {
+      background-color: skyblue;
+      border: 1px solid #fff;
+      display: inline-block;
+      height: 98px;
+      width: 98px;
+    }
+
+    .white::after,
+    .black::after
+
+    /* .optional::after  */
+      {
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+    }
+
+    .white::after,
+    .black::after {
+      height: 100%;
+      width: 100%;
+    }
+
+    .white::after {
+      background-color: #fff;
+    }
+
+    .black::after {
+      background-color: #000;
+    }
+
+    .optional::after {
+      height: 20px;
+      width: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <template v-for="(map, i) in maps">
+      <div v-for="(v, j) in map" class="chess" :class="{black: v === 1, white : v === 2}" @click="dropChess(i, j)">
+      </div>
+    </template>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        maps: [
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 1, 2, 0, 0, 0],
+          [0, 0, 0, 0, 2, 1, 0, 0],
+          [0, 0, 0, 0, 1, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+      },
+      methods: {
+        dropChess(i, j) {
+          console.log(i, j);
+          let canmove = false;
+          let [x, y] = [j, i];
+          // right j-- i0
+          while (--x > 0) {
+            // 边界
+            if (x < 0 || x >= this.maps.length || y < 0 || y >= this.maps.length) {
+              canmove = false;
+              break;
+            }
+            // canmove是用来渲染棋子颜色的
+            if (this.maps[y][x] === 2) { // 当前颜色相反的就可以移动
+              canmove = true
+            } else if (this.maps[y][x] === 1) { // 相同的就停止
+              break;
+            } else if (this.maps[y][x] === 0) { // 空直接中止
+              canmove = false
+              break;
+            }
+          }
+
+          while (canmove && ++x <= j) {
+            this.$set(this.maps[y], x, 1)
+          }
+          // left j++ i0
+          [x, y] = [j, i];
+          while (++x > 0) {
+            if (x < 0 || x >= this.maps.length || y < 0 || y >= this.maps.length) {
+              canmove = false;
+              break;
+            }
+            // canmove是用来渲染棋子颜色的
+            if (this.maps[y][x] === 2) { // 当前颜色相反的就可以移动
+              canmove = true
+            } else if (this.maps[y][x] === 1) { // 相同的就停止
+              break;
+            } else if (this.maps[y][x] === 0) { // 空直接中止
+              canmove = false
+              break;
+            }
+          }
+
+          while (canmove && --x >= j) {
+            this.$set(this.maps[y], x, 1)
+          }
+          
+          // top j0 i++
+          [x, y] = [j, i];
+          while (++y > 0) {
+            if (x < 0 || x >= this.maps.length || y < 0 || y >= this.maps.length) {
+              canmove = false;
+              break;
+            }
+            // canmove是用来渲染棋子颜色的
+            if (this.maps[y][x] === 2) { // 当前颜色相反的就可以移动
+              canmove = true
+            } else if (this.maps[y][x] === 1) { // 相同的就停止
+              break;
+            } else if (this.maps[y][x] === 0) { // 空直接中止
+              canmove = false
+              break;
+            }
+          }
+
+          while (canmove && --y <= i) {
+            this.$set(this.maps[x], y, 1)
+          }
+        },
+      },
+      created() {
+
+      },
+      mounted() {
+
+      },
+    })
+  </script>
+</body>
+
+</html>
