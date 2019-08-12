@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="board"></div>
+<script>
+    let map = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 1, 0, 0, 0],
+        [0, 0, 0, 1, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    let color = 1
+    let container = document.getElementById("board");
+    render();
+
+    function render() {
+        container.innerHTML = '';//清棋盘
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                let cell = document.createElement("div");
+                container.appendChild(cell);
+                cell.style = `vertical-align:middle;
+                            height:30px;
+                            width:30px;
+                            margin:1px;
+                            background-color:darkgreen;
+                            display:inline-block`;
+                cell.addEventListener("click", event => {
+                    let directions = [
+                        {x: -1, y: -1},
+                        {x: -1, y: 1},
+                        {x: 1, y: -1},
+                        {x: 1, y: 1},
+                        {x: 0, y: -1},
+                        {x: 0, y: 1},
+                        {x: -1, y: 0},
+                        {x: 1, y: 0}
+                    ]
+
+                    for (let direction of directions) {
+                        let canPlace = false;//能否落子
+                        let [y, x] = [i, j];
+                        console.log('map[' + y + '][' + x + ']=' + map[y][x])
+                        while (true) {//右侧吃子
+                            x += direction.x
+                            y += direction.y
+                            if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                                canPlace = false
+                                break
+                            }
+
+                            if (map[y][x] == 3-color) {//白
+                                canPlace = true;
+                            } else if (map[y][x] == color) {//黑
+                                break
+                            } else if (map[y][x] == 0) {//没子
+                                canPlace = false;
+                                break;
+                            }
+                        }
+
+                        while (canPlace) {
+                            x -= direction.x
+                            y -= direction.y
+                            map[y][x] = color;
+                            if (x == j && y == i){
+                                color = 3 - color;
+                                break;
+                            }
+
+                        }
+
+                    }
+
+
+                    render();//刷新棋盘
+
+                })
+                if (map[i][j] == 1) {
+                    let disc = document.createElement("div");
+                    disc.style = `margin:2px;border-radius:13px;
+                width:26px;height:26px;background-color:black`
+                    cell.appendChild(disc);
+                }
+                if (map[i][j] == 2) {
+                    let disc = document.createElement("div");
+                    disc.style = `margin:2px;border-radius:13px;
+                width:26px;height:26px;background-color:white`
+                    cell.appendChild(disc);
+                }
+            }
+            container.appendChild(document.createElement("br"));
+        }
+    }
+
+</script>
+</body>
+</html>

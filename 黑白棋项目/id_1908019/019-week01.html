@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>othello-wonder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <style media="screen">
+        div .block {
+            width: 70px;
+            height: 70px;
+            background-color: lightgrey;
+            display: inline-block;
+            border: solid 1px white;
+            vertical-align: middle;
+        }
+
+        /* #container {
+                width: max-content;
+                height: max-content;
+            } */
+        div .blackChess {
+            width: 50px;
+            height: 50px;
+            border-radius: 40px;
+            background-color: black;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+        div .whiteChess {
+            width: 50px;
+            height: 50px;
+            border-radius: 40px;
+            background-color: white;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style='width:100%;height:100%;display:flex;justify-content:center;align-items: center;'>
+        <div id="container"></div>
+        <div id="container2"></div>
+    </div>
+    <script type="text/javascript">
+        // console
+        var log = function() {
+            console.log.apply(console, arguments)
+        }
+
+        class OthelloPattern {
+            constructor() {
+                this.map = [
+                    [0, 0, 0, 0, 0, 0, 0, 0, ],
+                    [0, 0, 0, 0, 0, 0, 0, 0, ],
+                    [0, 0, 0, 0, 0, 0, 0, 0, ],
+                    [0, 0, 0, 0, 0, 0, 0, 0, ],
+                    [0, 0, 0, 0, 1, 2, 0, 0, ],
+                    [0, 0, 0, 1, 2, 2, 0, 0, ],
+                    [0, 0, 0, 0, 0, 0, 0, 2, ],
+                    [0, 0, 0, 0, 0, 0, 2, 1, ],
+                ]
+            }
+
+            move(x, y, color, checkPass) {
+                if (this.map[y][x] > 0) {
+                    return false
+                }
+
+                var orginX = x
+                var orginY = y
+                log(x, y)
+                var canMove = false
+                var oppositeChess = false
+                var checkPass = false
+
+                let directions = [
+                    [-1, -1],
+                    [0, -1],
+                    [1, -1],
+                    [1, 0],
+                    [1, 1],
+                    [0, 1],
+                    [-1, 1],
+                    [-1, 0],
+                ]
+
+                for (let i = 0; i < directions.length; i++) {
+                    let x = orginX
+                    let y = orginY
+                    // 递减应该放在 while TRUE 循环中
+                    while (true) {
+                        x -= directions[i][0]
+                        y -= directions[i][1]
+                        // 确定边界
+                        // 0-7 8个
+                        if (x < 0 || y < 0 || x > 7 || y > 7) {
+                            canMove = false
+                            break
+                        }
+                        if (this.map[y][x] == 3 - color) {
+                            oppositeChess = true
+                        }
+                        if (this.map[y][x] == color && oppositeChess) {
+                            canMove = true
+                            break
+                        }
+                        if (this.map[y][x] == 0) {
+                            canMove = false
+                            break
+                        }
+                    }
+                    if (canMove && !checkPass) {
+                        while (true) {
+                            x += directions[i][0]
+                            y += directions[i][1]
+                            log('while', x, y)
+                            this.map[y][x] = color
+                            // checkPass = true
+                            if (x == orginX && y == orginY) {
+                                break
+                            }
+                        }
+                    }
+
+                }
+                return true
+            }
+
+            check() {
+                for (let y = 0; y < 8; y++) {
+                    for (let x = 0; x < 8; x++) {
+                        if (this.move(x, y, this.color, true)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+
+
+
+                return true
+            }
+        }
+
+        class OthelloGame {
+            constructor() {
+                this.pattern = new OthelloPattern()
+                this.color = 1
+            }
+            move(x, y) {
+                if (this.pattern.move(x, y, this.color, false)) {
+                    this.color = 3 - this.color
+                    if (this.pattern.check(this.color)) {
+                        if (this.pattern.check(this.color)) {
+                            alert('Game Over!')
+                        }
+                    }
+                    return true
+                }
+            }
+        }
+
+        class OthelloView {
+            constructor(container, game) {
+                this.container = container
+                this.game = game
+            }
+
+            render() {
+                this.container.innerHTML = ''
+                for (let y = 0; y < 8; y++) {
+                    for (let x = 0; x < 8; x++) {
+                        var element = document.createElement('div')
+                        element.className = 'block'
+                        this.container.appendChild(element)
+
+                        if (this.game.pattern.map[y][x] == 1) {
+                            var disc = document.createElement('div')
+                            disc.className = 'blackChess'
+                            element.appendChild(disc)
+                        }
+                        if (this.game.pattern.map[y][x] == 2) {
+                            var disc = document.createElement('div')
+                            disc.className = 'whiteChess'
+                            element.appendChild(disc)
+                        }
+
+                        element.addEventListener('click', event => {
+                            this.game.move(x, y)
+                            this.render()
+                        })
+                    }
+                    this.container.appendChild(document.createElement("br"))
+                }
+            }
+
+        }
+        // 获取容器
+        var container = document.getElementById('container')
+
+
+        new OthelloView(document.getElementById("container"),
+            new OthelloGame()).render();
+
+
+
+    </script>
+</body>
+
+</html>
