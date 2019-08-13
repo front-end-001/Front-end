@@ -1,0 +1,34 @@
+.home{
+    width:800px;
+    height:800px;
+    background: #87e687;
+    border: 1px solid #000;
+}
+.box{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.item{
+    width:98px;
+    height:98px;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.Whiteqizi{
+    width:80px;
+    height:80px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #333;
+}
+.blackqizi{
+    width:80px;
+    height:80px;
+    border-radius: 50%;
+    background: #000;
+    border: 1px solid #333;
+}

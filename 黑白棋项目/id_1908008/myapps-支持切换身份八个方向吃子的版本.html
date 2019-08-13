@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>刘文儒的作业</title>
+<style type="text/css"></style>
+</head>
+<body>
+<div id="information"></div>
+<div id="gamecontainer"></div>
+</body>
+<script type="text/javascript">
+    let color=1;  // 先走棋子颜色
+    // 1 代表是黑棋 2 代表是白旗
+    let map=[
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,1,0,0,0,0],
+        [0,0,0,1,2,0,0,0],
+        [0,0,0,2,1,0,0,0],
+        [0,0,2,0,0,0,0,0],
+        [0,1,1,1,0,1,2,0],
+        [0,0,0,0,2,2,0,0],
+        [0,0,0,0,0,0,0,0]
+    ];
+    let content=document.getElementById("gamecontainer");
+    function coverpiece(i,j){
+        console.log("当前点击位置"+i+j);
+        let dects=[
+        {x:-1, y:-1},
+                  {x:-1, y:0},
+                  {x:-1, y:1},
+                  {x:0, y:-1},
+                  {x:0, y:1},
+                  {x:1, y:-1},
+                  {x:1, y:0},
+                  {x:1, y:1}
+        ]; // 吃子的八个方向
+        let movesuccess=false; // 标记是否可以切换棋子颜色去走子
+        for(let k=0;k<dects.length;k++){
+            let dect=dects[k];// 向左方向移动吃子
+            //let dect={x:-1,y:0};// 向上方向移动吃子
+            let clicklocation={x:i,y:j}; // 记录下点击的位置
+            let checkpoint={x:i,y:j}; // 开始检查的时间点
+            let canmove=false; // 标识是否存在可以改变棋子顺序的变量
+            
+            while(true){
+                // 和老师学会的方法，如果条件很复杂的话可以死循环然后在条件中break，条件中方法的箭头函数的，还是不理解
+                // 向左方向去移动找看看有没有子可以吃，找到可以吃的最末端的子记录下来位置，然后翻折数组
+                checkpoint={x:checkpoint.x+dect.x,y:checkpoint.y+dect.y};
+                console.log("检查的位置......"+checkpoint.x+checkpoint.y);
+                if(checkpoint.x<0 || checkpoint.x>=8 || checkpoint.y<0|| checkpoint.y>=8){
+                    canmove=false;
+                    break
+                }
+                if(map[checkpoint.x][checkpoint.y]===3-color){
+                    // 找到和自己不一样的棋子，继续找下一个
+                    canmove=true;
+                }
+                if(map[checkpoint.x][checkpoint.y]===color){
+                    // 和自己一样的棋子，跳过不用找了
+                    console.log("找到可以吃的最后一个位置或者和自己是一样的，不用找了"+checkpoint.x+checkpoint.y);
+                    break
+                }
+                if(map[checkpoint.x][checkpoint.y]===0){
+                    // 旁边没有子
+                    console.log("旁边没有子了，不用找了"+checkpoint.x+checkpoint.y);
+                    canmove=false;
+                    break
+                }
+                
+            }
+            // 从checkpoint点开始往回翻棋子
+            if(canmove){
+                let backpoint={x:checkpoint.x,y:checkpoint.y};
+                while(!(clicklocation.x===backpoint.x && clicklocation.y===backpoint.y)){
+                    backpoint={x:backpoint.x+(-dect.x),y:backpoint.y+(-dect.y)};
+                    map[backpoint.x][backpoint.y]=color;
+                    // 如果代码走到这个位置了说明一定是吃过子了，所以可以切换下一步走子的身份了
+                    movesuccess=true;
+                }
+            }
+        }
+        if(movesuccess===true){
+            console.log("上一次 color"+color+"吃到子了，切换身份...");
+            color=3-color;
+        } 
+    }
+    render();
+    function render(){
+        content.innerHTML="";
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                let node=document.createElement("div");
+                node.addEventListener("click",event=>{
+                    coverpiece(i,j);
+                    render();
+                });
+                // 渲染棋盘的方法，这个部分万年不动的
+                node.style=`vertical-align:middle;width:30px;margin:1px;height:30px;background-color:#F9CD9F;display:inline-block`;
+                //node.innerText=""+i+"-"+j+"";
+                content.appendChild(node);
+                if( map[i][j] === 1 ){
+                    let blackpiece=document.createElement("div");
+                    blackpiece.style=`margin:2px;border-radius:13px;width:26px;height:26px;background-color:black`;
+                    node.appendChild(blackpiece);
+                }
+                if(map[i][j]===2){
+                    let whitepiece=document.createElement("div");
+                    whitepiece.style=`margin:2px;border-radius:13px;width:26px;height:26px;background-color:white`;
+                    node.appendChild(whitepiece);
+                }
+            }
+            let br=document.createElement("br");
+            content.appendChild(br);
+        }
+    }
+</script>
+</html>

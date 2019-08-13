@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>黑白棋</title>
+</head>
+
+<body>
+    <div id="box">
+    </div>
+    <script>
+        let map = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        let container = document.getElementById("box");
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                let cell = document.createElement("div");
+                container.appendChild(cell);
+                cell.style = "width:40px; height:40px; display:inline-block; background-color:green; border-right:1px solid #fff;"
+                if (map[i][j] == 1) {
+                    let item = document.createElement("div");
+                    item.style = "width:36px; height:36px; border-radius:50%; background-color:white; margin:2px auto"
+                    cell.appendChild(item);
+                }
+                if (map[i][j] == 2) {
+                    let item = document.createElement("div");
+                    item.style = "width:36px; height:36px; border-radius:50%; background-color:black; margin:2px auto"
+                    cell.appendChild(item);
+                }
+            }
+            container.appendChild(document.createElement("br"))
+
+        }
+    </script>
+</body>
+
+</html>
