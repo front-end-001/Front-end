@@ -44,9 +44,6 @@ class Carousel {
         const el = this._el;
         ['dragStart', 'dragging', 'dragEnd'].forEach(handler => this[handler] = this[handler].bind(this))
         el.addEventListener('mousedown', this.dragStart);
-        for (const img of el.children) {
-            img.addEventListener('mousedown', e => e.preventDefault());
-        }
     }
     dragStart(e) {
         document.addEventListener('mousemove', this.dragging);
@@ -58,6 +55,7 @@ class Carousel {
     }
     dragging(e) {
         // console.log('move', e.clientX - this.dragStatus.start);
+        e.preventDefault();
         this._position = this.dragStatus.initPos + e.clientX - this.dragStatus.start;
         this.update(this._position + 'px');
     }
