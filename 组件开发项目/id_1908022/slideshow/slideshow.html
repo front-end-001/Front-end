@@ -23,7 +23,7 @@
 <body>
     <div id="container" class="container"></div>
     <script>
-        let container = document.getElementById('container');
+        /* let container = document.getElementById('container');
         container.classList.add("carousel");
         let data = [
         "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
@@ -48,7 +48,57 @@
             return createDiv;
         }
 
-        appendImgBox(3,data);
+        appendImgBox(3,data); */
+
+        let data =  [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+        ];
+
+        class Carousel {
+            constructor(container){
+                this._container = container;
+                this._container.classList.add('carousel');
+                this.data = null;
+            }
+
+            render() {
+               for(let url of this.data){
+                   var e = document.createElement('img');
+                   e.src = url;
+                   this._container.appendChild(e);
+               } 
+
+               let children = this._container.children;
+
+               let position = 0;
+               let nextFrame = () => {
+                   let nextPosition = position + 1;
+                   nextPosition = nextPosition % children.length;
+
+                   let current = children[position];
+                   let next = children[nextPosition];
+
+                   next.style.transition = "ease 0s";
+                   next.style.transform = `translate(${100 - nextPosition * 100}%)`;
+                   setTimeout(() => {
+                    current.style.transition = '';
+                    current.style.transform = `translate(${-100 - position * 100}%)`;
+                    next.style.transition = "";
+                    next.style.transform = `translate(${- nextPosition * 100}%)`;
+                    positon = nextPositon;
+                   },16)
+                   setTimeout(nextFrame,3000);
+               }
+               setTimeout(nextFrame,3000);
+            }
+        }
+
+        let carousel = new Carousel(document.getElementById('container'));
+        carousel.data = data;
+        carousel.render();
 
         
 
