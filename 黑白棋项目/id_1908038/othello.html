@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>黑白棋Othello——封装</title>
+  <style>
+    .black::before {
+      content: '';
+      display: block;
+      width:26px;
+      height:26px;
+      margin:2px;
+      background-color:black;
+      border-radius:100%
+    }
+    .white::before {
+      content: '';
+      display: block;
+      width:26px;
+      height:26px;
+      margin:2px;
+      background-color:white;
+      border-radius:100%
+    }
+  </style>
+</head>
+<body>
+  <div id="board"></div>
+  <br />
+  <div id="board2"></div>
+  <script src="js/othello.js"></script>
+</body>
+</html>
