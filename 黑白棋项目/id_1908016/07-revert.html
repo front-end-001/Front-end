@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>othello</title>
+</head>
+<body>
+    <div id="board"></div>
+    <br>
+    <br>
+    <div id="board1"></div>
+    <script>
+        /**
+         * @classdesc 本类用于负责处理UI相关的任务
+         * @desc 本类的构造函数中需传递2个参数: 用于装载棋盘的容器DOM和用于处理棋局的game类的实例
+         * */
+        class OthelloView {
+            constructor(container, game) {
+                this.container = container;
+                this.game = game;
+            }
+
+            /**
+             * 本方法用于根据数据模型(即二维数组中每个元素的值)来渲染视图并创建悔棋按钮
+             * @method
+             * @return {void}
+             * */
+            render() {
+                this.container.innerHTML= '';
+                for (let i = 0; i < 8; i++) {
+                    for(let j = 0; j < 8; j++) {
+                        let cell = document.createElement("div");
+                        this.container.appendChild(cell);
+                        cell.style = `vertical-align:middle;width:30px;margin:1px;
+            height:30px;background-color:darkgreen;
+            display:inline-block`;
+                        cell.addEventListener("click", (event) => {
+                            this.game.move(i, j);
+                            this.render();
+                        });
+
+                        if(this.game.pattern.map[i][j] > 0) {
+                            let disc = document.createElement("div");
+                            disc.style = `margin:2px;border-radius:13px;
+                width:26px;height:26px;background-color:${this.game.pattern.map[i][j] == 1 ? 'black' : 'white'}`;
+                            cell.appendChild(disc);
+                        }
+                    }
+                    this.container.appendChild(document.createElement("br"));
+                }
+
+                // 创建悔棋按钮
+                let regret = document.createElement("button");
+                regret.innerText = "悔棋";
+                regret.addEventListener("click", (event) => {
+                    this.game.revert();
+                    this.render();
+                });
+                this.container.appendChild(regret);
+            }
+        }
+
+        /**
+         * @classdesc 本类用于处理与局面落子后状态相关的任务 (譬如:棋盘的初始化 落子规则 PASS规则)
+         * @desc 初始化棋盘以及优先落子者的执子颜色
+         * */
+        class OthelloPattern {
+            constructor(map) {
+                this.map = map || [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 1, 2, 0, 0, 0],
+                    [0, 0, 0, 2, 1, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ];
+
+                this.color = 1;
+             }
+
+            /**
+             * 本方法用于检测给定位置对于给定棋子颜色而言是否可以落子并返回判定结果 如可以落子则返回true 否则返回false
+             * 在可以落子的情况下本函数将根据状态位设置来决定是否完成吃子的功能
+             * @method
+             * @param {int} i 待落子处的垂直坐标
+             * @param {int} j 待落子处的水平坐标
+             * @param {int} color 当前执子者的执子颜色
+             * @param {boolean} checkOnly 描述move()函数是否需要吃子的状态位
+             * @return {boolean} moveSuccess 标识是否成功落子的状态位 如成功落子则将所有方向上可以吃的敌方棋子都吃掉
+             * */
+            move(i, j, color, checkOnly) {
+                let moveSuccess = false;
+
+                if(this.map[i][j] > 0) {
+                    return moveSuccess;
+                }
+
+                let directions = [
+                    {x:-1, y:-1},
+                    {x:-1, y:0},
+                    {x:-1, y:1},
+                    {x:0, y:-1},
+                    {x:0, y:1},
+                    {x:1, y:-1},
+                    {x:1, y:0},
+                    {x:1, y:1}
+                ];
+
+                for (let direction of directions) {
+                    let canMove = false;
+                    let [x, y] = [j, i];
+
+                    while (true) {
+                        x += direction.x;
+                        y += direction.y;
+
+                        if(x < 0 || x >= 8 || y < 0 || y >= 8) {
+                            canMove = false;
+                            break;
+                        }
+
+                        if(this.map[y][x] === 3 - color) {
+                            canMove = true;
+                        } else if (this.map[y][x] === color) {
+                            break;
+                        } else if (this.map[y][x] === 0) {
+                            canMove = false;
+                            break;
+                        }
+                    }
+
+                    moveSuccess = moveSuccess || canMove;
+
+                    if(canMove && !checkOnly) {
+                        while(true) {
+                            x -= direction.x;
+                            y -= direction.y;
+
+                            this.map[y][x] = color;
+                            if(x === j && y === i) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                return moveSuccess;
+            }
+
+            /**
+             * 本方法用于检测棋盘上每个格子对于当前执子者而言是否可落子.如存在可落子的格子返回false(表示未被PASS),否则返回true
+             * @method
+             * @param {int} color 当前执子者所执棋子的颜色
+             * @return {boolean} false:当前执子者没被PASS true:当前执子者被PASS了
+             * */
+            checkPass(color) {
+                for (let i = 0; i < 8; i++) {
+                    for( let j = 0; j < 8; j++) {
+                        if(this.move(i, j,color, true)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            /**
+             * 本方法用于返回一个新的OthelloPattern的实例
+             * @method
+             * @return {OthelloPattern}
+             * */
+            clone() {
+                // TODO: line => line.slice()啥意思 = =
+                return new OthelloPattern(this.map.map(line => line.slice()));
+            }
+        }
+
+        /**
+         * @classdesc 本类用于控制棋盘当前状态 (譬如:控制落子后棋盘的状态 落子后落子权的让渡)
+         * @desc 初始化棋盘维护类OthelloPattern的实例和优先落子者的执子颜色
+         * */
+        class OthelloGame {
+            constructor() {
+                this.patterns = [new OthelloPattern()];
+                this.colors = [1];
+            }
+
+            /**
+             * 返回最后一次落子后棋盘状态的触发器
+             * @method
+             * @return {OthelloPattern}
+             * */
+            get pattern() {
+                return this.patterns[this.patterns.length - 1];
+            }
+
+            /**
+             * 返回最后一次落子后落子权归属的触发器
+             * @method
+             * @return {int}
+             * */
+            get color() {
+                return this.colors[this.colors.length - 1];
+            }
+
+            /**
+             * 本方法用于检测是否可以落子 并根据落子结果维护落子权的归属 之后将棋盘情况及落子权归属情况记录至本类的成员属性中
+             * @method
+             * @param {int} i 待落子处的垂直坐标
+             * @param {int} j 待落子处的水平坐标
+             * @return {boolean}
+             * */
+            move(i, j) {
+                // JS的拷贝是深拷贝 也就是复制一份副本 副本与原本指向不同的地址
+                // 也就是说此处的含义为:复制最后一次棋盘的情况 并根据落子情况修改副本 然后记录修改后的棋盘状态
+                // 当然这里的clone()方法是自己实现的
+                let pattern = this.pattern.clone();
+                let color = this.color;
+                if(pattern.move(i, j, color, false)) {
+                    color = 3 - color;
+                    if(pattern.checkPass(color)) {
+                        color = 3 - color;
+                        if(pattern.checkPass(color)) {
+                            alert("GG");
+                        }
+                    }
+
+                    // 记录本次操作的棋盘状态和落子权归属日志
+                    this.patterns.push(pattern);
+                    this.colors.push(color);
+                    return true;
+                }
+            }
+
+            /**
+             * 本方法用于从本类的成员属性patterns和colors中删除最后一个元素 以便实现悔棋功能
+             * @method
+             * @return {void}
+             * */
+            revert() {
+                if(this.patterns.length > 1) {
+                    this.patterns.pop();
+                    this.colors.pop();
+                }
+            }
+        }
+
+        new OthelloView(document.getElementById("board"), new OthelloGame()).render();
+    </script>
+</body>
+</html>
