@@ -52,21 +52,31 @@ class Carousel {
         document.addEventListener('mousemove', this.dragging);
         document.addEventListener('mouseup', this.dragEnd);
         this.dragStatus = {
-            initPos: this.dragStatus && this.dragStatus.endPos || 0,
+            initPos: this._position || 0,
             start: e.clientX
         };
     }
     dragging(e) {
         // console.log('move', e.clientX - this.dragStatus.start);
-        this.update((this.dragStatus.initPos + e.clientX - this.dragStatus.start) + 'px');
+        this._position = this.dragStatus.initPos + e.clientX - this.dragStatus.start;
+        this.update(this._position + 'px');
     }
     dragEnd(e) {
         document.removeEventListener('mousemove', this.dragging);
         document.removeEventListener('mouseup', this.dragEnd);
-        this.dragStatus.endPos = this.dragStatus.initPos + e.clientX - this.dragStatus.start;
+        //弹回
+        const containerWidth = this._el.offsetWidth;
+        const i = Math.min(this._items.length - 1, Math.max(0, Math.round(-this._position / containerWidth)));
+        const from = `${this._position}px`;
+        const to = `${this._position  = -i*containerWidth}px`;
+        console.log('end:', from, to);
+        for (const img of this._el.children) {
+            cssMove(img, from, to);
+        }
     }
     update(x) {
         for (const img of this._el.children) {
+            img.classList.remove('animate');
             img.style.transform = `translateX(${x})`;
         }
     }
