@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  box-sizing: border-box;
+  width: 420px;
+  margin: 10px auto;
+  overflow: hidden;
+}
+/* 优化使用伪类来画棋子 */
+.chess-box {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  margin: 1px;
+  float: left;
+  background: burlywood;
+  cursor: pointer;
+}
+.chess-box {
+  border-right: unset;
+  border-bottom: unset;
+}
+
+.chess-black::after, .chess-white::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.chess-black::after {
+  background: black;
+}
+
+.chess-white::after {
+  background: white;
+}
+.tip-box {
+  width: 420px;
+  margin: 50px auto 0;
+}

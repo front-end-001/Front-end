@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>黑白棋-UI分离</title>
+    <script src='Othello02.js'></script>
+</head>
+<body>
+    <div id='container'></div>
+    <script>        
+        class view{
+            constructor(game,container){
+                this.game=game;
+                this.container=container;
+                this.show(game.pattern);
+            }
+            show(pattern){
+                this.container.innerHTML='';
+                for(let y=0;y<8;y++){
+                    for(let x=0;x<8;x++){
+                        //画棋盘
+                        let ele=document.createElement('div');
+                        ele.addEventListener('click',(event)=>{
+                            this.game.move(x,y);  
+                            this.show(this.game.pattern);
+                        });
+                        ele.style='width:50px;height:50px;background-color:green;border:1px solid white;display:inline-block;vertical-align:bottom';
+                        container.appendChild(ele);  
+                        //画黑子
+                        if(pattern.board[y][x]===1){
+                            let cir=document.createElement('div');
+                            cir.style='width:40px;height:40px;border-radius:20px;background-color:black;margin:5px';
+                            ele.appendChild(cir);
+                        }
+                        //画白子
+                        if(pattern.board[y][x]===2){
+                            let cir=document.createElement('div');
+                            cir.style='width:40px;height:40px;border-radius:20px;background-color:white;margin:5px';
+                            ele.appendChild(cir);
+                        }
+                    }
+                    //一行满8格就换行
+                    let br=document.createElement('br');
+                    container.appendChild(br);
+                }
+            }
+        }
+        let v=new view(new game(),document.getElementById('container'));
+    </script>
+</body>
+</html>
