@@ -3,7 +3,8 @@ class Carousel {
         this._el = el;
         this._items = items;
         this.initDom();
-        this.move();
+        // this.move();
+        this.enableDrag();
     }
     initDom() {
         const { _el: el, _items: item } = this;
@@ -38,6 +39,36 @@ class Carousel {
         this._timer = setTimeout(() => {
             _move();
         }, 2000);
+    }
+    enableDrag() {
+        const el = this._el;
+        ['dragStart', 'dragging', 'dragEnd'].forEach(handler => this[handler] = this[handler].bind(this))
+        el.addEventListener('mousedown', this.dragStart);
+        for (const img of el.children) {
+            img.addEventListener('mousedown', e => e.preventDefault());
+        }
+    }
+    dragStart(e) {
+        document.addEventListener('mousemove', this.dragging);
+        document.addEventListener('mouseup', this.dragEnd);
+        this.dragStatus = {
+            initPos: this.dragStatus && this.dragStatus.endPos || 0,
+            start: e.clientX
+        };
+    }
+    dragging(e) {
+        // console.log('move', e.clientX - this.dragStatus.start);
+        this.update((this.dragStatus.initPos + e.clientX - this.dragStatus.start) + 'px');
+    }
+    dragEnd(e) {
+        document.removeEventListener('mousemove', this.dragging);
+        document.removeEventListener('mouseup', this.dragEnd);
+        this.dragStatus.endPos = this.dragStatus.initPos + e.clientX - this.dragStatus.start;
+    }
+    update(x) {
+        for (const img of this._el.children) {
+            img.style.transform = `translateX(${x})`;
+        }
     }
 }
 
