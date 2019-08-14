@@ -22,6 +22,7 @@
       border: 1px solid #fff;
       display: inline-block;
       height: 98px;
+      transition: transform 0.2s;
       width: 98px;
     }
 
@@ -29,7 +30,7 @@
     .black::after
 
     /* .optional::after  */
-      {
+    {
       border-radius: 50%;
       content: '';
       display: inline-block;
@@ -48,47 +49,78 @@
     .black::after {
       background-color: #000;
     }
+    /* .white::after {
+      background-color: #fff;
+      transform: rotateY(90deg);
+    }
+
+    .black::after {
+      background-color: #000;
+      transform: rotateY(90deg);
+    }
 
     .optional::after {
       height: 20px;
       width: 20px;
-    }
+    } */
+
   </style>
 </head>
 
 <body>
   <div id="app">
-    <template v-for="(row, i) in board">
-      <div v-for="(v, j) in row" class="chess" :class="{black: v === 1, white : v === 2}"
-        @click="playChess(i, j, color, false)">
+    <template v-for="(row, i) in map">
+      <div v-for="(v, j) in row" class="chess" :class="{black: v === 1, white : v === 2}"@click="playChess(i, j, color, false)">
       </div>
     </template>
-    <button @click="revert">悔棋</button>
+    <!-- <div>黑子:{{}}白子:{{}}回合数:{{maps.length}}</div> -->
+    <button @click="revert" v-if="maps.length > 1">悔棋</button>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script>
+  <script type="module">
     new Vue({
       el: '#app',
       data: {
-        map: [
-          [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 1, 2, 0, 0, 0],
-          [0, 0, 0, 2, 1, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0]
+        colors: [1],
+        maps: [
+          [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 2, 2, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+          ]
         ],
-        color: 1,
-        maps: [],
       },
       methods: {
         playChess(i, j, color, checkOnly) {
-          console.log('click'); // 悔棋有bug 需要调试
           let rgb = color;
-          const result = this.dropChess(i, j, color, checkOnly);
-          if ( result === 'undefined' || result === false) {
+          let result, map;
+          if (checkOnly) {
+            const data = this.dropChess(i, j, color, checkOnly);
+            if (typeof data === 'object') {
+              result = data[0]
+              map = data[1]
+            } else {
+              result = data
+            }
+          } else {
+            const data = this.dropChess(i, j, color, checkOnly);
+            if (typeof data === 'object') {
+              result = data[0]
+              map = data[1]
+            } else {
+              result = data
+            }
+          }
+          if (map && !checkOnly) {
+            this.maps.splice(this.maps.length - 1, 0, map);
+            this.colors.push(3 - color);// 记录color
+          }
+          if (!result) {
             return alert('此处不可落子');
           };
           rgb = 3 - rgb;
@@ -97,14 +129,12 @@
             if (this.checkPass(rgb)) {
               alert('Game Over')
             }
-          } else {
-            this.color = 3 - color;
           }
         },
         dropChess(i, j, color, checkOnly) {
           // 当前落子的地方有子
           if (this.map[i][j] > 0) {
-            return;
+            return false;
           }
           // right j-- i0
           // left j++ i0
@@ -125,14 +155,19 @@
             { x: -1, y: 1 },
           ];
           let moveSuccess = false;
-          for (direction of directions) {
+          let move = false;
+          let map = null;
+          if (!checkOnly) {
+            map = this.map.map(line => line.slice());
+          }
+          for (const direction of directions) {
             let canmove = false;
             let [x, y] = [j, i];
             while (true) {
               // 边界
               x += direction.x;
               y += direction.y;
-              if (x < 0 || x >= this.map.length || y < 0 || y >= this.map.length) {
+              if (x < 0 || x >= 8 || y < 0 || y >= 8) {
                 canmove = false;
                 break;
               }
@@ -157,14 +192,15 @@
               }
             }
           }
-          if (!checkOnly && moveSuccess) {
-            this.saveMap(this.map);
+          if (moveSuccess && !checkOnly) {
+            return [moveSuccess, map];
+          } else {
+            return moveSuccess;
           }
-          return moveSuccess;
         },
         checkPass(color) {
-          for (let i = 0; i < this.map.length; i++) {
-            for (let j = 0; j < this.map.length; j++) {
+          for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
               if (this.dropChess(i, j, color, true)) {
                 return false;
               }
@@ -172,25 +208,20 @@
           }
           return true;
         },
-        saveMap(map) {
-          this.maps.push(map.map(line => line.slice()));
-        },
         revert() {
           if (this.maps.length > 1) {
             this.maps.pop();
-            console.log(this.color);
-            this.color = 3 - this.color;
-            console.log(this.color);
+            this.colors.pop();
           }
         }
       },
       computed: {
-        board() {
+        map() {
           return this.maps[this.maps.length - 1]
-        }
-      },
-      mounted() {
-        this.saveMap(this.map);
+        },
+        color() {
+          return this.colors[this.colors.length - 1]
+        },
       },
     })
   </script>
