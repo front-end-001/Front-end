@@ -9,6 +9,7 @@ class Carousel {
   constructor(container, data) {
     this._container = container;
     this._container.classList.add('container');
+    this._handler = null;
     this.data = data;
   }
 
@@ -28,9 +29,9 @@ class Carousel {
       for (let child of children) {
         child.style.transform = `translate(${-100 * position}%)`;
       }
-      setTimeout(nextFrame, 3000);
+      this._handler = setTimeout(nextFrame, 3000);
     }
-    setTimeout(nextFrame, 3000)
+    this._handler = setTimeout(nextFrame, 3000)
   }
 }
 
