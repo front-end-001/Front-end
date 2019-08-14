@@ -10,7 +10,6 @@
 .container{
   width:500px;
   height:300px;
-  overflow:hidden;
   white-space: nowrap;
   position: relative;
   user-select:none;
@@ -42,6 +41,7 @@
   border: 1px solid #fff;
   border-radius: 50%;
   margin-right: 5px;
+  cursor: pointer;
 }
 .active{
   background: #fff!important;
@@ -54,6 +54,7 @@
   margin-top: -25px;
   color: #fff;
   font-size: 30px;
+  display: none;
 }
 .paging div{
   opacity: .7;
@@ -65,9 +66,19 @@
 }
 .paging #left{
   float: left;
+  display: none;
 }
 .paging #right{
   float: right;
+}
+.title {
+  width: 500px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+  background: #fefe;
+  text-align: center;
+  cursor: pointer;
 }
 
 </style>
@@ -79,7 +90,9 @@
             <div id="left"> &lt; </div>
             <div id="right"> &gt; </div>
         </div> 
+        
     </div>
+    <div id="title" class="title"></div>
 
     <script>
         /* let container = document.getElementById('container');
@@ -146,10 +159,29 @@
                    let span = document.createElement('span');
                    this._pointer.appendChild(span);
                } 
+               
 
                let children = this._carousel.children;
-               let points = this._pointer.children;
+               let points = Array.prototype.slice.call(this._pointer.children);
                let pagings = this._paging.children;
+               let title = document.getElementById("title");
+
+               for(let [key,point] of points.entries()){
+                 point.addEventListener('click',()=>{
+                  if(key == 0){
+                    position = 3;
+                  }else{
+                    position = key - 1;
+                  }
+                  nextFrame(true);
+                 })
+               }
+               
+               let initTitle = () => {
+                 title.innerHTML = this.data[0].title;
+                //  title.setAttribute("href", this.data[0].url);
+               }
+               initTitle();
 
                let position = 0;
                this._pointer.style.marginLeft = `-${this._pointer.clientWidth / 2}px`;
@@ -183,6 +215,8 @@
                       prev.style.transform = `translate(${- prevPosition * 100}%)`;
                       position = prevPosition;
                       points[position].classList.add('active');
+                      toggleButtonStatus();
+                      titleShow();
                      })
                    })
                }
@@ -205,6 +239,8 @@
                       next.style.transform = `translate(${- nextPosition * 100}%)`;
                       position = nextPosition;
                       points[position].classList.add('active');
+                      toggleButtonStatus();
+                      titleShow();
                      })
                    })
                    if(!isCycle) frame = setTimeout(nextFrame,3000);
@@ -241,19 +277,55 @@
                  points[position].classList.remove("active");
                  this._carousel.removeEventListener("mousemove",move);
                  this._carousel.removeEventListener("mouseup",end);
-                 if(Math.abs(endX - startX) < 10) rerurn;
+                 if(Math.abs(endX - startX) < 10){
+                  points[position].classList.add("active");
+                  window.open(this.data[position].url);
+                  return;
+                 } 
 
                  position = Math.round(- (startTransform + endX - startX) / 500);
                  position = Math.max(0,Math.min(position,children.length - 1));
                  points[position].classList.add("active");
+                 toggleButtonStatus();
+                 titleShow();
                  for(let child of children){
                    child.style.transition = "";
                    child.style.transform = `translate(${-position * 100}%)`;
                  }
                }
+
+               let toggleButtonStatus = () => {
+                  if(position == 3){
+                    pagings[1].style.display = 'none';
+                    pagings[0].style.display = 'block';
+                  }else if(position == 0){
+                    pagings[0].style.display = 'none';
+                    pagings[1].style.display = 'block';
+                  }else {
+                    pagings[1].style.display = 'block';
+                    pagings[0].style.display = 'block';
+                  }
+               }
+               
+               let titleShow = () => {
+                title.innerHTML = this.data[position].title;
+                // title.setAttribute("href",this.data[position].url);
+               }
+
+               title.addEventListener('click',()=>{
+                //  window.open(event.target.getAttribute('href'));
+                 window.open(this.data[position].url);
+               })
+
                this._carousel.addEventListener('mousedown',start);
-               this._container.addEventListener('mouseover',()=>{if(frame) clearTimeout(frame)});
-               this._container.addEventListener('mouseout',()=>{frame = setTimeout(nextFrame,3000)});
+               this._container.addEventListener('mouseover',()=>{
+                 if(frame) clearTimeout(frame)
+                 this._paging.style.display = 'block';  
+               });
+               this._container.addEventListener('mouseout',()=>{
+                 frame = setTimeout(nextFrame,3000);
+                 this._paging.style.display = 'none';
+               });
 
                pagings[0].addEventListener('click', prevFrame);
                pagings[1].addEventListener('click',() => {nextFrame(true)});
