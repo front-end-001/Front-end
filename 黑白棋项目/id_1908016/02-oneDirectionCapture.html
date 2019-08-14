@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>othello</title>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        // 本变量用于描述棋盘的状态
+        let board = [
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,2,1,0,0,0],
+            [0,0,0,1,2,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+        ];
+
+        // 本变量用于描述当前执子者所执棋子的颜色
+        let color = 1;
+
+        let container = document.getElementById("container");
+
+        render();
+
+        function render() {
+            // TODO:innerHTML和innerText的区别?
+            container.innerHTML = "";
+            for (let y = 0; y < 8; y++) {
+                for (let x = 0; x < 8; x++) {
+                    // 创建棋盘上的格子
+                    let element = document.createElement("div");
+
+                    // 落子后水平向左方向吃子
+                    // 监听盒子的点击事件 此处第2个参数为callback 该callback无论是否定义参数,都将含有一个默认参数event
+                    element.addEventListener("click", (event) => {
+                        // 本变量用于描述落子的水平位置
+                        // Tips:定义x y时必须使用let关键字, 如果使用var 则取到的x y都是render()函数运行后的值:即x=8和y=8
+                        // 基础概念:var的作用域是函数, let的作用域是代码块,因为事件监听函数被callback的时间节点为:在render()函数
+                        // 执行完毕,所以如果使用var,在回调时得到的i,j的值就都是8了.
+                        let ox = x;
+
+                        // 本变量用于描述落子处周围是否有敌方棋子
+                        // 由于本阶段只做左侧吃子,所以在这个场景下,本变量描述的是落子处左侧是否有敌方棋子
+                        let hasOpposite = false;
+
+                        // 本变量用于描述对于当前执子者而言,该格子是否可以落子
+                        let canMove = false;
+
+                        // 如果该位置上已经有棋子了,则不允许落子
+                        if(board[y][x] !== 0) {
+                            alert("该位置上已有棋子,无法落子!");
+                            return;
+                        }
+
+                        // 落子处左侧有棋子
+                        // Tips:此处必须使用--x,而不能使用x--.因为x--不能为左值,--x可以为左值.
+                        while (--x > 0) {
+                            // 左侧为敌方棋子
+                            if(board[y][x] === 3 - color) {
+                                hasOpposite = true;
+                            }
+
+                            // 一直向左检测,发现了我方棋子 并且落子处左侧有敌方棋子 则可以落子
+                            if(board[y][x] === color && hasOpposite) {
+                                canMove = true;
+                                // 判定结束 跳出循环
+                                break;
+                            }
+
+                            // 一直向左检测,检测到已经没有棋子了 则说明在左侧方向上没有我方棋子 无法吃子
+                            // 既然无法吃子 就无法落子了 所以不需要改变canMover的状态位 直接跳出循环
+                            if(board[y][x] === 0) {
+                                break;
+                            }
+                        }
+
+
+                        // 如果可以落子 就意味着可以吃子 所以需要在水平向左方向上,将从落子处开始到我方棋子的位置结束中间
+                        // 的敌方棋子全部吃掉 变成我方棋子
+                        if(canMove) {
+                            while (x++ != ox) {
+                                board[y][x] = color;
+                            }
+
+                            // 一次成功的落子之后 需要交换执子颜色
+                            color = 3 - color;
+                        }
+
+                        // 重新渲染棋盘
+                        render();
+                    });
+
+                    element.style = "vertical-align:bottom; border:1px solid white; width:50px; height:50px; background-color:darkgreen; display:inline-block;";
+                    container.appendChild(element);
+
+                    // 根据board判定当前格子中棋子的颜色 如果有棋子则向该格子中再添加一个div
+                    if(board[y][x] === 1) {
+                        let disc = document.createElement("div");
+                        disc.style = "margin-top:5px; margin-left:5px; border-radius:20px; width:40px; height:40px; background-color:black;";
+                        element.appendChild(disc);
+                    }
+
+                    if(board[y][x] === 2) {
+                        let disc = document.createElement("div");
+                        disc.style = "margin-top:5px; margin-left:5px; border-radius:20px; width:40px; height:40px; background-color:white;";
+                        element.appendChild(disc);
+                    }
+                }
+
+                // 1行创建完毕后要换行 否则就成了64个格子横向排列了
+                container.appendChild(document.createElement("br"));
+            }
+        }
+    </script>
+</body>
+</html>

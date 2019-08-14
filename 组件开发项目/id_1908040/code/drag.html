@@ -1,0 +1,130 @@
+<!-- drag 带鼠标拖拽的版本 -->
+<style>
+    .carousel {
+      width: 500px;
+      height: 300px;
+      white-space: nowrap;
+      overflow: hidden;
+      outline: 1px solid blue;
+    }
+    .carousel > img {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      transition: all ease 0.5s;
+    }
+  </style>
+  
+  <div id="carousel"></div>
+  
+  <script>
+    class Carousel {
+      constructor(container) {
+        this._container = container;
+        this._container.classList.add('carousel');
+        this.data = null;
+      }
+      render() {
+        for (let d of this.data) {
+          let e = document.createElement('img');
+          e.src = d;
+          this._container.appendChild(e);
+        }
+        // ？这里为什么不直接用this._container.children（HTMLCollection），而是浅复制到一个数组里
+        let children = Array.prototype.slice.call(this._container.children);
+        let position = 0; // 当前展示图片的位置
+        let nextFrame = () => {
+          let nextPosition = position + 1; // 下一张要显示的图片位置
+  
+          nextPosition = nextPosition % children.length; // nextPosition一直递增，这里需要做求余处理
+  
+          // 每次移动两张图片
+          let current = children[position],
+            next = children[nextPosition];
+  
+          next.style.transition = 'all ease 0s';
+          next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+  
+          setTimeout(() => {
+            // current向左挪出窗口
+            current.style.transition = ''; // 技巧：赋值为空，就会采用style标签中的默认样式
+            // 第0、1、2、3分别对应 -100 -200 -300 -400时挪出窗口
+            current.style.transform = `translate(${-100 - 100 * position}%)`;
+  
+            // next挪进窗口
+            next.style.transition = '';
+            // 第 0、1、2、3分别对应 0 -100 -200 -300时挪进窗口
+            next.style.transform = `translate(${-100 * nextPosition}%)`;
+  
+            // 移动完上面的元素后，重置position为nextPosition
+            position = nextPosition;
+          }, 16);
+  
+          // 在nextFrame将nextFrame自身加入异步队列，形成了setInterval的效果
+          setTimeout(nextFrame, 3000);
+        };
+        // 轮播
+        // setTimeout(nextFrame, 3000);
+  
+        /*
+              拖拽流程
+              按下鼠标 mousedown
+                监听鼠标移动和松开事件
+              鼠标移动 mousemove
+                设置图片移动
+              松开鼠标 mouseup
+                移除鼠标移动和松开事件
+             */
+        let startX; // 鼠标按下的位置（移动起始位置） event.clientX - startX即为鼠标移动的位移
+        let startTransform; // 图片起始位置
+        let start = event => {
+          event.preventDefault();
+          startX = event.clientX;
+          startTransform = - position * 500;
+          // 这里如果用this._container会出现鼠标离开container的范围后松开鼠标事件未被移除的情况
+          document.addEventListener('mousemove', move);
+          document.addEventListener('mouseup', end);
+        };
+  
+        let move = event => {
+          event.preventDefault();
+          for (let child of children) {
+            child.style.transition = 'all ease 0s';
+            child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+          }
+        };
+  
+        let end = () => {
+          document.removeEventListener('mousemove', move);
+          document.removeEventListener('mouseup', end);
+  
+          // 根据图片位移、鼠标位移计算当前图片索引
+          position = - Math.round((startTransform + event.clientX - startX) / 500);
+          // 处理边界情况？
+          position = Math.max(0, Math.min(position, children.length - 1));
+  
+          console.log(position);
+  
+          for (let child of children) {
+            child.style.transition = '';
+            child.style.transform = `translate(${ - position * 500}px)`;
+          }
+        };
+  
+        // 启动拖拽
+        this._container.addEventListener('mousedown', start);
+      }
+    }
+  
+    let images = [
+      'https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg',
+      'https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg',
+      'https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg',
+      'https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg'
+    ];
+    let carousel = new Carousel(document.getElementById('carousel'));
+    carousel.data = images;
+    // 注意每个实例是在拿到data之后再render
+    carousel.render();
+  </script>
+  
