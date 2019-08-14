@@ -13,6 +13,7 @@
   overflow:hidden;
   white-space: nowrap;
   position: relative;
+  user-select:none;
 }  
 .carousel{
     width:500px;
@@ -45,11 +46,39 @@
 .active{
   background: #fff!important;
 }
+.paging{
+  position: absolute;
+  height: 50px;
+  width: 100%;
+  top: 50%;
+  margin-top: -25px;
+  color: #fff;
+  font-size: 30px;
+}
+.paging div{
+  opacity: .7;
+  cursor: pointer;
+  padding: 0 10px;
+}
+.paging div:hover{
+  opacity: 1;
+}
+.paging #left{
+  float: left;
+}
+.paging #right{
+  float: right;
+}
+
 </style>
 <body>
-    <div class="container">
+    <div id="container" class="container">
         <div id="carousel"></div>
-        <div id="pointer" class="pointer">
+        <div id="pointer" class="pointer"></div>
+        <div class="paging" >
+            <div id="left"> &lt; </div>
+            <div id="right"> &gt; </div>
+        </div> 
     </div>
 
     <script>
@@ -100,10 +129,12 @@
         ];
 
         class Carousel {
-            constructor(container , pointer){
+            constructor(container){
                 this._container = container;
-                this._container.classList.add('carousel');
-                this._pointer = pointer;
+                this._carousel = container.children[0];
+                this._carousel.classList.add('carousel');
+                this._pointer = container.children[1];
+                this._paging = container.children[2];
                 this.data = null;
             }
 
@@ -111,18 +142,52 @@
                for(let item of this.data){
                    let e = document.createElement('img');
                    e.src = item.url;
-                   this._container.appendChild(e);
+                   this._carousel.appendChild(e);
                    let span = document.createElement('span');
                    this._pointer.appendChild(span);
                } 
 
-               let children = this._container.children;
+               let children = this._carousel.children;
                let points = this._pointer.children;
+               let pagings = this._paging.children;
+
                let position = 0;
                this._pointer.style.marginLeft = `-${this._pointer.clientWidth / 2}px`;
                points[0].classList.add('active');
 
-               let nextFrame = () => {
+               let frame;
+
+               let prevFrame = (isCycle) => {
+                   
+                   let prevPosition;
+                   if(position > 0){
+                     prevPosition = position - 1;
+                    //  prevPosition = prevPosition % children.length;
+                   }else{
+                    prevPosition = 3;
+                    // prevPosition = 4 - (Math.abs(position - 1) % children.length);
+                   }
+                   
+
+                   let current = children[position];
+                   let prev = children[prevPosition];
+                   points[position].classList.remove('active');
+
+                   prev.style.transition = "ease 0s";
+                   prev.style.transform = `translate(${-100 - prevPosition * 100}%)`;
+                   requestAnimationFrame(() => {
+                     requestAnimationFrame(() => {
+                      current.style.transition = '';
+                      current.style.transform = `translate(${100 - position * 100}%)`;
+                      prev.style.transition = "";
+                      prev.style.transform = `translate(${- prevPosition * 100}%)`;
+                      position = prevPosition;
+                      points[position].classList.add('active');
+                     })
+                   })
+               }
+
+               let nextFrame = (isCycle) => {
                    let nextPosition = position + 1;
                    nextPosition = nextPosition % children.length;
 
@@ -142,9 +207,9 @@
                       points[position].classList.add('active');
                      })
                    })
-                   setTimeout(nextFrame,3000);
+                   if(!isCycle) frame = setTimeout(nextFrame,3000);
                }
-               setTimeout(nextFrame,3000);
+               frame = setTimeout(nextFrame,3000);
 
                let startX;
                let startTransform;
@@ -152,9 +217,10 @@
                let start = event => {
                  event.preventDefault();
                  startX = event.clientX;
+                 endX = event.clientX;
                  startTransform = - position * 500;
-                 this._container.addEventListener("mousemove",move);
-                 this._container.addEventListener("mouseup", end);
+                 this._carousel.addEventListener("mousemove",move);
+                 this._carousel.addEventListener("mouseup", end);
                }
 
                let move = event => {
@@ -173,8 +239,10 @@
 
                let end = () => {
                  points[position].classList.remove("active");
-                 this._container.removeEventListener("mousemove",move);
-                 this._container.removeEventListener("mouseup",end);
+                 this._carousel.removeEventListener("mousemove",move);
+                 this._carousel.removeEventListener("mouseup",end);
+                 if(Math.abs(endX - startX) < 10) rerurn;
+
                  position = Math.round(- (startTransform + endX - startX) / 500);
                  position = Math.max(0,Math.min(position,children.length - 1));
                  points[position].classList.add("active");
@@ -183,11 +251,16 @@
                    child.style.transform = `translate(${-position * 100}%)`;
                  }
                }
-               this._container.addEventListener('mousedown',start);
+               this._carousel.addEventListener('mousedown',start);
+               this._container.addEventListener('mouseover',()=>{if(frame) clearTimeout(frame)});
+               this._container.addEventListener('mouseout',()=>{frame = setTimeout(nextFrame,3000)});
+
+               pagings[0].addEventListener('click', prevFrame);
+               pagings[1].addEventListener('click',() => {nextFrame(true)});
             }
         }
 
-        let carousel = new Carousel(document.getElementById('carousel'),document.getElementById('pointer'));
+        let carousel = new Carousel(document.getElementById('container'));
         carousel.data = data;
         carousel.render();
 
