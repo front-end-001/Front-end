@@ -1,0 +1,203 @@
+<html>
+    <head></head>
+    <body>
+        <div id="board">
+        </div> 
+    </body>
+    <script type="text/javascript">
+        class  pattern {
+            constructor(map) {
+                this.map = map || [
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,1,2,0,0,0],
+                    [0,0,0,2,1,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0]
+                ];
+            }
+            // 检查是否可移动和更新map
+            canMove(i,j,currentColor,checkOnly){
+                let maxlength =7;
+                let white=2;
+                let black=1;
+                let blank=0;
+                // 方向
+                let directions= [
+                            {x:-1,y:0},
+                            {x:1,y:0},
+                            {x:-1,y:-1},
+                            {x:-1,y:1},
+                            {x:1,y:-1},
+                            {x:1,y:1},
+                            {x:0,y:-1},
+                            {x:0,y:1}
+                        ]
+                let isSuccess=false;
+                if(this.map[i][j]==1 || this.map[i][j]==2){
+                    // 有子
+                    return false;
+                }
+                for(let direction of directions ){
+                    let canmove=false;
+                    let [x,y]=[j,i];
+                    // 往左方向调整
+                    while(true){
+                        x+=direction.x;
+                        y+=direction.y;
+                        if(x<0 || x>maxlength || y<0 || y>maxlength){
+                            canmove = false;
+                            break;
+                        }
+                        if(this.map[y][x]==(3-currentColor)){
+                            canmove=true;
+                        }else if(this.map[y][x]==currentColor){
+                            break;
+                        }else if(this.map[y][x]==blank){
+                            canmove=false;
+                            break;
+                        }
+                    }
+                    isSuccess =isSuccess || canmove;
+                    if(canmove){
+                        if(checkOnly){
+                        return isSuccess;
+                        }else{
+                        //更新map 
+                        while(true){
+                            x-=direction.x;
+                            y-=direction.y;
+                            this.map[y][x]=currentColor;
+                            if(x==j && y==i){
+                                break;
+                            }
+                         }
+                        }
+                    }
+
+                }
+                return isSuccess;
+            }
+
+            // 检查是否有棋子可下 
+            checkCanMove(currentColor){
+                let result=false;
+                for(let i=0;i<8;i++){
+                    for(let j=0;j<8;j++){
+                    result = this.canMove(i,j,currentColor,true);
+                    if(result){
+                        return result;
+                    }
+                    }
+                }
+                return result;
+            }
+            //克隆
+            clone(){ 
+                return new pattern(this.map.map(line => line.slice()))
+            }
+        } 
+
+        class  game {
+           constructor(){
+             // 当前颜色baise  黑子先走
+             this.patternTools=[new pattern()];
+             this.currentColors=[1]; 
+           }
+           get patternTool() {
+                return this.patternTools[this.patternTools.length-1];
+           }
+           get currentColor(){
+                return this.currentColors[this.currentColors.length-1];
+           }
+           move(i,j){
+                let patternTool = this.patternTool.clone();
+                let currentColor = this.currentColor;
+                let move = patternTool.canMove(i,j,currentColor,false)
+                if(move){
+                    //成功 更新颜色
+                    currentColor=3-currentColor;
+                    let batchCheckCanMove = patternTool.checkCanMove(currentColor);
+                    if(batchCheckCanMove==false){
+                            // 切换 棋子颜色
+                        currentColor=3-currentColor;
+                        //检查两遍
+                        if(patternTool.checkCanMove()==false){
+                            alert("game over");
+                        }
+                    }
+                    //存入数组 
+                    this.currentColors.push(currentColor)
+                    this.patternTools.push(patternTool)
+                }
+                return move;
+           }
+           revert(){
+             //出栈
+               if(this.patternTools.length<=1){
+                  alert("回到起点")
+                  return;
+               }
+               this.currentColors.pop();
+               this.patternTools.pop();
+           }
+        }
+
+        class  view {
+            constructor(container,game){
+                this.container = container;
+                this.game = game;
+            }
+            render(){
+                container.innerHTML='';
+                for(let i=0;i<8;i++){
+                    for(let j=0;j<8;j++){
+                        let cell = document.createElement("div");
+                        let map=this.game.patternTool.map;
+                        container.append(cell);
+                        cell.style="vertical-align:middle; width:30px;height:30px; background-color:green;margin:1px; display:inline-block";
+                        cell.addEventListener("click",event => {
+                            console.log(i,j)
+                            let ismove = this.game.move(i,j);
+                            if(ismove){
+                                this.render();
+                            }
+                        })
+                        if(map[i][j]>0){
+                            let disc=document.createElement("div");
+                            disc.style=`margin:2px; border-radius:13px;width:26px;height:26px;background-color:${map[i][j]==1?'black':'white'};`;
+                            cell.appendChild(disc);
+                        }
+                    }
+                    container.appendChild(document.createElement("br"));
+                }
+                // 增加回退button
+                let revertButton = document.createElement("button");
+                    revertButton.innerText="悔棋";
+                    revertButton.addEventListener('click',event=>{
+                       this.game.revert();
+                       this.render();
+                    });
+                    container.appendChild(revertButton);
+            }
+        }
+ 
+        let container=document.getElementById("board");
+        let _game=new game();
+        new view(container,_game).render();
+        
+        // map=[
+        //     [0, 1, 1, 2, 2, 1, 1, 2],
+        //     [0, 1, 2, 2, 2, 1, 2, 2],
+        //     [1, 1, 1, 1, 1, 2, 2, 2],
+        //     [1, 1, 2, 1, 2, 2, 2, 2],
+        //     [1, 2, 1, 2, 1, 1, 2, 2],
+        //     [2, 2, 2, 1, 2, 2, 1, 2],
+        //     [2, 2, 1, 1, 1, 1, 1, 1],
+        //     [2, 2, 2, 2, 2, 2, 2, 2]
+        //    ]
+    </script>
+
+</html>
