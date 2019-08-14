@@ -11,16 +11,15 @@ class OthelloPattern {
       [0, 0, 0, 0, 0, 0, 0, 2],
       [0, 0, 0, 0, 0, 0, 2, 1]
     ];
+    this.flips = [];
   }
   move(x, y, color, checkOnly = false) {
     let canMove = false;
     let [ox, oy] = [x, y];
   
-    // 有棋子不能落子
     if (this.board[y][x] > 0) {
       return false;
     }
-
     // 移动方向向量 [x, y]
     let directions = [
       [-1, 0], // 左
@@ -51,6 +50,7 @@ class OthelloPattern {
         }
         if (this.board[y][x] === color) {
           if (hasOpposite) {
+            // this.flips.push([y, x]);
             directionCanMove = true;
           }
           break;
@@ -65,6 +65,10 @@ class OthelloPattern {
           if (x === ox && y === oy) {
             break;
           }
+          this.flips.push({
+            x: x,
+            y: y
+          });
           this.board[y][x] = color;
         }
       }
@@ -145,6 +149,8 @@ class OthelloGame {
       this.patterns.push(pattern);
       this.colors.push(color);
       return true;
+    } else {
+      return false;
     }
   }
   // 悔棋 pattern和color出栈
@@ -161,8 +167,10 @@ class OthelloView {
   constructor(container) {
     this.container = container;
     this.game = new OthelloGame();
+    this.flippings = [];
   }
   render() {
+    this.flippings.length = 0;
     this.container.innerHTML = '';
     for (let y = 0; y < 8; y++) {
       for (let x = 0; x < 8; x++) {
@@ -170,9 +178,33 @@ class OthelloView {
         element.className = `cell ${
           this.game.pattern.board[y][x] === 1 ? 'black' : this.game.pattern.board[y][x] === 2 ? 'white' : ''
         }`;
+        for (let flip of this.game.pattern.flips) {
+          if (y === flip.y && x === flip.x) {
+            this.flippings.push(element);
+          }
+        }
+
+        // console.log(this.game.pattern.flips, this.flippings);
         element.addEventListener('click', () => {
-          this.game.move(x, y);
-          this.render();
+          if (this.game.move(x, y)) {
+            this.render();
+            let i = 0;
+            for (let ele of this.flippings) {
+              i++;
+              let flipping = false;
+              setTimeout(() => {
+                if (flipping) return;
+                ele.classList.add('flip');
+                flipping = true;
+                ele.addEventListener('transitionend', handleFlip);
+                function handleFlip() {
+                  flipping = false;
+                  ele.classList.remove('flip');
+                  ele.removeEventListener('transitionend', handleFlip);
+                }
+              }, 300 + i * 10);
+            }
+          }
         });
         this.container.appendChild(element);
       }

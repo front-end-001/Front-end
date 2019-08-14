@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>棋子翻转效果</title>
+  <style>
+    .container {
+      width: 100px;
+      height: 100px;
+      background: darkgreen;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .cell::before {
+      display: block;
+      content: '';
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .cell.black::before {
+      background: black;
+    }
+    .cell.white::before {
+      background: white;
+    }
+    .cell.flip::before {
+      transform: rotateY(90deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="cell black" id="disc"></div>
+  </div>
+  <script>
+    // transition配合transform
+    // 翻转核心思路：监听transitionend事件
+    // 点击时，添加tranform -- 触发transition
+    // transitionend时，更换颜色，移除transform样式和transitionend事件
+    let disc = document.getElementById('disc');
+    let flipping = false;
+
+    disc.addEventListener('click', () => {
+      if (flipping) {
+        return;
+      }
+      disc.classList.add('flip');
+      flipping = true;
+      disc.addEventListener('transitionend', handleFlip);
+      function handleFlip() {
+        flipping = false;
+        disc.classList.toggle('white');
+        disc.classList.toggle('black');
+        disc.classList.remove('flip');
+        disc.removeEventListener('transitionend', handleFlip);
+      }
+    });
+  </script>
+</body>
+</html>
