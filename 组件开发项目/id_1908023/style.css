@@ -2,8 +2,10 @@
   width: 600px;
   height: 400px;
   margin: 10px auto;
-  border: 1px solid blue;
+  overflow: hidden;
+  /* border: 1px solid #ccc; */
   white-space: nowrap;
+  outline: 1px solid red;
 }
 .container > img {
   width: 100%;

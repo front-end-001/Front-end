@@ -18,6 +18,19 @@ class Carousel {
       img.src = d;
       this._container.appendChild(img);
     }
+
+    let children = Array.prototype.slice.call(this._container.children);
+    let position = 0;
+
+    let nextFrame = () => {
+      position++;
+      position = position % children.length;
+      for (let child of children) {
+        child.style.transform = `translate(${-100 * position}%)`;
+      }
+      setTimeout(nextFrame, 3000);
+    }
+    setTimeout(nextFrame, 3000)
   }
 }
 
