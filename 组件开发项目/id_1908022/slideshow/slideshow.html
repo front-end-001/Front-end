@@ -184,6 +184,7 @@
                initTitle();
 
                let position = 0;
+               let isMove;
                this._pointer.style.marginLeft = `-${this._pointer.clientWidth / 2}px`;
                points[0].classList.add('active');
                prevPoint = position;
@@ -258,6 +259,7 @@
                  startX = event.clientX;
                  endX = event.clientX;
                  startTransform = - position * 500;
+                 isMove = startX;
                  this._carousel.addEventListener("mousemove",move);
                  this._carousel.addEventListener("mouseup", end);
                }
@@ -277,16 +279,19 @@
                }
 
                let end = () => {
-                 points[prevPoint].classList.remove("active");
-                 this._carousel.removeEventListener("mousemove",move);
-                 this._carousel.removeEventListener("mouseup",end);
-                 if(Math.abs(endX - startX) < 10){
-                  points[position].classList.add("active");
-                  prevPoint = position;
+                this._carousel.removeEventListener("mousemove",move);
+                this._carousel.removeEventListener("mouseup",end);
+                
+                if(Math.abs(endX - isMove) > 10 && Math.abs(endX - startX) == 0){
+                  return;
+                }
+                if(Math.abs(endX - startX) < 10){
                   window.open(this.data[position].url);
                   return;
-                 } 
+                }
 
+                 points[prevPoint].classList.remove("active");
+                 
                  position = Math.round(- (startTransform + endX - startX) / 500);
                  position = Math.max(0,Math.min(position,children.length - 1));
                  points[position].classList.add("active"); 
