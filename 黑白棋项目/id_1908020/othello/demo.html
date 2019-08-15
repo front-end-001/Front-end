@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>othello</title>
+  <meta name="author" content="winter" />
+</head>
+
+<body>
+  <div id="container"></div>
+  <script>
+    let board = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 1, 0, 0, 0],
+      [0, 0, 0, 1, 2, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    let color = 1;
+
+    let container = document.getElementById("container");
+    render();
+
+
+    function move(x, y, checkOnly = false) {
+      let ox = x, oy = y;
+
+      let canMove = false;
+
+      let directions = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, 1],
+        [0, -1],
+        [1, -1],
+        [1, 0],
+        [1, 1]
+      ]
+
+      if (board[y][x] !== 0)
+        return false;
+
+      for (direction of directions) {
+        x = ox;
+        y = oy;
+        let directionCanMove = false;
+        let hasOpposite = false;
+        while (true) {
+          x += direction[0];
+          y += direction[1];
+          if (x < 0 || x >= 8 || y < 0 || y >= 8)
+            break;
+
+          if (board[y][x] === 3 - color) {
+            hasOpposite = true;
+          }
+          if (board[y][x] === color) {
+            if (hasOpposite)
+              directionCanMove = true;
+            break;
+          }
+          if (board[y][x] === 0) {
+            break;
+          }
+        }
+        if (directionCanMove && !checkOnly) {
+          while (true) {
+            x -= direction[0]
+            y -= direction[1];
+            if (x == ox && y == oy)
+              break;
+            board[y][x] = color;
+          }
+        }
+        canMove = canMove || directionCanMove;
+      }
+
+      if (canMove && !checkOnly) {
+        board[oy][ox] = color;
+        color = 3 - color;
+      }
+      return canMove;
+    }
+
+    function checkPass() {
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          if (move(x, y, true))
+            return false;
+        }
+      }
+      return true;
+    }
+
+    function render() {
+      container.innerHTML = "";
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          let element = document.createElement("div");
+          element.addEventListener("click", (event) => {
+            move(x, y);
+            if (checkPass()) {
+              console.log("passed");
+              color = 3 - color;
+              if (checkPass()) {
+                //alert("Game Over");
+              }
+            }
+            render();
+
+          })
+          element.style = "vertical-align:bottom;border:solid 1px white;width:50px;height:50px;background-color:darkgreen;display:inline-block;"
+          container.appendChild(element);
+          if (board[y][x] === 1) {
+            let disc = document.createElement("div");
+            disc.style = "margin-top:5px;margin-left:5px;border-radius:20px;width:40px;height:40px;background-color:black;"
+            element.appendChild(disc);
+          }
+          if (board[y][x] === 2) {
+            let disc = document.createElement("div");
+            disc.style = "margin-top:5px;margin-left:5px;border-radius:20px;width:40px;height:40px;background-color:white;"
+            element.appendChild(disc);
+          }
+        }
+        container.appendChild(document.createElement("br"));
+      }
+    }
+
+
+
+  </script>
+</body>
+
+</html>
