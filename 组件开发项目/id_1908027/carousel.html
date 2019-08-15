@@ -1,0 +1,68 @@
+<!-- 027-韩荣礼 -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>轮播组件</title>
+		<style>
+			.carousel {
+				width: 200px;
+				height: 200px;
+				overflow: hidden;
+				border: 1px solid gray;
+			}
+			#wrap {
+				width: 1200px;
+			}
+		
+		</style>
+	</head>
+	<body>
+		<div class="carousel">
+			<div id="wrap"></div>
+		</div>
+		<script type="text/javascript">
+			// 获取元素标签
+			let wrap = document.getElementById("wrap")
+			const data = [
+			"https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+			"https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+			"https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+			"https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+			];
+			// 循环插入5张图片
+			for(let i=0; i<4; i++) {
+				const ele  = document.createElement("img")
+				ele.src=data[i]
+				ele.className="card"
+				ele.style = `
+				 display: inline-block;
+				 width: 200px;
+				 height: 200px;
+				 // margin-right: 10px;
+				 background: orange;
+				 transition: all ease-in 1s;
+				 transform: translate(${i*200}px,0);
+
+				`
+				wrap.appendChild(ele)
+			}
+			// 实现循环播放 分解步骤
+			// 实现一张张图片的向左移动：绝对定位或者translate
+			let cards = document.getElementsByClassName('card')
+		      for(let j=0; j<4; j++) {
+		      	setTimeout(() => {
+		      		console.log(cards[j])
+		      		 cards[j].style.transform = `
+						translate(${-200*(j+1)}px,0)
+					`
+		      	},1000*j)
+		       
+		      }
+
+			// 定时器可以自动代替事件自动触发
+      		
+      	
+		</script>
+	</body>
+</html>
