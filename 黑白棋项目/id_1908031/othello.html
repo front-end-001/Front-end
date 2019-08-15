@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>黑白棋</title>
+	<style>
+		.lattice {
+			display: inline-block;
+			width: 50px;
+			height: 50px;
+			border: 1px solid #ddd;
+			background: green;
+			vertical-align: middle;
+		}
+
+		.piece {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			margin: 5px 5px;
+		}
+
+		.black {
+			background: black;
+		}
+
+		.white {
+			background: white;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+
+    class OthelloView {
+
+        constructor(container, game) {
+            this.container = container;
+            this.game = game;
+        }
+
+        /**
+         * 渲染
+         */
+        render() {
+            this.container.innerHTML = '';
+            // 循环创建格与棋子
+            for (let i = 0; i < this.game.pattern.board.length; i++) {
+                for (let j = 0; j < this.game.pattern.board[i].length; j++) {
+                    let lattice = document.createElement('div');
+
+                    lattice.className = 'lattice';
+                    let piece = document.createElement('div');
+                    if (this.game.pattern.board[i][j] === 1) {
+                        piece.className = 'piece black';
+                        lattice.appendChild(piece);
+                    }
+                    if (this.game.pattern.board[i][j] === 2) {
+                        piece.className = 'piece white';
+                        lattice.appendChild(piece);
+                    }
+                    this.container.appendChild(lattice);
+
+                    // 点击事件
+                    lattice.addEventListener('click', () => {
+                        this.game.move(i, j);
+                        this.render();
+                    });
+                }
+                // 每8格换行
+                this.container.appendChild(document.createElement('br'));
+            }
+
+            let regret = document.createElement('button');
+            regret.innerText = '悔棋';
+            regret.addEventListener('click', () => {
+                this.game.revert();
+                this.render();
+            });
+            this.container.appendChild(regret);
+        }
+    }
+
+    class OthelloPattern {
+        constructor(board) {
+            // 棋盘
+            this.board = board || [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 2, 1, 0, 0, 0],
+                [0, 0, 0, 1, 2, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+        }
+
+        /**
+         * 检查是否pass
+         * @return {boolean}
+         */
+        checkPass(color) {
+            // 遍历每一格，检查是否可以吃子
+            for (let i = 0; i < this.board.length; i++) {
+                for (let j = 0; j < this.board[i].length; j++) {
+                    // 如果可以吃，则返回false
+                    if (this.move(i, j, color, true)) {
+                        return false;
+                    }
+                }
+            }
+            // 无法吃子则返回true
+            return true;
+        }
+
+        /**
+		 * 克隆
+		 */
+        clone(){
+            return new OthelloPattern(this.board.map( line => [...line]));
+		}
+
+        /**
+         * 吃子
+         * @param i
+         * @param j
+         * @param color
+         * @param checkOnly
+         * @return {boolean}
+         */
+        move(i, j, color, checkOnly) {
+            // 如果不是空格则直接返回
+            if (this.board[i][j] !== 0) {
+                return false;
+            }
+            // 是否成功吃子
+            let moveSuccess = false;
+
+            // 方向集
+            let directions = [
+                [-1, -1], [-1, 0], [-1, 1],
+                [0, -1], [0, 1],
+                [1, -1], [1, 0], [1, 1]
+            ];
+
+            // 遍历8个方向
+            for (let direction of directions) {
+                // 是否可落子
+                let canDrop = false;
+                let [x, y] = [j, i];
+                while (true) {
+                    x += direction[1];
+                    y += direction[0];
+                    // 判断边界
+                    if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                        canDrop = false;
+                        break;
+                    }
+                    if (this.board[y][x] === 3 - color) {
+                        canDrop = true;
+                    } else if (this.board[y][x] === color) {
+                        break;
+                    } else if (this.board[y][x] === 0) {
+                        canDrop = false;
+                        break;
+                    }
+
+                }
+
+                moveSuccess = moveSuccess || canDrop;
+
+                // 如果可落子，则循环回去，当找到落子得点将落子点与同颜色间的子吃掉
+                if (canDrop && !checkOnly) {
+                    while (true) {
+                        x -= direction[1];
+                        y -= direction[0];
+                        this.board[y][x] = color;
+                        if (x === j && y === i) {
+                            break;
+                        }
+                    }
+                }
+            }
+            // 成功移动则改变落子颜色
+            return moveSuccess;
+        }
+    }
+
+    class OthelloGame {
+        constructor() {
+            this.patterns = [new OthelloPattern()];
+            this.colors = [1];
+        }
+
+        get pattern() {
+            return this.patterns[this.patterns.length - 1];
+        }
+
+        get color() {
+            return this.colors[this.colors.length - 1];
+        }
+
+        move(i, j) {
+            let pattern = this.pattern.clone();
+            let color = this.color;
+            // 点击后判断
+            if (pattern.move(i, j, color, false)) {
+                // 可移动则改变颜色
+                color = 3 - color;
+                // 查看当前颜色是否可吃子
+                if (pattern.checkPass(color)) {
+                    // 不可吃则变化颜色
+                    color = 3 - color;
+                    // 如果两个颜色都无法吃子，则game over
+                    if (pattern.checkPass(color)) {
+                        alert('Game Over');
+                    }
+                }
+                this.patterns.push(pattern);
+                this.colors.push(color);
+                return true;
+            }
+        }
+
+        /**
+         * 悔棋
+         */
+        revert() {
+            if (this.patterns.length > 1) {
+                this.patterns.pop();
+                this.colors.pop();
+            }
+        }
+    }
+
+    // 容器
+    new OthelloView(document.getElementById('container'), new OthelloGame()).render();
+</script>
+</body>
+</html>

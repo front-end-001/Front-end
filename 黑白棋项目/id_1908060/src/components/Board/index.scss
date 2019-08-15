@@ -1,0 +1,50 @@
+.col {
+    display: inline-block;
+    line-height: 50px;
+    width: 50px;
+    height: 50px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    position: relative;
+    border-top: 1px solid;
+    &:first-child {
+        border-left: 1px solid;
+    }
+}
+
+.row {
+    margin-top: -1px;
+    line-height: 0;
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+.board {
+    background: #00b2b8;
+    line-height: 0;
+    width: 500px;
+    height: 450px;
+    margin: 80px auto;
+    padding-top: 50px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.piece {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    line-height: 50px;
+    vertical-align: middle;
+}
+.white {
+    background: #fff;
+}
+.black {
+    background: #333;
+}
