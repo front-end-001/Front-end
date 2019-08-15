@@ -165,17 +165,17 @@
                let points = Array.prototype.slice.call(this._pointer.children);
                let pagings = this._paging.children;
                let title = document.getElementById("title");
+               let prevPoint;
 
                for(let [key,point] of points.entries()){
                  point.addEventListener('click',()=>{
-                  if(key == 0){
-                    position = 3;
-                  }else{
-                    position = key - 1;
-                  }
-                  nextFrame(true);
+                  position = key;
+                  PointClick();
                  })
                }
+
+
+               
                
                let initTitle = () => {
                  title.innerHTML = this.data[0].title;
@@ -186,6 +186,7 @@
                let position = 0;
                this._pointer.style.marginLeft = `-${this._pointer.clientWidth / 2}px`;
                points[0].classList.add('active');
+               prevPoint = position;
 
                let frame;
 
@@ -203,7 +204,7 @@
 
                    let current = children[position];
                    let prev = children[prevPosition];
-                   points[position].classList.remove('active');
+                   points[prevPoint].classList.remove('active');
 
                    prev.style.transition = "ease 0s";
                    prev.style.transform = `translate(${-100 - prevPosition * 100}%)`;
@@ -215,6 +216,7 @@
                       prev.style.transform = `translate(${- prevPosition * 100}%)`;
                       position = prevPosition;
                       points[position].classList.add('active');
+                      prevPoint = position;
                       toggleButtonStatus();
                       titleShow();
                      })
@@ -227,7 +229,7 @@
 
                    let current = children[position];
                    let next = children[nextPosition];
-                   points[position].classList.remove('active');
+                   points[prevPoint].classList.remove('active');
 
                    next.style.transition = "ease 0s";
                    next.style.transform = `translate(${100 - nextPosition * 100}%)`;
@@ -239,6 +241,7 @@
                       next.style.transform = `translate(${- nextPosition * 100}%)`;
                       position = nextPosition;
                       points[position].classList.add('active');
+                      prevPoint = position;
                       toggleButtonStatus();
                       titleShow();
                      })
@@ -274,24 +277,43 @@
                }
 
                let end = () => {
-                 points[position].classList.remove("active");
+                 points[prevPoint].classList.remove("active");
                  this._carousel.removeEventListener("mousemove",move);
                  this._carousel.removeEventListener("mouseup",end);
                  if(Math.abs(endX - startX) < 10){
                   points[position].classList.add("active");
+                  prevPoint = position;
                   window.open(this.data[position].url);
                   return;
                  } 
 
                  position = Math.round(- (startTransform + endX - startX) / 500);
                  position = Math.max(0,Math.min(position,children.length - 1));
-                 points[position].classList.add("active");
+                 points[position].classList.add("active"); 
+                 prevPoint = position;
                  toggleButtonStatus();
                  titleShow();
                  for(let child of children){
                    child.style.transition = "";
                    child.style.transform = `translate(${-position * 100}%)`;
                  }
+               }
+
+               let PointClick = () => {
+                 points[prevPoint].classList.remove('active');
+                 for(let child of children){
+                   child.style.transition = "ease 0s";
+                   child.style.transform = `translate(${ -position * 100 }%)`;
+                 }
+                 for(let child of children){
+                   child.style.transition = "";
+                   child.style.transform = `translate(${-position * 100}%)`;
+                 }
+                 points[position].classList.add('active');
+                 prevPoint = position;
+                 toggleButtonStatus();
+                 titleShow();
+
                }
 
                let toggleButtonStatus = () => {
