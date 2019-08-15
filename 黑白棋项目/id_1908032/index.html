@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>黑白棋</title>
+    <style>
+        .cell {
+            vertical-align: middle; display: inline-block; width: 30px; height: 30px;margin: 1px 1px; background-color: #8bc34a
+        }
+
+        .whilte:after {
+            content: '';
+            display: inline-block;
+            margin: 2px; 
+            border-radius: 15px; 
+            width: 26px; 
+            height: 26px; 
+            background: #fff;
+        }
+        .black:after {
+            content: '';
+            display: inline-block;
+            margin: 2px; 
+            border-radius: 15px; 
+            width: 26px; 
+            height: 26px;
+             background: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <br />
+</body>
+<script>
+
+    class OthelloPatter {
+
+        constructor(map){
+            this.map = map || [
+                [0, 0, 0, 0, 0, 0, 0, 0,],
+                [0, 0, 0, 0, 0, 0, 0, 0,],
+                [0, 0, 0, 0, 0, 0, 0, 0,],
+                [0, 0, 0, 1, 2, 0, 0, 0,],
+                [0, 0, 0, 2, 1, 0, 0, 0,],
+                [0, 0, 0, 0, 0, 0, 0, 0,],
+                [0, 0, 0, 0, 0, 0, 0, 0,],
+                [0, 0, 0, 0, 0, 0, 0, 0,],
+            ];
+        }
+
+        checkPass(color){
+            for(let line = 0; line < this.map.length; line++){
+                for(let item = 0; item < this.map[line].length; item++){
+                    if(this.move(item, line, color, true))
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        move(item, line, color, checkOnly){
+            if(this.map[line][item] > 0)
+                return;
+
+            const directions = [
+                {x: -1, y: -1},
+                {x: -1, y: 0},
+                {x: -1, y: 1},
+                {x: 0, y: 1},
+                {x: 1, y: 1},
+                {x: 1, y: 0 },
+                {x: 1, y: -1 },
+                {x: 0, y: -1},
+            ];
+
+            let moveSuccess = false;
+            for(let direction of directions){
+                let [x, y] = [item, line];
+                let canMove = false;
+                while (true) {
+                    x += direction.x;
+                    y += direction.y;
+
+                    if(x < 0 || x >= 8 || y < 0 || y >= 8){
+                        canMove = false;
+                        break;
+                    }
+                    if(this.map[y][x] === 3 - color){
+                        canMove = true;
+                    } else if(this.map[y][x] === color){
+                        break;
+                    } else if(this.map[y][x] === 0){
+                        canMove = false;
+                        break;
+                    }
+
+                    // console.log(x, y);
+
+                }
+
+                moveSuccess = moveSuccess || canMove;
+
+                if(canMove && !checkOnly){
+                    moveSuccess = true;
+                    while(true){
+                        x -= direction.x;
+                        y -= direction.y;
+                        this.map[y][x] = color;
+                        if(x == item && y == line)
+                            break;
+                    }
+                }
+            }
+            return moveSuccess;
+        }
+        
+        clone(){
+            return new OthelloPatter(this.map.map(line => line.slice()));
+        }
+    }
+
+    class OthelloGame {
+
+        constructor(){
+            this.colors = [1];
+            this.othelloPatters = [new OthelloPatter()];
+        }
+
+        get color(){
+            return this.colors[this.colors.length - 1]
+        }
+
+        get othelloPatter(){
+            return this.othelloPatters[0];
+        }
+
+        move(i, j){
+            let pattern = this.othelloPatter.clone();
+            let color = this.color;
+            if(this.othelloPatter.move(i, j, this.color, false)){
+                color = 3 - this.color;
+                if(this.othelloPatter.checkPass(this.color)){
+                    color = 3 - this.color;
+                    if(this.othelloPatter.checkPass(this.color)){
+                        alert('Game Over!');
+                    }
+                }
+                
+                this.othelloPatters.push(pattern);
+                this.colors.push(color);
+                console.log(this.colors, this.othelloPatters);
+            }
+              
+        }
+
+        moveBack(){
+            if(this.othelloPatters.length > 1){
+                this.colors.shift();
+                this.othelloPatters.shift();
+            }
+        }
+
+    }
+
+    class OthelloView {
+
+        constructor(containter, game){
+            this.containter = containter;
+            this.game = game;
+        }
+
+        render(){
+            console.log(this.game.othelloPatter);
+            this.containter.innerHTML = '';
+            for(let line = 0; line < this.game.othelloPatter.map.length; line++){
+                for(let item = 0; item < this.game.othelloPatter.map[line].length; item++){
+                    let cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    this.containter.appendChild(cell);
+
+                    cell.addEventListener('click', event => {
+                        this.game.move(item, line, false);
+                        this.render();
+                    })
+
+                    if(this.game.othelloPatter.map[line][item] > 0){
+                        cell.className = `cell ${ this.game.othelloPatter.map[line][item] === 1 ? 'black':'whilte'}`
+                    }
+                    
+                }
+                this.containter.appendChild(document.createElement('br'))
+            }
+
+            // const button = document.createElement('button');
+            // button.innerText = '回退';
+            // this.containter.appendChild(button);
+            // button.addEventListener('click', event => {
+            //     this.game.moveBack();
+            //     this.render();
+            // })
+        }
+    }
+
+    new OthelloView(
+        document.getElementById('app'), 
+        new OthelloGame()
+    ).render();
+
+</script>
+</html>

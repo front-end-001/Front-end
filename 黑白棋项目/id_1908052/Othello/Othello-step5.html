@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>黑白棋</title>
+    <style>
+        .container{
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #board button{
+            width: 90px;
+            height: 35px;
+            font-size: 18px;
+            line-height: 35px;
+            border-radius: 5px;
+            display: block;
+            margin: 30px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="board"></div>
+</div>
+</body>
+<script>
+    // 添加悔棋功能
+    class OthelloPattern {
+        constructor(map){
+            this.map =map || [
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,2,1,0,0,0],
+                [0,0,0,1,2,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0]
+            ];
+        }
+        move(i, j, color, checkOnly) {
+            if(this.map[i][j]>0){
+                return;
+            }
+            let directions = [
+                {x:-1, y:-1},
+                {x:-1, y:0},
+                {x:-1, y:1},
+                {x:0, y:-1},
+                {x:0, y:1},
+                {x:1, y:-1},
+                {x:1, y:0},
+                {x:1, y:1}
+            ];
+            let moveSuccess = false;
+            for(let direction of directions){
+                let canMove = false;
+                let[x,y] = [j,i];
+                while (true) {
+                    x+=direction.x;
+                    y+=direction.y;
+                    if(x<0||x>=8||y<0||y>=8){
+                        canMove = false;
+                        break;
+                    }
+                    if(this.map[y][x]===3-color) {
+                        canMove = true;
+                    }else if(this.map[y][x]===color) {
+                        break;
+                    }else if(this.map[y][x]===0) {
+                        canMove = false;
+                        break;
+                    }
+                }
+                moveSuccess = moveSuccess || canMove;
+                if(canMove&&!checkOnly){
+                    while (true){
+                        x-=direction.x;
+                        y-=direction.y;
+                        this.map[y][x]=color;
+                        if(x===j&&y===i){
+                            break;
+                        }
+                    }
+                }
+            }
+            return moveSuccess;
+        }
+        checkPass(color){
+            for(let i = 0; i < 8; i++) {
+                for(let j = 0; j < 8; j++) {
+                    if(this.move(i, j, color, true))
+                        return false;
+                }
+            }
+            return true;
+        }
+        clone(){
+            return new OthelloPattern(this.map.map(line => line.slice()));
+        }
+    }
+    class OthelloGame{
+        constructor(){
+            this.patterns = [new OthelloPattern()];
+            this.colors = [1];
+        }
+        get pattern(){
+            return this.patterns[this.patterns.length - 1];
+        }
+        get color(){
+            return this.colors[this.colors.length - 1];
+        }
+        move(i, j){
+            let pattern = this.pattern.clone();
+            let color = this.color;
+            if(pattern.move(i, j, color, false)){
+                color=3-color;
+                if(pattern.checkPass(color)){
+                    color=3-color;
+                    if(pattern.checkPass(color)){
+                        alert("游戏结束")
+                    }
+                }
+                this.patterns.push(pattern);
+                this.colors.push(color);
+                return true;
+            }
+        }
+        revert(){
+            if(this.patterns.length > 1) {
+                this.patterns.pop();
+                this.colors.pop();
+            }
+        }
+    }
+    class OthelloView{
+        constructor(container, game){
+            this.container = container;
+            this.game = game;
+        }
+        render() {
+            this.container.innerHTML="";
+            for(let i = 0; i < 8; i++) {
+                for(let j = 0; j< 8; j++) {
+                    let cell = document.createElement("div");
+                    this.container.appendChild(cell);
+                    cell.style=`vertical-align:middle;width:50px;height:50px;background-color:gold;display:inline-block;margin:1px;`;
+                    cell.addEventListener("click",event=>{
+                        this.game.move(i, j);
+                        this.render();
+                    });
+                    if(this.game.pattern.map[i][j] > 0){
+                        let disc=document.createElement("div");
+                        disc.style=`margin:2px;border-radius:23px;weight:46px;height:46px;background:${this.game.pattern.map[i][j] === 1 ? 'black' : 'white'};`;
+                        cell.appendChild(disc)
+                    }
+                }
+                this.container.appendChild(document.createElement("br"));
+            }
+            let regret = document.createElement('button');
+            regret.innerText = "悔棋";
+            regret.addEventListener('click', event => {
+                this.game.revert();
+                this.render();
+            });
+            this.container.appendChild(regret);
+        }
+    }
+    new OthelloView(document.getElementById("board"),
+        new OthelloGame()).render();
+
+</script>
+</html>
+
+
+
+
+
