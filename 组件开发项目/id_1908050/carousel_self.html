@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>carousel_self</title>
+</head>
+<style type="text/css">
+	#container{
+		width: 400px;
+		height: 250px;
+		margin: 0 auto;
+		border: 1px solid #000;
+		white-space:nowrap;
+		overflow: hidden;
+	}
+	#container img{
+		width: 100%;
+		height: 100%;
+		display: inline-block;
+	}
+</style>
+<body>
+	<div id="container"></div>
+
+
+
+	<script type="text/javascript">
+		
+		let imgs = [
+			"https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+			"https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+			"https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"
+		]
+		console.log(imgs)
+
+		class Carousel{
+			// 属性
+			constructor (container) {
+				this._container = container
+				this._imgs = null
+				this._container.classList.add("carousel");
+				this._handler = null;
+
+			}
+			// 创建img方法
+			init(){
+				// 获取容器宽度-----图片移动距离
+				let conWidth = container._container.clientWidth
+				console.log(container)
+				for(let imgUrl of this._imgs){
+					let img_el = document.createElement('img')
+					img_el.src = imgUrl
+					this._container.appendChild(img_el)
+				}
+
+				let children = Array.prototype.slice.call(this._container.children);
+				console.log(children)
+
+
+
+				let position = 0;
+
+				let	nextFrame = () => {
+					//position ++
+					//position = position % children.length;
+					let nextPosition = position + 1;
+            
+		            nextPosition = nextPosition % children.length;
+
+		            let current = children[position];
+		            let next = children[nextPosition];
+		            //需要把next放到正确的位置
+		            next.style.transition = "ease 0s";
+		            next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+					console.log("移动")
+					//for(let child of children){
+						//child.style.transition = "ease .5s";
+						//child.style.transform = `translate(${-100 * position}%)`;
+						
+					//}
+					requestAnimationFrame(()=>{
+		                requestAnimationFrame(()=>{
+		                    //把current挪出视口
+
+		                    //transition置空之后，设置的css的属性才可以生效
+		                    current.style.transition = ""; 
+		                    current.style.transform = `translate(${- 100 - 100 * position}%)`
+		                    //把next挪进视口
+		                    next.style.transition = "";
+		                    next.style.transform = `translate(${- 100 * nextPosition}%)`
+		                    position = nextPosition;
+		                });
+		            })
+					this._handler = setTimeout(nextFrame,3000)
+
+				}
+				// setTimeout容易调试
+				this._handler = setTimeout(nextFrame,3000)
+
+				let startX;
+		        let startTransform;
+		        let start = event =>{
+		            event.preventDefault();
+		            startX = event.clientX;
+		            startTransform = - position * conWidth;
+		            // 鼠标事件一般都是加在上层（类似遮罩层/防止释放出问题）
+		            document.addEventListener("mousemove", move);
+		            document.addEventListener("mouseup", end);
+		        }
+		        let move = event =>{
+		        	// 阻止默认事件
+		            event.preventDefault();
+		            for(let child of children) {
+		                child.style.transition = "ease 0s";
+		                child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+		            }
+		                
+		        }
+
+		        let end = ()=>{
+		            document.removeEventListener("mousemove", move);
+		            document.removeEventListener("mouseup", end);
+
+		            position = - (Math.round((startTransform + event.clientX - startX) / conWidth)); 
+
+
+		            position = Math.max(0, Math.min(position, children.length - 1));
+
+		            for(let child of children) {
+		                child.style.transition = "";
+		                child.style.transform = `translate(${ - position * conWidth}px)`;
+		            }
+		        }
+
+		        document.addEventListener("mousedown",start);
+			}
+			
+
+			
+		}
+
+		let container = new Carousel(document.getElementById('container'))
+		container._imgs = imgs
+		container.init()
+
+		
+	</script>
+</body>
+</html>
