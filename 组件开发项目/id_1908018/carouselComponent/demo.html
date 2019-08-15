@@ -22,26 +22,28 @@
 		</style>
 	</head>
 	<div id="container" class="container">
-		<div id="carousel" class="carousel"></div>
 	</div>
 	<script>
 		let data = [
-			"https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-			"https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-			"https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-			"https://static001.geekbang.org/resource/image/74/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+			"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1065823702,2275031591&fm=26&gp=0.jpg",
+			"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2046760670,431481929&fm=26&gp=0.jpg",
+			"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=413854135,362570672&fm=26&gp=0.jpg",
+			"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1879388642,3453154810&fm=26&gp=0.jpg"
 		];
-		
+		//class 声明创建一个基于原型继承的具有给定名称的新类。
 		class Carousel {
+			//构造函数方法
 			constructor(container) {
 				this._container = container;
+				//Element.classList 是一个只读属性，返回一个元素的类属性的实时DOMTokenList 集合。
+				//使用 classList 是替代element.className作为空格分隔的字符串访问元素的类列表的一种方便的方法。
 				this._container.classList.add('carousel');
 				this._handle = null;
 				this.data = null;
 			}
-			
+			//渲染函数
 			render (){
-				
+				//创建img添加到页面指定容器
 				for (let d of this.data) {
 					
 					let e = document.createElement('img');
@@ -50,22 +52,31 @@
 					
 					this._container.appendChild(e);
 				};
+				//Array.prototype.slice.call(arguments)能将具有length属性的对象(key值为数字)转成数组。[]是Array的示例，所以可以直接使用[].slice（）方法。
 				let children = Array.prototype.slice.call(this._container.children)
+				//计数
 				let position = 0;
+				
 				let nextFrame = ()=>{
+					//向左
 					position++;
+					//去模运算让循环播放动画
 					position = position % children.length;
 					
+					//让所有img同时运动
 					for (let child of children) {
 						child.style.transform=`translate(${-100 * position}%)`
-					}
-					this._handler = setTimeout(nextFrame, 3000);
-				}
-				this._handler = setTimeout(nextFrame,3000);
+					};
+					//递归调用自身
+					this._handler = setTimeout(nextFrame, 1000);
+				};
+				//先执行一下
+				this._handler = setTimeout(nextFrame,1000);
 			}
 			
 		}
 		
+		//new一个实例对象出来
 		let carousel = new Carousel(document.getElementById('container'));
 		
 		carousel.data=data;
