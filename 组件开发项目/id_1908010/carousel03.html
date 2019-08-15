@@ -2,7 +2,7 @@
  * @Description: 轮播组件手势版本
  * @Author: 大亮
  * @Date: 2019-08-14 21:16:39
- * @LastEditTime: 2019-08-14 22:33:52
+ * @LastEditTime: 2019-08-15 22:05:43
  * @LastEditors: Please set LastEditors
  -->
 
@@ -58,11 +58,12 @@
                 startX = event.clientX;
                 startTransform = -position * 500; //初始位置 0 -500 -1000 -1500 ...
                 
-                this._container.addEventListener("mousemove", move);
-                this._container.addEventListener("mouseup", end);
+                document.addEventListener("mousemove", move);
+                document.addEventListener("mouseup", end);
             };
 
             let move = (event) => {
+                event.preventDefault();
                 for (let child of children) {
                     child.style.transition = "ease 0s";
                     child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
@@ -70,8 +71,8 @@
             };
 
             let end = (event) => {
-                this._container.removeEventListener("mousemove", move);
-                this._container.removeEventListener("mouseup", end);
+                document.removeEventListener("mousemove", move);
+                document.removeEventListener("mouseup", end);
                 position = - Math.round((startTransform + event.clientX - startX) / 500);  // 取最近的整数
                 position = Math.max(0, Math.min(position, children.length - 1));//如果position 不取正值
  
@@ -81,8 +82,13 @@
                 }
             };
 
+            // let over = (event) => {
+            //     this._container.removeEventListener("mousemove", move);
+            //     this._container.removeEventListener("mouseup", end);
+            // }
+
             this._container.addEventListener("mousedown", start);
-            this._container.addEventListener("mouseleave", end); //解决鼠标粘滞问题
+            // this._container.addEventListener("mouseleave", over); //解决鼠标粘滞问题
 
             
 
