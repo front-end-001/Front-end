@@ -82,6 +82,7 @@ const imgArray2 = [
             // this.btnWrap = document.createElement('div')
             // this.btnWrap.className='btnWrap'
             this.container.appendChild(this.swiperWrap)
+            this.startx = 0
         }   
         render(){
             for(let i=0;i<this.imgArray.length;i++){
@@ -117,6 +118,8 @@ const imgArray2 = [
             this.time = options.time
             this.imgArray = options.imgs
             this.handle = null
+            this.startx = 0
+            this.startTransform = 0
         }
         render(){
             for(let i of this.imgArray){
@@ -165,8 +168,33 @@ const imgArray2 = [
                         setTimeout(nextFrame,this.time)         
                 },this.time)
             }
-            nextFrame()
-            // const child 
+            // nextFrame()
+            document.addEventListener('mousedown',this.touchStart)
+        }
+        touchStart =(e)=>{
+            document.addEventListener('mousemove',this.touchMove)
+            document.addEventListener('mouseup',this.touchEnd)
+            this.startx = e.clientX
+        } 
+        touchMove = (e)=>{
+            e.preventDefault();
+            let p =this.startTransform+ e.clientX-this.startx
+            for(let item of this.container.children){
+                item.style.transform = `translateX(${p}px)`
+                item.style.transition = 'ease 0.5s'
+            }
+        } 
+        touchEnd =(e)=>{
+           document.removeEventListener('mousemove',this.touchMove)
+            document.removeEventListener('mouseup',this.touchEnd)
+            let p = - (Math.round(( this.startTransform + e.clientX - this.startx) / 500));
+            p = Math.max(0, Math.min(p, this.container.children.length - 1));
+            console.log(p)
+            for(let item of this.container.children){
+                item.style.transform = `translateX(-${p*500}px)`
+                item.style.transition = 'ease 0.5s'
+            }
+            this.startTransform = -p*500
         }   
     }
     new Carousel({container:document.getElementById('carousel'),time:1500,imgs:imgArray2,isautoPlay:true}).render()
