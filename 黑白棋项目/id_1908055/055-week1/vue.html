@@ -70,7 +70,7 @@
 <body>
   <div id="app">
     <template v-for="(row, i) in map">
-      <div v-for="(v, j) in row" class="chess" :class="{black: v === 1, white : v === 2}"@click="playChess(i, j, color, false)">
+      <div v-for="(v, j) in row" class="chess" :class="{black: v === 1, white : v === 2}" @click="playChess(i, j, color, false)">
       </div>
     </template>
     <!-- <div>黑子:{{}}白子:{{}}回合数:{{maps.length}}</div> -->
