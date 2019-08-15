@@ -67,11 +67,11 @@
           [0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 1, 2, 0, 0, 0],
+          [0, 0, 0, 2, 1, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 1, 2],
-          [0, 0, 0, 0, 0, 0, 2, 1]
+          [0, 0, 0, 0, 0, 0, 0, 0]
         ];
         this.directions = [{
             x: -1,
@@ -109,7 +109,7 @@
       }
 
       move = (i, j, color, show, canClick) => {
-        if (this.map[i][j] > 0) {
+        if (this.map[i][j] > 0 && this.map[i][j] < 3) {
           return
         }
         let moveSuccess = false
@@ -127,7 +127,7 @@
               canMove = true
             } else if (this.map[y][x] === color) {
               break
-            } else if (this.map[y][x] === 0) {
+            } else if (this.map[y][x] === 0 || this.map[y][x] === 3) {
               canMove = false
               break
             }
@@ -137,16 +137,23 @@
           }
           moveSuccess = canMove || moveSuccess;
           if (canMove && show) {
-            if (show === 3) {} else {
+            if(show !== 3) {
               while (true) {
-                x -= direction.x;
-                y -= direction.y;
-                this.map[y][x] = color;
-                if (y === i && x === j) {
-                  break
-                }
+              x -= direction.x;
+              y -= direction.y;
+              this.map[y][x] = color;
+              if (y === i && x === j) {
+              break
+              }
               }
             }
+          }
+        }
+        if(show === 3) {
+          if(moveSuccess) {
+            this.map[i][j] = 3;
+          } else {
+            this.map[i][j] = 0;
           }
         }
         return moveSuccess
@@ -154,7 +161,7 @@
       canAdd = color => {
         for (let i = 0; i < 8; i++) {
           for (let j = 0; j < 8; j++) {
-            this.move(i, j, color, 3)
+            this.move(i, j, color,3)
           }
         }
       }
@@ -216,6 +223,9 @@
       }
       render() {
         this.box.innerHTML = "";
+        let colorName = "";
+        // let nowCell = document.createElement("div");
+
         for (let i = 0; i < 8; i++) {
           for (let j = 0; j < 8; j++) {
             let cell = document.createElement("div");
@@ -223,6 +233,12 @@
             this.box.appendChild(cell);
             cell.addEventListener("click", (e) => {
               this.game.move(i, j)
+              // console.log('=================this.game.pattern.map[i][j]===================');
+              // console.log(this.game.pattern.map[i][j]);
+              // console.log('====================================');
+              // colorName = this.game.pattern.map[i][j] === 1 ? "白子" : "黑子"
+              
+              // nowCell.innerText = `当前:${colorName}`
               this.render()
             });
             switch (this.game.pattern.map[i][j]) {
@@ -243,6 +259,8 @@
             }
           }
         }
+        
+        // this.box.appendChild(nowCell);
         let regret = document.createElement('button');
         regret.innerText = "悔棋";
         regret.addEventListener('click', event => {
