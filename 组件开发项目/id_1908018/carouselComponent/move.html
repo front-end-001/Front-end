@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			.container{
+				position: absolute;
+				left: 0;
+				width: 100px;
+				height: 100px;
+				background: #008000;
+			}
+			
+		</style>
+	</head>
+		<div id="container"  class="container">
+			
+		</div>
+	<script>
+		let container = document.getElementById('container');
+		let num=0;
+		
+		
+		function anmite(dom,target){
+			console.log(dom);
+			clearInterval(dom.timer);
+			dom.timer = setInterval(function(){
+				var spend = (target - dom.offsetLeft) / 10;
+				spend = spend > 0 ? Math.ceil(spend) : Math.floor(spend);
+				if(dom.offsetLeft == target){
+					clearInterval(dom.timer);
+				} else {
+					dom.style.left = dom.offsetLeft + spend + 'px';
+				}
+			},30)
+		};
+		anmite(container, 100);
+		
+		
+	</script>
+
+	</body>
+</html>
