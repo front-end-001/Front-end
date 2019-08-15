@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>othello</title>
+</head>
+<body>
+    <div id="board"></div>
+    <script>
+        /**
+         * @classdesc 本类用于负责处理UI相关的任务
+         * @desc 本类的构造函数中需传递2个参数: 用于装载棋盘的容器DOM和用于处理棋局的game类的实例
+         * */
+        class OthelloView {
+            constructor(container, game) {
+                this.container = container;
+                this.game = game;
+            }
+
+            /**
+             * 本方法用于根据数据模型(即二维数组中每个元素的值)来渲染视图
+             * @method
+             * @return {void}
+             * */
+            render() {
+                this.container.innerHTML= '';
+                for (let i = 0; i < 8; i++) {
+                    for(let j = 0; j < 8; j++) {
+                        let cell = document.createElement("div");
+                        this.container.appendChild(cell);
+                        cell.style = `vertical-align:middle;width:30px;margin:1px;
+            height:30px;background-color:darkgreen;
+            display:inline-block`;
+                        cell.addEventListener("click", (event) => {
+                            if (this.game.move(i, j, false)) {
+                                this.game.color = 3 - this.game.color;
+                                if(this.game.checkPass()) {
+                                    console.log("pass");
+                                    this.game.color = 3 - this.game.color;
+                                    if(this.game.checkPass()) {
+                                        alert("GG");
+                                    }
+                                }
+                            }
+                            this.render();
+                        });
+
+                        if(this.game.map[i][j] > 0) {
+                            let disc = document.createElement("div");
+                            disc.style = `margin:2px;border-radius:13px;
+                width:26px;height:26px;background-color:${this.game.map[i][j] == 1 ? 'black' : 'white'}`;
+                            cell.appendChild(disc);
+                        }
+                    }
+                    this.container.appendChild(document.createElement("br"));
+                }
+            }
+        }
+
+        /**
+         * @classdesc 本类用于处理黑白棋逻辑并维护描述棋盘当前状态的数据
+         * @desc 初始化棋盘以及优先落子者的执子颜色
+         * */
+        class OthelloGame {
+            constructor() {
+                this.map = [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 1, 2, 0, 0, 0],
+                    [0, 0, 0, 2, 1, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ];
+
+                this.color = 1;
+            }
+
+            /**
+             * 本函数用于检测棋盘上每个格子对于当前执子者而言是否可落子.如存在可落子的格子返回false(表示未被PASS),否则返回true
+             * @method checkPass
+             * @return {boolean} false:当前执子者没被PASS true:当前执子者被PASS了
+             * */
+            checkPass() {
+                for (let i = 0; i < 8; i++) {
+                    for( let j = 0; j < 8; j++) {
+                        if(this.move(i, j, true)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            /**
+             * 本函数用于检测给定位置是否可以落子并返回判定结果 如可以落子则返回true 否则返回false
+             * 在可以落子的情况下本函数将完成吃子的功能
+             * @method move
+             * @param {int} i 待落子处的垂直坐标
+             * @param {int} j 待落子处的水平坐标
+             * @param {boolean} checkOnly 描述move()函数是否需要吃子的状态位
+             * @returns {boolean} moveSuccess 标识是否成功落子的状态位 如成功落子则将所有方向上可以吃的敌方棋子都吃掉
+             * */
+            move(i, j, checkOnly) {
+                let moveSuccess = false;
+
+                if(this.map[i][j] > 0) {
+                    return moveSuccess;
+                }
+
+                let directions = [
+                    {x:-1, y:-1},
+                    {x:-1, y:0},
+                    {x:-1, y:1},
+                    {x:0, y:-1},
+                    {x:0, y:1},
+                    {x:1, y:-1},
+                    {x:1, y:0},
+                    {x:1, y:1}
+                ];
+
+
+                for (let direction of directions) {
+                    let canMove = false;
+                    let [x, y] = [j, i];
+
+                    while (true) {
+                        x += direction.x;
+                        y += direction.y;
+
+                        if(x < 0 || x >= 8 || y < 0 || y >= 8) {
+                            canMove = false;
+                            break;
+                        }
+
+                        if(this.map[y][x] === 3 - this.color) {
+                            canMove = true;
+                        } else if (this.map[y][x] === this.color) {
+                            break;
+                        } else if (this.map[y][x] === 0) {
+                            canMove = false;
+                            break;
+                        }
+                    }
+
+                    moveSuccess = moveSuccess || canMove;
+
+                    if(canMove && !checkOnly) {
+                        while(true) {
+                            x -= direction.x;
+                            y -= direction.y;
+
+                            this.map[y][x] = this.color;
+                            if(x === j && y === i) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                return moveSuccess;
+            }
+        }
+
+        new OthelloView(document.getElementById("board"), new OthelloGame()).render();
+    </script>
+</body>
+</html>
