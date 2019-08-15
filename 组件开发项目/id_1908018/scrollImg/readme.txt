@@ -1,1 +1,0 @@
-1.var pluginName = "slideshow";此处如果是,那就会出现意料不到的错误，一定要细心哈
