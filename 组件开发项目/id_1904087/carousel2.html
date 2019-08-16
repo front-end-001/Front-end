@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<!-- anything need to search: https://duckduckgo.com/?q=site%3Aw3.org+white-space&search-submit=&ia=web  -->
+<html>
+    <h4>slider</h4>
+    <div id="slider" >
+    </div>
+    <!-- https://www.w3.org/TR/css3-roadmap/#css -->
+    <style>
+        .carousel{
+            width:500px;
+            height:300px;
+            /* 
+            
+            hidden
+            visible 
+            
+            outline: solid 1px grey;
+            */
+            overflow:hidden; 
+            
+            /*
+            https://www.w3.org/TR/css-text-3/#white-space-property
+            normal | pre | nowrap | pre-wrap | break-spaces | pre-line
+
+            */
+            white-space: nowrap;
+        }
+        
+        .carousel>img{
+            width:100%;
+            height:100%;
+            /*
+            https://www.w3.org/Talks/2003/0521-CSS-WWW2003/inline-demo.html
+            图片在一行显示
+            */
+            display:inline-block;
+            /*
+            * https://www.w3.org/TR/css-transitions-1/ 
+            CSS Transitions allows property changes in CSS values to occur smoothly over a specified duration.
+            to animate smoothly from the old state to the new state over time.
+
+            https://www.cnblogs.com/afighter/p/5731293.html
+            ease 由快到慢到更慢 
+            linear:恒速
+            ease-in:越来越快
+            ease-out:越来越慢
+            ease-in-out:先加速后减速
+            */
+            transition:ease 0.5s;
+        }
+    </style>
+      
+    <script>
+
+    let imgList = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+    ];
+      
+      class sliderView {
+        constructor(container) {
+          this._container = container;
+          // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+          // add, remove, replace
+          // add( String [, String [, ...]] )
+          this._container.classList.add("carousel");
+          this.data = null;
+        }
+
+        render() {
+            for (let d in this.data) {
+                let e = document.createElement("img");
+                e.src = this.data[d];
+                e.id = d;
+                this._container.appendChild(e);
+            }
+            // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice#Array-like
+            // 将 类数组（Array-like）对象/集合转换成一个新数组
+            let children = Array.prototype.slice.call(this._container.children);
+
+            let position = 0;
+            let nextFrame = ()=> {
+                let nextPosition = position + 1;
+
+                // 确保按顺序循环播放图片集合 [0, 1, 2...children.length -2,  children.length -1 ]
+                nextPosition = nextPosition % children.length;
+                
+                let current = children[position];
+                let next = children[nextPosition];
+
+                //将next移动到下一帧的位置
+                next.style.transition = "ease 0s";
+
+                // 周期性的将下一张图移动到当前图片到“旁边”
+                /*
+                index 从 0 开始
+                当前是第一张时： next为1； 第二张图片 translate(0)     不需要移动
+                当前是第二张时： next为2； 第三张图片 translate(-100%)     向左移动1个位置，相当于到了第二张到图片位置
+                当前是第三张时： next为3； 第四张图片 translate(-200%)     向左移动2个位置，相当于到了第二张到图片位置
+                */
+                next.style.transform = `translate(${100 *(1 - nextPosition)}%)`;
+
+                console.log("next: ", nextPosition, next);
+
+                setTimeout(()=>{
+                    // 将current移动出当前帧
+                    current.style.transition = ""; //使得css的属性生效
+                    // current会周期性更改： 0、1、2、3 
+                    /*
+                    如何将当前帧移出
+                    当前是第一张时： translate(-100%) 移出 一个单位   
+                    当前是第二张时： translate(-200%) 移出  两个单位
+                    当前是第三张时： translate(-300%) 移出  三个单位
+                    当前是第四张时： translate(-400%) 移出  四个单位
+
+                    -100 * (1 + position)  -->  这里到 1+ position不能直接使用 nextPosition代替，
+                    两个timeout执行会导致nextPosition发生了变化？最后一直图片到第一张图片到过渡出现问题
+                    */
+                    current.style.transform = `translate(${-100 * (1 + position)}%)`;
+
+                    console.log("trans: current: ",position, current);
+
+                    //将下一帧移动到当前帧
+                    next.style.transition = "";
+                    //针对104行到next元素，再translate一个单位 -100% 
+                    // -100 * nextPosition = 100 *(1 - nextPosition) - 100;
+                    next.style.transform = `translate(${-100 * nextPosition}%)`;
+                    console.log("trans: next: ",nextPosition, next);
+                    position = nextPosition;
+
+                }, 16);//转换一帧
+
+                setTimeout(nextFrame, 3000);
+            }
+            setTimeout(nextFrame,3000);
+        }
+        
+      }
+      let slider = new sliderView(document.getElementById("slider"));
+      slider.data = imgList;
+      slider.render();
+    </script>
+</html>
