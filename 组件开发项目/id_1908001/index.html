@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title>轮播图</title>
+    </head>
+    <body>
+        <div id="container">
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    class View {
+        constructor (images) {
+            this.images = images
+            this.hander = null
+        }
+        render () {
+            const container = document.getElementById("container")
+            container.innerHTML = ''
+            for (let i = 0; i < this.images.length; i++) {
+                const imageElement = document.createElement("img")
+                imageElement.src = images[i]
+                container.appendChild(imageElement)
+            }
+            const children = Array.prototype.slice.call(container.children)
+            let position = 0
+            let transform = 0
+            const nextFrame = () => {
+                let nextPosition = position + 1
+                transform += 100
+                nextPosition = nextPosition % children.length
+                let current = children[position]
+                let next = children[nextPosition]
+                next.style.transition = "ease 0"
+                next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+                setTimeout(() => {
+                    current.style.transition = ""
+                    current.style.transform = `translate(${- 100 - 100 * position}%)`
+                    next.style.transition = ""
+                    next.style.transform = `translate(${-100 * nextPosition}%)`
+                    position = nextPosition
+                })
+                this.hander = setTimeout(nextFrame, 3000)
+            }
+            let startX;
+            let startTransform
+            const start = event =>{
+                event.preventDefault()
+                startX = event.clientX
+                startTransform = - position * 500
+                container.addEventListener("mousemove", move)
+                container.addEventListener("mouseup", end)
+            }
+            const move = event =>{
+                event.preventDefault()
+                for(let child of children) {
+                    child.style.transition = "ease 0s"
+                    child.style.transform = `translate(${startTransform + event.clientX - startX}px)`
+                }
+            }
+            const end = ()=>{
+                container.removeEventListener("mousemove", move)
+                container.removeEventListener("mouseup", end)
+                position = - (Math.round((startTransform + event.clientX - startX) / 500))
+                position = Math.max(0, Math.min(position, children.length - 1))
+                for(const child of children) {
+                    child.style.transition = ""
+                    child.style.transform = `translate(${ - position * 500}px)`
+                }
+            }
+            container.addEventListener("mousedown",start)
+        }
+    }
+    const images = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"]
+    const view = new View(images)
+    view.render()
+</script>
+<style>
+    .carousel{
+        width:500px;
+        height:300px;
+        overflow:hidden;
+        white-space: nowrap;
+        outline: solid 1px blue;
+    }
+    .carousel>img{
+        width:100%;
+        height:100%;
+        display:inline-block;
+        transition:ease 0.5s;
+    }
+</style>
