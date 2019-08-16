@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>黑白棋</title>
+    <style>
+        .container{
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="board"></div>
+</div>
+</body>
+<script>
+    // 绘制棋盘、棋子，并在一个方向实现吃子
+    let map =[
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,2,1,0,0,0],
+        [0,0,0,1,2,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0]
+    ];
+    let container =document.getElementById("board");
+    render();
+    function render() {
+        container.innerHTML="";
+        for(let i = 0; i < 8; i++) {
+            for(let j = 0; j< 8; j++) {
+                let cell = document.createElement("div");
+                container.appendChild(cell);
+                cell.style=`vertical-align:middle;width:50px;height:50px;background-color:gold;display:inline-block;margin:1px;`;
+                cell.addEventListener("click",event=>{
+                    let canMove = false;
+                    let[x,y] = [j,i];
+                    //判断右侧那些位置可以落子
+                    while (--x>0) {
+                        if(map[y][x]===2) {
+                            canMove = true;
+                        }else if(map[y][x]===1) {
+                            break;
+                        }else if(map[y][x]===0) {
+                            canMove = false;
+                            break;
+                        }
+                    }
+                    //边界不能落子
+                    if(x<0){
+                        canMove = false;
+                    }
+                    //落子并吃子
+                    while (canMove&&++x<=j){
+                        map[y][x]=1;
+                    }
+                    render();
+                });
+                if(map[i][j]===1){
+                    let disc=document.createElement("div");
+                    disc.style=`margin:2px;border-radius:23px;weight:46px;height:46px;background:white;`;
+                    cell.appendChild(disc)
+                }
+                if(map[i][j]===2){
+                    let disc=document.createElement("div");
+                    disc.style=`margin:2px;border-radius:43px;weight:46px;height:46px;background:black;`;
+                    cell.appendChild(disc)
+                }
+
+            }
+            container.appendChild(document.createElement("br"));
+        }
+    }
+</script>
+</html>
+
