@@ -11,7 +11,15 @@ function enableGesture(main) {
     context.isTap = true;
     context.isPan = false;
     context.isFlick = false;
+    context.isPress = false;
     context.startTime = Date.now();
+    context.pressTimer = setTimeout(() => {
+      context.isPress = true;
+      context.isTap = false;
+      const e = new Event('press');
+      Object.assign(e, context);
+      main.dispatchEvent(e);
+    }, 3000);
   }
   const move = (point, context) => {
     // console.log('move', point.clientX, point.clientY);
@@ -22,6 +30,17 @@ function enableGesture(main) {
       Object.assign(e, context);
       main.dispatchEvent(e);
     } else if ((context.dx * context.dx + context.dy * context.dy) > 100) {
+      if (context.pressTimer) {
+        clearInterval(context.pressTimer);
+        context.pressTimer = null;
+      }
+      if (context.isPress) {
+        context.isPress = false;
+        const e = new Event('presscancel');
+        Object.assign(e, context);
+        main.dispatchEvent(e);
+      }
+
       if (Math.abs(context.dx) > Math.abs(context.dy)) {
         /** 水平 */
         context.isHorizontal = true;
@@ -45,6 +64,11 @@ function enableGesture(main) {
     const dt = Date.now() - context.startTime;
     const v = Math.sqrt(context.dx * context.dx + context.dy * context.dy) / (dt / 1000);
 
+    if (context.pressTimer) {
+      clearInterval(context.pressTimer);
+      context.pressTimer = null;
+    }
+
     if (context.isPan && dt <= 500 && v > 0.3) {
       context.isFlick = true;
       context.isPan = false;
@@ -56,8 +80,16 @@ function enableGesture(main) {
     if (context.isTap) {
       const e = new Event('tap');
       main.dispatchEvent(e);
-    } else if (context.isPan) {
+    }
+
+    if (context.isPan) {
       const e = new Event('panend');
+      Object.assign(e, context);
+      main.dispatchEvent(e);
+    }
+
+    if (context.isPress) {
+      const e = new Event('pressend');
       Object.assign(e, context);
       main.dispatchEvent(e);
     }
@@ -123,8 +155,20 @@ let y = 0;
 
 enableGesture(main);
 
-main.addEventListener('flick', (event) => {
-  console.log('main flick');
+main.addEventListener('tap', (event) => {
+  console.log('main tap');
+});
+main.addEventListener('press', (event) => {
+  console.log('main press');
+});
+main.addEventListener('pressend', (event) => {
+  console.log('main pressend');
+});
+main.addEventListener('presscancel', (event) => {
+  console.log('main presscancel');
+});
+main.addEventListener('touchstart', (event) => {
+  event.preventDefault();
 });
 
 // main.addEventListener('tap', (event) => {
