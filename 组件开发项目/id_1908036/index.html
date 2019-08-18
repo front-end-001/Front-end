@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+      .carousel {
+        width: 540px;
+        height: 300px;
+        border: 2px solid #bbb;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .carousel > img {
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        transition: 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <script>
+      // 轮播组建需求整理
+      /*
+       * 视图设计：
+       *
+       * 1.适应宽度，高度自动，宽高比2.235：1
+       * 2.pagination 在组件底部居中，小圆点表示
+       *
+       *
+       *
+       * 功能描述：
+       *
+       * 1.自动轮播 -
+       * 		·定时滚动切换：停留2~3s后下一帧
+       * 		·帧切换动画为左出右进，动画速度为 快-慢-快
+       * 		·鼠标停留或触摸停留时，自动播放暂停
+       *
+       * 2.手动切换上一张或下一张
+       * 		·点击下方的pagination的或者左滑右滑
+       * 		·左滑右滑切换帧的条件为：滑动距离大于组件宽度50%
+       * 		·当前帧与手动切换的目的帧的动画速度加快，控制总动画时间在1s内
+       *
+       * 3.图片点击后跳转页面
+       *
+       *
+       * */
+      const data = [
+        "https://w.wallhaven.cc/full/49/wallhaven-49rzd1.jpg",
+        "https://w.wallhaven.cc/full/39/wallhaven-39wej9.jpg",
+        "https://w.wallhaven.cc/full/0j/wallhaven-0jy85y.jpg",
+        "https://w.wallhaven.cc/full/x1/wallhaven-x12ozd.jpg"
+      ];
+
+      class Carousel {
+        constructor(container) {
+          this._container = container;
+          this._container.classList.add("carousel");
+          this._handler = null;
+          this.data = null;
+        }
+
+        render() {
+          for (let d of data) {
+            let e = document.createElement("img");
+            e.src = d;
+            this._container.appendChild(e);
+          }
+
+          let children = Array.prototype.slice.call(container.children);
+          let position = 0;
+          let transform = 0;
+
+          let nextFrame = () => {
+            let nextPosition = position + 1;
+            nextPosition = nextPosition % children.length;
+
+            let current = children[position],
+              next = children[nextPosition];
+
+            next.style.transition = "ease 0";
+            next.style.tarnsform = `translate(${100 - 100 * nextPosition}%)`;
+
+            setTimeout(() => {
+              current.style.transition = "";
+              next.style.transition = "";
+
+              current.style.transform = `translate(${-transform -
+                100 -
+                100 * nextPosition}%)`;
+              next.style.transform = `translate(${-100 * nextPosition}%)`;
+
+              transform += 100;
+              position = nextPosition;
+            }, 16);
+
+            for (let child of children) {
+              child.style.tranform = `translate(${-100 * position}%)`;
+            }
+            setTimeout(nextFrame, 3000);
+          };
+          setTimeout(nextFrame, 3000);
+
+          let startX = 0;
+          let startTransform = 0;
+          let start = event => {
+            startX = event.clientX;
+
+            this._container.addEventListener("mousemove", move);
+            this._container.addEventListener("mouseup", end);
+          };
+
+          let move = event => {
+            event.preventDefault();
+            let t = event.clientX - startX;
+            for (let child of children) {
+              child.style.transition = "ease 0.5s";
+              child.style.transform = `translate${t}px`;
+            }
+          };
+
+          let end = () => {
+            this._container.addEventListener("mousemove", move);
+            this._container.addEventListener("mouseup", end);
+
+            position = Math.round(t / 500);
+
+            for (let child of children) {
+              child.style.transition = "";
+              child.style.transform = `translate(${-position * 500}px)`;
+            }
+          };
+
+          this._container.addEventListener("mousedown", start);
+        }
+      }
+
+      let carousel = new Carousel(document.getElementById("container"));
+      carousel.data = data;
+      carousel.render();
+    </script>
+  </body>
+</html>
