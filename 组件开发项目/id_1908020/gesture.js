@@ -14,6 +14,13 @@ function enableGesture(main) {
     if (dx * dx + dy * dy > 100) {
       context.isTap = false
       if (context.isPan === false) {
+        if (Math.abs(dx) > Math.abs(dy)) {
+          context.isVertical = false
+          context.isHorizontal = true
+        } else {
+          context.isVertical = true
+          context.isHorizontal = false
+        }
         let e = new Event("panstart")
         e.startX = context.startX
         e.startY = context.startY
@@ -52,7 +59,7 @@ function enableGesture(main) {
       let e = new Event("panend")
       e.dx = dx
       e.dy = dy
-      e.isFlick=context.isFlick
+      e.isFlick = context.isFlick
       main.dispatchEvent(e)
     }
   }
