@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="main" style="width:500px;height:500px;background:#f00"></div>
+    <script>
+        let main = document.getElementById('main');
+        let start = point => {
+            console.log('start', point.clientX);
+        }
+        let move = point => {
+            console.log('move', point.clientX);
+        }
+        let end = point => {
+            console.log('end', point.clientX);
+        }
+        let mousedown = event => {
+            document.addEventListener('mousemove', mousemove);
+            document.addEventListener('mouseup', mouseup);
+            start(event);
+        }
+        let mousemove = event => {
+            move(event);
+        }
+        let mouseup = event => {
+            document.removeEventListener('mousemove', mousemove);
+            document.removeEventListener('mouseup', mouseup);
+            end(event);
+        }
+        main.addEventListener('mousedown', mousedown);
+
+        let touchstart = event => {
+            for (let touch of event.changedTouches) {
+                start(touch);
+            }
+        }
+        let touchmove = event => {
+            for (let touch of event.changedTouches) {
+                move(touch);
+            }
+        }
+        let touchend = event => {
+            for (let touch of event.changedTouches) {
+                end(touch);
+            }
+        }
+        let touchcancel = event => {
+            for (let touch of event.changedTouches) {
+                end(touch);
+            }
+        }
+        main.addEventListener('touchstart', touchstart);
+        main.addEventListener('touchmove', touchmove);
+        main.addEventListener('touchend', touchend);
+        main.addEventListener('touchcancel', touchcancel);
+    </script>
+</body>
+</html>
