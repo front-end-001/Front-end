@@ -1,4 +1,5 @@
-function enableGuestion(el) {
+function enableGesture(el) {
+    const context = Object.create(null);
     const start = (point, context) => {
         context.isTab = true;
         context.startX = point.clientX;
@@ -11,8 +12,8 @@ function enableGuestion(el) {
             if (dx * dx + dy * dy > 100) {
                 context.isTab = false;
                 const panstart = new Event('panstart');
-                panstart.dx = dx; //与pan 一样？
-                panstart.dy = dy;
+                panstart.startX = context.startX;
+                panstart.startY = context.startY;
                 el.dispatchEvent(panstart);
             }
         } else {
@@ -21,9 +22,8 @@ function enableGuestion(el) {
             pan.dy = dy;
             el.dispatchEvent(pan);
         }
-        context.startX = point.clientX;
     };
-    const end = (event, context) => {
+    const end = ({ clientX, clientY }, context) => {
         if (context.isTab) {
             const tab = new Event('tab');
             el.dispatchEvent(tab);
@@ -81,15 +81,17 @@ function enableGuestion(el) {
     const touchend = event => {
         for (const touch of event.changedTouches) {
             end(touch, context[touch.identifier])
+            delete context[touch.identifier]
         }
     }
     const touchcancel = event => {
         for (const touch of event.changedTouches) {
             cancel(touch, context[touch.identifier])
+            delete context[touch.identifier]
         }
     }
     el.addEventListener('touchstart', touchstart);
     el.addEventListener('touchmove', touchmove);
-    el.addEventListener('touchend', toucend);
+    el.addEventListener('touchend', touchend);
     el.addEventListener('touchcancel', touchcancel);
 }
