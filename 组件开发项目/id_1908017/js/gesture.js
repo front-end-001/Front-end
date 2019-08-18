@@ -2,6 +2,8 @@ function enableGesture(el) {
     const context = Object.create(null);
     const start = (point, context) => {
         context.isTab = true;
+        context.startTime = +new Date();
+        context.isFlick = false;
         context.startX = point.clientX;
         context.startY = point.clientY;
     };
@@ -30,9 +32,20 @@ function enableGesture(el) {
         } else {
             const dx = clientX - context.startX,
                 dy = clientY - context.startY;
+            const v = Math.sqrt(dx * dx + dy * dy) / (new Date() - context.startTime);
+            console.log('v', v);
+            if (v > 0.3) {
+                context.isFlick = true;
+                const flick = new Event('flick');
+                flick.dx = dx;
+                flick.dy = dy;
+                el.dispatchEvent(flick);
+            }
+
             const panend = new Event('panend');
             panend.dx = dx;
             panend.dy = dy;
+            panend.isFlick = context.isFlick;
             el.dispatchEvent(panend);
         }
     };

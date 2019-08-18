@@ -98,8 +98,20 @@
                     }
                 })
                 this._container.addEventListener("panend", event => {
-                    position = -(Math.round((x + event.dx) / 500));
-                    position = Math.max(0, Math.min(position, children.length - 1));
+                    let flickHandled = false;
+                    if (event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)) {
+                        const newPosition = position + (event.dx > 0 ? -1 : 1);
+                        if (0 <= newPosition && newPosition < children.length) {
+                            flickHandled = true;
+                            position = newPosition;
+                        }
+                    }
+
+                    if (!flickHandled) {
+
+                        position = -(Math.round((x + event.dx) / 500));
+                        position = Math.max(0, Math.min(position, children.length - 1));
+                    }
 
                     for (let child of children) {
                         child.style.transition = "";
