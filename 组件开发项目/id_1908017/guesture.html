@@ -22,6 +22,25 @@
         const main = document.getElementById('main');
         const context = Object.create(null);
         const mouseIndentifer = Symbol('mouse');
+        /**
+         * 业务
+         */
+        let x = 0,
+            y = 0;
+        main.addEventListener('panstart', e => {
+
+        });
+        main.addEventListener('pan', e => {
+            main.style.transform = `translate(${x+e.dx}px, ${y+e.dy}px)`;
+        });
+        main.addEventListener('panend', e => {
+            x = x + e.dx;
+            y = y + e.dy; //dy undefined
+        });
+        main.addEventListener('pancancel', e => {
+
+        });
+
         /*
          *  handler
          */
@@ -35,13 +54,28 @@
             const dx = context.dx = point.clientX - context.startX;
             const dy = context.dy = point.clientY - context.startY;
             if (context.isTap && (dx * dx + dy * dy) > 100) {
+                const e = new Event('panstart');
+                e.dx = dx;
+                e.dy = dy;
+                main.dispatchEvent(e);
                 context.isTap = false;
+            }
+            if (!context.isTap) {
+                const pan = new Event('pan');
+                pan.dx = dx;
+                pan.dy = dy;
+                main.dispatchEvent(pan);
             }
             console.log('move', point.clientX, point.clientY);
         }
 
         const end = (point, context) => {
                 console.log('end', point.clientX, point.clientY, context.isTap);
+                if (context.isTap) {
+                    main.dispatchEvent(new Event('tap'));
+                } else {
+                    main.dispatchEvent(new Event('panend'));
+                }
             }
             /**
              * mouse
