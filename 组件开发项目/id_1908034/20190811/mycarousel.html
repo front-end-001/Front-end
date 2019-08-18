@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My - 轮播效果</title>
+    <style>
+        div#container {
+            width: 400px;
+            height: 300px;
+            /*margin: 50px auto;*/
+            white-space: nowrap;
+            /*overflow: visible;*/
+            overflow: hidden;
+            outline: solid 1px blue;
+        }
+
+        div#container > img {
+            display: inline-block;
+            height: 100%;
+            width: 100%;
+            transition: ease 0.5s;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+</div>
+<script>
+    let funnyList = [1, 2, 3, 4];
+    let pictureData = funnyList.map(item => `https://songzxdev.github.io/mystatistics/pictures/picture-${item}.jpg`);
+    let container = document.getElementById('container');
+
+
+    let play = () => {
+        container.innerHTML = '';
+        for (let i = 0; i < funnyList.length; i++) {
+            let newImg = document.createElement('img');
+            newImg.src = pictureData[i];
+            newImg.alt = i + 1;
+            newImg.title = `picture-${i + 1}`;
+            container.appendChild(newImg);
+
+        }
+        let childList = Array.from(container.children);
+        for (let i = 0; i < funnyList.length; i++) {
+            let [curr, next] = [childList[i], childList[i + 1]];
+            // console.log(curr, next);
+            if (childList[i + 1]) {
+                next.style.transition = 'ease 0';
+                next.style.transform = `translate(${100 - 100 * (i + 1)}%)`;
+                setTimeout(() => {
+                    curr.style.transition = '';
+                    curr.style.transform = `translate(${-100 - 100 * i}%)`;
+                    next.style.transition = '';
+                    next.style.transform = `translate(${-100 * (i + 1)}%)`;
+                }, 1500 * (i + 1));
+            }
+
+        }
+        // setTimeout(() => play(), 16);
+    };
+    play();
+    setInterval("play()", 5500);
+</script>
+</body>
+</html>
