@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #main {
+            width: 300px;
+            height: 300px;
+            background-color: #999;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main"></div>
+    <script>
+        const main = document.getElementById('main');
+        /*
+         *  handler
+         */
+        const start = point => {
+            console.log('start', point.clientX, point.clientY);
+        }
+        const move = point => {
+            console.log('move', point.clientX, point.clientY);
+        }
+        const end = point => {
+                console.log('end', point.clientX, point.clientY);
+            }
+            /**
+             * mouse
+             */
+            //todo let 换成const 能用么:能用，分析一下？
+        const mousedown = event => {
+            document.addEventListener('mousemove', mousemove);
+            document.addEventListener('mouseup', mouseup);
+            // console.log('start', event.clientX, event.clientY);
+            start(event);
+        }
+        const mousemove = event => {
+            // console.log('mousemove', event);
+            // console.log('move', event.clientX, event.clientY);
+            move(event);
+        }
+        const mouseup = event => {
+            document.removeEventListener('mousemove', mousemove);
+            document.removeEventListener('mouseup', mouseup);
+            // console.log('end', event.clientX, event.clientY);
+            end(event);
+        }
+
+        main.addEventListener('mousedown', mousedown);
+        /*
+        touch
+        */
+        const touchstart = event => {
+            for (let touch of event.changedTouches) {
+                // console.log('start', touch.clientX, touch.clientY)
+                start(touch)
+            }
+        }
+        const touchmove = event => {
+            //不需要绑定到 document
+            for (let touch of event.changedTouches) {
+                // console.log('move', touch.clientX, touch.clientY)
+                move(touch);
+            }
+        }
+        const touchend = event => {
+            for (let touch of event.changedTouches) {
+                // console.log('end', touch.clientX, touch.clientY)
+                end(touch);
+            }
+        }
+        const touchcancel = event => {
+            //不总是发生
+            for (let touch of event.changedTouches) {
+                console.log('cancel', touch.clientX, touch.clientY)
+            }
+        }
+
+        main.addEventListener('touchstart', touchstart);
+        main.addEventListener('touchmove', touchmove);
+        main.addEventListener('touchend', touchend);
+        main.addEventListener('touchcancel', touchcancel);
+    </script>
+</body>
+
+</html>
