@@ -150,3 +150,4 @@ P1:
 链接
 [不带拖拽的轮播效果](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/no-drag.html)
 [拖拽的效果](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/drag.html)
+[Crousel使用手势库](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/touch.html)
