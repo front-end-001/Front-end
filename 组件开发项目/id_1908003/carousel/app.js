@@ -76,7 +76,7 @@ class Carousel {
         child.style.transform = `translate(${-position * width + disX}px)`;
       }
     };
-    
+
     const end = () => {
       position = -Math.round((-position * width + disX) / width);
       position = Math.max(0, Math.min(position, children.length - 1));
@@ -88,7 +88,32 @@ class Carousel {
       document.removeEventListener('mouseup', move);
     };
 
-    this._container.addEventListener('mousedown', start);
+    // 注释此行禁止原始拖动代码
+    // this._container.addEventListener('mousedown', start);
+
+    enableGesture(this._container);
+
+    this._container.addEventListener('pan', (event) => {
+      disX = event.clientX - startX;
+      for (let child of children) {
+        child.style.transition = 'ease 0s';
+        child.style.transform = `translate(${-position * width + event.dx}px)`;
+      }
+    });
+
+    this._container.addEventListener('panend', (event) => {
+      position = -Math.round((-position * width + event.dx) / width);
+      position = Math.max(0, Math.min(position, children.length - 1));
+      for (let child of children) {
+        child.style.transition = '';
+        child.style.transform = `translate(${-position * width}px)`;
+      }
+    });
+
+    this._container.addEventListener('mousedown', (event) => {
+      event.preventDefault();
+    });
+
   }
 }
 
