@@ -155,37 +155,38 @@ let y = 0;
 
 enableGesture(main);
 
-main.addEventListener('tap', (event) => {
-  console.log('main tap');
-});
+
 main.addEventListener('press', (event) => {
   console.log('main press');
 });
+
 main.addEventListener('pressend', (event) => {
   console.log('main pressend');
 });
+
 main.addEventListener('presscancel', (event) => {
   console.log('main presscancel');
 });
+
 main.addEventListener('touchstart', (event) => {
   event.preventDefault();
 });
 
-// main.addEventListener('tap', (event) => {
-//   console.log('main tap');
-// });
+main.addEventListener('tap', (event) => {
+  console.log('main tap');
+});
 
-// main.addEventListener('panstart', (event) => {
-//   console.log('main panstart');
-// });
+main.addEventListener('panstart', (event) => {
+  console.log('main panstart');
+});
 
-// main.addEventListener('pan', (event) => {
-//   main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
-// });
+main.addEventListener('pan', (event) => {
+  main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+});
 
-// main.addEventListener('panend', (event) => {
-//   console.log('main panend');
-//   main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
-//   x = event.dx + x;
-//   y = event.dy + y;
-// });
+main.addEventListener('panend', (event) => {
+  console.log('main panend');
+  main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+  x = event.dx + x;
+  y = event.dy + y;
+});
