@@ -1,9 +1,3 @@
-// const main = document.getElementById('gesture');
-
-// let x = 0;
-// let y = 0;
-
-
 function enableGesture(main) {
 
   // 适合做索引
@@ -16,6 +10,8 @@ function enableGesture(main) {
     context.startY = point.clientY;
     context.isTap = true;
     context.isPan = false;
+    context.isFlick = false;
+    context.startTime = Date.now();
   }
   const move = (point, context) => {
     // console.log('move', point.clientX, point.clientY);
@@ -38,14 +34,23 @@ function enableGesture(main) {
 
   }
   const end = (point, context) => {
+    const dt = Date.now() - context.startTime;
+    const v = Math.sqrt(context.dx * context.dx + context.dy * context.dy) / (dt / 1000);
+
+    if (context.isPan && dt <= 500 && v > 0.3) {
+      context.isFlick = true;
+      context.isPan = false;
+      const e = new Event('flick');
+      Object.assign(e, context);
+      main.dispatchEvent(e);
+    }
+
     if (context.isTap) {
       const e = new Event('tap');
       main.dispatchEvent(e);
-
     } else if (context.isPan) {
       const e = new Event('panend');
-      e.dx = context.dx;
-      e.dy = context.dy;
+      Object.assign(e, context);
       main.dispatchEvent(e);
     }
   }
@@ -103,7 +108,16 @@ function enableGesture(main) {
   main.addEventListener('touchcancel', touchcancel);
 }
 
-// enableGesture(main);
+const main = document.getElementById('gesture');
+
+let x = 0;
+let y = 0;
+
+enableGesture(main);
+
+main.addEventListener('flick', (event) => {
+  console.log('main flick');
+});
 
 // main.addEventListener('tap', (event) => {
 //   console.log('main tap');
