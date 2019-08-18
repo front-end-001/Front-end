@@ -19,15 +19,23 @@ function enableGesture(main) {
     context.dy = point.clientY - context.startY;
     if (context.isPan) {
       const e = new Event('pan');
-      e.dx = context.dx;
-      e.dy = context.dy;
+      Object.assign(e, context);
       main.dispatchEvent(e);
     } else if ((context.dx * context.dx + context.dy * context.dy) > 100) {
+      if (Math.abs(context.dx) > Math.abs(context.dy)) {
+        /** 水平 */
+        context.isHorizontal = true;
+        /** 垂直 */
+        context.isVertical = false;
+
+      } else {
+        context.isHorizontal = false;
+        context.isVertical = true;
+      }
       context.isTap = false;
       context.isPan = true;
       const e = new Event('panstart');
-      e.dx = context.dx;
-      e.dy = context.dy;
+      Object.assign(e, context);
       main.dispatchEvent(e);
     }
     // console.log(dx, dy);

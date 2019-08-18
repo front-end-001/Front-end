@@ -95,6 +95,9 @@ class Carousel {
 
 
     this._container.addEventListener('pan', (event) => {
+      if (!event.isHorizontal) {
+        return;
+      }
       disX = event.clientX - startX;
       for (let child of children) {
         child.style.transition = 'ease 0s';
@@ -103,11 +106,12 @@ class Carousel {
     });
 
     this._container.addEventListener('flick', (event) => {
-      console.log('flick');
-      if (event.dx < 0) {
-        position += 1;
-      } else {
-        position -= 1;
+      if (event.isHorizontal) {
+        if (event.dx < 0) {
+          position += 1;
+        } else {
+          position -= 1;
+        }
       }
       position = Math.max(0, Math.min(position, children.length - 1));
       for (let child of children) {
@@ -119,10 +123,11 @@ class Carousel {
 
     this._container.addEventListener('panend', (event) => {
       if (event.isFlick) return;
-      console.log('panend');
 
-      position = -Math.round((-position * width + event.dx) / width);
-      position = Math.max(0, Math.min(position, children.length - 1));
+      if (event.isHorizontal) {
+        position = -Math.round((-position * width + event.dx) / width);
+        position = Math.max(0, Math.min(position, children.length - 1));
+      }
       for (let child of children) {
         child.style.transition = '';
         child.style.transform = `translate(${-position * width}px)`;
