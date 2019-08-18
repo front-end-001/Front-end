@@ -20,17 +20,28 @@
     <div id="main"></div>
     <script>
         const main = document.getElementById('main');
+        const context = Object.create(null);
+        const mouseIndentifer = Symbol('mouse');
         /*
          *  handler
          */
-        const start = point => {
+        const start = (point, context) => {
+            context.startX = point.clientX;
+            context.startY = point.clientY;
+            context.isTap = true;
             console.log('start', point.clientX, point.clientY);
         }
-        const move = point => {
+        const move = (point, context) => {
+            const dx = context.dx = point.clientX - context.startX;
+            const dy = context.dy = point.clientY - context.startY;
+            if (context.isTap && (dx * dx + dy * dy) > 100) {
+                context.isTap = false;
+            }
             console.log('move', point.clientX, point.clientY);
         }
-        const end = point => {
-                console.log('end', point.clientX, point.clientY);
+
+        const end = (point, context) => {
+                console.log('end', point.clientX, point.clientY, context.isTap);
             }
             /**
              * mouse
@@ -40,18 +51,20 @@
             document.addEventListener('mousemove', mousemove);
             document.addEventListener('mouseup', mouseup);
             // console.log('start', event.clientX, event.clientY);
-            start(event);
+            context[mouseIndentifer] = Object.create(null);
+            start(event, context[mouseIndentifer]);
         }
         const mousemove = event => {
             // console.log('mousemove', event);
             // console.log('move', event.clientX, event.clientY);
-            move(event);
+            move(event, context[mouseIndentifer]);
         }
         const mouseup = event => {
             document.removeEventListener('mousemove', mousemove);
             document.removeEventListener('mouseup', mouseup);
             // console.log('end', event.clientX, event.clientY);
-            end(event);
+            end(event, context[mouseIndentifer]);
+            delete context[mouseIndentifer];
         }
 
         main.addEventListener('mousedown', mousedown);
@@ -61,20 +74,21 @@
         const touchstart = event => {
             for (let touch of event.changedTouches) {
                 // console.log('start', touch.clientX, touch.clientY)
-                start(touch)
+                context[touch.identifier] = Object.create(null)
+                start(touch, context[touch.identifier])
             }
         }
         const touchmove = event => {
             //不需要绑定到 document
             for (let touch of event.changedTouches) {
                 // console.log('move', touch.clientX, touch.clientY)
-                move(touch);
+                move(touch, context[touch.identifier]);
             }
         }
         const touchend = event => {
             for (let touch of event.changedTouches) {
                 // console.log('end', touch.clientX, touch.clientY)
-                end(touch);
+                end(touch, context[touch.identifier]);
             }
         }
         const touchcancel = event => {
