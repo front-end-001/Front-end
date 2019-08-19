@@ -19,7 +19,7 @@
             transition: ease 0.5s;
         }
     </style>
-    <script src="geust.js"></script>
+    <script src="gesture.js"></script>
 </head>
 <body>
 <div id="container">
@@ -88,15 +88,29 @@
 
             enableGesture(this._container);
 
-            this._container.addEventListener("panmove", event => {
-                console.log("pan")
+            this._container.addEventListener("pan", event => {
+                //console.log("pan")
+                if(event.isVertical)
+                    return;
                 for(let child of children) {
                     child.style.transition = "ease 0s";
                     child.style.transform = `translateX(${event.dx + x}px`;
                 }
             })
             this._container.addEventListener("panend", event => {
-                position = -(Math.round((x + event.dx) / 500));
+                if(event.isVertical)
+                    return;
+                if(event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)){
+                    if(event.dx > 0) {
+                        position = position - 1;
+                    }
+                    if(event.dx < 0) {
+                        position = position + 1;
+                    }
+                } else {
+                    position = -(Math.round((x + event.dx) / 500));
+                }
+                 
                 position = Math.max(0, Math.min(position, children.length - 1));
 
                 for(let child of children) {
