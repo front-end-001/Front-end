@@ -20,7 +20,7 @@
             transition: ease 0.5s;
         }
     </style>
-    <script src="./js/gesture.js"></script>
+    <script src="./js/gesture.v2.js"></script>
 </head>
 
 <body>
@@ -89,6 +89,15 @@
                 let x = 0;
 
                 enableGesture(this._container);
+                this._container.addEventListener('pressstart', () => {
+                    console.log('pressstart');
+                })
+                this._container.addEventListener('pressend', () => {
+                    console.log('pressend');
+                })
+                this._container.addEventListener('presscancel', () => {
+                    console.log('presscancel');
+                })
 
                 this._container.addEventListener("pan", event => {
                     console.log("pan")
