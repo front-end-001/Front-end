@@ -24,21 +24,21 @@
       width:500px;
    }
    .carousel {
-       width:500px;
-       height:300px;
+       width:200px;
+       height:120px;
        outline: 1px solid #fff;
        overflow: hidden;
        white-space:nowrap;
        
    }
    .carousel img{
-    width:500px;
+    width:200px;
     display: inline-block;
     /* transition:ease 1s; */
    }
 </style>
 <body>
-    <div id="wrap"></div>
+    <!-- <div id="wrap"></div> -->
     <div id="carousel"></div>
 </body>
 </html>
@@ -111,6 +111,121 @@ const imgArray2 = [
         }
     }
     // new SwiperRender({container:document.getElementById('wrap'),time:1000,imgs:imgArray,isautoPlay:true}).render()
+   
+   function enableGesture(gesture){
+    const context = Object.create(null)
+    const mousedown = event =>{
+       context[mouseSymbol] = Object.create(null)
+       start(event,context[mouseSymbol])
+       console.log(event.clientX,event.clientY)
+   }
+   const mousemove = event =>{
+    move(event,context[mouseSymbol])
+       console.log(event.clientY,event.clientY)
+   }
+   const mouseup = event =>{
+    end(event,context[mouseSymbol])
+       console.log(event.clientY,event.clientY)
+   }
+  
+   document.addEventListener('mouseup',mouseup)
+   document.addEventListener('mousemove',mousemove)
+   document.addEventListener('mousedown',mousedown)
+   
+   const touchstart = event=>{
+       for(item of event.changedTouches)
+       context[item.identifier] = Object.create(null)
+       start(item,context[item.identifier])
+   }
+   const touchmove = event=>{
+       for(item of event.changedTouches){
+           move(item,context[item.identifier])
+        }
+   }
+   const touchend = event=>{
+       
+       for(item of event.changedTouches){
+        end(item,context[item.identifier])
+       }
+       
+    //    console.log(event)
+   }
+   const touchcancel = event=>{
+       for(item of event.changedTouches)
+       console.log(item.clientX,item.clientY)
+    //    console.log(event)
+   }
+   gesture.addEventListener('touchstart',touchstart)
+   gesture.addEventListener('touchmove',touchmove)
+   gesture.addEventListener('touchend',touchend)
+   let x = 0,y=0
+//    gesture.addEventListener('pan',(e)=>{
+//      console.log('pan',e.dx)
+//     gesture.style.transform = `translate(${x+e.dx}px,${y+e.dy}px)`
+//     // gesture.style.transform = `translateY(${y+e.dy}px)`
+//    })
+//    gesture.addEventListener('panend',(e)=>{
+//     gesture.style.transform = `translateX(${x+e.dx}px,${y+e.dy}px)`
+//     x=x+e.dx
+//     y=y+e.dy
+//     // gesture.style.transform = `translateY(${y+e.dy}px)`
+//    })
+//    gesture.addEventListener('pancancel',(e)=>{
+//     gesture.style.transform = `translateX(${x}px)`
+//     gesture.style.transform = `translateY(${y}px)`
+//    })
+
+   start = (point,context) =>{
+       context.startX = point.clientX
+       context.startY = point.clientY
+       context.isTap = true
+       context.isTouch = false
+   }
+   move = (point,context) =>{
+       context.dx = point.clientX-context.startX
+        context.dy = point.clientY-context.startY
+        if(context.dx*context.dx+context.dy*context.dy>100){
+            context.isTap = false
+            if(context.isTouch===false){
+                if(Math.abs(context.dx)>Math.abs(context.dy)){
+                    context.isVertical = false
+                    context.isHorizontal = true
+                }else{
+                    context.isVertical = true
+                    context.isHorizontal = false
+                }
+                const e =new Event('panstart')
+                e.dx = context.startX
+                e.dy = context.startY
+                gesture.dispatchEvent(e)
+                context.isTouch = true
+            }
+            if(context.isTouch){
+                const e =new Event('pan')
+                e.dx = context.dx
+                e.dy = context.dy
+                e.isVertical = context.isVertical
+                e.isHorizontal = context.isHorizontal
+                gesture.dispatchEvent(e)
+            }
+        }
+   }
+   end = (point,context) =>{
+       if(context.isTap){
+           const e = new Event('tap')
+           gesture.dispatchEvent(e)
+       }
+       if(context.isTouch){
+        const e =new Event('panend')
+                e.dx = context.dx
+                e.dy = context.dy
+                e.isVertical = context.isVertical
+                e.isHorizontal = context.isHorizontal
+                gesture .dispatchEvent(e)
+       }
+       console.log('end',point.clientX,point.clientY)
+   }
+   }
     class Carousel{
         constructor(options){
             this.container = options.container
@@ -169,7 +284,24 @@ const imgArray2 = [
                 },this.time)
             }
             // nextFrame()
-            document.addEventListener('mousedown',this.touchStart)
+            // document.addEventListener('mousedown',this.touchStart)
+            enableGesture(this.container)
+           
+            let x = 0
+            this.container.addEventListener('pan',e=>{
+                for(let item of this.container.children){
+                    item.style.transform = `translateX(${x+e.dx}px)`
+                    item.style.transition = 'ease 0.5s'
+                    x = x+e.x
+            }
+            })
+            this.container.addEventListener('panend',e=>{
+                for(let item of this.container.children){
+                item.style.transform = `translateX(${x+e.dx}px)`
+                item.style.transition = 'ease 0.5s'
+                x = x+e.x
+                }
+            })
         }
         touchStart =(e)=>{
             document.addEventListener('mousemove',this.touchMove)
