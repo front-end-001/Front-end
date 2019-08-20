@@ -60,7 +60,7 @@ window.onload = function () {
         moveSuccess = moveSuccess || canmove;
 
         // 找到目标棋子后，开始翻转棋子颜色，检查模式不翻转
-        if (moveSuccess && !checkOnly) {
+        if (canmove && !checkOnly) {
           while (true) {
             // 反向翻转颜色
             x -= direction.x;

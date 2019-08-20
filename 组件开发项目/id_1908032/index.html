@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 300px;
+            height: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .slider-item {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            transition: ease 0.5s;
+        }
+        
+        .dot {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+    </div>
+</body>
+<script>
+
+    class Carousel {
+
+        constructor(container){
+            this._container = container;
+            this.data = [
+                { url: 'https://imgcps.jd.com/ling/1461392811/6L2m5YWF5ZOB57G75ZGo/6L2m5ZOB5aW96LSnMeWFg-aKog/p-5bd8253082acdd181d02f9d3/833aa83e.jpg', title: '标题1' },
+                { url: 'https://img11.360buyimg.com/pop/s1180x940_jfs/t1/57142/39/4463/75557/5d22e21aEe03e106c/fa653e79e2d1f480.jpg', title: '标题2' },
+                { url: 'https://img12.360buyimg.com/pop/s1180x940_jfs/t1/66796/15/5719/74404/5d3d0103E2c59e1e8/6e208dbf74490aa6.jpg', title: '标题2' },
+            ]
+        }
+
+        render(){
+            // 插入轮播图片
+            for(let slider of this.data){
+                let item = document.createElement('img');
+                item.src = slider.url;
+                item.classList.add('slider-item');
+                this._container.appendChild(item);
+            }
+
+            let children = Array.prototype.slice.call(this._container.children);
+            let position = 0;
+        
+            let nextFrame = () => {
+                let nextPosition = position + 1;
+                nextPosition = nextPosition % children.length;
+
+                let current = children[position]; 
+                let next = children[nextPosition];
+
+                next.style.transition = "ease 0s";
+                next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+                setTimeout(() => {
+                    current.style.transition = '';
+                    current.style.transform = `translate(${-100 - 100 * position}%)`
+                    
+                    next.style.transition = '';
+                    next.style.transform = `translate(${ - 100 * nextPosition }%)`;
+                    position = nextPosition;
+                }, 16);
+                this.handler = setTimeout(nextFrame, 3000);
+            }
+
+            // this.handler = setTimeout(nextFrame, 3000);
+
+            let startX;
+            let startTransform;
+            let start = event => {
+                event.preventDefault();
+                startX = event.clientX;
+                startTransform = - position * 300;
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', end);
+            }
+
+            let move = event => {
+                event.preventDefault();
+                for(let child of children){
+                    child.style.transition = 'ease 0s';
+                    child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+                }
+                console.log(startTransform + event.clientX - startX);
+            }
+
+            let end = () => {
+                document.removeEventListener('mousemove', move);
+                document.removeEventListener('mouseup', end);
+
+                position = -(Math.round((startTransform, event.clientX - startX) / 300));
+                position = Math.max(0, Math.min(position, children.length - 1));
+
+                for(let child of children){
+                    child.style.transition = '';
+                    child.style.transform = `translate(${-position * 300}px)`;
+                }
+            }
+
+            this._container.addEventListener('mousedown', start);
+        }
+
+    }
+
+    new Carousel(document.getElementById('app')).render();
+</script>
+</html>
