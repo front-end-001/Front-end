@@ -1,5 +1,5 @@
 学习笔记
-1.刷题网站：[](https://leetcode-cn.com/)
+1.刷题网站：(https://leetcode-cn.com/)
 2.组件化的起源
 yui ext
 老师的代码：
@@ -33,3 +33,12 @@ P1：
 	4.2点击向左按钮向前播放，点击向右按钮向后播放
 	
 		
+flowbywind:
+https://codeshare.io/ad9Eny  js的手势库
+
+原地#5569:
+手势库 https://codeshare.io/ad9Eny
+轮播组件 https://codeshare.io/5ee3XK
+
+晨瑶@极客大学:
+今天下午的代码，还是下周四提交，大家下周再看看回放
