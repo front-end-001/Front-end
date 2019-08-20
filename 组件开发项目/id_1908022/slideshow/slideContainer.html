@@ -19,6 +19,7 @@
         transition: ease .5s;
     }
     </style>
+    <script src="touch.js"></script>
 </head>
 <body>
     <div id="container"></div>
@@ -54,6 +55,29 @@
                     e.src = item.url;
                     this._container.appendChild(e);
                 }
+
+                let position = 0;
+                let children = Array.prototype.slice.call(this._container.children);
+                let x = 0;
+                
+                enableGesture(this._container);
+                this._container.addEventListener('panmove',event => {
+                    for(let child of children){
+                    child.style.transition = "ease 0s";     
+                    child.style.transform = `translateX(${event.dX + x}px)`;
+                    } 
+                })
+                this._container.addEventListener('panend',event => {
+                    position = -Math.round((event.dX + x) / 500);
+                    position = Math.max(0, Math.min(position,children.length -1 ));
+                    for(let child of children){
+                    child.style.transition = "";    
+                    child.style.transform = `translateX(${position * -500}px)`;
+                    }
+                    x = position * -500;
+                })
+                this._container.addEventListener('mousedown', event => { event.preventDefault() });
+
             }
         }
 
