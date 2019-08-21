@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Othello</title>
+  <style>
+    .chessWrap {
+      width: 256px;
+    }
+
+    .chessItem {
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+      margin-right: 1px;
+      margin-bottom: 1px;
+      vertical-align: middle;
+      background-color: darkgreen;
+      cursor: pointer;
+    }
+
+    .chessWhite::before {
+      content: " ";
+      width: 26px;
+      height: 26px;
+      border-radius: 26px;
+      background-color: #fff;
+      display: block;
+      margin: 2px;
+    }
+
+    .chessBlack::before {
+      content: " ";
+      width: 26px;
+      height: 26px;
+      border-radius: 26px;
+      background-color: #000;
+      display: block;
+      margin: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="chessWrap"></div>
+  <script>
+    let board = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 1, 0, 0, 0],
+      [0, 0, 0, 1, 2, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    let color = 1;
+    let container = document.querySelector(".chessWrap");
+    let directions = [{
+        x: -1,
+        y: 0
+      },
+      {
+        x: 1,
+        y: 0
+      },
+      {
+        x: 0,
+        y: 1
+      },
+      {
+        x: 0,
+        y: -1
+      },
+      {
+        x: -1,
+        y: -1
+      },
+      {
+        x: 1,
+        y: 1
+      },
+      {
+        x: 1,
+        y: -1
+      },
+      {
+        x: -1,
+        y: 1
+      }
+    ];
+
+    function checkPass() {
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          if (move(j, i, true)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    };
+
+    function move(x, y, checkOnly) {
+      let result = false;
+      let [ox, oy] = [x, y];
+      if (board[y][x] > 0) {
+        return result;
+      }
+      for (let d of directions) {
+        let canmove = false;
+        x = ox;
+        y = oy;
+        while (true) {
+          x += d.x;
+          y += d.y;
+          if (x < 0 || x > 7 || y < 0 || y > 7) {
+            canmove = false;
+            break;
+          }
+          if (board[y][x] == 3 - color) {
+            canmove = true;
+          } else if (board[y][x] == color) {
+            break;
+          } else if (board[y][x] == 0) {
+            canmove = false;
+            break;
+          }
+        }
+        if (canmove) {
+          result = true;
+          if (!checkOnly) {
+            while (true) {
+              x -= d.x;
+              y -= d.y;
+              board[y][x] = color;
+              if (x == ox && y == oy) {
+                break;
+              }
+            }
+          }
+        }
+      }
+      return result;
+    }
+
+    function render() {
+      container.innerHTML = "";
+      let fragment = document.createDocumentFragment();
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          let cell = document.createElement("div");
+          cell.className = "chessItem";
+          if (board[i][j] == 1) {
+            cell.classList.add("chessBlack");
+          }
+          if (board[i][j] == 2) {
+            cell.classList.add("chessWhite");
+          }
+          fragment.appendChild(cell);
+          cell.addEventListener("click", () => {
+            if (move(j, i)) {
+              render();
+              color = 3 - color;
+              if (checkPass()) {
+                color = 3 - color;
+                if (checkPass()) {
+                  alert("Game Over");
+                }
+              }
+            }
+          })
+        }
+      }
+      container.appendChild(fragment);
+    }
+    render();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+<div id='board'></div>
+<script>
+    class OthelloPattern {
+        constructor() {
+            this.map = [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 2, 0, 0, 0],
+                [0, 0, 0, 2, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        }
+
+        move(i, j, color, checkOnly) {
+            let directions = [
+                [0, 1],
+                [0, -1],
+                [1, 1],
+                [-1, -1],
+                [-1, 0],
+                [1, -1],
+                [-1, 1],
+                [1, 0]
+            ];
+            let moveSuccess = false;
+            if (this.map[i][j] === 0) {
+                for (let direction of directions) {
+                    let canmove = false;
+                    let [x, y] = [i, j];
+                    x = x + direction[0];
+                    y = y + direction[1];
+                    while (true) {
+                        if (x < 0 || y < 0 || x >= 8 || y >= 8) {
+                            canmove = false;
+                            break;
+                        }
+
+                        if (this.map[x][y] === 3 - color) {
+                            canmove = true;
+                        } else if (this.map[x][y] === 0) {
+                            canmove = false;
+                            break;
+                        } else {
+                            break;
+
+                        }
+                        x = x + direction[0];
+                        y = y + direction[1];
+                    }
+                    moveSuccess = moveSuccess || canmove;
+
+
+                    if (canmove && !checkOnly) {
+                        let [c, d] = [i, j];
+                        while (1) {
+                            if (c === x && d === y) {
+                                break;
+                            }
+                            this.map[c][d] = color;
+                            c = c + direction[0];
+                            d = d + direction[1];
+                        }
+                    }
+                }
+                return moveSuccess;
+
+            }
+        }
+        checkPass = (color) => {
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    if (this.move(i, j, color, true)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+
+        }
+    }
+
+    class OthelloGame {
+        constructor() {
+            this.prattern = new OthelloPattern();
+            this.color = 1;
+        }
+        move(i, j) {
+            if (this.prattern.move(i, j, this.color, false)) {
+                this.color = 3 - this.color;
+                if (this.prattern.checkPass(this.color)) {
+                    this.color = 3 - this.color;
+                    if (this.prattern.checkPass(this.color)) {
+                        alert('game over');
+                    }
+                }
+            }
+        }
+    }
+    class OthelloView {
+        constructor(container, game) {
+            this.container = container;
+            this.game = game;
+        }
+        render() {
+            container.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    let cell = document.createElement('div');
+                    container.appendChild(cell);
+                    cell.style = 'width:30px;height:30px;background:darkgreen;display:inline-block;margin:3px';
+                    cell.addEventListener('click', e => {
+                        this.game.move(i, j);
+                        this.render();
+                    })
+                    if (this.game.prattern.map[i][j] === 1) {
+                        let disc = document.createElement('div');
+                        disc.style = 'border-radius:50%;width:26px;height:26px;background:black;margin:2px 0 0 2px;';
+                        cell.appendChild(disc);
+                    }
+                    if (this.game.prattern.map[i][j] === 2) {
+                        let disc = document.createElement('div');
+                        disc.style = 'border-radius:50%;height:26px;width:26px;background:white;margin:2px 0 0 2px;';
+                        cell.appendChild(disc);
+                    }
+                }
+                this.container.appendChild(document.createElement('br'));
+            }
+        }
+    }
+    let container = document.getElementById('board');
+    new OthelloView(container,
+        new OthelloGame()).render();
+</script>

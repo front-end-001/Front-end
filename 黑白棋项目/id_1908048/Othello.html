@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Othello</title>
+    <meta name="author" content="Nan Jiang">
+    <style type="text/css">
+        .info{
+            width: 256px;
+            height: 200px;
+            overflow-x:hidden;
+            overflow-y:auto;
+        }
+        .info:first-line{
+            color: red;
+        }
+        #layout{
+            display:flex;
+            flex-wrap: wrap;
+        }
+        .container{
+            width:33%;
+            min-width:260px;
+            flex:1;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <h1>黑白棋</h1>
+    <div id="layout">
+        <div id="container" class="container">
+            <h2>单人模式</h2>
+            <div id="board"></div>
+            <div class="info"></div>
+        </div>
+        <div id="container1" class="container">
+            <h2>双人模式</h2>
+            <div id="board"></div>
+            <div class="info"></div>
+        </div>
+        <div id="container2" class="container">
+            <h2>双AI模式</h2>
+            <div id="board"></div>
+            <div class="info"></div>
+        </div>
+    </div>
+    <p>游戏规则：</p>
+    <p>棋子：黑白棋棋子每颗由黑白两色组成，一面白，一面黑，共64个（包括棋盘中央的4个）。棋子呈圆饼形。两个玩家各下一面棋子。</p>
+    <p>棋盘：黑白棋棋盘由64（8*8）格的正方格组成，游戏进行时棋子要下在格内。</p>
+    <p>玩法：棋盘为8×8的方格布局，开局时在棋盘正中有摆好的四枚棋子，黑白各2枚，交叉放置，由执黑棋的一方先落子，双方交替下子，棋子落在方格内，一局游戏结束后双方更换执子颜色。
+    步合法的棋步包括：在一个空格新落下一个棋子，并且翻转对手一个或多个棋子。<br>
+    下子方式：把自己颜色的棋子放在棋盘的空格上，而当自己放下的棋子在横、竖、斜八个方向内有一个自己的棋子，则被夹在中间的对方棋子全部翻转会成为自己的棋子。夹住的位置上必须全部是对手的棋子，不能有空格。并且，只有在可以翻转棋子的地方才可以下子。<br>
+    一步棋可以在数个方向上翻棋，任何被夹住的棋子都必须被翻转过来，棋手无权选择不去翻某个棋子必须是刚下的子夹对方才能够翻对方的子，因翻转对方的棋子而夹住的子是不能被翻的。<br>
+    翻转棋子时，有一个棋子的翻转动画大概显示1秒左右每次下子最少必须翻转对方一个棋子，若棋局中下子都不能翻转对方棋子，则自动pass轮空，客户端界面气泡提示：您无子可下由对方继续下子，而对方气泡提示：由于对方无子可下，您可继续下子。若二个玩家都不能下子翻转对方棋子，游戏结束。</p>
+    <script>
+        class OthelloPattern{
+            constructor(){
+                this.map = [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 1, 2, 0, 0, 0],
+                    [0, 0, 0, 2, 1, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ];
+            }
+            compare(i, j, a, b, color, move) {
+                    let canmove = 0;
+                    let [x,y] = [j,i];
+                    while (true) {
+                        x = x + a;
+                        y = y + b;
+                        if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                            canmove = 0;
+                            break;
+                        }
+                        if (this.map[y][x] === 3 - color) {
+                            canmove = 1;
+                        }
+                        else if (this.map[y][x] === color) {
+                            break;
+                        }
+                        else if (this.map[y][x] === 0) {
+                            canmove = 0;
+                            break;
+                        }
+                    };
+                    if (!move)
+                        return canmove;
+                    while (canmove === 1) {
+                        x = x - a;
+                        y = y - b;
+                        this.map[y][x] = color;
+                        if (x < 0 || x >= 8 || y < 0 || y >= 8)
+                            break;
+                        if (x === j && y === i) {
+                            break;
+                        }
+                    };
+                    return canmove;
+                }
+        
+            compareAll(i, j, color, move) {
+                if (this.map[j][i] !== 0) 
+                        return false;
+                let moveSuccess = this.compare(j, i, 1, 0, color, move)
+                    + this.compare(j, i, -1, 0, color, move)
+                    + this.compare(j, i, 0, 1, color, move)
+                    + this.compare(j, i, 0, -1, color, move)
+                    + this.compare(j, i, 1, 1, color, move)
+                    + this.compare(j, i, 1, -1, color, move)
+                    + this.compare(j, i, -1, 1, color, move)
+                    + this.compare(j, i, -1, -1, color, move);
+                if (moveSuccess > 0)
+                    return true;
+                else
+                    return false;
+            }
+            passTest(color) {
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        if (this.compareAll(i, j, color, false))
+                            return true;
+                    }
+                }
+                return false;
+            };
+        }
+        class OthelloGame{
+            constructor(pattern){
+                this.pattern = new OthelloPattern();
+                this.color = 1;
+                this.message= (this.color === 1)?"黑方出棋<br>":"白方出棋<br>";
+            }
+            ai(){
+                let array=[];
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        if (this.pattern.compareAll(i, j, this.color, false))
+                            array.push([i,j]);
+                    }
+                }
+                let select = Math.floor(Math.random()*Math.floor(array.length));
+                this.move(array[select][0],array[select][1]);
+            }
+            move(i,j){
+                let original = this.color;
+                if (this.pattern.compareAll(i, j, this.color, true)) {
+                    let role = (this.color === 1) ? "黑方" : "白方";
+                    let rival = (role === "白方") ? "黑方" : "白方";
+                    this.message= role + "布子" + (j+1)+"行"+(i+1)+"列<br>" + this.message;
+                    this.color = 3 - this.color;
+                    //检测是否对手是否有棋可走，没有则产生Pass，交回我方局
+                    if (!this.pattern.passTest(this.color)){
+                        this.color = 3 - this.color;
+                        //若发生Pass，则判断我方是否有棋可走，没有则游戏结束，生成结束消息
+                        if (!this.pattern.passTest(this.color)) {
+                            let black = 0, white = 0;
+                            for (i = 0; i < 8; i++) {
+                                for (j = 0; j < 8; j++) {
+                                    if (this.pattern.map[i][j] === 1)
+                                        black++;
+                                    else if (this.pattern.map[i][j] === 2)
+                                        white++;
+                                }
+                            }
+                            this.message="游戏结束<br>黑方: "+black+"分<br>白方: "+white+"分"+((black > white) ? "<br>黑方" : "<br>白方") + "获胜<br>" + this.message;
+                        }
+                        //若我方有棋可走则生成Pass消息
+                        else {
+                            this.message=rival+"Pass"+role+"继续出棋<br>"+ this.message;
+                        }
+                    }
+                    //若没发生Pass则生成更换棋手消息
+                    else {
+                        this.message=rival+"出棋<br>"+ this.message
+                    }
+                }
+                return (original === this.color) ? false:true;            
+            }
+        }
+        class OthelloView{
+            constructor(container, game,mode=0){
+                this.container = container;
+                this.game = game;
+                this.mode = mode;
+            }
+            render() {
+                let board = this.container.childNodes[3];
+                let info = this.container.childNodes[5];
+                board.innerHTML = "";
+                info.innerHTML = this.game.message;
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        let cell = document.createElement("div");
+                        cell.addEventListener("click", (event) => {
+                            //mode = 1 单人模式，mode = 2 双AI模式，mode = 0或其他 双人模式。
+                            //move(j,i)返回值真代表走子成功，否则代表走子失败
+                            if (this.mode === 1){
+                                if (this.game.move(j,i))
+                                    this.game.ai();
+                            }
+                            else if (this.mode === 2){
+                                this.game.ai();
+                            }
+                            else {
+                                this.game.move(j, i);
+                            }
+                            this.render();
+                        });
+                        board.appendChild(cell);
+                        cell.style = "vertical-align:middle;margin:1px;width:30px;height:30px;background-color:lightgreen;display:inline-block";
+                        if (this.game.pattern.map[i][j] === 1) {
+                            let zi = document.createElement("div");
+                            zi.style = "border: black solid 1px;margin: 2px;border-radius:12px;width:24px;height:24px;background-color:black";
+                            cell.appendChild(zi);
+                        }
+                        else if (this.game.pattern.map[i][j] === 2) {
+                            let zi = document.createElement("div");
+                            zi.style = "border: black solid 1px;margin: 2px;border-radius:12px;width:24px;height:24px;background-color:white";
+                            cell.appendChild(zi);
+                        }
+                    }
+                    board.appendChild(document.createElement("br"));
+                }
+            }
+        }
+
+        new OthelloView(document.getElementById("container"),new OthelloGame(),1).render();
+        new OthelloView(document.getElementById("container1"), new OthelloGame(),0).render();
+        new OthelloView(document.getElementById("container2"), new OthelloGame(), 2).render();
+    </script>
+    
+</body>
+</html>
