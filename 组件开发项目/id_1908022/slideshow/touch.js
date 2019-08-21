@@ -3,7 +3,7 @@ function enableGesture(main){
     
     let start = (point,context) => {
         // console.log('start',point.clientX,point.clientY);
-
+        context.startTime = Date.now();
         context.startX = point.clientX;
         context.startY = point.clientY;
         context.isTap = true;
@@ -31,14 +31,22 @@ function enableGesture(main){
     }
     let end = (point,context) => {
         // console.log('end',point.clientX,point.clientY);
+        let dX = point.clientX - context.startX , dY = point.clientY - context.startY;
         if(context.isTap){
             let e = new Event('tap');
+            main.dispatchEvent(e);
+        }
+        let v = Math.sqrt(dX * dX + dY * dY) / (Date.now() - context.startTime);
+        if(context.isPan && v >= 0.3){
+            context.isFilck = true;
+            let e = new Event('flick');
+            e.dX = dX;
+            e.dY = dY;
             main.dispatchEvent(e);
         }
             
         if(context.isPan){
             let e = new Event('panend');
-            let dX = point.clientX - context.startX , dY = point.clientY - context.startY;
             e.dX = dX;
             e.dY = dY;
             main.dispatchEvent(e);
