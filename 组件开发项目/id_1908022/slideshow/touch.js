@@ -38,17 +38,20 @@ function enableGesture(main){
         }
         let v = Math.sqrt(dX * dX + dY * dY) / (Date.now() - context.startTime);
         if(context.isPan && v >= 0.3){
-            context.isFilck = true;
+            context.isFlick = true;
             let e = new Event('flick');
             e.dX = dX;
             e.dY = dY;
             main.dispatchEvent(e);
+        }else{
+            context.isFlick = false;
         }
             
         if(context.isPan){
             let e = new Event('panend');
             e.dX = dX;
             e.dY = dY;
+            e.isFlick = context.isFlick;
             main.dispatchEvent(e);
         }
             
