@@ -17,56 +17,68 @@ class Carousel {
             e.src = d;
             this._container.appendChild(e);
         }
-        this.children = Array.prototype.slice.call(
-            this._container.children
-        );
+        this.children = Array.prototype.slice.call(this._container.children);
 
         this.autoPlay();
 
-        this.bindMouseEvent();
+        this.bindEvent();
     }
 
     autoPlay() {
         this._handle = setTimeout(() => this.nextFrame(), 3000);
     }
 
-    bindMouseEvent() {
-        this._container.addEventListener("mousedown", event => {
+    bindEvent() {
+        enableGesture(this._container);
+
+        this._container.addEventListener("mouseover", event => {
             clearTimeout(this._handle);
-            start(event);
+            this._handle = null;
         });
 
-        let startX, startTransform;
+        this._container.addEventListener("mouseout", event => {
+            if (this._handle === null) {
+                this.autoPlay();
+            }
+        });
 
-        let start = event => {
+        this._container.addEventListener("mousedown", event => {
             event.preventDefault();
+        });
 
-            startX = event.clientX;
+        let startTransform;
+
+        this._container.addEventListener("panstart", event => {
+            clearTimeout(this._handle);
+            this._handle = null;
+        });
+
+        this._container.addEventListener("pan", event => {
             startTransform = -500 * this.position;
-
-            document.addEventListener("mousemove", move);
-            document.addEventListener("mouseup", end);
-        };
-
-        let move = event => {
-            event.preventDefault();
 
             for (let child of this.children) {
                 child.style.transition = "ease 0s";
                 child.style.transform = `translate(${startTransform +
-                    event.clientX -
-                    startX}px)`;
+                    event.dx}px)`;
             }
-        };
+        });
 
-        let end = () => {
-            document.removeEventListener("mousemove", move);
-            document.removeEventListener("mouseup", end);
+        // 结束滑动事件
+        this._container.addEventListener("panend", event => {
+            if (event.isVertical) return;
 
-            this.position = -Math.round(
-                (startTransform + event.clientX - startX) / 500
-            );
+            if (event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)) {
+                if (event.dx > 0) {
+                    this.position = this.position - 1;
+                }
+                if (event.dx < 0) {
+                    this.position = this.position + 1;
+                }
+            } else {
+                this.position = -Math.round((startTransform + event.dx) / 500);
+            }
 
+            // 给position设置边界
             this.position = Math.max(
                 0,
                 Math.min(this.position, this.children.length - 1)
@@ -74,12 +86,11 @@ class Carousel {
 
             for (let child of this.children) {
                 child.style.transition = "";
-                child.style.transform = `translate(${-500 *
-                    this.position}px)`;
+                child.style.transform = `translate(${-500 * this.position}px)`;
             }
 
             this.autoPlay();
-        };
+        });
     }
 
     nextFrame() {
@@ -90,8 +101,7 @@ class Carousel {
 
         // 把Next 摆到下一张的位置
         nextImage.style.transition = "ease 0s";
-        nextImage.style.transform = `translate(${100 -
-            nextPosition * 100}%)`;
+        nextImage.style.transform = `translate(${100 - nextPosition * 100}%)`;
 
         setTimeout(() => {
             // 下一帧开始移动
@@ -102,8 +112,7 @@ class Carousel {
             //  拿到下一张图， 转移进入
             // log("nextImage", nextImage, nextPosition);
             nextImage.style.transition = "";
-            nextImage.style.transform = `translate(${-100 *
-                nextPosition}%)`;
+            nextImage.style.transform = `translate(${-100 * nextPosition}%)`;
 
             this.position = nextPosition;
         }, 16);
@@ -120,7 +129,7 @@ const __main = () => {
         "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
     ];
 
-    let carousel = new Carousel(document.getElementById("container"));
+    let carousel = new Carousel(document.querySelector(".carousel"));
     carousel.data = data;
     carousel.render();
 };
