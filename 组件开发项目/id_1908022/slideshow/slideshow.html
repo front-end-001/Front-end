@@ -376,6 +376,7 @@
                  } 
                })
                this._carousel.addEventListener('panend',event => {
+                 points[prevPoint].classList.remove('active');
                  position = -Math.round((event.dX + x) / 500);
                  position = Math.max(0, Math.min(position,children.length -1 ));
                  for(let child of children){
@@ -383,6 +384,10 @@
                    child.style.transform = `translateX(${position * -500}px)`;
                  }
                  x = position * -500;
+                 toggleButtonStatus();
+                 titleShow();
+                 prevPoint = position;
+                 points[position].classList.add('active');
                })
 
                this._carousel.addEventListener('flick',event => {
@@ -401,7 +406,8 @@
                    child.style.transform = `translateX(${position * -500}px)`;
                  }
                  x = position * -500;
-
+                 toggleButtonStatus();
+                 titleShow();
                })
 
 
