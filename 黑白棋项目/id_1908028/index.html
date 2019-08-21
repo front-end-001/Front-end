@@ -22,6 +22,7 @@
             for (let x = 0; x < this.game.pattern.arr[y].length; x++) {
               let cross = document.createElement("div");
               cross.className = "grid";
+              cross.innerHTML=x+','+y
               cross.addEventListener("click", () => {
                 this.game.move(x, y);
                 this.render();
@@ -68,7 +69,6 @@
         new OthelloGame(),
         document.getElementById("root")
       );
-      v.game.checkPass();
       v.render();
     </script>
   </body>
