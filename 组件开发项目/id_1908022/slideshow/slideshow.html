@@ -82,7 +82,7 @@
         cursor: pointer;
       }
     </style>
-    <script src="geust.js"></script>
+    <script src="touch.js"></script>
 </head>
 
 <body>
@@ -371,17 +371,40 @@
                }) */
                this._carousel.addEventListener('panmove',event => {
                  for(let child of children){
-                   child.style.transform = `translateX(${event.dx + x}px)`
+                   child.style.transition = "ease 0s";
+                   child.style.transform = `translateX(${event.dX + x}px)`
                  } 
                })
                this._carousel.addEventListener('panend',event => {
-                 position = -Math.round((event.dx + x) / 500);
+                 position = -Math.round((event.dX + x) / 500);
                  position = Math.max(0, Math.min(position,children.length -1 ));
                  for(let child of children){
+                   child.style.transition = "";
                    child.style.transform = `translateX(${position * -500}px)`;
                  }
                  x = position * -500;
                })
+
+               this._carousel.addEventListener('flick',event => {
+                 if(event.dX > 0){
+                   position -= 1;
+                 }else if(event.dX < 0){
+                   position += 1;
+                 }else{
+                   position = -Math.round((event.dX + x) / 500);
+                 }
+
+                 position = Math.max(0, Math.min(position,children.length -1 ));
+
+                 for(let child of children){
+                   child.style.transition = "";
+                   child.style.transform = `translateX(${position * -500}px)`;
+                 }
+                 x = position * -500;
+
+               })
+
+
                /* this._carousel.addEventListener('tap',event => {
                  console.log('tap',event);  
                }) */
