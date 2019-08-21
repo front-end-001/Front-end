@@ -6,14 +6,42 @@ function enableGesture(main) {
 
         context.isTap = true;
         context.isPan = false;
+        context.isPress = false;
+        context.pressHandler = setTimeout(() => {
+            context.isPress = true;
+            context.isTap = false;
+            let e = new Event('press');
+            main.dispatchEvent(e);
+            context.pressHandler = null;
+        }, 500);
+
+        context.startTime = Date.now();
     }
     let move = (point, context) => {
         console.log('move');
         let dx = point.clientX - context.startX;
         let dy = point.clientY - context.startY;
         if (dx * dx + dy * dy > 100) {
+
+            if (context.pressHandler !== null) {
+                clearTimeout(context.pressHandler);
+                context.pressHandler = null;
+            } else {
+                context.isPress = false;
+                let e = new Event('presscancel');
+                main.dispatchEvent(e);
+            }
+
             context.isTap = false;
+
             if (!context.isPan) {
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    context.isVertical = false;
+                    context.isHorizontal = true;
+                } else {
+                    context.isVertical = true;
+                    context.isHorizontal = false;
+                }
                 let e = new Event('panstart');
                 main.dispatchEvent(e);
                 e.startX = context.startX;
@@ -25,10 +53,29 @@ function enableGesture(main) {
             let e = new Event('pan');
             e.dx = dx;
             e.dy = dy;
+            e.isHorizontal = context.isHorizontal;
+            e.isVertical = context.isVertical;
             main.dispatchEvent(e);
         }
     }
     let end = (point, context) => {
+        let dx = point.clientX - context.startX,
+            dy = point.clientY - context.startY;
+
+        let speed = Math.sqrt((dx * dx + dy * dy)) / (Date.now() - context.startTime);
+        if (context.isPan && speed > 0.3) {
+            context.isFlick = true;
+            let e = new Event('flick');
+            e.dx = dx;
+            e.dy = dy;
+            main.dispatchEvent(e);
+        } else {
+            context.isFlick = false;
+        }
+
+        if(context.pressHandler !== null) {
+            clearTimeout(context.pressHandler);
+        }
         if (context.isTap) {
             let e = new Event('tap');
             main.dispatchEvent(e);
@@ -37,6 +84,13 @@ function enableGesture(main) {
             let e = new Event('panend');
             e.dx = point.clientX - context.startX;
             e.dy = point.clientY - context.startY;
+            e.isFlick = context.isFlick;
+            e.isHorizontal = context.isHorizontal;
+            e.isVertical = context.isVertical;
+            main.dispatchEvent(e);
+        }
+        if (context.isPress) {
+            let e = new Event('pressend');
             main.dispatchEvent(e);
         }
         console.log('end');
@@ -44,6 +98,10 @@ function enableGesture(main) {
     let cancel = (point, context) => {
         if (context.isPan) {
             let e = new Event('pancancel');
+            main.dispatchEvent(e);
+        }
+        if (context.isPress) {
+            let e = new Event('presscancel');
             main.dispatchEvent(e);
         }
     }
