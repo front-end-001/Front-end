@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .carousel {
+            width: 500px;
+            height: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        .carousel>img {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            transition: ease 0.5s;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container"></div>
+    <script>
+        let imgFiles = [
+            "https://c-ssl.duitang.com/uploads/item/201904/25/20190425142011_npdec.jpg",
+            "https://c-ssl.duitang.com/uploads/item/201904/25/20190425142011_orbyy.jpg",
+            "https://c-ssl.duitang.com/uploads/item/201904/25/20190425142013_tbhsg.jpg",
+            "https://c-ssl.duitang.com/uploads/item/201904/25/20190425142015_brgsq.jpg",
+            "https://c-ssl.duitang.com/uploads/item/201904/25/20190425142015_vxzlx.jpg"
+        ];
+        class Carousel {
+            constructor(container) {
+                this._container = container;
+                this._container.classList.add("carousel");
+                this.imgFiles = null;
+            }
+
+            render() {
+                for (let img of imgFiles) {
+                    let i = document.createElement('img');
+                    i.src = img;
+                    this._container.appendChild(i);
+                }
+                //???
+                let children = Array.prototype.slice.call(container.children);
+                let position = 0;
+                let nextFrame = () => {
+                    let nextPosition = position + 1;
+                    nextPosition = nextPosition % children.length;
+                    let current = children[position];
+                    let next = children[nextPosition];
+
+                    //快速把next挪到正确的位置
+                    next.style.transition = "ease 0s";
+                    next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+
+                    setTimeout(() => {
+                        //current挪出视口
+                        current.style.transition = '';
+                        current.style.transform = `translate(${-100 - 100 * position}%)`
+                            //next挪进视口
+                        next.style.transition = '';
+                        next.style.transform = `translate(${- 100 * nextPosition}%)`
+                        position = nextPosition;
+                    }, 16)
+
+                    setTimeout(nextFrame, 3000);
+                }
+                setTimeout(nextFrame, 3000);
+                let startX;
+                let startTransform;
+                let start = event => {
+                    event.preventDefault();
+                    //MouseEvent.clientX 是只读属性， 它提供事件发生时的应用客户端区域的水平坐标 (与页面坐标不同)
+                    startX = event.clientX;
+                    startTransform = -position * 500;
+                    //当指针设备( 通常指鼠标 )在元素上移动时, mousemove 事件被触发
+                    document.addEventListener("mousemove", move);
+                    document.addEventListener("mouseup", end);
+                }
+                let move = event => {
+                    event.preventDefault();
+                    for (let child of children) {
+                        child.style.transition = "ease 0s";
+                        child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+                    }
+
+                }
+
+                let end = () => {
+                        //结束了移除监听事件
+                        document.removeEventListener("mousemove", move);
+                        document.removeEventListener("mouseup", end);
+
+                        position = -(Math.round((startTransform + event.clientX - startX) / 500));
+                        position = Math.max(0, Math.min(position, children.length - 1));
+
+                        for (let child of children) {
+                            child.style.transition = "";
+                            child.style.transform = `translate(${ - position * 500}px)`;
+                        }
+                    }
+                    //mousedown 事件在指针设备按钮按下时触发
+                this._container.addEventListener("mousedown", start);
+
+
+            }
+        }
+        let carousel = new Carousel(document.getElementById("container"));
+        carousel.imgFiles = imgFiles;
+        carousel.render();
+    </script>
+</body>
+
+</html>
