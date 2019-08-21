@@ -19,6 +19,7 @@
             display: inline-block;
         }
     </style>
+    <script src="./gesture.js"></script>
 </head>
 <body>
     <div id="container"></div>
@@ -65,36 +66,57 @@
                         }, 16)
                         this._handler = setTimeout(nextFram, 3000);
                     }
-                    this._handler = setTimeout(nextFram, 3000);
+                    // this._handler = setTimeout(nextFram, 3000);
 
-                    let startX, transformX;
-                    let start = event => {
-                        event.preventDefault();
-                        startX = event.clientX;
-                        transformX = -500 * position;
-                        document.addEventListener('mousemove', move);
-                        document.addEventListener('mouseup', end);
-                    }
-                    let move = event => {
-                        event.preventDefault();
+                    enableGesture(this._container);
+
+                    let transformX = -500 * position; // 
+                    this._container.addEventListener('pan', event => {
                         for (let child of children) {
                             child.style.transition = '';
-                            child.style.transform = `translate(${transformX + event.clientX - startX}px)`;
+                            child.style.transform = `translate(${transformX + event.dx}px)`;
                         }
-                    }
-                    let end = event => {
-                        document.removeEventListener('mousemove', move);
-                        document.removeEventListener('mouseup', end);
+                    });
+
+                    this._container.addEventListener('panend', event => {
                         // 四舍五入回弹效果
-                        position = -Math.round((transformX + event.clientX - startX) / 500);
+                        position = -Math.round((transformX + event.dx) / 500);
                         // 控制边界元素回弹
                         position = Math.max(0, Math.min(position, children.length - 1));
+                        transformX = -500 * position;
                         for (let child of children) {
                             child.style.transition = 'ease .5s';
-                            child.style.transform = `translate(${-500 * position}px)`;
+                            child.style.transform = `translate(${transformX}px)`;
                         }
-                    }
-                    this._container.addEventListener('mousedown', start);
+                    })
+                    // let startX, transformX;
+                    // let start = event => {
+                    //     event.preventDefault();
+                    //     startX = event.clientX;
+                    //     transformX = -500 * position;
+                    //     document.addEventListener('mousemove', move);
+                    //     document.addEventListener('mouseup', end);
+                    // }
+                    // let move = event => {
+                    //     event.preventDefault();
+                    //     for (let child of children) {
+                    //         child.style.transition = '';
+                    //         child.style.transform = `translate(${transformX + event.clientX - startX}px)`;
+                    //     }
+                    // }
+                    // let end = event => {
+                    //     document.removeEventListener('mousemove', move);
+                    //     document.removeEventListener('mouseup', end);
+                    //     // 四舍五入回弹效果
+                    //     position = -Math.round((transformX + event.clientX - startX) / 500);
+                    //     // 控制边界元素回弹
+                    //     position = Math.max(0, Math.min(position, children.length - 1));
+                    //     for (let child of children) {
+                    //         child.style.transition = 'ease .5s';
+                    //         child.style.transform = `translate(${-500 * position}px)`;
+                    //     }
+                    // }
+                    // this._container.addEventListener('mousedown', start);
                 }
             }
 

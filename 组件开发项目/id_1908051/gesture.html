@@ -38,8 +38,9 @@
                 if (!context.isPan) {
                     let e = new Event('panstart');
                     main.dispatchEvent(e);
-                    e.dx = dx;
-                    e.dy = dy;
+                    e.startX = context.startX;
+                    e.startY = context.startY;
+                    main.dispatchEvent(e);
                     context.isPan = true;
                 }
             }
@@ -69,6 +70,7 @@
                 main.dispatchEvent(e);
             }
         }
+        
         let contexts = Object.create(null);
         let mouseSymbol = Symbol('mouse');
         let mousedown = event => {
@@ -107,7 +109,7 @@
         }
         let touchcancel = event => {
             for (let touch of event.changedTouches) {
-                end(touch, contexts[touch.identifier]);
+                cancel(touch, contexts[touch.identifier]);
                 delete contexts[touch.identifier];
             }
         }
