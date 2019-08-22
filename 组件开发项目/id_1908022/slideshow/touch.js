@@ -8,10 +8,37 @@ function enableGesture(main){
         context.startY = point.clientY;
         context.isTap = true;
         context.isPan = false;
+        context.isPress = false;
+        context.pressHandle = setTimeout(() => {
+            context.isPress = true;
+            context.isTap = false;
+            let e = new Event('pressstart');
+            main.dispatchEvent(e);
+            clearTimeout(context.pressHandle);
+            context.pressHandle = null;
+        },500)
     }
     let move = (point,context) => {
         // console.log('move',point.clientX,point.clientY);
+        if(context.pressHandle !== null){
+            context.isPress = false;
+            clearTimeout(context.pressHandle);
+            context.pressHandle = null;
+        }else{
+            context.isPress = false;
+            let e = new Event('presscancle');
+            main.dispatchEvent(e);
+        }
+
         let dX = point.clientX - context.startX , dY = point.clientY - context.startY;
+        if(Math.abs(dX) > Math.abs(dY)){
+            context.isVertical = false;
+            context.isHorizontal = true;
+        }else{
+            context.isVertical = true;
+            context.isHorizontal = false;
+        }
+
         if((dX * dX + dY * dY) > 100){
             context.isTap = false;
             if(!context.isPan){
@@ -26,12 +53,24 @@ function enableGesture(main){
             let e = new Event('panmove');
             e.dX = dX;
             e.dY = dY;
+            e.isVertical = context.isVertical;
+            e.isHorizontal = context.isHorizontal;
             main.dispatchEvent(e);
         }
     }
     let end = (point,context) => {
         // console.log('end',point.clientX,point.clientY);
         let dX = point.clientX - context.startX , dY = point.clientY - context.startY;
+        if(context.pressHandle !== null){
+            clearTimeout(context.pressHandle);
+        }
+        if(context.isPress){
+            let e = new Event('pressend');
+            e.dX = dX;
+            e.dY = dY;
+            main.dispatchEvent(e); 
+        }
+
         if(context.isTap){
             let e = new Event('tap');
             main.dispatchEvent(e);
@@ -51,10 +90,31 @@ function enableGesture(main){
             let e = new Event('panend');
             e.dX = dX;
             e.dY = dY;
+            e.isVertical = context.isVertical;
+            e.isHorizontal = context.isHorizontal;
             e.isFlick = context.isFlick;
             main.dispatchEvent(e);
         }
             
+    }
+
+    let cancle = (point,context) => {
+        if(context.isTap){
+            let e = new Event('tapcancle');
+            main.dispatchEvent(e);
+        }
+        if(context.isPan){
+            let e = new Event('pancancle');
+            main.dispatchEvent(e);
+        }
+        if(context.isPress){
+            let e = new Event('presscancle');
+            main.dispatchEvent(e);
+            
+        }
+        if(context.pressHandle !== null){
+            clearTimeout(context.pressHandle);
+        }
     }
 
     let mouseSymbol  = Symbol('mouse'); 
@@ -93,7 +153,7 @@ function enableGesture(main){
     }
     let touchCancle = event => {
         for(let point of event.changedTouches){
-            end(point,contexts[point.identifier]);
+            cancle(point,contexts[point.identifier]);
             delete contexts[point.identifier];
         }
     }
