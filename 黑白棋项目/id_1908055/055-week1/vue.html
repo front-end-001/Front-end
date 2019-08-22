@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #app {
+      margin: 0 auto;
+      font-size: 0;
+      width: 800px;
+    }
+
+    .chess {
+      background-color: skyblue;
+      border: 1px solid #fff;
+      display: inline-block;
+      height: 98px;
+      transition: transform 0.2s;
+      width: 98px;
+    }
+
+    .white::after,
+    .black::after
+
+    /* .optional::after  */
+    {
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+    }
+
+    .white::after,
+    .black::after {
+      height: 100%;
+      width: 100%;
+    }
+
+    .white::after {
+      background-color: #fff;
+    }
+
+    .black::after {
+      background-color: #000;
+    }
+    /* .white::after {
+      background-color: #fff;
+      transform: rotateY(90deg);
+    }
+
+    .black::after {
+      background-color: #000;
+      transform: rotateY(90deg);
+    }
+
+    .optional::after {
+      height: 20px;
+      width: 20px;
+    } */
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <template v-for="(row, i) in map">
+      <div v-for="(v, j) in row" class="chess" :class="{black: v === 1, white : v === 2}" @click="playChess(i, j, color, false)">
+      </div>
+    </template>
+    <!-- <div>黑子:{{}}白子:{{}}回合数:{{maps.length}}</div> -->
+    <button @click="revert" v-if="maps.length > 1">悔棋</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script type="module">
+    new Vue({
+      el: '#app',
+      data: {
+        colors: [1],
+        maps: [
+          [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 2, 2, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+          ]
+        ],
+      },
+      methods: {
+        playChess(i, j, color, checkOnly) {
+          let rgb = color;
+          let result, map;
+          if (checkOnly) {
+            const data = this.dropChess(i, j, color, checkOnly);
+            if (typeof data === 'object') {
+              result = data[0]
+              map = data[1]
+            } else {
+              result = data
+            }
+          } else {
+            const data = this.dropChess(i, j, color, checkOnly);
+            if (typeof data === 'object') {
+              result = data[0]
+              map = data[1]
+            } else {
+              result = data
+            }
+          }
+          if (map && !checkOnly) {
+            this.maps.splice(this.maps.length - 1, 0, map);
+            this.colors.push(3 - color);// 记录color
+          }
+          if (!result) {
+            return alert('此处不可落子');
+          };
+          rgb = 3 - rgb;
+          if (this.checkPass(rgb)) {
+            rgb = 3 - rgb;
+            if (this.checkPass(rgb)) {
+              alert('Game Over')
+            }
+          }
+        },
+        dropChess(i, j, color, checkOnly) {
+          // 当前落子的地方有子
+          if (this.map[i][j] > 0) {
+            return false;
+          }
+          // right j-- i0
+          // left j++ i0
+          // top j0 i++
+          // top j0 i--
+          // leftbot i++ j++
+          // lefttop i-- j--
+          // righttop i-- j++
+          // rightbottom i++ j--
+          const directions = [
+            { x: -1, y: 0 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: -1 },
+            { x: 1, y: 1 },
+            { x: -1, y: -1 },
+            { x: 1, y: -1 },
+            { x: -1, y: 1 },
+          ];
+          let moveSuccess = false;
+          let move = false;
+          let map = null;
+          if (!checkOnly) {
+            map = this.map.map(line => line.slice());
+          }
+          for (const direction of directions) {
+            let canmove = false;
+            let [x, y] = [j, i];
+            while (true) {
+              // 边界
+              x += direction.x;
+              y += direction.y;
+              if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                canmove = false;
+                break;
+              }
+              // canmove是用来渲染棋子颜色的
+              if (this.map[y][x] === 3 - color) { // 当前颜色相反的就可以移动
+                canmove = true
+              } else if (this.map[y][x] === color) { // 相同的就停止
+                break;
+              } else if (this.map[y][x] === 0) { // 空直接中止
+                canmove = false
+                break;
+              }
+            }
+            // 判断是否是检测
+            moveSuccess = moveSuccess || canmove; // canmove在checkonly装态下即为moveSuccess
+            while (canmove && !checkOnly) {
+              x -= direction.x;
+              y -= direction.y;
+              this.$set(this.map[y], x, color);
+              if (x === j && y === i) {
+                break;
+              }
+            }
+          }
+          if (moveSuccess && !checkOnly) {
+            return [moveSuccess, map];
+          } else {
+            return moveSuccess;
+          }
+        },
+        checkPass(color) {
+          for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+              if (this.dropChess(i, j, color, true)) {
+                return false;
+              }
+            }
+          }
+          return true;
+        },
+        revert() {
+          if (this.maps.length > 1) {
+            this.maps.pop();
+            this.colors.pop();
+          }
+        }
+      },
+      computed: {
+        map() {
+          return this.maps[this.maps.length - 1]
+        },
+        color() {
+          return this.colors[this.colors.length - 1]
+        },
+      },
+    })
+  </script>
+</body>
+
+</html>

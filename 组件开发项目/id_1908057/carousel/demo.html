@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .carousel{
+            width:500px;
+            height:300px;
+            overflow:hidden;
+            white-space: nowrap;
+        }
+        .carousel>img{
+            width:100%;
+            height:100%;
+            display:inline-block;
+            transition:ease 0.5s;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+
+</div>
+<script>
+    let data = [
+        "img/1500359291930.jpg",
+        "img/1500359416774.jpg",
+        "img/1500359541932.jpg",
+        "img/1500359608725.jpg",
+        "img/164136vzbc5aggaob67bvm.jpg"
+    ];
+
+    class Carousel {
+        constructor(container){
+            this._container = container;
+            this._container.classList.add("carousel");
+            this._handler = null;
+            this.data = null;
+        }
+        render(){
+            for(let d of data) {
+                let e = document.createElement("img");
+                e.src = d;
+                this._container.appendChild(e);
+            }
+            let children = Array.prototype.slice.call(container.children);
+            let position = 0;
+            let nextFrame = ()=>{
+                position ++;
+                position = position % children.length;
+                for(let child of children) {
+                    child.style.transform = `translate(${-100 * position}%)`;
+                }
+                this._handler = setTimeout(nextFrame, 3000);
+            }
+            this._handler = setTimeout(nextFrame,3000);
+
+        }
+    }
+    let carousel = new Carousel(document.getElementById("container"));
+    carousel.data = data;
+    carousel.render();
+
+</script>
+</body>
+
+
+</html>
