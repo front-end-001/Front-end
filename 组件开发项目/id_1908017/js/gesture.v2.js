@@ -187,6 +187,8 @@ function enableFlick(listen, emit) {
         if (context.moved) {
             if (context.getSpeed() > 0.3) {
                 const e = new Event('flick');
+                e.dx = context.dx;
+                e.dy = context.dy;
                 emit(e);
             }
         }
