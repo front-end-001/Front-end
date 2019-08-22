@@ -29,11 +29,15 @@ class Gesture {
         context.startX = point.clientX;
         context.startY = point.clientY;
 
-        context.startTime = Date.now(); // 记录开始时间
-
+        // tap
         context.isTap = true;
+        // pan
         context.isPan = false;
+        // flick
+        context.isFlick = false;
+        context.startTime = Date.now();
 
+        // press
         context.isPress = false;
         context.pressHandler = setTimeout(() => {
             context.isPress = true;
@@ -41,26 +45,31 @@ class Gesture {
             let e = new Event("pressstart");
             this.container.dispatchEvent(e);
             context.pressHandler = null;
-        }, 500);
+        }, 2000);
     }
 
     _move(point, context) {
-        // console.log("move", point.clientX, point.clientY);
         let dx = point.clientX - context.startX,
             dy = point.clientY - context.startY;
 
         if (dx * dx + dy * dy > 100) {
-            if (context.pressHandler !== null) {
-                clearTimeout(context.pressHandler);
-                context.pressHandler = null;
-                context.isPress = false;
-            } else if (context.isPress) {
-                context.isPress = false;
-                let e = new Event("presscancel");
-                this._container.dispatchEvent(e);
-            }
+            // tap
             context.isTap = false;
 
+            // press
+            if (context.pressHandler !== null) {
+                // 是在press了,但延迟时间还没有到的时候，移动了情况
+                clearTimeout(context.pressHandler);
+                // context.pressHandler = null;
+                context.isPress = false;
+            } else if (context.isPress) {
+                // 是在press了,但延迟时间到的时候，移动了情况
+                context.isPress = false;
+                let e = new Event("presscancel");
+                this.container.dispatchEvent(e);
+            }
+
+            // pan
             if (context.isPan == false) {
                 if (Math.abs(dx) > Math.abs(dy)) {
                     context.isVertical = false;
@@ -89,32 +98,35 @@ class Gesture {
     }
 
     _end(point, context) {
-        // console.log("end", point.clientX, point.clientY);
+        // press
         if (context.pressHandler !== null) {
             clearTimeout(context.pressHandler);
         }
         if (context.isPress) {
             let e = new Event("pressend");
-            this._container.dispatchEvent(e);
-        }
-        if (context.isTap) {
-            let e = new Event("tap");
             this.container.dispatchEvent(e);
         }
+        // tap
+        if (context.isTap) {
+            let e = new Event("tap");
+            console.log("this.container", this.container.dispatchEvent(e));
+            this.container.dispatchEvent(e);
+        }
+
+        // flick
         let dx = point.clientX - context.startX,
             dy = point.clientY - context.startY;
 
         let v = Math.sqrt(dx * dx + dy * dy) / (Date.now() - context.startTime);
-        //console.log(v);
         if (context.isPan && v > 0.3) {
             context.isFlick = true;
             let e = new Event("flick");
             e.dx = dx;
             e.dy = dy;
             this.container.dispatchEvent(e);
-        } else {
-            context.isFlick = false;
         }
+
+        // pan
         if (context.isPan) {
             let e = new Event("panend");
             e.dx = dx;
@@ -129,15 +141,15 @@ class Gesture {
     _cancel(point, context) {
         if (context.isPan) {
             let e = new Event("pancancel");
-            this._container.dispatchEvent(e);
+            this.container.dispatchEvent(e);
         }
         if (context.isPress) {
             let e = new Event("presscancel");
-            this._container.dispatchEvent(e);
+            this.container.dispatchEvent(e);
         }
         if (context.pressHandler !== null) {
             let e = new Event("pancancel");
-            this._container.dispatchEvent(e);
+            this.container.dispatchEvent(e);
             clearTimeout(context.pressHandler);
         }
     }
