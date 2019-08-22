@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+    <title>轮播图</title>
+</head>
+<body>
+<div id="container" class="carousel"></div>
+</body>
+</html>
+<script type="text/javascript">
+    class View {
+        constructor (container, images) {
+            this.images = images
+            this.container = container
+        }
+        render () {
+            const container = this.container
+            container.innerHTML = ''
+            for (let i = 0; i < this.images.length; i++) {
+                const imageElement = document.createElement("img")
+                imageElement.src = images[i]
+                container.appendChild(imageElement)
+            }
+            // 取所有的img出来
+            const children = Array.prototype.slice.call(container.children)
+        }
+    }
+    const images = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"]
+    const view = new View(document.getElementById("container"), images)
+    view.render()
+</script>
+<style>
+    .carousel{
+        width:500px;
+        height:300px;
+        overflow:hidden;
+        white-space: nowrap;
+    }
+    .carousel>img{
+        width:100%;
+        height:100%;
+        display:inline-block;
+        transition:ease 0.5s;
+    }
+</style>
