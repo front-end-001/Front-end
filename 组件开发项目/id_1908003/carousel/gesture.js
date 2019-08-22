@@ -22,7 +22,6 @@ function enableGesture(main) {
     }, 3000);
   }
   const move = (point, context) => {
-    // console.log('move', point.clientX, point.clientY);
     context.dx = point.clientX - context.startX;
     context.dy = point.clientY - context.startY;
     if (context.isPan) {
