@@ -38,6 +38,11 @@ class Carousel {
             //todo 考虑移出 el
             stopAuto();
         })
+        this._el.addEventListener('mouseenter', () => {
+            console.log('mouseenter');
+            //todo 考虑移出 el
+            stopAuto();
+        })
         this._el.addEventListener('mouseleave', () => {
             console.log('mouseleave');
             //todo 考虑移出 el
@@ -48,19 +53,26 @@ class Carousel {
     enableGesture() {
         const el = this._el;
         enableGesture(el);
-
+        //点击跳转
         el.addEventListener('tap', () => {
             console.log('tap', this.pos); //跳转到pos
         });
+        //flick 左滑右滑
         el.addEventListener('flick', e => {
             const r2l = e.dx < 0;
             console.log('carousel flick r2l:', r2l);
             //todo 配合 手势 一开始就是高速
             this.move(this.getValidPos(this.pos + (r2l ? 1 : -1)), r2l);
         });
-        //禁止拖拽 
+        //todo flick优化 ,快速左右移动时 抖动
+        //禁止拖拽图片
         el.addEventListener('mousedown', e => e.preventDefault());
         el.addEventListener('touchstart', e => e.preventDefault());
+        //手势开始是停止计时器
+        el.addEventListener('start', () => clearTimeout(this.autoMoveTimer));
+        el.addEventListener('end', () => this.autoMove());
+        el.addEventListener('cancel', () => this.autoMove());
+        //todo 考虑 与 hover 冲突？ 并集（hover|| 手势）时停止
     }
     getValidPos(pos) {
         return (pos + this._items.length) % this._items.length;

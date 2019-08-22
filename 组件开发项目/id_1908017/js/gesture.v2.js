@@ -9,7 +9,7 @@ class Context {
     getSpeed() {
         const { dx, dy } = this;
         const time = new Date - this.createTime;
-        console.log('speed', Math.sqrt(dx * dx + dy * dy) / time);
+        // console.log('speed', Math.sqrt(dx * dx + dy * dy) / time);
         return Math.sqrt(dx * dx + dy * dy) / time;
     }
 }
@@ -42,6 +42,7 @@ function enableGesture(el) {
         context._timer = setTimeout(() => {
             invokeListeners('timezone', { context });
         }, pressTime);
+        el.dispatchEvent(new Event('start'));
     };
     const move = (point, context) => {
         const dx = context.dx = point.clientX - context.startX;
@@ -57,10 +58,12 @@ function enableGesture(el) {
         context.dx = point.clientX - context.startX;
         context.dy = point.clientY - context.startY;
         invokeListeners('end', { point, context });
+        el.dispatchEvent(new Event('end'));
     };
     const cancel = (point, context) => {
         clearTimeout(context._timer);
         invokeListeners('cancel', { point, context });
+        el.dispatchEvent(new Event('cancel'));
     };
 
     //mouse
