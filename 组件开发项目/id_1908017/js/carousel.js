@@ -5,8 +5,9 @@ class Carousel {
         this.initDom();
         this.pos = 0;
         this.autoMove();
+        enableGesture(el);
         this.enableAutoMoveStop();
-        this.enableGesture();
+        this.setGesture();
     }
 
     initDom() {
@@ -31,28 +32,37 @@ class Carousel {
      * hover时停止autoMove
      */
     enableAutoMoveStop() {
-        const stopAuto = () => clearTimeout(this.autoMoveTimer);
-        const startAuto = () => this.autoMove();
-        this._el.addEventListener('mouseenter', () => {
+
+        // todo 考虑 与 hover 冲突？ 并集（hover|| 手势）时停止 
+        let count = 0;
+        const stopAuto = () => {
+            count++;
+            log('count ++', count);
+            clearTimeout(this.autoMoveTimer);
+        };
+        const startAuto = () => {
+            count--;
+            log('count --', count);
+            count === 0 && this.autoMove();
+        };
+        const el = this._el;
+        el.addEventListener('mouseenter', () => {
             console.log('mouseenter');
-            //todo 考虑移出 el
             stopAuto();
         })
-        this._el.addEventListener('mouseenter', () => {
-            console.log('mouseenter');
-            //todo 考虑移出 el
-            stopAuto();
-        })
-        this._el.addEventListener('mouseleave', () => {
+        el.addEventListener('mouseleave', () => {
             console.log('mouseleave');
-            //todo 考虑移出 el
             startAuto();
         })
+
+        //手势开始是停止计时器
+        el.addEventListener('start', () => stopAuto());
+        el.addEventListener('end', () => startAuto());
+        el.addEventListener('cancel', () => startAuto());
     }
 
-    enableGesture() {
+    setGesture() {
         const el = this._el;
-        enableGesture(el);
         //点击跳转
         el.addEventListener('tap', () => {
             console.log('tap', this.pos); //跳转到pos
@@ -68,24 +78,25 @@ class Carousel {
         //禁止拖拽图片
         el.addEventListener('mousedown', e => e.preventDefault());
         el.addEventListener('touchstart', e => e.preventDefault());
-        //手势开始是停止计时器
-        el.addEventListener('start', () => clearTimeout(this.autoMoveTimer));
-        el.addEventListener('end', () => this.autoMove());
-        el.addEventListener('cancel', () => this.autoMove());
-        //todo 考虑 与 hover 冲突？ 并集（hover|| 手势）时停止
     }
     getValidPos(pos) {
         return (pos + this._items.length) % this._items.length;
     }
+    _moving(poses) {
+        const last = this._movingPos || [];
+        this._movingPos = poses;
+        return last;
+    }
 
-    move(to, r2l = true) {
-        const from = this.pos;
-        this.pos = to;
-        const leaveItem = this._el.children[from];
-        const enterItem = this._el.children[to];
+    move(enter, r2l = true) {
+        const leave = this.pos;
+        this.pos = enter;
+        const leaveItem = this._el.children[leave];
+        const enterItem = this._el.children[enter];
+        const lastMove = this._moving([leave, enter]);
         //render
-        cssMove(leaveItem, `${(-from) * 100}%`, `${((r2l ? -1 : 1) - from) * 100}%`);
-        cssMove(enterItem, `${((r2l ? 1 : -1) - to) * 100}%`, `${(-to) * 100}%`);
+        cssMove(leaveItem, `${(-leave) * 100}%`, `${((r2l ? -1 : 1) - leave) * 100}%`, lastMove.indexOf(leave) > -1);
+        cssMove(enterItem, `${((r2l ? 1 : -1) - enter) * 100}%`, `${(-enter) * 100}%`, lastMove.indexOf(enter) > -1);
     }
 
     enableDrag() {
@@ -128,14 +139,27 @@ class Carousel {
     }
 }
 
-function cssMove(dom, from, to) {
-    dom.classList.remove('animate');
-    dom.style.transform = `translateX(${from})`;
+function cssMove(dom, from, to, continuous = false) {
+    console.log('cssMove:', continuous);
+
+    if (!continuous) {
+        dom.classList.toggle('animate', false);
+        dom.style.transform = `translateX(${from})`;
+    }
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            dom.classList.add('animate');
+            dom.classList.toggle('animate', true);
             dom.style.transform = `translateX(${to})`;
         });
     });
-    //todo ?考虑z—index;
+    //todo：考虑 continuous时 requestAnimationFrame调用导致  被拉开距离了
+}
+
+function cssUpdate(dom, pos) {
+    dom.classList.toggle('animate', false);
+    dom.style.transform = `translateX(${pos})`;
+}
+
+function log(...args) {
+    console.log.apply(null, args);
 }
