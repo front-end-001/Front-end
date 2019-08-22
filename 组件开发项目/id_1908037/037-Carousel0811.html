@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>037</title>
+    <meta name="author" content="037" />
+    <style>
+        .carousel{
+            width:500px;
+            height:300px;
+            /* overflow:hidden; */
+            white-space: nowrap;
+            outline: solid 1px blue;
+            overflow:visible;
+ 
+        }
+        .carousel>img{
+            width:100%;
+            height:100%;
+            display:inline-block;
+            transition:ease 0.5s;
+        }
+        </style>
+</head>
+
+<body>
+    <div id="container"></div>
+   
+
+        <script>
+        let data = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+        ];
+      
+        class Carousel {
+            constructor(container){
+                this._container = container;
+                this._container.classList.add("carousel");
+                this._handler = null;
+                this.data = null;
+            }
+            render(){
+                for(let d of this.data) {
+                    let e = document.createElement("img");
+                    e.src = d;
+                    this._container.appendChild(e);
+                }
+                  // 自动切换的方案，基本思路是，加载图片，挪走，摆正，进入。位置调整
+                let children = Array.prototype.slice.call(container.children);//能将具有length属性的对象转成数组，除了IE下的节点集合（因为ie下的dom对象是以com对象的形式实现的，js对象与com对象不能进行转换）
+                let position = 0;
+                let nextFrame = ()=>{
+                    let nextPosition = position + 1;
+                    
+                    nextPosition = nextPosition % children.length;//为了循环，防止超界
+        
+                    let current = children[position],
+                        next = children[nextPosition];
+                    //把next摆到正确的位置
+                    next.style.transition = "ease 0s";
+                    next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+                    //如果使用requestAnimationFrame，需要套双层..requestAnimationFrame 会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+                    // requestAnimationFrame(()=>{
+                    //     requestAnimationFrame(()=>{
+                        setTimeout(()=>{
+                            //把current挪出视口
+                            current.style.transition = ""; //transition置空，css中的属性就会生效
+                            current.style.transform = `translate(${- 100 - 100 * position}%)`
+                            //把next挪进视口
+                            next.style.transition = "";
+                            next.style.transform = `translate(${- 100 * nextPosition}%)`
+                            position = nextPosition;
+                        }, 16);//因为不同浏览器的刷新频率也不一样（一般认为设置16为最佳,按每秒60帧算，1000/60≈16.67）
+                    //     });
+                    // })
+                    
+                    //for(let child of children) {
+                    //    child.style.transform = `translate(${-100 * position}%)`;
+                    //}
+                    //自调一次，预加载下一图
+                    setTimeout(nextFrame, 3000);
+                }
+                //注释了自动播放，启动手动控制              
+                // setTimeout(nextFrame,3000);
+                
+                //手动切换的方案
+                let startX;
+                let startTransform;
+                let start = event =>{
+                    event.preventDefault();//该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）。
+                    startX = event.clientX;//clientX 事件属性返回当事件被触发时鼠标指针向对于浏览器页面（或客户区）的水平坐标。
+                    startTransform = - position * 500;
+                    //如果使用this._container，则鼠标被粘住，不释放
+                    // this._container.addEventListener("mousemove", move);
+                    document.addEventListener("mousemove", move);
+                    document.addEventListener("mouseup", end);
+                }
+                let move = event =>{
+                    event.preventDefault();
+                    for(let child of children) {
+                        child.style.transition = "ease 0s";
+                        child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+                    }
+                        
+                }
+        
+                let end = ()=>{
+                    document.removeEventListener("mousemove", move);
+                    document.removeEventListener("mouseup", end);
+        
+                    position = - (Math.round((startTransform + event.clientX - startX) / 500)); 
+        
+        
+                    position = Math.max(0, Math.min(position, children.length - 1));
+        
+                    for(let child of children) {
+                        child.style.transition = "";
+                        child.style.transform = `translate(${ - position * 500}px)`;
+                    }
+                }
+                //启动手动控制方案        
+                document.addEventListener("mousedown",start);
+        
+        
+            }
+        }
+        let carousel = new Carousel(document.getElementById("container"));
+        carousel.data = data;
+        carousel.render();
+        
+        
+       
+        </script>
+</body>
+
+</html>
