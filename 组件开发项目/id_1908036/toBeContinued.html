@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+
+    <div id="root"></div>
+
+    <script>
+
+        var imgs = [
+            {
+                id: "img1",
+                url: "https://w.wallhaven.cc/full/49/wallhaven-49rzd1.jpg",
+                link: "https://www.w3.org/",
+                discripton: "w3c"
+            },
+            {
+                id: "img2",
+                url: "https://w.wallhaven.cc/full/39/wallhaven-39wej9.jpg",
+                link: "https://leetcode-cn.com",
+                discripton: "力扣刷题"
+            },
+            {
+                id: "img3",
+                url: "https://w.wallhaven.cc/full/0j/wallhaven-0jy85y.jpg",
+                link: "https://www.baidu.com",
+                discripton: "百度"
+            },
+            {
+                id: "img4",
+                url: "https://w.wallhaven.cc/full/x1/wallhaven-x12ozd.jpg",
+                link: "https://www.bilibili.com",
+                discripton: "哔哩哔哩"
+            }
+        ];
+
+        class BannerCompoent {
+
+            constructor(containerId, imgs) {
+                this.containerId = containerId;
+                this.imgs = imgs;
+            }
+
+            createBanner() {
+
+                const container =  condocument.getElementById(containerId);
+
+                const ulEle = document.createElement("ul")
+
+            }
+        }
+    </script>
+
+
+    <script>
+      // 轮播组建需求整理
+
+      /*
+       * 视图设计：
+       *
+       * 1.适应宽度，高度自动，宽高比2.235：1
+       * 2.pagination 在组件底部居中，小圆点表示
+       *
+       *
+       *
+       * 功能描述：
+       *
+       * 1.自动轮播 -
+       * 		·定时滚动切换：停留2~3s后下一帧
+       * 		·帧切换动画为左出右进，动画速度为 快-慢-快
+       * 		·鼠标停留或触摸停留时，自动播放暂停
+       *
+       * 2.手动切换上一张或下一张
+       * 		·点击下方的pagination的或者左滑右滑
+       * 		·左滑右滑切换帧的条件为：滑动距离大于组件宽度50%
+       * 		·当前帧与手动切换的目的帧的动画速度加快，控制总动画时间在1s内
+       *
+       * 3.图片点击后跳转页面
+       *
+       *
+       * */
+    </script>
+  </body>
+</html>
