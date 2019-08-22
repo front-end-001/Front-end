@@ -12,4 +12,16 @@
 
 > 5、图片轮播时，当前图片所链接的按钮样式高亮展示
 
+### 手淘轮播组件行为
+> 1、5秒轮播图
+> 2、点击跳转
+> 3、拖动滑动
+> 4、按边界展示图片
+> 
+> 
+> 
+> 
 
+###### 调试禁止缩放：document.addEventListener("touchstart", event => event.preventDefault(), {passive:false});
+手势：
+tap 点  pan 拖动 flick 快速拖动 press 长按
