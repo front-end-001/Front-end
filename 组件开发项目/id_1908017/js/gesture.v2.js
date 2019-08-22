@@ -69,16 +69,16 @@ function enableGesture(el) {
     //mouse
     const mouseId = Symbol('mouse');
     const mousedown = event => {
-        el.addEventListener('mousemove', mousemove);
-        el.addEventListener('mouseup', mouseup);
+        document.addEventListener('mousemove', mousemove);
+        document.addEventListener('mouseup', mouseup);
         start(event, contexts[mouseId] = createContext(event));
     }
     const mousemove = event => {
         move(event, contexts[mouseId]);
     }
     const mouseup = event => {
-        el.removeEventListener('mousemove', mousemove);
-        el.removeEventListener('mouseup', mouseup);
+        document.removeEventListener('mousemove', mousemove);
+        document.removeEventListener('mouseup', mouseup);
         end(event, contexts[mouseId]);
         delete contexts[mouseId];
     }
