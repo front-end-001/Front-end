@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  <style>
+    #carousel {
+      width: 400px;
+      height: 200px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin: 50px auto;
+      overflow: hidden;
+      position: relative;
+    }
+    #container {
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    #container .item {
+      width: 400px;
+      height: 200px;
+      margin-right: 20px;
+      background: gray;
+      float: left;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="carousel">
+    <div id="container">
+      <div class="item">1111111</div>
+      <div class="item">22222222</div>
+      <div class="item">33333333</div>
+      <div class="item">44444444</div>
+      <div class="item">55555555</div>
+    </div>
+  </div>
+
+
+  <!-- <script src="index.js"></script> -->
+  <script>
+    const container = document.querySelector('#container');
+    const items = document.querySelectorAll('.item');
+    container.style.width = items.length * (400 + 20) + 'px';
+    let i = 0;
+    setInterval(function () {
+      container.style.left = -i * 420 + 'px';
+      i++;
+      if (i >= items.length) {
+        i = 0;
+      }
+    }, 1000)
+    
+  </script>
+</body>
+</html>
