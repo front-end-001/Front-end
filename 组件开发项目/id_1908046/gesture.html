@@ -4,6 +4,8 @@
     let main = document.getElementById('main');
     let x = 0, y = 0;
 
+    enableGesture(main);
+
     main.addEventListener('pan', evetn => {
         console.log(event.dx, event.dy);
         main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
