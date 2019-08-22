@@ -16,8 +16,10 @@
 		width: 100%;
 		height: 100%;
 		display: inline-block;
+		transition:ease .5s;
 	}
 </style>
+	<script src="./1.js"></script>
 <body>
 	<div id="container"></div>
 
@@ -94,34 +96,33 @@
 
 				}
 				// setTimeout容易调试
-				this._handler = setTimeout(nextFrame,3000)
-
-				let startX;
-		        let startTransform;
-		        let start = event =>{
-		            event.preventDefault();
-		            startX = event.clientX;
-		            startTransform = - position * conWidth;
-		            // 鼠标事件一般都是加在上层（类似遮罩层/防止释放出问题）
-		            document.addEventListener("mousemove", move);
-		            document.addEventListener("mouseup", end);
-		        }
-		        let move = event =>{
-		        	// 阻止默认事件
-		            event.preventDefault();
+				//this._handler = setTimeout(nextFrame,3000)
+			        let x = 0;
+		
+		            enableGesture(this._container);
+		
+		            this._container.addEventListener("pan", event => {
+		                //console.log("pan")
+		                if(event.isVertical)
+		                    return;
 		            for(let child of children) {
 		                child.style.transition = "ease 0s";
-		                child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+		                child.style.transform = `translateX(${event.dx + x}px`;
 		            }
-		                
-		        }
-
-		        let end = ()=>{
-		            document.removeEventListener("mousemove", move);
-		            document.removeEventListener("mouseup", end);
-
-		            position = - (Math.round((startTransform + event.clientX - startX) / conWidth)); 
-
+		            })
+		            this._container.addEventListener("panend", event => {
+		                if(event.isVertical)
+		                    return;
+		                if(event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)){
+		                    if(event.dx > 0) {
+		                        position = position - 1;
+		                    }
+		                    if(event.dx < 0) {
+		                        position = position + 1;
+		                    }
+		                } else {
+		            position = - (Math.round((x + event.dx) / conWidth)); 
+		                }
 
 		            position = Math.max(0, Math.min(position, children.length - 1));
 
@@ -129,9 +130,10 @@
 		                child.style.transition = "";
 		                child.style.transform = `translate(${ - position * conWidth}px)`;
 		            }
-		        }
+					x = -position * conWidth;
+		        })
 
-		        document.addEventListener("mousedown",start);
+		        document.addEventListener("mousedown",event => event.preventDefault());
 			}
 			
 
