@@ -114,6 +114,7 @@ const imgArray2 = [
    
    function enableGesture(gesture){
     const context = Object.create(null)
+    let mouseSymbol = Symbol("mouse");
     const mousedown = event =>{
        context[mouseSymbol] = Object.create(null)
        start(event,context[mouseSymbol])
@@ -180,6 +181,7 @@ const imgArray2 = [
        context.startY = point.clientY
        context.isTap = true
        context.isTouch = false
+       context.startTime = Date.now()
    }
    move = (point,context) =>{
        context.dx = point.clientX-context.startX
@@ -216,11 +218,22 @@ const imgArray2 = [
            gesture.dispatchEvent(e)
        }
        if(context.isTouch){
+        const v = Math.sqrt(context.dx*context.dx+context.dy*context.dy)/(Date.now()-context.startTime)
+        if(v>0.3){
+            context.isFlick = true;
+            let e = new Event("flick");
+            e.dx = dx;
+            e.dy = dy;
+            main.dispatchEvent(e);
+        }else{
+            context.isFlick = false;
+        }
         const e =new Event('panend')
                 e.dx = context.dx
                 e.dy = context.dy
                 e.isVertical = context.isVertical
                 e.isHorizontal = context.isHorizontal
+                e.isFlick = context.isFlick;
                 gesture .dispatchEvent(e)
        }
        console.log('end',point.clientX,point.clientY)
@@ -288,19 +301,37 @@ const imgArray2 = [
             enableGesture(this.container)
            
             let x = 0
+            // let position = 0
             this.container.addEventListener('pan',e=>{
+
                 for(let item of this.container.children){
                     item.style.transform = `translateX(${x+e.dx}px)`
                     item.style.transition = 'ease 0.5s'
-                    x = x+e.x
+                    // x = x+e.dx
             }
             })
             this.container.addEventListener('panend',e=>{
-                for(let item of this.container.children){
-                item.style.transform = `translateX(${x+e.dx}px)`
-                item.style.transition = 'ease 0.5s'
-                x = x+e.x
+                // if(e.isVertical)
+                //     return;
+                if(e.isFlick && Math.abs(e.dx) > Math.abs(e.dy)){
+                    if(e.dx > 0) {
+                        position = position - 1;
+                    }
+                    if(e.dx < 0) {
+                        position = position + 1;
+                    }
+                } else {
+                    position = -(Math.round((x + e.dx) / 500));
                 }
+                // position = -(Math.round((x+e.dx)/200))
+                position = Math.max(0, Math.min(position, children.length - 1));
+                console.log(position)
+                for(let item of this.container.children){
+                    item.style.transform = `translate(${-position * 200}px)`;
+                item.style.transition = 'ease 0.5s'
+                
+                }
+                x = -position*200
             })
         }
         touchStart =(e)=>{
