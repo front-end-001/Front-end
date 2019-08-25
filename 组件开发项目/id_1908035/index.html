@@ -160,21 +160,6 @@ const imgArray2 = [
    gesture.addEventListener('touchmove',touchmove)
    gesture.addEventListener('touchend',touchend)
    let x = 0,y=0
-//    gesture.addEventListener('pan',(e)=>{
-//      console.log('pan',e.dx)
-//     gesture.style.transform = `translate(${x+e.dx}px,${y+e.dy}px)`
-//     // gesture.style.transform = `translateY(${y+e.dy}px)`
-//    })
-//    gesture.addEventListener('panend',(e)=>{
-//     gesture.style.transform = `translateX(${x+e.dx}px,${y+e.dy}px)`
-//     x=x+e.dx
-//     y=y+e.dy
-//     // gesture.style.transform = `translateY(${y+e.dy}px)`
-//    })
-//    gesture.addEventListener('pancancel',(e)=>{
-//     gesture.style.transform = `translateX(${x}px)`
-//     gesture.style.transform = `translateY(${y}px)`
-//    })
 
    start = (point,context) =>{
        context.startX = point.clientX
