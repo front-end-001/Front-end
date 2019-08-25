@@ -53,8 +53,8 @@
         this._styleSetter = styleSetter;
       }
       tick(t) {
-        if (t < this._start) return;
-        if (t > this._end) return;
+        if (t < this._start.time) return;
+        if (t > this._end.time) return;
         this._styleSetter(this._el, this._start, this._end, t);
       }
     }
@@ -81,7 +81,7 @@
       const result = Object.assign({}, start);
       const time = end.time - start.time;
       for (const key of Object.keys(result)) {
-        result[key] += (end[key] - start[key]) * t / time;
+        result[key] += (end[key] - start[key]) * (t-start.time) / time;
       }
       return result;
     }
