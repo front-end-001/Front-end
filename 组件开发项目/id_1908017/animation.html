@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 017-4组-陈昕 -->
+  <style>
+    #ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: #0f0;
+      border-radius: 50%;
+    }
+  </style>
+  <div id="ball"></div>
+  <script>
+    class TimeLine {
+      constructor() {
+        this._animations = [];
+      }
+      start() {
+        const startTime = new Date();
+        this._interval = setInterval(() => {
+          const t = new Date() - startTime;
+          for (const animation of this._animations) {
+            animation.tick(t);
+          }
+        }, 16);
+
+      }
+      pause() {
+
+      }
+      resum() {
+
+      }
+      addAnimation(animation) {
+        this._animations.push(animation)
+      }
+    }
+    class ElementStyleAnimation {
+      constructor(el, start, end, styleSetter) {
+        this._el = el;
+        this._start = start;
+        this._end = end;
+        this._styleSetter = styleSetter;
+      }
+      tick(t) {
+        if (t < this._start) return;
+        if (t > this._end) return;
+        this._styleSetter(this._el, this._start, this._end, t);
+      }
+    }
+    const tl = new TimeLine();
+    const el = document.getElementById('ball');
+    tl.addAnimation(new ElementStyleAnimation(el, { time: 0, left: 0 }, { time: 500, left: 100 }, (el, start, end,t) => {
+      const val = interpolation(start, end, t);
+      el.style.left = `${val.left}px`;
+    }))
+    tl.addAnimation(new ElementStyleAnimation(el, { time: 500, top: 0 }, { time: 1000, top: 100 }, (el, start, end,t) => {
+      const val = interpolation(start, end, t);
+      el.style.top = `${val.top}px`;
+    }))
+    tl.addAnimation(new ElementStyleAnimation(el, { time: 1000, left: 100 }, { time: 1500, left: 0 }, (el, start, end,t) => {
+      const val = interpolation(start, end, t);
+      el.style.left = `${val.left}px`;
+    }))
+    tl.addAnimation(new ElementStyleAnimation(el, { time: 1500, top: 100 }, { time: 2000, top: 0 }, (el, start, end,t) => {
+      const val = interpolation(start, end, t);
+      el.style.top = `${val.top}px`;
+    }))
+    tl.start();
+    function interpolation(start, end, t) {
+      const result = Object.assign({}, start);
+      const time = end.time - start.time;
+      for (const key of Object.keys(result)) {
+        result[key] += (end[key] - start[key]) * t / time;
+      }
+      return result;
+    }
+
+  // /**怎么支持 跳转到指定帧？
+  // //  *    Animation 怎么实现
+  //  * /
+  </script>
+</body>
+
+</html>
