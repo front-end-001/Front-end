@@ -44,3 +44,9 @@ let play = () => {
 + [第一版轮播图支持移动端拖拽](./20190818/teacheronline.html)
 + [移动端手势代码调试页面](./20190818/carouselphone.html)
 + [照抄老师的组件库](./20190818/gesture.js)
+
+## 20190825线上课练习
++ [第二版轮播图支持移动端拖拽](./20190825/carousel0825.html)
++ [timeline-demo](./20190825/timeline0825.html)
++ [照抄老师的组件库](./20190825/gesture.js)
++ [照抄老师的动画库](./20190825/animation.js)
