@@ -147,11 +147,16 @@ P1:
      4.2 点击向左按钮向前播放，点击向右按钮向后播放
 
 9. 轮播组件实战
-链接
+
+
 [不带拖拽的轮播效果](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/no-drag.html)
+
 [拖拽的效果](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/drag.html)
+
 [Crousel使用手势库](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/touch.html)
+
 [动画入门--实现一个时间线](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/timeline.html)
+
 [轮播整合动画库--使用动画库实现轮播并适应拖拽](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/carousel-with-animation.html)
 
 
