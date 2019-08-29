@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id = 'container'></div><br>
+    <div id = 'container2'></div>
+    <style>
+        .piece-black::after{
+            content:'';
+            width: 40px;
+            height: 40px;
+            display: block;
+            overflow: hidden;
+            margin: 5px;
+            background: black;
+            border-radius:100%;
+
+        }
+        .piece-white::after{
+            content:'';
+            width: 40px;
+            height: 40px;
+            display: block;
+            overflow: hidden;
+            margin: 5px;
+            background: white;
+            border-radius:100%;
+        }
+    </style>
+    <script>
+    //     let container = document.getElementById('container')
+    //     container.setAttribute('style','width:500px;height:500px')
+    //     let  mapArr  = [
+    //                     [0, 0, 0, 0, 0, 0, 0, 0],
+    //                     [0, 0, 0, 0, 0, 0, 0, 0],
+    //                     [0, 0, 0, 0, 0, 0, 0, 0],
+    //                     [0, 0, 0, 0, 0, 0, 0, 0],
+    //                     [0, 0, 0, 0, 0, 0, 0, 0],
+    //                     [0, 0, 0, 0, 0, 0, 0, 2],
+    //                     [0, 0, 0, 0, 0, 0, 0, 1],
+    //                     [0, 0, 0, 0, 0, 0, 0, 0]
+    //                  ]
+    //     let x='',y='', color = 1//是否真下
+    //     function render(){
+    //         container.innerHTML = ''
+    //          for (let i = 0; i < 8; i++) {
+    //             for (let j = 0; j < 8; j++) {
+    //                 let dom = document.createElement('div')
+    //                 container.appendChild(dom)
+    //                 dom.setAttribute('data-oy', i)
+    //                 dom.setAttribute('data-ox', j)
+    //                 dom.setAttribute('style', 'width:50px;height:50px;background:green;border:solid 1px #e5e5e5;display:inline-block;vertical-align:middle')
+    //                 //    if(mapArr[i][j] != 0 ){
+    //                 //        dom.append(piece(mapArr[i][j]),dom)
+
+    //                 //    }
+    //                 if (mapArr[i][j] == 1) {
+    //                     dom.setAttribute('class', 'piece-black')
+    //                 } else if (mapArr[i][j] == 2) {
+    //                     dom.setAttribute('class', 'piece-white')
+    //                 }
+    //             }
+    //             let br = document.createElement('br')
+    //             container.append(br)
+    //         }
+    //     }
+    //    function piece(isBlackOrwhite,dom){
+    //         let div = document.createElement('div')
+    //         if(isBlackOrwhite==1){
+    //             div.setAttribute('style', 'width:40px;height:40px;background:black;display:inline-block;vertical-align:middle;border-radius:100%;margin: 5px;')
+               
+    //        }else{
+    //             div.setAttribute('style', 'width:40px;height:40px;background:#fff;display:inline-block;vertical-align:middle;border-radius:100%;margin: 5px;')
+    //         }
+    //         return div
+    //     }
+    //    function clickContainer(){
+    //         container.addEventListener('click',(e)=>{  //2是白子，1是黑子
+    //             //获取当前的x,y
+    //             //1、是否有子？有:没有 
+    //             //2、没有的话进入逻辑判断是否绘制，有就return掉
+    //             if(!e.target.dataset.ox){
+    //                 return; 
+    //             }
+    //             let ox = parseInt(e.target.dataset.ox),
+    //                 oy = parseInt(e.target.dataset.oy)
+    //             if(mapArr[oy][ox] > 0){
+    //                 return;
+    //             }
+    //             move(ox, oy)
+    //             if(isCheckPass()){
+    //                 color = 3 - color
+    //                 if(isCheckPass()){
+    //                     alert('Game over')
+    //                 }
+    //             }
+              
+    //         })
+    //    }
+    //    function move(ox,oy, checkOlny = false){
+    //        let directionArr = [
+    //            [-1, -1],
+    //            [-1, 0],
+    //            [-1, 1],
+    //            [0, -1],
+    //            [0, 1],
+    //            [1, -1],
+    //            [1, 0],
+    //            [1, 1]
+    //        ]
+    //        let moveSuccess  = false
+    //        let x = ox, y = oy
+    //         for(let d of  directionArr){//循环各方向
+    //                     x = ox, y = oy
+    //                     let canmove = false
+    //                     let pass = false //当下以后，另一方颜色无法下
+    //                     while (true) { //循环某一个方向
+    //                         x += d[0]
+    //                         y += d[1]
+    //                         if(y < 0 || x < 0 || y >= 8 || x >= 8){
+    //                             canmove = false
+    //                             break;
+    //                         }
+    //                         if (mapArr[y][x] == 3 - color) {//是白子情况
+    //                         canmove = true
+
+    //                         } else if (mapArr[y][x] == color) {//是黑子情况
+    //                             break;
+    //                         } else if (mapArr[y][x] == 0) {//没子
+    //                             canmove = false
+    //                             break;
+    //                         }
+            
+    //                     }
+
+    //                     moveSuccess = moveSuccess || canmove;
+
+    //                     if(canmove && !checkOlny){
+
+    //                         while (true) {
+    //                             x -= d[0]
+    //                             y -= d[1]
+    //                             mapArr[y][x] = color
+    //                             if (y == oy && x == ox) { 
+    //                                 break;
+    //                             }
+    //                         }
+
+    //                     }
+    //                 }
+    //             if(checkOlny){
+    //                 return moveSuccess
+    //             }
+    //             if(moveSuccess){
+    //                 color = 3 - color 
+    //             }
+    //             render()
+                    
+    //    }
+    //    function isCheckPass(){
+    //         for (let i = 0; i < 8; i++) {
+    //             for (let j = 0; j < 8; j++) {
+    //                 if(move(j, i, true)) {
+    //                     return false
+    //                 }
+    //             }
+    //         }
+    //         return true
+    //    }
+
+    //    render()
+    //    clickContainer()
+//------------------------------------------------------------------------------------
+       class Pattern{
+            constructor(mapArr){
+                this.mapArr = mapArr || [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 1, 2, 0, 0, 0],
+                    [0, 0, 0, 2, 1, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 2],
+                    [0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ]
+            }
+            move(ox,oy,color, checkOlny){
+                // if(this.mapArr[oy][ox] > 0){
+                //     return;
+                // }
+                let directionArr = [
+                    [-1, -1],
+                    [-1, 0],
+                    [-1, 1],
+                    [0, -1],
+                    [0, 1],
+                    [1, -1],
+                    [1, 0],
+                    [1, 1]
+                ]
+                let moveSuccess = false
+                let x = ox, y = oy
+                for (let d of directionArr) {//循环各方向
+                    x = ox, y = oy
+                    let canmove = false
+                    let pass = false //当下以后，另一方颜色无法下
+                    while (true) { //循环某一个方向
+                        x += d[0]
+                        y += d[1]
+                        if (y < 0 || x < 0 || y >= 8 || x >= 8) {
+                            canmove = false
+                            break;
+                        }
+                        if (this.mapArr[y][x] == 3 - color) {
+                            canmove = true
+
+                        } else if (this.mapArr[y][x] == color) {
+                            break;
+                        } else if (this.mapArr[y][x] == 0) {//没子
+                            canmove = false
+                            break;
+                        }
+
+                    }
+
+                    moveSuccess = moveSuccess || canmove;
+
+                    if (canmove && !checkOlny) {
+                        while (true) {
+                            x -= d[0]
+                            y -= d[1]
+                            this.mapArr[y][x] = color
+                            if (y == oy && x == ox) {
+                                break;
+                            }
+                        }
+
+                    }
+                }
+                // if (checkOlny) {
+                    return moveSuccess
+                // }
+                // if (moveSuccess) {
+                //     color = 3 - color
+                // }
+            }
+            isCheckPass(color) {
+               for (let i = 0; i < 8; i++) {
+                   for (let j = 0; j < 8; j++) {
+                       if (this.move(j, i,color,true)) {
+                           return false
+                       }
+                   }
+               }
+               return true
+           }
+           clone(){
+               return new Pattern(this.mapArr.map(line => line.slice()));
+           }
+       }
+       
+       
+       class Game{
+           constructor(view){
+               this.patterns = [new Pattern()]
+               this.colors = [1]
+           }
+           get pattern(){
+               return  this.patterns[this.patterns.length - 1]
+           }
+           get color(){
+                return this.colors[this.colors.length - 1]
+           }
+           move(ox,oy){
+               let pattern = this.pattern.clone()
+               let color = this.color
+               if(pattern.move(ox,oy,color,false)){//画子是否成功
+                   color =  3 - color
+                   if (pattern.isCheckPass(color)) {//判断check
+                       color = 3 - color
+                       if (pattern.isCheckPass(color)) {//是否结束游戏
+                           alert('Game over')
+                       }
+                   }
+                   this.patterns.push(pattern);
+                   this.colors.push(color);
+                   return true
+               }
+               
+           }
+           piceBack(){//悔棋
+               if(this.patterns.length > 1){
+                   this.patterns.pop()
+                   this.colors.pop()
+               }
+           }
+           
+       }
+
+       class View{
+           constructor(container,game){
+               this.container = container
+               this.game = game
+               this.click()
+           }
+           render(){
+                this.container.innerHTML = ''
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        let dom = document.createElement('div')
+                        this.container.appendChild(dom)
+                        dom.setAttribute('data-oy', i)
+                        dom.setAttribute('data-ox', j)
+                        dom.setAttribute('style', 'width:50px;height:50px;background:green;border:solid 1px #e5e5e5;display:inline-block;vertical-align:middle')
+                        //    if(mapArr[i][j] != 0 ){
+                        //        dom.append(piece(mapArr[i][j]),dom)
+
+                        //    }
+                        if (this.game.pattern.mapArr[i][j] == 1) {
+                            dom.setAttribute('class', 'piece-black')
+                        } else if (this.game.pattern.mapArr[i][j] == 2) {
+                            dom.setAttribute('class', 'piece-white')
+                        }
+                    }
+                    let br = document.createElement('br')
+                    this.container.append(br)
+                }
+                let back = document.createElement('button')
+                back.setAttribute('data-btn','back')
+                back.innerText='悔棋'
+                this.container.appendChild(back)
+                
+           }
+           click(){
+                this.container.addEventListener('click', (e) => {  //2是白子，1是黑子
+                   //获取当前的x,y
+                   //1、是否有子？有:没有 
+                   //2、没有的话进入逻辑判断是否绘制，有就return掉
+                   if(e.target.dataset.btn){
+                         this.game.piceBack()
+                         this.render()
+                         return;
+                   }
+                   if (!e.target.dataset.ox) {
+                       return;
+                   }
+                   let ox = parseInt(e.target.dataset.ox),
+                       oy = parseInt(e.target.dataset.oy)
+                   if (this.game.pattern.mapArr[oy][ox] > 0) {
+                       return;
+                   }
+                   this.game.move(ox, oy)
+                   this.render()
+               })
+           }
+       }
+       let container2 = document.getElementById('container2')
+        container2.setAttribute('style', 'width:500px;height:500px')
+       new View(container2, new Game()).render()
+       //悔棋就是把所有棋盘和子存起来，如果悔棋就取上一步骤，用栈,后退pop
+       //map // [] 
+    </script>
+</body>
+</html>
