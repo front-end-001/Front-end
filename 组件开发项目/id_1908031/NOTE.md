@@ -25,3 +25,9 @@
 ###### 调试禁止缩放：document.addEventListener("touchstart", event => event.preventDefault(), {passive:false});
 手势：
 tap 点  pan 拖动 flick 快速拖动 press 长按
+
+### 动画
+
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API https://developer.mozilla.org/zh-CN/docs/Web/API/Animation
+https://developer.mozilla.org/en-US/docs/Web/API/Animation
+贝塞尔曲线 https://cubic-bezier.com/

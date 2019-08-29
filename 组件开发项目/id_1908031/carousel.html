@@ -22,6 +22,7 @@
 <body>
 <div id="container"></div>
 <script src="touch.js"></script>
+<script src="animation.js"></script>
 <script>
 	// 数据信息
 	let data = [
@@ -51,7 +52,7 @@
 			let children = Array.prototype.slice.call(container.children);
 			let position = 0;
 			// 保存当前位置，计算下一张位置
-			let nextFrame = () => {
+			let nextPic = () => {
 				let nextPosition = position + 1;
 				nextPosition = nextPosition % children.length;
 
@@ -74,7 +75,7 @@
 
 				});
 				// 3秒执行
-				setTimeout(nextFrame, 3000);
+				setTimeout(nextPic, 3000);
 			};
 			let x = 0;
 			// 引入拖拽库
