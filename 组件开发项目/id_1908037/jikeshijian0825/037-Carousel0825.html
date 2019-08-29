@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>037</title>
+    <meta name="author" content="037" />
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="ball"
+        style="transition:top 0.5s ease 0s;position:absolute;width:50px;height:50px;border-radius:25px;background-color:navy;">
+    </div>
+
+
+    <script>
+        //老师分享的贝塞尔曲线算法。
+        function cubicBezier(p1x, p1y, p2x, p2y) {
+            const ZERO_LIMIT = 1e-6;
+            // Calculate the polynomial coefficients,
+            // implicit first and last control points are (0,0) and (1,1).
+            const ax = 3 * p1x - 3 * p2x + 1;
+            const bx = 3 * p2x - 6 * p1x;
+            const cx = 3 * p1x;
+
+            const ay = 3 * p1y - 3 * p2y + 1;
+            const by = 3 * p2y - 6 * p1y;
+            const cy = 3 * p1y;
+
+            function sampleCurveDerivativeX(t) {
+                // `ax t^3 + bx t^2 + cx t' expanded using Horner 's rule.
+                return (3 * ax * t + 2 * bx) * t + cx;
+            }
+
+            function sampleCurveX(t) {
+                return ((ax * t + bx) * t + cx) * t;
+            }
+
+            function sampleCurveY(t) {
+                return ((ay * t + by) * t + cy) * t;
+            }
+
+            // Given an x value, find a parametric value it came from.
+            function solveCurveX(x) {
+                var t2 = x;
+                var derivative;
+                var x2;
+
+                // https://trac.webkit.org/browser/trunk/Source/WebCore/platform/animation
+                // First try a few iterations of Newton's method -- normally very fast.
+                // http://en.wikipedia.org/wiki/Newton's_method
+                for (let i = 0; i < 8; i++) {
+                    // f(t)-x=0
+                    x2 = sampleCurveX(t2) - x;
+                    if (Math.abs(x2) < ZERO_LIMIT) {
+                        return t2;
+                    }
+                    derivative = sampleCurveDerivativeX(t2);
+                    // == 0, failure
+                    /* istanbul ignore if */
+                    if (Math.abs(derivative) < ZERO_LIMIT) {
+                        break;
+                    }
+                    t2 -= x2 / derivative;
+                }
+
+                // Fall back to the bisection method for reliability.
+                // bisection
+                // http://en.wikipedia.org/wiki/Bisection_method
+                var t1 = 1;
+                /* istanbul ignore next */
+                var t0 = 0;
+
+                /* istanbul ignore next */
+                t2 = x;
+                /* istanbul ignore next */
+                while (t1 > t0) {
+                    x2 = sampleCurveX(t2) - x;
+                    if (Math.abs(x2) < ZERO_LIMIT) {
+                        return t2;
+                    }
+                    if (x2 > 0) {
+                        t1 = t2;
+                    } else {
+                        t0 = t2;
+                    }
+                    t2 = (t1 + t0) / 2;
+                }
+
+                // Failure
+                return t2;
+            }
+
+            function solve(x) {
+                return sampleCurveY(solveCurveX(x));
+            }
+
+            return solve;
+        }
+
+
+
+        class TimeLine {
+            //构造函数
+            constructor() {
+                //动画数组CSS使用简写属性，将动画与 div 元素绑定：
+                this._animations = [];
+                this.pauseTime = 0;
+            }
+
+            pause() {
+                this._pauseStart = Date.now();
+                // this.pauseTime
+
+            }
+
+            resume() {
+                this._pauseTime += Date.now() - this._pauseStart;
+
+            }
+
+            start() {
+                let startTime = Date.now();
+                this.pauseTime = 0;
+
+
+                setInterval(() => {
+
+                    for (let animation of this._animations) {
+                        if (!animation.finished) {
+                            animation.tick(Date.now() - startTime);
+                        }
+
+
+                    }
+                }, 16)
+
+            }
+            //倍速播放
+            set rate(value) { }
+            get rate() { }
+
+            addAnimation(animation) {
+                // 加入动画数组
+                this._animations.push(animation);
+            }
+
+            removeAnimation(animation) { }
+
+
+
+        }
+
+        //加入多种曲线的算法
+        //linear
+        // 括号内的值，去网站上设置，然后拷贝网址后面的值https://cubic-bezier.com/
+
+        let linear = cubicBezier(0, 0, 1, 1);
+        let ease = cubicBezier(.25, .1, .25, 1);
+        let easeIn = cubicBezier(.42, 0, 1, 1);
+        let easeOut = cubicBezier(0, 0, .58, 1);
+        let easeInOut = cubicBezier(.42, 0, .58, 1);
+        let myCB = cubicBezier(.69, -0.85, .25, 1);
+
+
+        class DOMElementStyleAnimation {
+            // constructor(element, property, startTime, startValue, endTime, endValue) {
+            //     this._element = element;
+            //     this._property = property;
+            //     this._startTime = startTime;
+            //     this._startValue = startValue;
+            //     this._endTime = endTime;
+            //     this._endValue = endValue;
+            //     this._converter = converter;
+            // }
+            constructor(element, property, startTime, startValue, endTime, endValue, converter) {
+                //对象
+                this._element = element;
+                //style
+                this._property = property;
+                this._startTime = startTime;
+                this._startValue = startValue;
+                this._endTime = endTime;
+                this._endValue = endValue;
+                //字符串转换
+                this._converter = converter;
+            }
+            tick(t) {
+                // console.log(t);
+                if (t > this._endTime) {
+                    t = this._endTime;
+                    this.finished = true;
+                    // return;
+                }
+                if (t < this._startTime) {
+                    // t= this._startTime;
+                    return;
+                }
+                //写少了一个参数
+                // this._element.style[this._property] = this._converter((t - this._startTime) / (this._endTime - this._startTime) * (this._endValue) + this._startValue);
+                //时间进展*要动的增量=结果（当前值）。
+                //插值函数。
+                // this._element.style[this._property] = this._converter((t - this._startTime) / (this._endTime - this._startTime) * (this._endValue - this._startValue) + this._startValue);
+
+                // let progress=(t - this._startTime) / (this._endTime - this._startTime);
+                // let displacement=progress*(this._endValue - this._startValue);
+                // let constructor=displacement+this._startValue;
+                // this._element.style[this._property] = this._converter(constructor);
+
+                let progress = (t - this._startTime) / (this._endTime - this._startTime);
+                // let displacement=progress*(this._endValue - this._startValue);
+                //这里不断替换progress前面的曲线方法。测试
+                // Math.sin(progress * Math.PI / 2)
+                // let displacement = Math.sin(progress) * (this._endValue - this._startValue);
+
+                let displacement = myCB(progress) * (this._endValue - this._startValue);
+                let constructor = displacement + this._startValue;
+                this._element.style[this._property] = this._converter(constructor);
+
+
+
+            }
+
+        }
+        //设置时间线
+        let tl = new TimeLine();
+        //时间线，启动，移动。
+        tl.addAnimation(new DOMElementStyleAnimation(
+            document.getElementById("ball"),
+            "top",
+            0, 0,
+            500, 100,
+            (v) => `${v}px`
+        ));
+        tl.addAnimation(new DOMElementStyleAnimation(
+            document.getElementById("ball"),
+            "left",
+            500, 0,
+            1000, 100,
+            (v) => `${v}px`
+        ));
+        tl.addAnimation(new DOMElementStyleAnimation(
+            document.getElementById("ball"),
+            "top",
+            1000, 100,
+            1500, 0,
+            (v) => `${v}px`
+        ));
+        tl.addAnimation(new DOMElementStyleAnimation(
+            document.getElementById("ball"),
+            "left",
+            1500, 100,
+            2000, 0,
+            (v) => `${v}px`
+        ));
+        tl.start();
+
+    </script>
+</body>
+
+</html>
