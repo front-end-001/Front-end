@@ -142,10 +142,27 @@
         this._end = end;
         this._styleSetter = styleSetter;
       }
+      /**
+      * 当动画第一次超出边界时,按边界tick 更新
+      * @return [doUpdate是否更新,adjustT调整过的t]
+      */
+      adjustTick(t) {
+        const lOutRange = t < this._start.time;
+        const rOutRange = t > this._end.time;
+        if (!lOutRange && !rOutRange) {
+          //边界内
+          this._lastInRange = true;
+          return [true, t];
+        }
+        if (this._lastInRange) {
+          this._lastInRange = false;
+          return [true, lOutRange ? this._start.time : this._end.time];
+        }
+        return [false];
+      }
       tick(t) {
-        if (t < this._start.time) return;
-        if (t > this._end.time) return;
-        this._styleSetter(this._el, this._start, this._end, t);
+        const [run, adjustT] = this.adjustTick(t);
+        run && this._styleSetter(this._el, this._start, this._end, adjustT);
       }
     }
     const tl = new TimeLine();
@@ -175,12 +192,11 @@
         });
       })
       let val = interpolationEase(start, end, t);
-      val = [val.r,val.g,val.b].map(n=>{
+      val = [val.r, val.g, val.b].map(n => {
         n = Math.round(n);
-        n = Math.min(Math.max(0,n),255);
-        return `0${n}`.substr(-2,2);
+        n = Math.min(Math.max(0, n), 255);
+        return `0${n.toString(16)}`.substr(-2, 2);
       }).join('');
-      console.log('color:', val);
       el.style.background = `#${val}`;
     }));
     tl.start();
