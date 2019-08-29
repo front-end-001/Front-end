@@ -86,7 +86,7 @@
             let startTransform;
 
             let offset = 0;
-            this._container.addEventListener("mousedown", event => {
+            this._container.addEventListener("panstart", event => {
                 startTransform = - position * 500;
                 tl.pause();
 
@@ -143,25 +143,31 @@
                     } else {
                         isLeft = true;
                     }
-
-                    //position = (Math.round((position * 500 - event.dx) / 500));
                 }
                 position = (children.length + position) % children.length;
 
-                let current = children[position]
-                let nextPosition = (position + 1)/children.length
-                let next = children[nextPosition]
-                let lastPosition = (children.length + position - 1)/ children.length
-                let last = children[lastPosition]
-                last.style.transition = "ease 0s";
-                last.style.transform = `translate(${500 - 500 * lastPosition}px)`
+                let current = children[position];
+                let nextPosition = (position + 1) % children.length;
+                let next = children[nextPosition];
+                let lastPosition = (children.length + position - 1) % children.length;
+                let last = children[lastPosition];
 
-                next.style.transition = "ease 0s";
+                if(!isLeft){
+                    last.style.transition = "";
+                } else {
+                    last.style.transition = "ease 0s";
+                }
+                last.style.transform = `translate(${-500 - 500 * lastPosition}px)`
+
+                if(isLeft){
+                    next.style.transition = "";
+                } else {
+                    next.style.transition = "ease 0s";
+                }
                 next.style.transform = `translate(${500 - 500 * nextPosition}px)`
 
-                current.style.transition = "ease 0s";
-                current.style.transform = `translate(${500 - 500 * position}px)`
-
+                current.style.transition = "";
+                current.style.transform = `translate(${- 500 * position}px)`
             });
 
             this._container.addEventListener("mousedown", event => event.preventDefault());
