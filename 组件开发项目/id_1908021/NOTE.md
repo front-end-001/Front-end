@@ -31,3 +31,20 @@ P1：
    - TouchEvent的监听与MouseEvent的区别
      - MouseEvent事件(mouseup, mousemove)绑定在某元素上，超过元素范围则不会触发
      - TouchEvent事件(touchend, touchmove)，哪怕触点移出元素范围也会触发
+
+
+  ## Week-02 轮播组件手势基础
+
+  
+  ### CSS Animation
+   - transition
+   - transform
+
+  ### web Animation
+  当前兼容性不好，不建议使用
+  - [Using_the_Web_Animations_API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API)
+  
+  - [Animation](https://developer.mozilla.org/en-US/docs/Web/API/Animation)
+
+
+https://cubic-bezier.com/#.17,.67,.83,.67
