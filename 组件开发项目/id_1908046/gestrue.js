@@ -21,7 +21,7 @@ function enableGesture(main){
         //console.log(context.startX,context.startY);
         let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
         if(dx * dx + dy * dy > 100) {
-            
+
             if(context.pressHandler !== null) {
                 clearTimeout(context.pressHandler);
                 context.pressHandler = null;
@@ -33,7 +33,7 @@ function enableGesture(main){
             }
 
             context.isTap = false;
-            
+
             if(context.isPan == false) {
                 if(Math.abs(dx) > Math.abs(dy)) {
                     context.isVertical = false;
@@ -139,7 +139,7 @@ function enableGesture(main){
             contexts[touch.identifier] = Object.create(null);
             start(touch, contexts[touch.identifier]);
         }
-            
+
     }
     let touchmove = event => {
         for(let touch of event.changedTouches)
