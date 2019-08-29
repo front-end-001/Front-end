@@ -20,6 +20,7 @@
     }
   </style>
   <div id="ball"></div>
+  <script src='./js/animation.js'></script>
   <script>
     function cubicBezier(p1x, p1y, p2x, p2y) {
       const ZERO_LIMIT = 1e-6;
@@ -111,115 +112,31 @@
     let easeInOut = cubicBezier(.42, 0, .58, 1);
     let myCB = cubicBezier(.69, -0.85, .25, 1);
 
-    class TimeLine {
-      constructor() {
-        this._animations = [];
-      }
-      start() {
-        const startTime = new Date();
-        this._interval = setInterval(() => {
-          const t = new Date() - startTime;
-          for (const animation of this._animations) {
-            animation.tick(t);
-          }
-        }, 16);
-
-      }
-      pause() {
-
-      }
-      resum() {
-
-      }
-      addAnimation(animation) {
-        this._animations.push(animation)
-      }
-    }
-    class ElementStyleAnimation {
-      constructor(el, start, end, styleSetter) {
-        this._el = el;
-        this._start = start;
-        this._end = end;
-        this._styleSetter = styleSetter;
-      }
-      /**
-      * 当动画第一次超出边界时,按边界tick 更新
-      * @return [doUpdate是否更新,adjustT调整过的t]
-      */
-      adjustTick(t) {
-        const lOutRange = t < this._start.time;
-        const rOutRange = t > this._end.time;
-        if (!lOutRange && !rOutRange) {
-          //边界内
-          this._lastInRange = true;
-          return [true, t];
-        }
-        if (this._lastInRange) {
-          this._lastInRange = false;
-          return [true, lOutRange ? this._start.time : this._end.time];
-        }
-        return [false];
-      }
-      tick(t) {
-        const [run, adjustT] = this.adjustTick(t);
-        run && this._styleSetter(this._el, this._start, this._end, adjustT);
-      }
-    }
     const tl = new TimeLine();
     const el = document.getElementById('ball');
-    tl.addAnimation(new ElementStyleAnimation(el, { time: 0, left: 0 }, { time: 500, left: 500 }, (el, start, end, t) => {
-      const val = interpolationEase(start, end, t);
-      el.style.left = `${val.left}px`;
-    }))
-    tl.addAnimation(new ElementStyleAnimation(el, { time: 500, top: 0 }, { time: 1000, top: 500 }, (el, start, end, t) => {
-      const val = interpolationEase(start, end, t);
-      el.style.top = `${val.top}px`;
-    }))
-    tl.addAnimation(new ElementStyleAnimation(el, { time: 1000, left: 500 }, { time: 1500, left: 0 }, (el, start, end, t) => {
-      const val = interpolationEase(start, end, t);
-      el.style.left = `${val.left}px`;
-    }))
-    tl.addAnimation(new ElementStyleAnimation(el, { time: 1500, top: 500 }, { time: 2000, top: 0 }, (el, start, end, t) => {
-      const val = interpolationEase(start, end, t);
-      el.style.top = `${val.top}px`;
-    }))
-    tl.addAnimation(new ElementStyleAnimation(el, { time: 0, background: '00ff00' }, { time: 2000, background: 'ff00ff' }, (el, start, end, t) => {
-      [start, end] = [start, end].map(v => {
-        return Object.assign({}, v, {
-          r: parseInt(v.background.substr(0, 2), 16),
-          g: parseInt(v.background.substr(2, 2), 16),
-          b: parseInt(v.background.substr(4, 2), 16)
-        });
-      })
-      let val = interpolationEase(start, end, t);
-      val = [val.r, val.g, val.b].map(n => {
-        n = Math.round(n);
-        n = Math.min(Math.max(0, n), 255);
-        return `0${n.toString(16)}`.substr(-2, 2);
-      }).join('');
-      el.style.background = `#${val}`;
+    tl.addAnimation(new StyleAnimation(el, 0, 500, {
+      left: ["0px", "500px"],
+      background: ["#00FF00", "#333333"],
+      transform: ["scale(1)", "scale(3)"]
+    }, ease));
+    tl.addAnimation(new StyleAnimation(el, 500, 1000, {
+      top: ["0px", "500px"],
+      background: ["#333333", "#FF0000"],
+      transform: ["scale(3) skew(0deg, 0deg)", "scale(1) skew(10deg, 10deg)"]
     }));
-    tl.start();
-    function interpolation(start, end, t) {
-      const result = Object.assign({}, start);
-      const time = end.time - start.time;
-      for (const key of Object.keys(result)) {
-        result[key] += (end[key] - start[key]) * (t - start.time) / time;
-      }
-      return result;
-    }
-    function interpolationEase(start, end, t) {
-      const result = Object.assign({}, start);
-      const time = end.time - start.time;
-      for (const key of Object.keys(result)) {
-        result[key] += (end[key] - start[key]) * ease((t - start.time) / time);
-      }
-      return result;
-    }
+    tl.addAnimation(new StyleAnimation(el, 1000, 1500, {
+      left: ["500px", "0px"],
+      background: ["#FF0000", "#333333"],
+      transform: [" skew(10deg, 10deg)", "scale(1) skew(0deg, 0deg)"]
+    }, easeOut));
+    tl.addAnimation(new StyleAnimation(el, 1500, 2000, { top: ["500px", "0px"], background: ["#333333", "#0000FF"] }));
+    //正放
+    tl.ratio = 0.5;
+    tl.play();
+    //倒放
+    // tl.ratio = -0.5;
+    // tl.play(2000);
 
-  // /**怎么支持 跳转到指定帧？
-  // //  *    Animation 怎么实现
-  //  * /
   </script>
 </body>
 
