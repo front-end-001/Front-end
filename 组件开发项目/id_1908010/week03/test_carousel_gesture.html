@@ -1,26 +1,28 @@
 <!--
- * @Description: 轮播组件手势版本
- * @Author: 大亮
- * @Date: 2019-08-14 21:16:39
- * @LastEditTime: 2019-08-15 22:05:43
- * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @Author: 玉皇大亮
+ * @Date: 2019-08-21 22:07:24
+ * @LastEditTime: 2019-08-22 18:12:48
  -->
-
- <style>
-    .carousel {
-        width: 500px;
-        height: 300px;
-        overflow: hidden;
-        white-space: nowrap;
-        outline: solid 1px greenyellow;
-    }
-    .carousel>img {
-        width: 100%;
-        height: 100%;
-        display: inline-block;
-        transition: ease 0.5s;
-    }
-</style>
+<html lang="en">
+ <head>
+    <style>
+        .carousel {
+            width: 500px;
+            height: 300px;
+            overflow: hidden;
+            white-space: nowrap;
+            outline: solid 1px greenyellow;
+        }
+        .carousel>img {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            transition: ease 0.5s;
+        }
+    </style>
+    <script src="./test_gesture.js"></script>
+ </head>
 
 <div id="carousel"></div>
 <script>
@@ -39,6 +41,7 @@
             this._container.classList.add("carousel");
             this.data = null;
             this._handler = null; //保存handler 是为了未来随时可以停掉
+            enableGesture(this._container);
         }
 
         render() {
@@ -50,47 +53,45 @@
             let children = Array.prototype.slice.call(this._container.children);
             let position = 0;
 
-            let startX;
-            let startTransform;
-
-            let start = (event) => {
+            let startX = 0;
+            
+            this._container.addEventListener("panmove", (event) => {
+                if (event.isVertical) 
+                    return;
                 event.preventDefault();//阻止默认的拖拽效果
-                startX = event.clientX;
-                startTransform = -position * 500; //初始位置 0 -500 -1000 -1500 ...
-                
-                document.addEventListener("mousemove", move);
-                document.addEventListener("mouseup", end);
-            };
-
-            let move = (event) => {
-                event.preventDefault();
                 for (let child of children) {
                     child.style.transition = "ease 0s";
-                    child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+                    child.style.transform = `translateX(${startX + event.dx}px)`; //复位
                 }
-            };
+            });
 
-            let end = (event) => {
-                document.removeEventListener("mousemove", move);
-                document.removeEventListener("mouseup", end);
-                position = - Math.round((startTransform + event.clientX - startX) / 500);  // 取最近的整数
+            this._container.addEventListener("panend", (event) => {
+                if (event.isVertical) 
+                    return;
+                    
+                if (event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)) {
+                    if (event.dx > 0) {
+                        position = position - 1;
+                    } 
+                    if (event.dx < 0) {
+                        position = position + 1;
+                    }
+                } else {
+                    position = - Math.round((startX + event.dx) / 500);  // 取最近的整数
+                }
+
                 position = Math.max(0, Math.min(position, children.length - 1));//如果position 不取正值
  
                 for (let child of children) {
                     child.style.transition = "";
                     child.style.transform = `translate(${-position * 500}px)`; //复位
                 }
-            };
 
-            // let over = (event) => {
-            //     this._container.removeEventListener("mousemove", move);
-            //     this._container.removeEventListener("mouseup", end);
-            // }
-
-            this._container.addEventListener("mousedown", start);
-            // this._container.addEventListener("mouseleave", over); //解决鼠标粘滞问题
-
-            
+                startX  =  -position * 500; //与普通的拖拽容器相比，起始点的计算
+            });
+ 
+ 
+            // let startTransform;
 
             // let start = (event) => {
             //     event.preventDefault();//阻止默认的拖拽效果
@@ -102,6 +103,7 @@
             // };
 
             // let move = (event) => {
+            //     event.preventDefault();
             //     for (let child of children) {
             //         child.style.transition = "ease 0s";
             //         child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
@@ -116,13 +118,14 @@
  
             //     for (let child of children) {
             //         child.style.transition = "";
-            //         child.style.transform = `translate(${-position * 500}px)`;
+            //         child.style.transform = `translate(${-position * 500}px)`; //复位
             //     }
-                
             // };
 
-            // document.addEventListener("mousedown", start);
-            // document.addEventListener("mouseleave", end); 
+            // this._container.addEventListener("mousedown", start);
+            // this._container.addEventListener("mouseleave", over); //解决鼠标粘滞问题
+
+
         }
     }
 
@@ -131,4 +134,4 @@
     carousel.render();
 
 </script>
- 
+</html>
