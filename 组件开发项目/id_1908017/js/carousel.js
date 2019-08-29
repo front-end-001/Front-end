@@ -47,11 +47,11 @@ class Carousel {
     };
     const el = this._el;
     el.addEventListener('mouseenter', () => {
-      console.log('mouseenter');
+      // console.log('mouseenter');
       stopAuto();
     })
     el.addEventListener('mouseleave', () => {
-      console.log('mouseleave');
+      // console.log('mouseleave');
       startAuto();
     })
 
@@ -77,7 +77,7 @@ class Carousel {
       const fromPos = this._getFloatPos(e.dx);
       let toPos
       if (e.isFlick) {
-        console.log('flick', e.dx);
+        // console.log('flick', e.dx);
         if (e.dx > 0) {
           toPos = Math.ceil(fromPos - 1);
         } else {
@@ -118,7 +118,7 @@ class Carousel {
   }
 
   move(from, to) {
-    console.log('move from', from, to);
+    // console.log('move from', from, to);
     const diff = (to - from).toFixed(2);
     if (Math.abs(diff) > 1) {
       throw new Error('diff should be less or equal  1');
@@ -145,11 +145,13 @@ class CarouselItemRender {
     this.zeroPos = zeroPos;
   }
   show(pos) {
+    // console.log(`item= ${this.zeroPos} show`, pos);
     this._tlStop();
     this._toggleShow(true);
     this.el.style.transform = this._posToStyle(pos);
   }
   hide() {
+    // console.log(`item= ${this.zeroPos} hide`);
     this._tlStop();
     this._toggleShow(false);
   }
@@ -159,6 +161,7 @@ class CarouselItemRender {
    * @param {*} to 
    */
   move(from, to) {
+    // console.log(`item= ${this.zeroPos} move`, from, to);
     this._tlStop();
     this._toggleShow(true);
     this._tlPlay(duration, { transform: [from, to].map(pos => this._posToStyle(pos)) });

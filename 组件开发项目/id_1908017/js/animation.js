@@ -24,26 +24,34 @@ class TimeLine {
     for (let animation of this._animations) {
       animation.tick(t);//todo check timeLine 需要知道 animation 是否跨界么？
     }
-    requestAnimationFrame(this._tick);
+    // console.log('timeline run');
+    this.rAF(this._tick);
   }
   //只能开始调用一次
   play(startTime = 0) {
     this._escaped = startTime;
     this._lastTime = +new Date();
-    requestAnimationFrame(this._tick);
+    this.rAF(this._tick);
   }
   resume() {
     if (this._isPause) {
       this._isPause = false;
       this._lastTime = +new Date();
-      requestAnimationFrame(this._tick);
+      this.rAF(this._tick);
     }
   }
   pause() {
     if (!this._isPause) {
       this._isPause = true;
-      cancelAnimationFrame(this._tick);
+      this.cAF();
     }
+  }
+  rAF(fn) {
+    this._requestId = requestAnimationFrame(fn);
+  }
+  cAF() {
+    cancelAnimationFrame(this._requestId);
+    this._requestId = null;
   }
 }
 class StyleAnimation {
