@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .carousel {
+            width: 500px;
+            height: 300px;
+            overflow: hidden;
+            outline: 1px solid blue;
+            white-space: nowrap;
+        }
+
+        .carousel>img {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            transition: ease 0.5s;
+        }
+    </style>
+    <script src="gesture.js"></script>
+</head>
+<body>
+<div id="container">
+
+</div>
+
+<script>
+    let data = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+    ];
+
+    class Carousel {
+        constructor(container) {
+            // _开头的属性表示私有属性 但实际上该属性并不会因为以_开头就真的成为一个私有属性
+            this._container = container;
+            this._container.classList.add("carousel");
+
+            // handler用于保存和时序相关的操作
+            this.handler = null;
+            this.data = null;
+        }
+
+        // 本方法用于渲染组件本体
+        render() {
+            for (let d of this.data) {
+                let e = document.createElement("img");
+                e.src = d;
+                this._container.appendChild(e);
+            }
+
+            let children = Array.prototype.slice.call(this._container.children);
+
+            let position = 0;
+            let nextFrame = function () {
+                let nextPosition = position + 1;
+                nextPosition = nextPosition % children.length;
+
+                let current = children[position],
+                    next = children[nextPosition];
+
+                // 将next放到正确的位置上
+                next.style.transition = "ease 0s";
+                next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+
+                setTimeout(() => {
+                    // 把current挪出视口
+                    current.style.transition = "";
+                    current.style.transform = `translate(${-100 - 100 * position}%)`;
+
+                    console.log(position);
+
+                    // 把next挪进视口
+                    next.style.transition = "";
+                    next.style.transform = `translate(${-100 * nextPosition}%)`;
+
+                    position = nextPosition;
+                }, 16);
+
+                setTimeout(nextFrame, 3000);
+            };
+
+            let x = 0;
+
+            enableGesture(this._container);
+
+            this._container.addEventListener("pan", event => {
+                console.log("pan")
+                for(let child of children) {
+                    child.style.transition = "ease 0s";
+                    child.style.transform = `translateX(${event.dx + x}px`;
+                }
+            })
+            this._container.addEventListener("panend", event => {
+                position = -(Math.round((x + event.dx) / 500));
+                position = Math.max(0, Math.min(position, children.length - 1));
+
+                for(let child of children) {
+                    child.style.transition = "";
+                    child.style.transform = `translate(${-position * 500}px)`;
+                }
+                x = -position * 500;
+            })
+
+            this._container.addEventListener("mousedown", event => event.preventDefault());
+            
+
+            /*let startTransform;
+
+            // start绑定事件
+            let start = event => {
+                event.preventDefault();
+                startX = event.clientX;
+                startTransform = -position * 500;
+                document.addEventListener("mousemove", move);
+                document.addEventListener("mouseup", end);
+            };
+
+            let move = event => {
+                event.preventDefault();
+                for(let child of children) {
+                    child.style.transition = "ease 0s";
+                    child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+                }
+            };
+
+            // end移除事件
+            let end = event => {
+                document.removeEventListener("mousemove", move);
+                document.removeEventListener("mouseup", end);
+
+                position = -(Math.round((startTransform + event.clientX - startX) / 500));
+                position = Math.max(0, Math.min(position, children.length - 1));
+
+                for(let child of children) {
+                    child.style.transition = "";
+                    child.style.transform = `translate(${-position * 500}px)`;
+                }
+                
+            };
+
+            document.addEventListener("mousedown", start);
+            */
+            // 先注释上 为了能够看出来拖拽的效果
+            // setTimeout(nextFrame, 3000);
+        }
+    }
+
+    let carousel = new Carousel(document.getElementById("container"));
+    carousel.data = data;
+    carousel.render();
+</script>
+</body>
+</html>

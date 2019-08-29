@@ -10,8 +10,8 @@ const log = function() {
     console.log.apply(console, arguments)
 }
 
-var allSpan = eAll('.carousel .dots span')
-var allA = eAll('.carousel .panels a')
+var allSpan = eAll('.carousel-step1 .dots span')
+var allA = eAll('.carousel-step1 .panels a')
 
 const setDots = function(index) {
     const removeActive = function(element) {
@@ -30,7 +30,7 @@ const setPanels = function(index) {
 }
 
 // 绑定 dots 点击事件
-let dots = e('.carousel .dots')
+let dots = e('.carousel-step1 .dots')
 dots.addEventListener('click', function(event) {
     // 返回事件的目标节点
     let item = event.target
@@ -53,7 +53,7 @@ dots.addEventListener('click', function(event) {
 // 绑定 pre 点击事件
 let btnPre = e('.pre')
 btnPre.addEventListener('click', function(){
-    let picAct = e('.carousel .dots span.active')
+    let picAct = e('.carousel-step1 .dots span.active')
     let index = Array.from(allSpan).indexOf(picAct)
     index = (index - 1 + allSpan.length) % allSpan.length
     log(index)
@@ -69,7 +69,7 @@ btnPre.addEventListener('click', function(){
 // 绑定 next 点击事件
 let btnNext = e('.next')
 btnNext.addEventListener('click', function(){
-    let picAct = e('.carousel .dots span.active')
+    let picAct = e('.carousel-step1 .dots span.active')
     let index = Array.from(allSpan).indexOf(picAct)
     index = (index + 1) % allSpan.length
     log(index)
