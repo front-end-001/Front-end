@@ -7,6 +7,8 @@
   <title>Document</title>
   <style>
     .ball {
+      position: absolute;
+      transition: top .5s ease;
       width: 50px;
       height: 50px;
       border-radius: 50%;
@@ -16,26 +18,45 @@
 </head>
 <body>
   <div id="ball" class="ball"></div>
+  <button onclick="tl.pause();">pause</button>
+  <button onclick="tl.resume();">resume</button>
 
+  <script src="./cubicBezier.js"></script>
   <script>
     // 时间线
     class Timeline {
       constructor() {
         this._animations = [];
+        this.status = 'inited';
       }
       start() {
+        if (this.status == "started")
+          return;
+        this.status = "started";
         let startTime = Date.now();
-        setInterval(() => {
+        this.pauseTime = 0;
+        this.tick = () => {
           for (let animation of this._animations) {
-            animation.tick(Date.now() - startTime);
+            if (!animation.finished) {
+              animation.tick(Date.now() - startTime);
+            }
           }
-        }, 16)
+        }
+        this._timer = setInterval(this.tick, 16)
       }
       pause() {
-
+        if (this.status != 'started')
+          return;
+        this.status = "paused";
+        clearInterval(this._timer);
+        this._timer = null;
+        this._pauseStart = Date.now();
       }
       resume() {
-
+        if (this.status != 'paused')
+          return;
+        this.pauseTime += Date.now() - this._pauseStart;
+        this._timer = setInterval(this.tick, 16)
       }
       set rate(value) {
 
@@ -64,20 +85,57 @@
       }
       tick(t) {
         if (t > this._endTime) {
+          t = this._endTime;
+          this.finished = true;
+        }
+        if (t < this._startTime) {
           return;
         }
-        this._element.style[this._property] = this._converter((t - this._startTime) / (this._endTime - this._startTime) * (this._endValue - this._startValue) + this._startValue);
+        // y = kx + b 线性插值公式
+        // this._element.style[this._property] = this._converter((t - this._startTime) / (this._endTime - this._startTime) * (this._endValue - this._startValue) + this._startValue);
+        let progress = (t - this._startTime) / (this._endTime - this._startTime);
+        let displacement = ease(progress) * (this._endValue - this._startValue);
+        let currentValue = displacement + this._startValue;           
+        this._element.style[this._property] = this._converter(currentValue);
       }
     }
 
     let tl = new Timeline();
-    tl.addAnimation(new DOMElementStyleAnimation(
-      document.getElementById('ball'),
-      'transform',
-      0, 0,
-      500, 100,
-      (v) => `translateX(${v}px)`
-    ))
+    // tl.addAnimation(new DOMElementStyleAnimation(
+    //   document.getElementById('ball'),
+    //   'transform',
+    //   0, 0,
+    //   500, 300,
+    //   (v) => `translateX(${v}px)`
+    // ))
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "top",
+    0, 0,
+    500, 200,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "left",
+    500, 0,
+    1000, 200,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "top",
+    1000, 200,
+    1500, 0,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "left",
+    1500, 200,
+    2000, 0,
+    (v) => `${v}px`
+));
     tl.start()
   </script>
 </body>
