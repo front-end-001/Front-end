@@ -35,36 +35,67 @@ class Carousel {
            
             setTimeout(nextframe, 2000);
         };
-        setTimeout(nextframe, 2000);
+        // setTimeout(nextframe, 2000);
 
-        let startX;
-        let startTransform;
-        let start = event => {
-            event.preventDefault();
-            startX = event.clientX;
-            startTransform = - 500 * position;
-            document.addEventListener("mousemove", move);
-            document.addEventListener("mouseup", end);
-        };
-        let move = event => {
-            event.preventDefault;
+        enableGesture(this._container);
+
+        let x = 0;
+        this._container.addEventListener("pan", event => {
             for (let e of children) {
                 e.style.transition ="ease 0s";
-                e.style.transform = `translate(${startTransform + event.clientX - startX}px)`
+                e.style.transform = `translateX(${x + event.dx}px)`
             }
-        };
-        let end = event => {
-            event.preventDefault;
-            document.removeEventListener("mousemove", move);
-            document.removeEventListener("mouseup", end);
-            position = - Math.round((startTransform + event.clientX - startX) / 500);
+        });
+        this._container.addEventListener("panend", event => {
+            if (event.isVertical) {
+                return;
+            }
+            if (event.isFilck) {
+                if (event.dx > 0) {
+                    position = position - 1;
+                } else {
+                    position = position + 1;
+                }
+            } else {
+                position = - Math.round((x + event.dx) / 500);
+            }
+            
             position = Math.max(0, Math.min(children.length - 1, position));
             for (let e of children) {
                 e.style.transition = "";
                 e.style.transform = `translate(${- 100 * position}%)`
             }
-        }
-        document.addEventListener("mousedown", start);
+            x = - 500 * position;
+        });
+
+        // let startX;
+        // let startTransform;
+        // let start = event => {
+        //     event.preventDefault();
+        //     startX = event.clientX;
+        //     startTransform = - 500 * position;
+        //     document.addEventListener("mousemove", move);
+        //     document.addEventListener("mouseup", end);
+        // };
+        // let move = event => {
+        //     event.preventDefault;
+        //     for (let e of children) {
+        //         e.style.transition ="ease 0s";
+        //         e.style.transform = `translate(${startTransform + event.clientX - startX}px)`
+        //     }
+        // };
+        // let end = event => {
+        //     event.preventDefault;
+        //     document.removeEventListener("mousemove", move);
+        //     document.removeEventListener("mouseup", end);
+        //     position = - Math.round((startTransform + event.clientX - startX) / 500);
+        //     position = Math.max(0, Math.min(children.length - 1, position));
+        //     for (let e of children) {
+        //         e.style.transition = "";
+        //         e.style.transform = `translate(${- 100 * position}%)`
+        //     }
+        // }
+        // document.addEventListener("mousedown", start);
     }
 }
 
