@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>手势</title>
+</head>
+
+<body>
+  <div id="main" style="width: 300px;height:300px;background-color: navy;"></div>
+  <script src="./gesture.js"></script>
+  <script>
+    let main = document.getElementById("main");
+    enableGesture(main);
+    //实现拖拽
+    let x = 0,
+      y = 0;
+    main.addEventListener('pan', event => {
+      console.log(event.dx, event.dy);
+      main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+    })
+    main.addEventListener('panned', event => {
+      x = x + event.dx;
+      y = y + event.dy;
+    });
+    main.addEventListener('pancancel', event => {
+      console.log("cancel")
+      main.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  </script>
+</body>
+
+</html>
