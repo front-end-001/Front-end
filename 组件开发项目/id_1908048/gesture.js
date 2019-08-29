@@ -103,6 +103,7 @@ function enableGesture(main) {
         
     }
     let end = (point, context) => {
+        
         if (context.pressHandler !== null) {
             clearTimeout(context.pressHandler);
             context.pressHandler = null;
