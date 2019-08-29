@@ -1,146 +1,156 @@
-const imgList = [
-  '../carousel-step1-vue/public/imgs/cat1.jpg',
-  '../carousel-step1-vue/public/imgs/cat2.jpg',
-  '../carousel-step1-vue/public/imgs/cat3.jpg',
-  '../carousel-step1-vue/public/imgs/cat4.jpg',
-];
-
-class Carousel {
-  constructor(container) {
-    this._container = container;
-    this._container.classList.add('carousel');
-    this._timer = null;
-    this.data = null;
-  }
-  render() {
-    for (let src of this.data) {
-      const item = document.createElement('img');
-      item.src = src;
-      this._container.appendChild(item);
-    }
-
-    // 将子元素转化为普通数组
-    const children = Array.prototype.slice.call(this._container.children);
-
-    /** 当前轮播位置 */
-    let position = 0;
-
-    const nextFrame = () => {
-      /** 下一轮播位置 */
-      let nextPosition = position + 1;
-      nextPosition = nextPosition % children.length;
-
-      /** 当前轮播元素 */
-      const current = children[position];
-      /** 下一轮播元素 */
-      const next = children[nextPosition];
-
-      next.style.transition = 'ease 0s';
-      next.style.transform = `translate(${ -nextPosition * 100 + 100 }%)`;
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          current.style.transform = `translate(${ -100 - 100 * position }%)`;
-          next.style.transition = '';
-          next.style.transform = `translate(${ -nextPosition * 100 }%)`;
-          position = nextPosition;
-        });
-      });
-
-      this._timer = setTimeout(nextFrame, 3000);
-    };
-
-    // 注释则不进行自动轮播
-    // this._timer = setTimeout(nextFrame, 3000);
-
-    /** 鼠标最初位置 */
-    let startX;
-    /** 水平位移 */
-    let disX;
-    /** 轮播宽度 */
-    const width = this._container.offsetWidth;
-
-    const start = (event) => {
-      event.preventDefault();
-      startX = event.clientX;
-      disX = 0;
-      document.addEventListener('mousemove', move);
-      document.addEventListener('mouseup', end);
-    };
-
-    const move = (event) => {
-      event.preventDefault();
-      disX = event.clientX - startX;
-      for (let child of children) {
-        child.style.transition = 'ease 0s';
-        child.style.transform = `translate(${-position * width + disX}px)`;
-      }
-    };
-
-    const end = () => {
-      position = -Math.round((-position * width + disX) / width);
-      position = Math.max(0, Math.min(position, children.length - 1));
-      for (let child of children) {
-        child.style.transition = '';
-        child.style.transform = `translate(${-position * width}px)`;
-      }
-      document.removeEventListener('mousemove', move);
-      document.removeEventListener('mouseup', move);
-    };
-
-    // 注释此行禁止原始拖动代码
-    // this._container.addEventListener('mousedown', start);
-
-    enableGesture(this._container);
+// 轮播用例
+(function () {
+  const imgList = [{
+    src: '../carousel-vue/public/imgs/cat1.jpg',
+    title: 'MDN',
+    action: {
+      type: 'link',
+      value: 'https://developer.mozilla.org/en-US/',
+    },
+  }, {
+    src: '../carousel-vue/public/imgs/cat2.jpg',
+    title: 'google',
+    action: {
+      type: 'link',
+      value: 'https://developers.google.com/web/fundamentals/',
+    },
+  }, {
+    src: '../carousel-vue/public/imgs/cat3.jpg',
+    title: 'github',
+    action: {
+      type: 'link',
+      value: 'https://github.com/',
+    },
+  }, {
+    src: '../carousel-vue/public/imgs/cat4.jpg',
+    title: 'stackoverflow',
+    action: {
+      type: 'link',
+      value: 'https://stackoverflow.com/',
+    },
+  }];
 
 
-    this._container.addEventListener('pan', (event) => {
-      if (!event.isHorizontal) {
-        return;
-      }
-      disX = event.clientX - startX;
-      for (let child of children) {
-        child.style.transition = 'ease 0s';
-        child.style.transform = `translate(${-position * width + event.dx}px)`;
-      }
-    });
 
-    this._container.addEventListener('flick', (event) => {
-      if (event.isHorizontal) {
-        if (event.dx < 0) {
-          position += 1;
-        } else {
-          position -= 1;
-        }
-      }
-      position = Math.max(0, Math.min(position, children.length - 1));
-      for (let child of children) {
-        child.style.transition = '';
-        child.style.transform = `translate(${-position * width}px)`;
-      }
-    });
+  const carouselEle = document.getElementById('carousel')
+  const carousel = new Carousel(document.getElementById('carousel'));
+  carousel.data = imgList;
+  carousel.render();
+
+// }());
+});
+
+// 动画用例
+(function () {
+  const ballEle = document.getElementById('ball');
+  const tl = new anime.timeline();
+
+  tl.add({
+    element: ballEle,
+    property: 'left',
+    startTime: 0,
+    endTime: 500,
+    startValue: 0,
+    endValue: 100,
+  }).add({
+    element: ballEle,
+    property: 'top',
+    startTime: 500,
+    endTime: 1000,
+    startValue: 0,
+    endValue: 100,
+  }).add({
+    element: ballEle,
+    property: 'left',
+    startTime: 1000,
+    endTime: 1500,
+    startValue: 100,
+    endValue: 0,
+  }).add({
+    element: ballEle,
+    property: 'top',
+    startTime: 1500,
+    endTime: 2000,
+    startValue: 100,
+    endValue: 0,
+  });
+
+  // 默认先运行一次动画
+  tl.play();
+
+  // 开始
+  document.getElementById('btn-play').onclick = () => {
+    tl.play();
+  };
+  // 暂停
+  document.getElementById('btn-pause').onclick = () => {
+    tl.pause();
+  };
+  // 重新开始
+  document.getElementById('btn-restart').onclick = () => {
+    tl.restart();
+  };
+  // 反向
+  document.getElementById('btn-reverse').onclick = () => {
+    tl.reverse();
+  };
+  // 2倍速
+  document.getElementById('btn-acc').onclick = () => {
+    tl.rate = 2;
+  };
+  // 1倍速
+  document.getElementById('btn-dcc').onclick = () => {
+    tl.rate = 1;
+  };
+
+}());
 
 
-    this._container.addEventListener('panend', (event) => {
-      if (event.isFlick) return;
+// 手势用例
+(function () {
+  const main = document.getElementById('gesture');
 
-      if (event.isHorizontal) {
-        position = -Math.round((-position * width + event.dx) / width);
-        position = Math.max(0, Math.min(position, children.length - 1));
-      }
-      for (let child of children) {
-        child.style.transition = '';
-        child.style.transform = `translate(${-position * width}px)`;
-      }
-    });
+  let x = 0;
+  let y = 0;
 
-    this._container.addEventListener('mousedown', (event) => {
-      event.preventDefault();
-    });
+  gesture.enableGesture(main);
 
-  }
-}
 
-const carousel = new Carousel(document.getElementById('carousel'));
-carousel.data = imgList;
-carousel.render();
+  main.addEventListener('press', (event) => {
+    console.log('gesture press', event);
+  });
+
+  main.addEventListener('pressend', (event) => {
+    console.log('gesture pressend', event);
+  });
+
+  main.addEventListener('presscancel', (event) => {
+    console.log('gesture presscancel', event);
+  });
+
+  main.addEventListener('tap', (event) => {
+    console.log('gesture tap', event);
+  });
+
+  main.addEventListener('panstart', (event) => {
+    console.log('gesture panstart', event);
+  });
+
+  main.addEventListener('pan', (event) => {
+    main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+  });
+
+  main.addEventListener('panend', (event) => {
+    console.log('gesture panend', event);
+    main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+    x = event.dx + x;
+    y = event.dy + y;
+  });
+
+  main.addEventListener('flick', (event) => {
+    console.log('gesture flick', event);
+    main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+    x = event.dx + x;
+    y = event.dy + y;
+  });
+}());
