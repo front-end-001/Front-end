@@ -22,7 +22,7 @@
 </style>
 <body>
     <div id="carousel"></div>
-
+<script src="./gesture.js"></script>
 <script>
 (function(){
     const DATA = [
@@ -71,48 +71,88 @@
                 } , 16)
                 this.timer = setTimeout(nextFram, 3000);
             }
-
-            this.timer = setTimeout(nextFram, 3000);
             
-            let startX;
-            let startTransform;
+            enableGesture(this._container);
 
-            let start = event => {
-                event.preventDefault();
-                
-                startX = event.clientX;
-                startTransform = -position * 500;
-                document.addEventListener('mousemove', move);
-                document.addEventListener('mouseup', moveup);
-            }
-
-            let move = event => {
-                for(let child of children ){
+            let x = 0;
+            
+            this._container.addEventListener('pan', event=>{
+                if(event.isVertical){
+                    return
+                }
+                for(let child of children){
                     child.style.transition = "ease 0s";
-                    child.style.transform = `translate(${ startTransform + event.clientX - startX }px)`;
+                    child.style.transform = `translateX(${event.dx + x}px)`;
                 }
-            }
-            
-            let moveup = event => {
-                document.removeEventListener('mousemove', move);
-                document.removeEventListener('mouseup', moveup);
-                
-                position = - Math.round( (startTransform + event.clientX - startX) / 500 );
-                position =  Math.max(0, Math.min( position, children.length - 1 ) );
-                
-                for( let child of children){
-                    child.style.transition = '';
-                    child.style.transform = `translate(${-position*500}px)`;
-                }
-            }
-
-            this._container.addEventListener('mousedown', start);
-            this._container.addEventListener('mouseover', ()=>{
-                clearTimeout(this.timer);
             });
-            this._container.addEventListener('mouseout', ()=>{
-                this.timer = setTimeout(nextFram, 3000);
-            })
+            
+            this._container.addEventListener("panend", event => {
+                if(event.isVertical){
+                    return
+                }
+                if(event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)){
+                    if(event.dx > 0){
+                        position = position -1;
+                    }
+                    if(event.dx < 0){
+                        position = position +1;
+                    }
+                }else{
+                    position = -(Math.round((x + event.dx) / 500));
+                }
+
+                
+                position = Math.max(0, Math.min(position, children.length - 1));
+
+                for(let child of children) {
+                    child.style.transition = "";
+                    child.style.transform = `translate(${-position * 500}px)`;
+                }
+                x = -position * 500;
+            });
+
+            this._container.addEventListener("mousedown", event => event.preventDefault());
+            // this.timer = setTimeout(nextFram, 3000);
+            
+            // let startX;
+            // let startTransform;
+
+            // let start = event => {
+            //     event.preventDefault();
+                
+            //     startX = event.clientX;
+            //     startTransform = -position * 500;
+            //     document.addEventListener('mousemove', move);
+            //     document.addEventListener('mouseup', moveup);
+            // }
+
+            // let move = event => {
+            //     for(let child of children ){
+            //         child.style.transition = "ease 0s";
+            //         child.style.transform = `translate(${ startTransform + event.clientX - startX }px)`;
+            //     }
+            // }
+            
+            // let moveup = event => {
+            //     document.removeEventListener('mousemove', move);
+            //     document.removeEventListener('mouseup', moveup);
+                
+            //     position = - Math.round( (startTransform + event.clientX - startX) / 500 );
+            //     position =  Math.max(0, Math.min( position, children.length - 1 ) );
+                
+            //     for( let child of children){
+            //         child.style.transition = '';
+            //         child.style.transform = `translate(${-position*500}px)`;
+            //     }
+            // }
+
+            // this._container.addEventListener('mousedown', start);
+            // this._container.addEventListener('mouseover', ()=>{
+            //     clearTimeout(this.timer);
+            // });
+            // this._container.addEventListener('mouseout', ()=>{
+            //     this.timer = setTimeout(nextFram, 3000);
+            // })
 
 
         }
