@@ -37,7 +37,7 @@
                 e.src = d;
                 this._container.appendChild(e);
             }
-            let children = Array.prototype.slice.call(container.children);
+            let children = Array.prototype.slice.call(this._container.children);
             let position = 0;
             let nextFrame = ()=>{
                 let nextPosition = position + 1;
