@@ -1,0 +1,64 @@
+<div id="main"></div>
+<style>
+  #main {
+    width: 400px;
+    height: 300px;
+    background-color: green;
+  }
+</style>
+<script>
+  let main = document.getElementById("main");
+
+  let start = (point, context) => {
+    console.log("start", point.clientX, point.clientY);
+    context.startX = point.clientX;
+    context.startY = point.clientY;
+
+    context.isTap = true;
+    context.isPan = false;
+  };
+  let move = point => {
+    console.log("move", point.clientX, point.clientY);
+    let dx = context.startX - point.startX, dy = context.startY - point.startY;
+    if (dx * dx + dy * dy > 100) {
+      context.isTap = false;
+      context.isPan = true;
+    }
+  }; 
+  let end = point => {
+    console.log("end", point.clientX, point.clientY);
+  };
+
+  let mousedown = event => {
+    document.addEventListener("mousemove", mousemove);
+    document.addEventListener("mouseup", mouseup);
+    start(event);
+  };
+  let mousemove = event => {
+    move(event);
+  };
+
+  let mouseup = event => {
+    document.removeEventListener("mousemove", mousemove);
+    document.removeEventListener("mouseup", mouseup);
+    end(event);
+  };
+  main.addEventListener("mousedown", mousedown);
+
+  let touchstart = event => {
+    for (let touch of event.changedTouches) start(touch);
+  };
+  let touchmove = event => {
+    for (let touch of event.changedTouches) move(touch);
+  };
+  let touchend = event => {
+    for (let touch of event.changedTouches) end(touch);
+  };
+  let touchcancel = event => {
+    for (let touch of event.changedTouches) end(touch);
+  };
+  main.addEventListener("touchstart", touchstart);
+  main.addEventListener("touchmove", touchmove);
+  main.addEventListener("touchend", touchend);
+  main.addEventListener("touchcancel", touchcancel);
+</script>
