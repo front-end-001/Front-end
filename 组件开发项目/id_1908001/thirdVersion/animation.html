@@ -1,0 +1,131 @@
+<html lang="en">
+    <head>
+        <title>动画</title>
+    </head>
+    <body>
+    <div id="ball" class="ball"></div>
+    <button onclick="tl.pause()">pause</button>
+    <button onclick="tl.resume()">resume</button>
+    </body>
+</html>
+<script type="text/javascript">
+    class TimeLine {
+        constructor(props) {
+            this.animations = []
+            this.status = 1
+            this.rate = 1
+            this.startPoint = 0
+        }
+        pause () {
+            if (this.status !== 2) {
+                return
+            }
+            this.status = 3
+            clearTimeout(this.timer)
+            this.pauseStart = Date.now()
+        }
+        resume () {
+            if (this.status !== 3) {
+                return
+            }
+            this.pauseTime += Date.now() - this.pauseStart
+            this.timer = setInterval(this.tick, 16)
+        }
+        start () {
+            if (this.status === 2) {
+                return
+            }
+            this.status = 2
+            const startTime = Date.now()
+            this.pauseTime = 0
+            this.tick = () => {
+                for (const animation of this.animations) {
+                    if (animation.finished) return
+                    console.log(animation, Date.now() - this.pauseTime - startTime)
+                    animation.tick(Date.now() - this.pauseTime - startTime * this.rate + this.startPoint)
+                }
+            }
+            this.timer = setInterval(this.tick, 16)
+        }
+        set rate (rateValue) {
+            this.rate = rateValue
+        }
+        get rate () {
+            return this.rate
+        }
+        set startPoint (pointValue) {
+            this.startPoint = pointValue
+        }
+        get startPoint () {
+            return this.startPoint
+        }
+        addAnimation (animation) {
+            this.animations.push(animation)
+        }
+    }
+    class CssAnimation {
+        constructor (element, property, startTime, startValue, endTime, endValue, converter) {
+            this.element = element
+            this.property = property
+            this.startTime = startTime
+            this.startValue = startValue
+            this.endTime = endTime
+            this.endValue = endValue
+            this.converter = converter
+            this.finished = false
+        }
+        tick (t) {
+            if (t < this.startTime) return
+            if (t > this.endTime) {
+                this.finished = true
+                return
+            }
+            const progress = (t - this.startTime) / (this.endTime - this.startTime)
+            const displacement = progress * (this.endValue -  this.startValue)
+            const currentValue = displacement + this.startValue
+            this.element.style[this.property] = this.converter(currentValue)
+        }
+    }
+    const tl = new TimeLine()
+    /*tl.addAnimation(new CssAnimation(
+        document.getElementById("ball"),
+        "transform",
+        0,
+        0,
+        500, 100,
+        (v) => `translateX(${v}px)`
+    ))*/
+    tl.addAnimation(new CssAnimation(
+        document.getElementById("ball"),
+        "top",
+        0,
+        0,
+        500, 1000,
+        (v) => `${v}px`
+    ))
+    tl.rate = 1
+    tl.startPoint = 10
+    /*tl.addAnimation(new CssAnimation(
+        document.getElementById("ball"),
+        "left",
+        500,
+        100,
+        1000, 100,
+        (v) => `${v}px`
+    ))*/
+
+
+    tl.start()
+</script>
+<style>
+    .ball{
+        transition: top 0.5s linear 0s;
+        top: 0;
+        left: 0;
+        position: absolute;
+        width:50px;
+        height:50px;
+        border-radius: 25px;
+        background-color: cornflowerblue;
+    }
+</style>

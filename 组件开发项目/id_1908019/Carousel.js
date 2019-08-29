@@ -11,7 +11,7 @@ const log = function() {
 }
 
 
-let dots = e('.carousel .dots')
+let dots = e('.carousel-step1 .dots')
 dots.addEventListener('click', function(event) {
     // 返回事件的目标节点
     let item = event.target
@@ -35,7 +35,7 @@ dots.addEventListener('click', function(event) {
     const setIndex = function(element) {
         element.style.zIndex = 1
     }
-    let allA = eAll('.carousel .panels a')
+    let allA = eAll('.carousel-step1 .panels a')
     allA.forEach(setIndex)
     allA[index].style.zIndex = 10
 
@@ -44,8 +44,8 @@ dots.addEventListener('click', function(event) {
 
 let btnPre = e('.pre')
 btnPre.addEventListener('click', function(){
-    let picAct = e('.carousel .dots span.active')
-    let allSpan = eAll('.carousel .dots span')
+    let picAct = e('.carousel-step1 .dots span.active')
+    let allSpan = eAll('.carousel-step1 .dots span')
     let index = Array.from(allSpan).indexOf(picAct)
     index = (index - 1 + allSpan.length) % allSpan.length
     log(index)
@@ -54,7 +54,7 @@ btnPre.addEventListener('click', function(){
     const setIndex = function(element) {
         element.style.zIndex = 1
     }
-    let allA = eAll('.carousel .panels a')
+    let allA = eAll('.carousel-step1 .panels a')
     allA.forEach(setIndex)
     allA[index].style.zIndex = 10
 
@@ -69,8 +69,8 @@ btnPre.addEventListener('click', function(){
 
 let btnNext = e('.next')
 btnNext.addEventListener('click', function(){
-    let picAct = e('.carousel .dots span.active')
-    let allSpan = eAll('.carousel .dots span')
+    let picAct = e('.carousel-step1 .dots span.active')
+    let allSpan = eAll('.carousel-step1 .dots span')
     let index = Array.from(allSpan).indexOf(picAct)
     index = (index + 1) % allSpan.length
     log(index)
@@ -79,7 +79,7 @@ btnNext.addEventListener('click', function(){
     const setIndex = function(element) {
         element.style.zIndex = 1
     }
-    let allA = eAll('.carousel .panels a')
+    let allA = eAll('.carousel-step1 .panels a')
     allA.forEach(setIndex)
     allA[index].style.zIndex = 10
 

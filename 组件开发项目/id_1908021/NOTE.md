@@ -1,3 +1,6 @@
+# 组件开发
+## Week-01 轮播组件
+### 轮播组件需求清单
 P0：
 1. 轮播需求
 	1.1 展示一个序列的图片
@@ -18,3 +21,13 @@ P1：
 	4.1 鼠标悬停，展示向左翻页和向右翻页按钮
   	4.1.1 P2：第一张图没有向左按钮，最后一张图没有向右按钮
   4.2 点击向左按钮向前播放，点击向右按钮向后播放
+
+  ## Week-02 轮播组件手势基础
+  - [TouchEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/TouchEvent/changedTouches)
+    - changedTouches: [Touch[]](https://developer.mozilla.org/en-US/docs/Web/API/Touch)
+      -  Touch.identifier: 触碰操作的触发源标记。哪个手指 or pen or...
+      -  Touch.clientX/clinetY
+      -  Touch.target
+   - TouchEvent的监听与MouseEvent的区别
+     - MouseEvent事件(mouseup, mousemove)绑定在某元素上，超过元素范围则不会触发
+     - TouchEvent事件(touchend, touchmove)，哪怕触点移出元素范围也会触发

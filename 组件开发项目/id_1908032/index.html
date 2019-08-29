@@ -29,6 +29,7 @@
     <div class="container" id="app">
     </div>
 </body>
+<script src="./gesture.js"></script>
 <script>
 
     class Carousel {
@@ -53,6 +54,10 @@
 
             let children = Array.prototype.slice.call(this._container.children);
             let position = 0;
+
+            let x = 0;
+
+            enableGesture(this._container);
         
             let nextFrame = () => {
                 let nextPosition = position + 1;
@@ -76,40 +81,78 @@
 
             // this.handler = setTimeout(nextFrame, 3000);
 
-            let startX;
-            let startTransform;
-            let start = event => {
-                event.preventDefault();
-                startX = event.clientX;
-                startTransform = - position * 300;
-                document.addEventListener('mousemove', move);
-                document.addEventListener('mouseup', end);
-            }
-
-            let move = event => {
-                event.preventDefault();
+            this._container.addEventListener('pan', event => {
+                // console.log(event);
                 for(let child of children){
                     child.style.transition = 'ease 0s';
-                    child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+                    child.style.transform = `translateX(${event.dx + x}px)`;
                 }
-                console.log(startTransform + event.clientX - startX);
-            }
+            })
 
-            let end = () => {
-                document.removeEventListener('mousemove', move);
-                document.removeEventListener('mouseup', end);
+            this._container.addEventListener('panend', event => {
+                console.log(event);
+                if(event.isVertical)
+                    return;
+                if(event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)){
+                    if(event.dx > 0){
+                        position = position - 1;
+                    }
+                    if(event.dx < 0){
+                        position = position + 1;
+                    }
+                } else {
+                    position = - (Math.round((x + event.dx) / 300));
+                }
 
-                position = -(Math.round((startTransform, event.clientX - startX) / 300));
                 position = Math.max(0, Math.min(position, children.length - 1));
 
                 for(let child of children){
-                    child.style.transition = '';
+                    child.style.transition = "";
                     child.style.transform = `translate(${-position * 300}px)`;
                 }
-            }
 
-            this._container.addEventListener('mousedown', start);
+                x = -position * 300;
+
+            })
+
+            this._container.addEventListener("mousedown", event => event.preventDefault());
         }
+
+
+        //     let startX;
+        //     let startTransform;
+        //     let start = event => {
+        //         event.preventDefault();
+        //         startX = event.startX;
+        //         startTransform = - position * 300;
+        //         document.addEventListener('pan', move);
+        //         document.addEventListener('panend', end);
+        //     }
+
+        //     let move = event => {
+        //         event.preventDefault();
+        //         for(let child of children){
+        //             child.style.transition = 'ease 0s';
+        //             child.style.transform = `translate(${startTransform + event.dx - startX}px)`;
+        //         }
+        //         console.log(startTransform + event.clientX - startX);
+        //     }
+
+        //     let end = () => {
+        //         document.removeEventListener('pan', move);
+        //         document.removeEventListener('panend', end);
+
+        //         position = -(Math.round((startTransform, event.clientX - startX) / 300));
+        //         position = Math.max(0, Math.min(position, children.length - 1));
+
+        //         for(let child of children){
+        //             child.style.transition = '';
+        //             child.style.transform = `translate(${-position * 300}px)`;
+        //         }
+        //     }
+
+        //     this._container.addEventListener('panstart', start);
+        // }
 
     }
 
