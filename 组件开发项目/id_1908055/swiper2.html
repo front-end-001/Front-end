@@ -57,6 +57,7 @@
 
 <body>
   <div id="swiper"></div>
+  <script src="./gesture.js"></script>
   <script>
     let data = [
       "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
@@ -110,42 +111,72 @@
           nextFrame();
         }, 3000)
 
-        let startX;
-        let startTransform;
+        let startX = 0;
+        enableGesture(this._container);
+        this._container.addEventListener('panstart', event => {
+          console.log('panstart')
+        })
 
-        let start = event => {
-          event.preventDefault();
-          // 添加事件
-          document.addEventListener('mousemove', move);
-          document.addEventListener('mouseup', end);
-          // 记录当前clientX startTransform
-          startX = event.clientX;
-          startTransform = - position * 500;
-        }
-
-        let move = event => {
-          // 移动视图
+        this._container.addEventListener('pan', event => {
+          if (event.isVertical) {
+            return;
+          }
           for (let child of children) {
             child.style.transition = 'ease 0s';
-            child.style.transform = `translate(${startTransform - startX + event.clientX}px)`;
+            child.style.transform = `translate(${event.dx + startX}px)`;
           }
-        }
+        })
 
-        let end = event => {
-          document.removeEventListener('mousemove', move);
-          document.removeEventListener('mouseup', end);
-          // 移动的距离是不是大于等于实际图片长度的一半
-          position = - (Math.round((startTransform + event.clientX - startX) / 500));
-          // position最大值为3
+        this._container.addEventListener('panend', event => {
+          if (event.isVertical) {
+            return
+          }
+
+          if (event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)) {
+            if (event.dx > 0) {
+              position -= 1
+            }
+
+            if (event.dx < 0) {
+              position += 1
+            }
+          } else {
+            position = -(Math.round((startX + event.dx) / 500));
+          }
+          // 最大3
           position = Math.max(0, Math.min(position, children.length - 1));
-          // 复位
           for (let child of children) {
             child.style.transition = "";
-            child.style.transform = `translate(${- position * 500}px)`;
+            child.style.transform = `translate(${-position * 500}px)`;
           }
-        }
+          startX = -position * 500;
+        })
 
-        this._container.addEventListener('mousedown', start);
+        this._container.addEventListener('flick', event => {
+          console.log('flick')
+        })
+
+        this._container.addEventListener('pancancel', event => {
+        })
+
+        this._container.addEventListener('pressstart', event => {
+          console.log('pressstart')
+        })
+
+        this._container.addEventListener('pressend', event => {
+          console.log('pressend')
+        })
+
+        this._container.addEventListener('presscancel', event => {
+          console.log('presscancel')
+          for (let child of children) {
+            child.style.transition = "";
+            child.style.transform = `translate(${-position * 500}px)`;
+          }
+          startX = -position * 500;
+        })
+
+        this._container.addEventListener('mousedown', event => event.preventDefault())
       }
     }
 
