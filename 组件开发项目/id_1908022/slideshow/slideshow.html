@@ -7,6 +7,13 @@
     <title>slideshow</title>
 </head>
 <style>
+.container{
+  width:500px;
+  height:300px;
+  white-space: nowrap;
+  position: relative;
+  user-select:none;
+}  
 .carousel{
     width:500px;
     height:300px;
@@ -19,12 +26,77 @@
     display:inline-block;
     transition:ease 0.5s;
 }
+.pointer{
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  background: transparent;
+}
+.pointer>span{
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background: transparent;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.active{
+  background: #fff!important;
+}
+.paging{
+  position: absolute;
+  height: 50px;
+  width: 100%;
+  top: 50%;
+  margin-top: -25px;
+  color: #fff;
+  font-size: 30px;
+  display: none;
+}
+.paging div{
+  opacity: .7;
+  cursor: pointer;
+  padding: 0 10px;
+}
+.paging div:hover{
+  opacity: 1;
+}
+.paging #left{
+  float: left;
+  display: none;
+}
+.paging #right{
+  float: right;
+}
+.title {
+  width: 500px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+  background: #fefe;
+  text-align: center;
+  cursor: pointer;
+}
+
 </style>
 <body>
-    <div id="container" class="container"></div>
+    <div id="container" class="container">
+        <div id="carousel"></div>
+        <div id="pointer" class="pointer"></div>
+        <div class="paging" >
+            <div id="left"> &lt; </div>
+            <div id="right"> &gt; </div>
+        </div> 
+        
+    </div>
+    <div id="title" class="title"></div>
+
     <script>
-        let container = document.getElementById('container');
-        container.classList.add("carousel");
+        /* let container = document.getElementById('container');
+        container.classList.add("carousel-step1");
         let data = [
         "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
         "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
@@ -48,7 +120,248 @@
             return createDiv;
         }
 
-        appendImgBox(3,data);
+        appendImgBox(3,data); */
+
+        let data =  [
+          {
+            title: "包子脸",
+            url: "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"
+          },
+          {
+            title: "舔手",
+            url: "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg"
+          },
+          {
+            title: "梨花",
+            url: "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg"
+          },
+          {
+            title: "慵懒",
+            url: "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+          }
+        ];
+
+        class Carousel {
+            constructor(container){
+                this._container = container;
+                this._carousel = container.children[0];
+                this._carousel.classList.add('carousel');
+                this._pointer = container.children[1];
+                this._paging = container.children[2];
+                this.data = null;
+            }
+
+            render() {
+               for(let item of this.data){
+                   let e = document.createElement('img');
+                   e.src = item.url;
+                   this._carousel.appendChild(e);
+                   let span = document.createElement('span');
+                   this._pointer.appendChild(span);
+               } 
+               
+
+               let children = this._carousel.children;
+               let points = Array.prototype.slice.call(this._pointer.children);
+               let pagings = this._paging.children;
+               let title = document.getElementById("title");
+               let prevPoint;
+
+               for(let [key,point] of points.entries()){
+                 point.addEventListener('click',()=>{
+                  position = key;
+                  PointClick();
+                 })
+               }
+
+
+               
+               
+               let initTitle = () => {
+                 title.innerHTML = this.data[0].title;
+                //  title.setAttribute("href", this.data[0].url);
+               }
+               initTitle();
+
+               let position = 0;
+               let isMove;
+               this._pointer.style.marginLeft = `-${this._pointer.clientWidth / 2}px`;
+               points[0].classList.add('active');
+               prevPoint = position;
+
+               let frame;
+
+               let prevFrame = (isCycle) => {
+                   
+                   let prevPosition;
+                   if(position > 0){
+                     prevPosition = position - 1;
+                    //  prevPosition = prevPosition % children.length;
+                   }else{
+                    prevPosition = 3;
+                    // prevPosition = 4 - (Math.abs(position - 1) % children.length);
+                   }
+                   
+
+                   let current = children[position];
+                   let prev = children[prevPosition];
+                   points[prevPoint].classList.remove('active');
+
+                   prev.style.transition = "ease 0s";
+                   prev.style.transform = `translate(${-100 - prevPosition * 100}%)`;
+                   requestAnimationFrame(() => {
+                     requestAnimationFrame(() => {
+                      current.style.transition = '';
+                      current.style.transform = `translate(${100 - position * 100}%)`;
+                      prev.style.transition = "";
+                      prev.style.transform = `translate(${- prevPosition * 100}%)`;
+                      position = prevPosition;
+                      points[position].classList.add('active');
+                      prevPoint = position;
+                      toggleButtonStatus();
+                      titleShow();
+                     })
+                   })
+               }
+
+               let nextFrame = (isCycle) => {
+                   let nextPosition = position + 1;
+                   nextPosition = nextPosition % children.length;
+
+                   let current = children[position];
+                   let next = children[nextPosition];
+                   points[prevPoint].classList.remove('active');
+
+                   next.style.transition = "ease 0s";
+                   next.style.transform = `translate(${100 - nextPosition * 100}%)`;
+                   requestAnimationFrame(() => {
+                     requestAnimationFrame(() => {
+                      current.style.transition = '';
+                      current.style.transform = `translate(${-100 - position * 100}%)`;
+                      next.style.transition = "";
+                      next.style.transform = `translate(${- nextPosition * 100}%)`;
+                      position = nextPosition;
+                      points[position].classList.add('active');
+                      prevPoint = position;
+                      toggleButtonStatus();
+                      titleShow();
+                     })
+                   })
+                   if(!isCycle) frame = setTimeout(nextFrame,3000);
+               }
+               frame = setTimeout(nextFrame,3000);
+
+               let startX;
+               let startTransform;
+               let endX;
+               let start = event => {
+                 event.preventDefault();
+                 startX = event.clientX;
+                 endX = event.clientX;
+                 startTransform = - position * 500;
+                 isMove = startX;
+                 this._carousel.addEventListener("mousemove",move);
+                 this._carousel.addEventListener("mouseup", end);
+               }
+
+               let move = event => {
+                 event.preventDefault();
+                 endX = event.clientX;
+                 let minX = - 500 * (children.length - 1);
+                 if(startTransform + endX - startX > 0 || startTransform + endX - startX < minX){
+                  startX = event.clientX;
+                   return;
+                 }
+                 for(let child of children){
+                   child.style.transition = "ease 0s";
+                   child.style.transform = `translate(${ startTransform + endX - startX }px)`;
+                 }
+               }
+
+               let end = () => {
+                this._carousel.removeEventListener("mousemove",move);
+                this._carousel.removeEventListener("mouseup",end);
+                
+                if(Math.abs(endX - isMove) > 10 && Math.abs(endX - startX) == 0){
+                  return;
+                }
+                if(Math.abs(endX - startX) < 10){
+                  window.open(this.data[position].url);
+                  return;
+                }
+
+                 points[prevPoint].classList.remove("active");
+                 
+                 position = Math.round(- (startTransform + endX - startX) / 500);
+                 position = Math.max(0,Math.min(position,children.length - 1));
+                 points[position].classList.add("active"); 
+                 prevPoint = position;
+                 toggleButtonStatus();
+                 titleShow();
+                 for(let child of children){
+                   child.style.transition = "";
+                   child.style.transform = `translate(${-position * 100}%)`;
+                 }
+               }
+
+               let PointClick = () => {
+                 points[prevPoint].classList.remove('active');
+                 for(let child of children){
+                   child.style.transition = "ease 0s";
+                   child.style.transform = `translate(${ -position * 100 }%)`;
+                 }
+                 for(let child of children){
+                   child.style.transition = "";
+                   child.style.transform = `translate(${-position * 100}%)`;
+                 }
+                 points[position].classList.add('active');
+                 prevPoint = position;
+                 toggleButtonStatus();
+                 titleShow();
+
+               }
+
+               let toggleButtonStatus = () => {
+                  if(position == 3){
+                    pagings[1].style.display = 'none';
+                    pagings[0].style.display = 'block';
+                  }else if(position == 0){
+                    pagings[0].style.display = 'none';
+                    pagings[1].style.display = 'block';
+                  }else {
+                    pagings[1].style.display = 'block';
+                    pagings[0].style.display = 'block';
+                  }
+               }
+               
+               let titleShow = () => {
+                title.innerHTML = this.data[position].title;
+                // title.setAttribute("href",this.data[position].url);
+               }
+
+               title.addEventListener('click',()=>{
+                //  window.open(event.target.getAttribute('href'));
+                 window.open(this.data[position].url);
+               })
+
+               this._carousel.addEventListener('mousedown',start);
+               this._container.addEventListener('mouseover',()=>{
+                 if(frame) clearTimeout(frame)
+                 this._paging.style.display = 'block';  
+               });
+               this._container.addEventListener('mouseout',()=>{
+                 frame = setTimeout(nextFrame,3000);
+                 this._paging.style.display = 'none';
+               });
+
+               pagings[0].addEventListener('click', prevFrame);
+               pagings[1].addEventListener('click',() => {nextFrame(true)});
+            }
+        }
+
+        let carousel = new Carousel(document.getElementById('container'));
+        carousel.data = data;
+        carousel.render();
 
         
 

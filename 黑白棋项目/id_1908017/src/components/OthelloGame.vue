@@ -1,6 +1,10 @@
 <template>
   <div>
-    <Board :cells="animateBoard" :cellClick="cellClick"></Board>
+    <Board
+      :cells="animateBoard"
+      :cellClick="cellClick"
+      @flipEnd="onFlipEnd"
+    ></Board>
     <p>比分 黑:{{ blackCount }},白:{{ whiteCount }}</p>
     <p>
       第{{ this.turns.length }}轮
@@ -136,6 +140,9 @@ export default {
       if (this.turns.length > 1) {
         this.turns.pop();
       }
+    },
+    onFlipEnd() {
+      console.log("onFlipEnd:", arguments);
     }
   }
 };
