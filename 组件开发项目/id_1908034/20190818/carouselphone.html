@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>M端手势轮播</title>
+    <style>
+        div#container {
+            width: 300px;
+            height: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            background-color: #111111;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+</div>
+<script src="gesture.js"></script>
+<script>
+    let main = document.getElementById('container');
+    let x = 0, y = 0;
+    main.addEventListener("pan", event => {
+        console.log('pan', event.dx, event.dy);
+        main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+    });
+
+    main.addEventListener('tap', event=>{
+       console.log('tap');
+    });
+
+    main.addEventListener("panend", event => {
+        x = x + event.dx;
+        y = y + event.dy;
+        console.log("panend", x, y);
+    });
+
+    main.addEventListener("pancancel", event => {
+        console.log("cancel");
+        main.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    main.addEventListener("mousedown", event => event.preventDefault());
+    main.addEventListener("pressstart", event => {
+        console.log("pressstart")
+    });
+
+    main.addEventListener("presscancel", event => {
+        console.log("presscancel")
+    });
+
+
+    enableGesture(main);
+
+
+</script>
+</body>
+</html>
