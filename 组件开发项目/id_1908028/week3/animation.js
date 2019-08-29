@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 20:54:20
- * @LastEditTime: 2019-08-28 21:00:56
+ * @LastEditTime: 2019-08-29 10:55:04
  * @LastEditors: Please set LastEditors
  */
 function cubicBezier(p1x, p1y, p2x, p2y) {
@@ -96,168 +96,192 @@ let easeInOut = cubicBezier(0.42, 0, 0.58, 1);
 let myCB = cubicBezier(0.69, -0.85, 0.25, 1);
 
 class Timeline {
-    constructor() {
-        this._animations = [];
-        this.status = "inited";
-        this._rate = 1;
-    }
+  constructor() {
+    this._animations = [];
+    this.status = "inited";
+    this._rate = 1;
+    this._startPoint = 0;
+  }
 
-    pause() {
-        if(this.status !== "started") {
-            return;
-        }
-        this._resumeTick = this._tick;
-        this._tick = null;
-        this._pauseStart = Date.now();
-        this.status = "paused";
+  pause() {
+    if (this.status !== "started") {
+      return;
     }
+    this._resumeTick = this._tick;
+    this._tick = null;
+    this._pauseStart = Date.now();
+    this.status = "paused";
+  }
 
-    resume() {
-        if(this.status !== "paused") {
-            return;
+  resume() {
+    if (this.status !== "paused") {
+      return;
+    }
+    this.pauseTime += Date.now() - this._pauseStart;
+    this._tick = this._resumeTick;
+    requestAnimationFrame(this._tick);
+  }
+
+  start() {
+    if (this.status === "started") {
+      return;
+    }
+    this.status = "started";
+    let startTime = Date.now();
+    this.pauseTime = 0;
+    this._tick = () => {
+      for (let animation of this._animations) {
+        if (!animation.finished) {
+          animation.tick(
+            (Date.now() - this.pauseTime - startTime) * this._rate +
+              this._startPoint
+          );
         }
-        this.pauseTime += Date.now() - this._pauseStart;
-        this._tick = this._resumeTick;
+      }
+      if (this._tick) {
         requestAnimationFrame(this._tick);
+      }
+    };
+
+    requestAnimationFrame(this._tick);
+  }
+
+  restart() {
+    if (this._tick) {
+      this._tick = null;
+      this._resumeTick = null;
     }
+    this.status = "inited";
+    requestAnimationFrame(() => {
+      this.start();
+    });
+  }
 
-    start() {
-        if(this.status === "started") {
-            return;
-        }
-        this.status = "started";
-        let startTime = Date.now();
-        this.pauseTime = 0;
+  set startPoint(value) {
+    this._startPoint = value;
+  }
 
-        this._tick = () => {
-            for (let animation of this._animations) {
-                if (!animation.finished) {
-                    animation.tick((Date.now() - this.pauseTime - startTime) * this._rate + this._startPoint);
-                }
-            }
-            if(this._tick) {
-                requestAnimationFrame(this._tick);
-            }
-        };
+  get startPoint() {
+    return this._startPoint;
+  }
 
-        requestAnimationFrame(this._tick);
-    }
+  // rate属性
+  set rate(value) {
+    this._rate = value;
+  }
 
-    restart() {
-        if(this._tick) {
-            this._tick = null;
-            this._resumeTick = null;
-        }
-        this.status = "inited";
-        requestAnimationFrame(() => {
-            this.start();
-        });
-    }
+  get rate() {
+    return this._rate;
+  }
 
-    set startPoint(value) {
-        this._startPoint = value;
-    }
+  // 添加动画
+  addAnimation(animation) {
+    this._animations.push(animation);
+  }
 
-    get startPoint() {
-        return this._startPoint;
-    }
+  // 移除动画
+  removeAnimation(animation) {
+  }
 
-    // rate属性
-    set rate(value){
-        this._rate = value;
-    }
-
-    get rate(){
-        return this._rate;
-    }
-
-    // 添加动画
-    addAnimation(animation) {
-        this._animations.push(animation);
-    }
-
-    // 移除动画
-    removeAnimation(animation) {
-
-    }
+  //清空动画
+  clearAnimation(){
+    this._animations=[];
+  }
 }
 
 class DomElementStyleNumberAnimation {
-    constructor(element, property, startTime, startValue, endTime, endValue, converter) {
-        this._element = element;
-        this._property = property;
-        this._startTime = startTime;
-        this._startValue = startValue;
-        this._endTime = endTime;
-        this._endValue = endValue;
-        this._converter = converter;
+  constructor(
+    element,
+    property,
+    startTime,
+    startValue,
+    endTime,
+    endValue,
+    converter
+  ) {
+    this._element = element;
+    this._property = property;
+    this._startTime = startTime;
+    this._startValue = startValue;
+    this._endTime = endTime;
+    this._endValue = endValue;
+    this._converter = converter;
+    this._fixKeyFrame = false;
+  }
+
+  tick(t) {
+    if (t > this._endTime) {
+      if (!this._fixKeyFrame) {
+        return;
+      } else {
+        t = this._endTime;
+      }
+    } else if (t < this._startTime) {
+      if (!this._fixKeyFrame) {
+        return;
+      } else {
+        t = this._startTime;
         this._fixKeyFrame = false;
+      }
+    } else {
+      this._fixKeyFrame = true;
     }
 
-    tick(t) {
-        if(t > this._endTime) {
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._endTime;
-            }
-        } else if(t < this._startTime) {
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._startTime;
-                this._fixKeyFrame = false;
-            }
-        } else {
-            this._fixKeyFrame = true;
-        }
-
-        let progress = (t - this._startTime) /(this._endTime - this._startTime);
-        let displacement = myCB(progress) * (this._endValue - this._startValue);
-        let currentValue = this._startValue + displacement;
-        this._element.style[this._property] = this._converter(currentValue);
-    }
+    let progress = (t - this._startTime) / (this._endTime - this._startTime);
+    let displacement = ease(progress) * (this._endValue - this._startValue);
+    let currentValue = this._startValue + displacement;
+    this._element.style[this._property] = this._converter(currentValue);
+  }
 }
 
 class DomElementStyleVectorAnimation {
-    constructor(element, property, startTime, startValue, endTime, endValue, converter) {
-        this._element = element;
-        this._property = property;
-        this._startTime = startTime;
-        this._startValue = startValue;
-        this._endTime = endTime;
-        this._endValue = endValue;
-        this._converter = converter;
+  constructor(
+    element,
+    property,
+    startTime,
+    startValue,
+    endTime,
+    endValue,
+    converter
+  ) {
+    this._element = element;
+    this._property = property;
+    this._startTime = startTime;
+    this._startValue = startValue;
+    this._endTime = endTime;
+    this._endValue = endValue;
+    this._converter = converter;
+    this._fixKeyFrame = false;
+  }
+
+  tick(t) {
+    if (t > this._endTime) {
+      if (!this._fixKeyFrame) {
+        return;
+      } else {
+        t = this._endTime;
+      }
+    } else if (t < this._startTime) {
+      if (!this._fixKeyFrame) {
+        return;
+      } else {
+        t = this._startTime;
         this._fixKeyFrame = false;
+      }
+    } else {
+      this._fixKeyFrame = true;
     }
 
-    tick(t) {
-        if(t > this._endTime) {
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._endTime;
-            }
-        } else if(t < this._startTime) {
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._startTime;
-                this._fixKeyFrame = false;
-            }
-        } else {
-            this._fixKeyFrame = true;
-        }
+    let progress = (t - this._startTime) / (this._endTime - this._startTime);
 
-        let progress = (t - this._startTime) /(this._endTime - this._startTime);
-
-        let displacement = [];
-        let currentValue = [];
-        for(let i = 0; i < this._endValue.length; i++) {
-            displacement[i] = myCB(progress) * (this._endValue[i] - this._startValue[i]);
-            currentValue[i] = this._startValue[i] + displacement[i];
-        }
-
-        this._element.style[this._property] = this._converter(currentValue);
+    let displacement = [];
+    let currentValue = [];
+    for (let i = 0; i < this._endValue.length; i++) {
+      displacement[i] =
+        myCB(progress) * (this._endValue[i] - this._startValue[i]);
+      currentValue[i] = this._startValue[i] + displacement[i];
     }
+
+    this._element.style[this._property] = this._converter(currentValue);
+  }
 }

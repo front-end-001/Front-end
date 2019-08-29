@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-29 09:51:12
+ * @LastEditTime: 2019-08-29 14:41:45
+ * @LastEditors: Please set LastEditors
+ */
 function gesture(main) {
     let start = (point, context) => {
         context.startX = point.clientX
