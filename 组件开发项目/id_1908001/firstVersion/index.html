@@ -1,101 +1,84 @@
-<html>
-    <head>
-        <title>轮播图</title>
-    </head>
-    <body>
-        <div id="container" class="carousel">
-        </div>
-    </body>
+<html lang="en">
+<head>
+    <title>轮播图</title>
+</head>
+<body>
+<div id="container" class="carousel"></div>
+</body>
 </html>
-<script src="../gesture/gesture.js"></script>
 <script type="text/javascript">
     class View {
-        constructor (images) {
+        constructor (container, images) {
             this.images = images
-            this.hander = null
+            this.container = container
         }
         render () {
-            const container = document.getElementById("container")
+            const container = this.container
             container.innerHTML = ''
             for (let i = 0; i < this.images.length; i++) {
                 const imageElement = document.createElement("img")
                 imageElement.src = images[i]
                 container.appendChild(imageElement)
             }
+            // 取所有的img出来
             const children = Array.prototype.slice.call(container.children)
             let position = 0
-            let transform = 0
-            const nextFrame = () => {
-                let nextPosition = position + 1
-                transform += 100
-                nextPosition = nextPosition % children.length
-                let current = children[position]
-                let next = children[nextPosition]
-                next.style.transition = "ease 0"
+            const nextFrame = function () {
+                // 等价于 if(position+1 > children.length - 1) position = 0
+                const nextPosition = (position + 1) % children.length
+                const current = children[position],
+                    next = children[nextPosition]
+                // ---实现第二张替换第一张的动画效果--begin
+                next.style.transition = "ease 0s"
                 next.style.transform = `translate(${100 - 100 * nextPosition}%)`
                 setTimeout(() => {
                     current.style.transition = ""
-                    current.style.transform = `translate(${- 100 - 100 * position}%)`
+                    current.style.transform = `translate(${-100 - 100 * position}%)`
                     next.style.transition = ""
                     next.style.transform = `translate(${-100 * nextPosition}%)`
                     position = nextPosition
                 }, 16)
-                this.hander = setTimeout(nextFrame, 3000)
+                // ---实现第二张替换第一张的动画效果--end
+                setTimeout(nextFrame, 3000)
             }
-            initGesture(container);
-
-            container.addEventListener("pan", event => {
-                console.log("pan")
-                for(let child of children) {
-                    child.style.transition = "ease 0s";
-                    child.style.transform = `translateX(${event.dx + x}px`;
-                }
-            })
-            container.addEventListener("panend", event => {
-                position = -(Math.round((x + event.dx) / 500));
-                position = Math.max(0, Math.min(position, children.length - 1));
-
-                for(let child of children) {
-                    child.style.transition = "";
-                    child.style.transform = `translate(${-position * 500}px)`;
-                }
-                x = -position * 500;
-            })
-            container.addEventListener("mousedown", event => event.preventDefault());
-
-            let startX;
-            let startTransform
-            const start = event =>{
+            setTimeout(nextFrame, 3000)
+            let startTransform, startX
+            // start绑定事件
+            const start = event => {
                 event.preventDefault()
                 startX = event.clientX
-                startTransform = - position * 500
-                container.addEventListener("mousemove", move)
-                container.addEventListener("mouseup", end)
+                startTransform = -position * 500
+                document.addEventListener("mousemove", move)
+                document.addEventListener("mouseup", end)
             }
-            const move = event =>{
+            const move = event => {
                 event.preventDefault()
                 for(let child of children) {
                     child.style.transition = "ease 0s"
                     child.style.transform = `translate(${startTransform + event.clientX - startX}px)`
                 }
             }
-            const end = ()=>{
-                container.removeEventListener("mousemove", move)
-                container.removeEventListener("mouseup", end)
-                position = - (Math.round((startTransform + event.clientX - startX) / 500))
+            // end移除事件
+            const end = event => {
+                document.removeEventListener("mousemove", move)
+                document.removeEventListener("mouseup", end)
+
+                position = -(Math.round((startTransform + event.clientX - startX) / 500))
                 position = Math.max(0, Math.min(position, children.length - 1))
-                for(const child of children) {
+
+                for(let child of children) {
                     child.style.transition = ""
-                    child.style.transform = `translate(${ - position * 500}px)`
+                    child.style.transform = `translate(${-position * 500}px)`
                 }
+
             }
-            container.addEventListener("mousedown",start)
+            document.addEventListener("mousedown", start)
         }
     }
     const images = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
         "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
         "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"]
-    const view = new View(images)
+    const view = new View(document.getElementById("container"), images)
     view.render()
 </script>
 <style>
@@ -104,7 +87,6 @@
         height:300px;
         overflow:hidden;
         white-space: nowrap;
-        outline: solid 1px blue;
     }
     .carousel>img{
         width:100%;
