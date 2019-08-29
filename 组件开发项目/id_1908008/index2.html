@@ -41,6 +41,7 @@ function cubicBezier(p1x, p1y, p2x, p2y) {
             x2 = sampleCurveX(t2) - x;
             if (Math.abs(x2) < ZERO_LIMIT) {
                 return t2;
+                
             }
             derivative = sampleCurveDerivativeX(t2);
             // == 0, failure
