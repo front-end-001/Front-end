@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<div id="main" style="width: 300px;height: 300px; background: navy;"></div>
+<script src="touch.js"></script>
+<script>
+	let main = document.getElementById('main');
+
+	enableGesture(main);
+
+	let x = 0, y = 0;
+
+	main.addEventListener('pan', event => {
+		main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+	});
+
+	main.addEventListener('panend', event => {
+		x = x + event.dx;
+		y = y + event.dy;
+	});
+
+	main.addEventListener('pancancel', event => {
+		main.style.transform = `translate(${x}px,${y}px)`;
+	});
+</script>
+</body>
+</html>

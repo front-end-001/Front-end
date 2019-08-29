@@ -1,0 +1,225 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-28 21:01:11
+ * @LastEditTime: 2019-08-29 15:08:38
+ * @LastEditors: Please set LastEditors
+ -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>轮播</title>
+    <style>
+      #slides {
+        overflow: hidden;
+        white-space: nowrap;
+        outline: solid blue;
+      }
+
+      #slides img {
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="slides"></div>
+    <script src="./gesture.js"></script>
+    <script src="./animation.js"></script>
+    <script>
+      class Slides {
+        constructor() {
+          this.imgList = [];
+        }
+        addImg(img) {
+          this.imgList.push(img);
+        }
+      }
+      class View {
+        constructor(root) {
+          this.slides = new Slides();
+          this.root = root;
+          this.config = {};
+          gesture(this.root);
+        }
+        setConfig(width = 500, height = 300) {
+          const config = this.config;
+          config.width = width;
+          config.height = height;
+        }
+        render() {
+          this.root.style.width = `${this.config.width}px`;
+          this.root.style.height = `${this.config.height}px`;
+          let i = this.slides.imgList.length;
+          for (let img of this.slides.imgList) {
+            const pic = document.createElement("img");
+            pic.src = img;
+            this.root.appendChild(pic);
+            pic.style.zIndex = i++;
+          }
+
+          let children = Array.from(this.root.children);
+          let position = 0;
+          let offsetTimeStart = 0;
+          let tl = new Timeline();
+
+          let nextPic = () => {
+            let nextPosition = position + 1;
+
+            nextPosition = nextPosition % children.length;
+
+            let current = children[position],
+              next = children[nextPosition];
+            //     //把next摆到正确的位置
+            next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+
+            offsetTimeStart = Date.now();
+            tl.clearAnimation();
+            tl.addAnimation(
+              new DomElementStyleNumberAnimation(
+                current,
+                "transform",
+                0,
+                -500 * position,
+                1000,
+                -500 - 500 * position,
+                v => `translateX(${v}px)`
+              )
+            );
+            tl.addAnimation(
+              new DomElementStyleNumberAnimation(
+                next,
+                "transform",
+                0,
+                500 - 500 * nextPosition,
+                1000,
+                -500 * nextPosition,
+                v => `translateX(${v}px)`
+              )
+            );
+            tl.restart();
+
+            position = nextPosition;
+            nextPicTimer = setTimeout(nextPic, 3000);
+          };
+          let nextPicTimer = setTimeout(nextPic, 3000);
+
+          let startTransform;
+          let offset = 0;
+          this.root.addEventListener("mousedown", event => {
+            event.preventDefault()
+            tl.pause();
+            let currentTime = Date.now();
+            if (currentTime - offsetTimeStart < 1000) {
+              offset = 500 - ease((currentTime - offsetTimeStart) / 1000) * 500;
+            } else {
+              offset = 0;
+            }
+            clearTimeout(nextPicTimer);
+          });
+          
+
+
+          this.root.addEventListener("pan", event => {
+            event.preventDefault();
+            let current = children[position];
+            let nextPosition = (position + 1) % children.length;
+            let next = children[nextPosition];
+            let lastPosition =
+              (children.length + position - 1) % children.length;
+            let last = children[lastPosition];
+            last.style.transition = "ease 0s";
+            last.style.transform = `translate(${-500 -
+              500 * lastPosition +
+              event.dx +
+              offset}px)`;
+
+            next.style.transition = "ease 0s";
+            next.style.transform = `translate(${500 -
+              500 * nextPosition +
+              event.dx +
+              offset}px)`;
+
+            current.style.transition = "ease 0s";
+            current.style.transform = `translate(${-500 * position +
+              event.dx +
+              offset}px)`;
+          });
+
+          this.root.addEventListener("panend", event => {
+            event.preventDefault();
+            let isLeft;
+            if (event.isFlick) {
+              if (event.dx > 0) {
+                position--;
+                isLeft = true;
+              }
+
+              if (event.dx < 0) {
+                position++;
+                isLeft = false;
+              }
+            } else {
+              if (event.dx > 250) {
+                position--;
+                isLeft = true;
+              } else if (event.dx < -250) {
+                position++;
+                isLeft = false;
+              } else if (event.dx > 0) {
+                isLeft = false;
+              } else {
+                isLeft = true;
+              }
+            }
+            position = (children.length + position) % children.length;
+            let current = children[position];
+            let nextPosition = (position + 1) % children.length;
+            let next = children[nextPosition];
+            let lastPosition =
+              (children.length + position - 1) % children.length;
+            let last = children[lastPosition];
+
+            if (!isLeft) {
+              last.style.transition = "";
+            } else {
+              last.style.transition = "ease 0s";
+            }
+            last.style.transform = `translate(${-500 - 500 * lastPosition}px)`;
+
+            if (isLeft) {
+              next.style.transition = "";
+            } else {
+              next.style.transition = "ease 0s";
+            }
+            next.style.transform = `translate(${500 - 500 * nextPosition}px)`;
+
+            current.style.transition = "";
+            current.style.transform = `translate(${-500 * position}px)`;
+            nextPicTimer = setTimeout(nextPic, 3000);
+          });
+        }
+      }
+      let v = new View(document.getElementById("slides"));
+      v.slides.addImg(
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"
+      );
+      v.slides.addImg(
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg"
+      );
+      v.slides.addImg(
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg"
+      );
+      v.slides.addImg(
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+      );
+      v.setConfig();
+      v.render();
+    </script>
+  </body>
+</html>

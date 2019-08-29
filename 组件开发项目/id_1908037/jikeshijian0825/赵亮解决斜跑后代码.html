@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .ball {
+      position: absolute;
+      transition: top .5s ease;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: navy;
+    }
+  </style>
+</head>
+<body>
+  <div id="ball" class="ball"></div>
+
+  <script src="./cubicBezier.js"></script>
+  <script>
+    // 时间线
+    class Timeline {
+      constructor() {
+        this._animations = [];
+      }
+      start() {
+        let startTime = Date.now();
+        setInterval(() => {
+          for (let animation of this._animations) {
+            if (!animation.finished) {
+              animation.tick(Date.now() - startTime);
+            }
+          }
+        }, 16)
+      }
+      pause() {
+
+      }
+      resume() {
+
+      }
+      set rate(value) {
+
+      }
+      get rate() {
+
+      }
+      addAnimation(animation) {
+        this._animations.push(animation);
+      }
+      removeAnimation(animation) {
+
+      }
+    }
+
+    // 动画
+    class DOMElementStyleAnimation {
+      constructor(element, property, startTime, startValue, endTime, endValue, converter) {
+        this._element = element;
+        this._property = property;
+        this._startTime = startTime;
+        this._startValue = startValue;
+        this._endTime = endTime;
+        this._endValue = endValue;
+        this._converter = converter;
+      }
+      tick(t) {
+        if (t > this._endTime) {
+          t = this._endTime;
+          this.finished = true;
+        }
+        if (t < this._startTime) {
+          return;
+        }
+        // y = kx + b 线性插值公式
+        // this._element.style[this._property] = this._converter((t - this._startTime) / (this._endTime - this._startTime) * (this._endValue - this._startValue) + this._startValue);
+        let progress = (t - this._startTime) / (this._endTime - this._startTime);
+        let displacement = ease(progress) * (this._endValue - this._startValue);
+        let currentValue = displacement + this._startValue;           
+        this._element.style[this._property] = this._converter(currentValue);
+      }
+    }
+
+    let tl = new Timeline();
+    // tl.addAnimation(new DOMElementStyleAnimation(
+    //   document.getElementById('ball'),
+    //   'transform',
+    //   0, 0,
+    //   500, 300,
+    //   (v) => `translateX(${v}px)`
+    // ))
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "top",
+    0, 0,
+    500, 200,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "left",
+    500, 0,
+    1000, 200,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "top",
+    1000, 200,
+    1500, 0,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "left",
+    1500, 200,
+    2000, 0,
+    (v) => `${v}px`
+));
+    tl.start()
+  </script>
+</body>
+</html>

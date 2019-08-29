@@ -1,0 +1,50 @@
+{
+  "name": "winter-gesture",
+  "version": "0.0.1",
+  "description": "A gesture library",
+  "main": "gestures.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "@babel/runtime": "^7.4.5",
+    "ava": "^2.1.0",
+    "browser-env": "^3.2.6",
+    "nyc": "^14.1.1"
+  },
+  "scripts": {
+    "test": "nyc ava --serial && rm -rf ./coverage && mkdir ./coverage && nyc report --reporter=text-lcov > ./coverage/lcov.info"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintercn/gesture.git"
+  },
+  "keywords": [
+    "gesture",
+    "spritejs"
+  ],
+  "author": "winter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wintercn/gesture/issues"
+  },
+  "homepage": "https://github.com/wintercn/gesture#readme",
+  "ava": {
+    "require": [
+      "./test/_setup-browser-env.js",
+      "./test/_regist-babel.js"
+    ]
+  },
+  "nyc": {
+    "include": [
+      "src/*.js",
+      "abc.js"
+    ]
+  }
+}

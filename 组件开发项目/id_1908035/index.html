@@ -24,21 +24,21 @@
       width:500px;
    }
    .carousel {
-       width:500px;
-       height:300px;
+       width:200px;
+       height:120px;
        outline: 1px solid #fff;
        overflow: hidden;
        white-space:nowrap;
        
    }
    .carousel img{
-    width:500px;
+    width:200px;
     display: inline-block;
     /* transition:ease 1s; */
    }
 </style>
 <body>
-    <div id="wrap"></div>
+    <!-- <div id="wrap"></div> -->
     <div id="carousel"></div>
 </body>
 </html>
@@ -111,6 +111,119 @@ const imgArray2 = [
         }
     }
     // new SwiperRender({container:document.getElementById('wrap'),time:1000,imgs:imgArray,isautoPlay:true}).render()
+   
+   function enableGesture(gesture){
+    const context = Object.create(null)
+    let mouseSymbol = Symbol("mouse");
+    const mousedown = event =>{
+       context[mouseSymbol] = Object.create(null)
+       start(event,context[mouseSymbol])
+       console.log(event.clientX,event.clientY)
+   }
+   const mousemove = event =>{
+    move(event,context[mouseSymbol])
+       console.log(event.clientY,event.clientY)
+   }
+   const mouseup = event =>{
+    end(event,context[mouseSymbol])
+       console.log(event.clientY,event.clientY)
+   }
+  
+   document.addEventListener('mouseup',mouseup)
+   document.addEventListener('mousemove',mousemove)
+   document.addEventListener('mousedown',mousedown)
+   
+   const touchstart = event=>{
+       for(item of event.changedTouches)
+       context[item.identifier] = Object.create(null)
+       start(item,context[item.identifier])
+   }
+   const touchmove = event=>{
+       for(item of event.changedTouches){
+           move(item,context[item.identifier])
+        }
+   }
+   const touchend = event=>{
+       
+       for(item of event.changedTouches){
+        end(item,context[item.identifier])
+       }
+       
+    //    console.log(event)
+   }
+   const touchcancel = event=>{
+       for(item of event.changedTouches)
+       console.log(item.clientX,item.clientY)
+    //    console.log(event)
+   }
+   gesture.addEventListener('touchstart',touchstart)
+   gesture.addEventListener('touchmove',touchmove)
+   gesture.addEventListener('touchend',touchend)
+   let x = 0,y=0
+
+   start = (point,context) =>{
+       context.startX = point.clientX
+       context.startY = point.clientY
+       context.isTap = true
+       context.isTouch = false
+       context.startTime = Date.now()
+   }
+   move = (point,context) =>{
+       context.dx = point.clientX-context.startX
+        context.dy = point.clientY-context.startY
+        if(context.dx*context.dx+context.dy*context.dy>100){
+            context.isTap = false
+            if(context.isTouch===false){
+                if(Math.abs(context.dx)>Math.abs(context.dy)){
+                    context.isVertical = false
+                    context.isHorizontal = true
+                }else{
+                    context.isVertical = true
+                    context.isHorizontal = false
+                }
+                const e =new Event('panstart')
+                e.dx = context.startX
+                e.dy = context.startY
+                gesture.dispatchEvent(e)
+                context.isTouch = true
+            }
+            if(context.isTouch){
+                const e =new Event('pan')
+                e.dx = context.dx
+                e.dy = context.dy
+                e.isVertical = context.isVertical
+                e.isHorizontal = context.isHorizontal
+                gesture.dispatchEvent(e)
+            }
+        }
+   }
+   end = (point,context) =>{
+       if(context.isTap){
+           const e = new Event('tap')
+           gesture.dispatchEvent(e)
+       }
+       if(context.isTouch){
+        const v = Math.sqrt(context.dx*context.dx+context.dy*context.dy)/(Date.now()-context.startTime)
+        if(v>0.3){
+            context.isFlick = true;
+            let e = new Event("flick");
+            e.dx = dx;
+            e.dy = dy;
+            main.dispatchEvent(e);
+        }else{
+            context.isFlick = false;
+        }
+        const e =new Event('panend')
+                e.dx = context.dx
+                e.dy = context.dy
+                e.isVertical = context.isVertical
+                e.isHorizontal = context.isHorizontal
+                e.isFlick = context.isFlick;
+                gesture .dispatchEvent(e)
+       }
+       console.log('end',point.clientX,point.clientY)
+   }
+   }
     class Carousel{
         constructor(options){
             this.container = options.container
@@ -169,7 +282,42 @@ const imgArray2 = [
                 },this.time)
             }
             // nextFrame()
-            document.addEventListener('mousedown',this.touchStart)
+            // document.addEventListener('mousedown',this.touchStart)
+            enableGesture(this.container)
+           
+            let x = 0
+            // let position = 0
+            this.container.addEventListener('pan',e=>{
+
+                for(let item of this.container.children){
+                    item.style.transform = `translateX(${x+e.dx}px)`
+                    item.style.transition = 'ease 0.5s'
+                    // x = x+e.dx
+            }
+            })
+            this.container.addEventListener('panend',e=>{
+                // if(e.isVertical)
+                //     return;
+                if(e.isFlick && Math.abs(e.dx) > Math.abs(e.dy)){
+                    if(e.dx > 0) {
+                        position = position - 1;
+                    }
+                    if(e.dx < 0) {
+                        position = position + 1;
+                    }
+                } else {
+                    position = -(Math.round((x + e.dx) / 200));
+                }
+                // position = -(Math.round((x+e.dx)/200))
+                position = Math.max(0, Math.min(position, children.length - 1));
+                console.log(position)
+                for(let item of this.container.children){
+                    item.style.transform = `translate(${-position * 200}px)`;
+                item.style.transition = 'ease 0.5s'
+                
+                }
+                x = -position*200
+            })
         }
         touchStart =(e)=>{
             document.addEventListener('mousemove',this.touchMove)

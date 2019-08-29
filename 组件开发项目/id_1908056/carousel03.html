@@ -72,6 +72,7 @@
                     let startX;
                     let startTransform;
                     let start = event => {
+                        //如果此事件没被显示处理，那么它的默认动作也不要做
                         event.preventDefault();
                         startX = event.clientX;
                         startTransform = -position * 500;
@@ -79,7 +80,7 @@
                         document.addEventListener("mouseup", end);
                     }
                     let move = event =>{
-                        event.preventDefault();
+                        // event.preventDefault();
                         for (let child of children) {
                             child.style.transition = "ease 0s";
                             child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
@@ -95,7 +96,7 @@
                         for (let child of children) {
                             child.style.transition = "";
                             child.style.transform = `translate(${ - position * 500}px)`;
-                    }
+                        }
                     
                     }
                     this._container.addEventListener("mousedown", start);
