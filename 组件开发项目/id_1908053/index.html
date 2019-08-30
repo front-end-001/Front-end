@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+         .cantainer {
+            width: 200px;
+            height: 200px;
+        }
+        /*  
+       
+        li {
+            display: inline-block;
+        }
+        li img {
+            vertical-align: bottom;
+            width: 200px;
+            height: 200px;
+        } */
+    </style>
+</head>
+<body>
+    <div class="cantainer" id="cantainer">
+        <!-- <ul class="carousel-step1">
+            <li>
+                <img src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg" alt="">
+            </li>
+            <li>
+                <img src="https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg" alt="">
+            </li>
+            <li>
+                <img src="https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg" alt="">
+            </li>
+        </ul> -->
+    </div>
+</body>
+</html>
+
+<script>
+    // 声明一个轮播图类
+    /*
+    *   eleId 轮播图父容器
+    *   data  
+    */
+    let data = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+    ];
+    class Carousel {
+        constructor(eleId, data) {
+            this.container = document.getElementById(eleId);
+            this.data = data;
+            // 在末尾添加第一张图片
+            this.data.push(data[0]);
+            this.handler = null;
+        }
+        // 渲染函数
+        render() {
+            let ulEle = document.createElement("ul");
+            ulEle.classList.add("carousel");
+            ulEle.style = ' margin: 0;padding: 0;overflow: hidden;white-space: nowrap;font-size: 0px'
+            this.container.appendChild(ulEle);
+            let containerW = this.container.scrollWidth;
+            let containerH = this.container.scrollHeight;
+            let liHtml;
+            for (let d of this.data) {
+                liHtml = liHtml ? liHtml + this.createHtml(d, containerW, containerH) : this.createHtml(d, containerW, containerH); 
+            }
+            let ulNode = document.querySelector(".carousel");
+            ulNode.innerHTML = liHtml;
+            let children = Array.prototype.slice.call(ulNode.children);
+            
+            let position = 0;
+            let nextPosition;
+            let nextFrame = () => {
+                position ++;
+                nextPosition = position % this.data.length;
+                if (position === this.data.length) {
+                    for (let img of children) {
+                        img.style.transition = 'ease 0s';
+                        nextPosition = position % this.data.length;
+                        img.style.transform = `translateX(${-100 * nextPosition}%)`;
+                    }
+                    position = 0;
+                    this.handler = setTimeout(nextFrame, 0);
+                    
+                } else {
+                    for (let img of children) {       
+                        img.style.transition = 'ease .5s';
+                        img.style.transform = `translateX(${-100 * nextPosition}%)`;
+                    }
+                    this.handler = setTimeout(nextFrame, 1000);
+                }
+                
+            }
+            this.handler = setTimeout(nextFrame, 1000);
+        }
+
+        createHtml(arg, containerW, containerH) {
+            return (`<li style="list-style: none;display: inline-block;" class="carousel-item">
+                <img src="${arg}" alt="" style="vertical-align: bottom;width: ${containerW}px;height: ${containerH}px;">
+            </li>`)
+        }
+    }
+
+    // 创建一个实例
+    let carousel = new Carousel("cantainer", data);
+    carousel.render();
+</script>

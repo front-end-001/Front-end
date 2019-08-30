@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播图</title>
+  </head>
+  <style>
+    #container{
+      width:500px;
+      height:500px;
+      white-space: nowrap;
+      overflow:hidden;
+    }
+    #container>img{
+      width:100%;
+      height:100%;
+      display: inline-block;
+      object-fit: cover;
+      transition: ease 0.5s;
+    }
+  </style>
+  <body>
+    <div id='container'></div>
+  <script>//009-2组-胡颖
+    // 轮播需求分析
+    // 1、左右滑动（上下滑动）
+    // 2、箭头切换按钮
+    // 3、底部控制按钮群
+    // 4、切换动画
+    // 5、切换后的返回函数
+    // 6、是否循环
+    // 7、切换动画时间
+    // 8、自动 / 手动切换
+    // 9、跳转指定page
+      let imgSrcArr = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+                "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+                "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+                "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"]
+      let container = document.getElementById('container')
+      class Carousel{
+        constructor(container){
+            this._container = container;
+            this._handler = null;
+            this.imgSrcArr = null
+        }
+        render() {
+                for (let i = 0; i < imgSrcArr.length; i++) {
+                    let img = new Image()
+                    img.src = imgSrcArr[i]
+                    container.appendChild(img)
+                }
+                let children  = Array.prototype.slice.call(container.children)
+                let position = 0,
+                    nextPosition = position//拿到当前张和下一张，排列好
+                let currentImg,nextImg
+                let nextFrame = () =>{
+                    let nextPosition = position + 1;
+                    nextPosition = nextPosition % children.length//处理当超出图片数量问题
+
+                    currentImg = children[position]
+                    nextImg = children[nextPosition]
+
+                    nextImg.style.transition = 'ease 0s'//移动到第二的位置
+                    nextImg.style.transform = `translate(${ 100 - 100 * nextPosition}%)`
+
+                    setTimeout(()=>{//展示从第二张回第一张的动画，第一张出去的动画
+                        currentImg.style.transition = ''
+                        currentImg.style.transform = `translate(${-100-100 * position}%)`
+
+                        nextImg.style.transition = ''
+                        nextImg.style.transform = `translate(${ -100 * nextPosition}%)`
+                        position = nextPosition
+                    })
+                     setTimeout(nextFrame, 3000)
+                }
+                // setTimeout(nextFrame,3000)
+                 let start_x, translate
+                 let start = (e)=>{
+                   e.preventDefault();
+                   start_x = e.clientX
+                   translate = -500 * position
+                   document.addEventListener('mouseup', end)
+                   document.addEventListener('mousemove', move)
+                 }
+                 let move = (e) =>{//图片跟着鼠标移动
+                    event.preventDefault();
+                    let move_x = e.clientX
+                    for(let i of children){
+                        i.style.transition = "ease 0s";
+                        i.style.transform = `translate(${ translate + move_x - start_x}px)`
+                    }
+                 }
+                 let end = (e) => {//判断是否切换
+                    let end_x = e.clientX
+                    document.removeEventListener("mousemove", move);
+                    document.removeEventListener("mouseup", end);
+                    position = - (Math.round((translate + end_x - start_x) / 500));
+                    
+                    // position = position < 0 ? 0 : position
+                    // position = position > children.length - 1? children.length - 1: position 
+                     position = Math.max(0, Math.min(position, children.length))//处理便捷问题
+
+                     for (let child of children) {
+                         child.style.transition = "";
+                         child.style.transform = `translate(${- position * 500}px)`;
+                     }
+
+                  }
+                 this._container.addEventListener('mousedown',start)
+
+            }
+      }
+       let carousel = new Carousel(container)
+        carousel.imgSrcArr = imgSrcArr
+        carousel.render()
+  </script>
+  </body>
+</html>
+
+

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			.container{
+				width:500px;
+				height:300px;
+				margin: 0 auto;
+				overflow:hidden;
+			}
+			.carousel{
+				height:300px;
+				white-space: nowrap;
+			}
+			.carousel>img{
+				width:500px;
+				height:300px;
+				display:inline-block;
+				transition:ease 0.5s;
+			}
+		</style>
+	</head>
+	<div id="container" class="container">
+		<div id="carousel"></div>
+	</div>
+	<script>
+		let data = [
+			"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1065823702,2275031591&fm=26&gp=0.jpg",
+			"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2046760670,431481929&fm=26&gp=0.jpg",
+			"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=413854135,362570672&fm=26&gp=0.jpg",
+			"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1879388642,3453154810&fm=26&gp=0.jpg"
+		];
+		//class 声明创建一个基于原型继承的具有给定名称的新类。
+		class Carousel {
+			//构造函数方法
+			constructor(container) {
+				this._carousel = container;
+				//Element.classList 是一个只读属性，返回一个元素的类属性的实时DOMTokenList 集合。
+				//使用 classList 是替代element.className作为空格分隔的字符串访问元素的类列表的一种方便的方法。
+				this._carousel.classList.add('carousel');
+				this._handle = null;
+				this.data = null;
+			}
+			//渲染函数
+			render (){
+				
+				//创建img添加到页面指定容器
+				for (let d of this.data) {
+					
+					let e = document.createElement('img');
+					
+					e.src = d;
+					
+					this._carousel.appendChild(e);
+				};
+				//Array.prototype.slice.call(arguments)能将具有length属性的对象(key值为数字)转成数组。[]是Array的示例，所以可以直接使用[].slice（）方法。
+				let children = Array.prototype.slice.call(this._carousel.children);
+				
+				this._carousel.style.width=500*children.length+'px';
+				//计数
+				let position = 0;
+				
+				let nextFrame = ()=>{
+					
+					//向左
+					let nextPosition = position+1;
+					
+					//去模运算让循环播放动画
+					nextPosition = nextPosition % children.length;
+					
+					//当前位置
+					let current = children[position],
+					//下一个位置
+						next = children[nextPosition];
+					//把next摆到正确的位置
+					next.style.transition = "ease 0s";
+					next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+					
+					requestAnimationFrame(()=>{
+						requestAnimationFrame(()=>{
+						    //把current挪出视口
+						    current.style.transition = ""; //transition置空，css中的属性就会生效
+						    current.style.transform = `translate(${- 100 - 100 * position}%)`
+						    //把next挪进视口
+						    next.style.transition = "";
+						    next.style.transform = `translate(${- 100 * nextPosition}%)`
+						    position = nextPosition;
+						});
+					});
+					//先执行一下
+					setTimeout(nextFrame,3000);
+				};
+				//setTimeout(nextFrame,1000);
+				//开始
+				let startX;
+				let startTransform;
+				//鼠标mousedown
+				let start = event =>{
+				    event.preventDefault();
+					//存一下鼠标开始位置
+				    startX = event.clientX;
+					//容器原来的位置
+				    startTransform = - position * 500;
+				    document.addEventListener("mousemove", move);
+				    document.addEventListener("mouseup", end);
+				};
+				//鼠标mousemove
+				let move = event =>{
+					event.preventDefault();
+					//循环让所有图片同时运动
+					for (let child of children) {
+						child.style.transition = 'ease 0s';
+						child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+					};
+				}
+				//鼠标mouseup
+				let end = () =>{
+					//抬起鼠标时候清除事件
+					document.removeEventListener('mousemove', move);
+					document.removeEventListener('mouseup', end);
+					//该Math.round()函数返回舍入到最接近整数的数字的值。
+					position = -(Math.round((startTransform + event.clientX -startX)/500));
+					//Math.max() 函数返回一组数中的最大值。
+					//Math.min() 返回零个或更多个数值的最小值。
+					position = Math.max(0, Math.min(position, children.length - 1));
+					
+					for(let child of children) {
+					    child.style.transition = "";
+					    child.style.transform = `translate(${ - position * 500}px)`;
+					}
+				}
+				//鼠标mousedown
+				this._carousel.addEventListener('mousedown', start);
+			}
+			
+		}
+		
+		//new一个实例对象出来
+		let carousel = new Carousel(document.getElementById('carousel'));
+		
+		carousel.data=data;
+		
+		carousel.render();
+		
+	</script>
+
+	</body>
+</html>
