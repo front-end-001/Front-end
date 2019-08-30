@@ -15,14 +15,30 @@ const anime = (function () {
       this._rate = rate;
       /** 动画总时间 */
       this.totalTime = 0;
+      this.onFinish = null;
     }
 
     run() {
-      let finished = true;
+      let currentPoint;
+      let finished = false;
+      if (this.direction > 0) {
+        currentPoint = (Date.now() - this.startTime + this.pauseTime) * this._rate;
+        if (currentPoint > this.totalTime) {
+          finished = true;
+        }
+      } else {
+        currentPoint = (this.totalTime - (Date.now() - this.startTime) + this.pauseTime) * this._rate;
+        if (currentPoint < 0) {
+          finished = true;
+        }
+      }
       for (let animation of this._animation) {
         if (!animation.finished) {
-          finished = false;
-          animation.tick((Date.now() - this.startTime + this.pauseTime) * this._rate * this.direction);
+          if (this.direction > 0) {
+            animation.tick(currentPoint);
+          } else {
+            animation.tick(currentPoint);
+          }
         }
       }
 
@@ -35,8 +51,12 @@ const anime = (function () {
 
       // 已结束
       if (finished) {
+        console.log('时间线已结束');
         this.pauseTime = 0;
         this.paused = false;
+        if (this.onFinish) {
+          this.onFinish();
+        }
         return;
       }
 
@@ -51,13 +71,13 @@ const anime = (function () {
      */
     play() {
       if (!this.paused) {
-        this.startTime = Date.now();
         for (let animation of this._animation) {
           animation.finished = false;
-          animation.direction = this._rate;
+          animation.direction = this.direction;
         }
       }
-
+      this.startTime = Date.now();
+      this.paused = false;
       requestAnimationFrame(() => {
         this.run();
       });
@@ -75,12 +95,14 @@ const anime = (function () {
      */
     restart() {
       this.paused = false;
+      this.pauseTime = 0;
       this.play();
     }
 
     /** 反向 */
     reverse() {
       this.direction = -1 * this.direction;
+
     }
 
     set rate(value) {
@@ -105,8 +127,11 @@ const anime = (function () {
     /**
      * 添加动画
      */
-    add(animation) {
-      this._animation.push(new MyAnimation(animation, v => `${v}px`));
+    add(animation, conterter) {
+      if (!conterter) {
+        conterter = (v) => `${v}px`;
+      }
+      this._animation.push(new MyAnimation(animation, conterter));
 
       if (this.totalTime < animation.endTime) {
         this.totalTime = animation.endTime;
@@ -146,11 +171,15 @@ const anime = (function () {
       // 增大方向
       this.direction = 1;
     }
-    tick(t) {
+
+    checkFinished(t) {
+      // 已经结束直接返回
+      if (this.finished) return;
+
+      // 正向
       if (this.direction > 0) {
-        if (t < this._startTime) {
-          return;
-        }
+        if (t < this._startTime) return;
+
         if (t > this._endTime) {
           this.finished = true;
           // @ts-ignore
@@ -158,18 +187,25 @@ const anime = (function () {
           return;
         }
 
-      } else {
-        if (t > this._endTime) {
-          return;
-        }
-        if (t < this._startTime) {
-          this.finished = true;
-          // @ts-ignore
-          this._element.style[this._property] = this._conterter(this._startValue);
-          return;
-        }
+        return true;
       }
-      const progress = ease((t - this._startTime) / (this._endTime - this._startTime));
+
+      // 反向
+      if (t > this._endTime) return;
+
+      if (t < this._startTime) {
+        this.finished = true;
+        // @ts-ignore
+        this._element.style[this._property] = this._conterter(this._startValue);
+        return;
+      }
+      return true;
+    }
+
+    tick(t) {
+      if (!this.checkFinished(t)) return;
+
+      const progress = cubicBezierFuc.linear((t - this._startTime) / (this._endTime - this._startTime));
       // @ts-ignore
       this._element.style[this._property] = this._conterter(progress * (this._endValue - this._startValue) + this._startValue);
     }

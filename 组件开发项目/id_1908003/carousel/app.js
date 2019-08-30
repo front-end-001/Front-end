@@ -2,28 +2,28 @@
 (function () {
   const imgList = [{
     src: '../carousel-vue/public/imgs/cat1.jpg',
-    title: 'MDN',
+    title: '1-MDN',
     action: {
       type: 'link',
       value: 'https://developer.mozilla.org/en-US/',
     },
   }, {
     src: '../carousel-vue/public/imgs/cat2.jpg',
-    title: 'google',
+    title: '2-google',
     action: {
       type: 'link',
       value: 'https://developers.google.com/web/fundamentals/',
     },
   }, {
     src: '../carousel-vue/public/imgs/cat3.jpg',
-    title: 'github',
+    title: '3-github',
     action: {
       type: 'link',
       value: 'https://github.com/',
     },
   }, {
     src: '../carousel-vue/public/imgs/cat4.jpg',
-    title: 'stackoverflow',
+    title: '4-stackoverflow',
     action: {
       type: 'link',
       value: 'https://stackoverflow.com/',
@@ -33,17 +33,15 @@
 
 
   const carouselEle = document.getElementById('carousel')
-  const carousel = new Carousel(document.getElementById('carousel'));
-  carousel.data = imgList;
-  carousel.render();
+  const carousel = new Carousel(carouselEle, imgList);
+  carousel.init();
 
-// }());
-});
+}());
 
 // 动画用例
 (function () {
   const ballEle = document.getElementById('ball');
-  const tl = new anime.timeline();
+  const tl = new anime.timeline({});
 
   tl.add({
     element: ballEle,
