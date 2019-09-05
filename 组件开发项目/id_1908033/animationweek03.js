@@ -9,16 +9,13 @@ function cubicBezier(p1x, p1y, p2x, p2y) {
     const ay = 3 * p1y - 3 * p2y + 1;
     const by = 3 * p2y - 6 * p1y;
     const cy = 3 * p1y;
-
     function sampleCurveDerivativeX(t) {
         // `ax t^3 + bx t^2 + cx t' expanded using Horner 's rule.
         return (3 * ax * t + 2 * bx) * t + cx;
     }
-
     function sampleCurveX(t) {
         return ((ax * t + bx) * t + cx ) * t;
     }
-
     function sampleCurveY(t) {
         return ((ay * t + by) * t + cy ) * t;
     }
