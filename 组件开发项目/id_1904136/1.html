@@ -1,63 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
-    <script src="main.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
-<style>
-    ul{
-        list-style-type: none;
-    }
-    li{
-        position: absolute;
-        top:0;
-        left:0;
-    }
-</style>
 <body>
-<div id="d1">
-    <ul>
-        <li><img src="ss/1.jpg"></li>
-        <li><img src="ss/2.jpg"></li>
-        <li><img src="ss/3.jpg"></li>
-        <li><img src="ss/4.jpg"></li>
-    </ul>
-</div>
-<script>
-    var objdiv = document.getElementById("d1");
-    var objli = objdiv.getElementsByTagName("li");
-    var num=1;
-    var index=0;
-    var fad=0;
-    for(var i=0;i<4;i++){
-        objli[i].style.opacity=0;
-    }
-    function fchange(obj,fad) {
-        setTimeout(function(){
-            obj.style.opacity=fad;
-            fad+=0.01;
-            if(fad<1){
-                setTimeout(arguments.callee);
-            }
-        },20)}
-    function ff(){
-        console.log("11")
+<div id="swipe" style="width: 200px;height: 200px">
 
-        objli[index].style.opacity=0;
-        objli[index].style.zIndex=num;
-        fchange(objli[index],fad);
-        num++;
-        index++;
-        if(index>3){
-            index=0;
-        }
-        setTimeout(ff, 2000);
-    }
-    setTimeout(ff, 2000);
-</script>
+
+
+    let on
+    <script>
+    </script>
+
+</div>
 </body>
-</html>
+</html>　　
