@@ -86,6 +86,15 @@
         position = - (Math.round((x + event.dx) / 500))
         position = Math.max(0, Math.min(position, children.length - 1))
 
+        let current = children[position]
+        let next = children[(position + 1) / children.length]
+        let last = children[(position - 1) / children.length]
+
+        next.style.transition = "ease 0s";
+        next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+
+
+
         for (let child of children) {
           child.style.transition = ''
           child.style.transform = `translate(${- position * 500}px)`
