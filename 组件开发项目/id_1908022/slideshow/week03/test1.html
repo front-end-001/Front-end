@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>test1</title>
+    <style>
+        #ball{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgb(130, 180, 238);
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="ball" ></div>
+    <script>
+        class Timeline {
+            constructor(){
+                this._animations = [];
+            }
+
+            start(){
+                let startTime = Date.now();
+                setInterval(() => {
+                    for(let animation of this._animations){
+                        animation.tick(Date.now() - startTime);
+                    }
+                },20)
+                
+            }
+
+            appendAnimation(animation){
+                this._animations.push(animation);
+            }
+
+        }
+
+        class DomElementStyleAnimation{
+            constructor(element,property,startTime,startValue,endTime,endValue,conventer){
+                this._element = element;
+                this._property = property;
+                this._startTime = startTime;
+                this._startValue = startValue;
+                this._endTime = endTime;
+                this._endValue = endValue;
+                this._conventer = conventer;
+            }
+
+
+            tick(t){
+                if(t < this._startTime)
+                    return;
+                if(t > this._endTime)
+                    return;
+                this._element.style[this._property] = this._conventer((t - this._startTime) / (this._endTime - this._startTime) * (this._endValue - this._startValue) + this._startValue);
+            }
+        }
+
+        let t1 = new Timeline();
+
+        t1.appendAnimation(new DomElementStyleAnimation(document.getElementById('ball'),
+            'top',
+            0,  0,
+            500, 100,
+            v => {return `${v}px`}
+        ))
+        t1.appendAnimation(new DomElementStyleAnimation(document.getElementById('ball'),
+            'left',
+            500,  0,
+            1000, 100,
+            v => {return `${v}px`}
+        ))
+        t1.appendAnimation(new DomElementStyleAnimation(document.getElementById('ball'),
+            'top',
+            1000,  100,
+            1500, 0,
+            v => {return `${v}px`}
+        ))
+        t1.appendAnimation(new DomElementStyleAnimation(document.getElementById('ball'),
+            'left',
+            1500,  100,
+            2000, 0,
+            v => {return `${v}px`}
+        ))
+
+        t1.start();
+
+    </script>
+    
+</body>
+</html>
