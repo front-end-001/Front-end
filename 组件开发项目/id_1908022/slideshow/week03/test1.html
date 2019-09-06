@@ -109,6 +109,8 @@
                 this._animations = [];
                 this._status = 'init';
                 this.jxTime = 0;
+                this._rate = 1;
+                this._startPoint = 0;
 
             }
 
@@ -143,14 +145,28 @@
                 this._startTime = startTime;
                 this._tick = () => {
                     for(let animation of this._animations){
-                        if(!animation.finshed)
-                            animation.tick(Date.now() - this.jxTime - this._startTime);
+                            animation.tick((Date.now() - this.jxTime - this._startTime) * this._rate + this._startPoint);
                     }
                     if(this._tick)
                         requestAnimationFrame(this._tick);
                 }
                 requestAnimationFrame(this._tick);
             }
+
+            set startPoint(value){
+                this._startPoint = value;
+						}
+						get startPoint(){
+                return this._startPoint;
+						}
+
+            set rate(value){
+                this._rate = value;
+						}
+
+						get rate(){
+                return this._rate;
+						}
 
             appendAnimation(animation){
                 this._animations.push(animation);
@@ -175,18 +191,33 @@
                 this._endTime = endTime;
                 this._endValue = endValue;
                 this._conventer = conventer;
+                this._fixKeyFrame = false;
             }
 
 
             tick(t){
-                if(t < this._startTime)
-                    return;
-                if(t > this._endTime){
-                    t = this._endTime;
-                    this.finshed = true;
-                }
+                if(t < this._startTime){
+                    if(!this._fixKeyFrame)
+                        return
+										else{
+                        t = this._startTime;
+                        this._fixKeyFrame = false;
+										}
+
+								}else if(t > this._endTime){
+                    if(!this._fixKeyFrame)
+                        return
+										else{
+                        t = this._endTime;
+                        this._fixKeyFrame = false;
+										}
+
+                }else{
+                    this._fixKeyFrame = true;
+								}
+
                 let progress = (t - this._startTime) / (this._endTime - this._startTime);
-                let displacement = myCB(progress) * (this._endValue - this._startValue);
+                let displacement = easeIn(progress) * (this._endValue - this._startValue);
                 let currentValue = displacement + this._startValue
                 this._element.style[this._property] = this._conventer(currentValue);
             }
@@ -218,6 +249,9 @@
             20000, 0,
             v =>  `${v}px`
         ))
+
+				t1.rate = -10;
+        t1.startPoint = 20000;
 
         t1.start();
 
