@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>手势</title>
+    <style>
+        #carousel {
+            width: 500px;
+            height: 500px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    
+        #carousel img {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            object-fit: cover;
+            transition: ease 0.6s;
+        }
+    </style>
+</head>
+<body>
+    <div id='carousel'></div>
+    <!-- <div id='circle' style='border-radius:100%;background: goldenrod;width: 100px;height: 100px; '></div> -->
+    <script>
+        
+    function enable(circle){
+            let start = (point, context) => {
+                context.startX = point.clientX
+                context.startY = point.clientY
+                context.isTap = true
+                context.isPan = false
+                context.startTime = Date.now()
+
+                context.isPress = false
+
+                context.pressHandler = setTimeout(()=>{
+                    context.isPress = true;
+                    context.isTap = false;
+                    let e = new Event("pressstart");
+                    circle.dispatchEvent(e);
+                    context.pressHandler = null;
+                },500)
+            }
+            let move = (point, context) => {
+                let dx = point.clientX - context.startX
+                let dy = point.clientY - context.startY
+                if (dx * dx + dy * dy > 100) {
+                    if(context.pressHandler !== null){
+                         clearTimeout(context.pressHandler);
+                         context.pressHandler = null;
+                         context.isPress = false;
+                    } else if (context.isPress) {
+                        context.isPress = false;
+                        let e = new Event("presscancel");
+                        circle.dispatchEvent(e);
+                    }
+
+                    context.isTap = false
+
+                    if (context.isPan == false) {
+                        console.log(point.clientX,dy)
+                        if(Math.abs(dx) > Math.abs(dy)){
+                            context.isVertical = false
+                            context.isHorizontal = true
+                        }else{
+                            context.isVertical = true
+                            context.isHorizontal = false
+                        }
+                        let e = new Event('panstart')
+                        e.startX = point.clientX
+                        e.startY = point.clientY
+                        circle.dispatchEvent(e)
+                        context.isPan = true
+                    }
+                }
+                if (context.isPan) {
+                    let e = new Event('pan')
+                    e.dx = dx
+                    e.dy = dy
+                    e.isVertical = context.isVertical
+                    e.isHorizontal = context.isHorizontal
+                    circle.dispatchEvent(e)
+                }
+
+                context.dx = dx
+                context.dy = dy
+            }
+            let end = (point, context) => {
+                 if (context.pressHandler !== null) {
+                    clearTimeout(context.pressHandler);
+                }
+                if (context.isPress) {
+                    let e = new Event("pressend");
+                    circle.dispatchEvent(e);
+                }
+                if (context.isTap) {
+                    console.log('tap')
+                    let e = new Event('tap')
+                    circle.dispatchEvent(e)
+                }
+                let dx = point.clientX - context.startX
+                let dy = point.clientY - context.startY
+                let v = Math.sqrt(dx * dx + dy * dy)/(Date.now() - context.startTime)
+                if(context.isPan && v >  0.3){
+                    context.isFlick = true
+                    let e = new Event('Flick')
+                    e.dx = dx
+                    e.dy = dy
+                    circle.dispatchEvent(e)
+                }else{
+                    context.isFlick = false
+                }
+                if (context.isPan) {
+                    console.log('pan')
+                    let dx = point.clientX - context.startX, dy = point.clientY - context.startY
+                    let e = new Event('panend')
+                    e.dx = dx
+                    e.dy = dy
+                    e.isFlick = context.isFlick
+                    e.isVertical = context.isVertical
+                    e.isHorizontal = context.isHorizontal
+                    circle.dispatchEvent(e)
+                }
+
+            }
+            let cancle = (point, context) => {
+                if (context.isPan) {
+                    let e = new Event("pancancel");
+                    circle.dispatchEvent(e);
+                }
+                if (context.isPress) {
+                    let e = new Event("presscancel");
+                    circle.dispatchEvent(e);
+                }
+                if (context.pressHandler !== null) {
+                    let e = new Event("pancancel");
+                    circle.dispatchEvent(e);
+                    clearTimeout(context.pressHandler);
+                }
+            }
+
+            let contexts = Object.create(null)
+            let mouseSymbol = Symbol('mouse')
+            let mousedown = event => {
+                event.preventDefault();
+                document.addEventListener('mousemove', mousemove)
+                document.addEventListener('mouseup', mouseup)
+                contexts[mouseSymbol] = Object.create(null)
+                start(event, contexts[mouseSymbol])
+            }
+            let mousemove = event => {
+                event.preventDefault();
+                move(event, contexts[mouseSymbol])
+            }
+            let mouseup = event => {
+                document.removeEventListener('mousemove', mousemove)
+                document.removeEventListener('mouseup', mouseup)
+                end(event, contexts[mouseSymbol])
+                delete contexts[mouseSymbol]
+            }
+
+
+            let touchstart = event => {
+                for (let touche of event.changedTouches) {
+                    contexts[touche.identifier] = Object.create(null)
+                    start(touche, contexts[touche.identifier])
+                }
+
+            }
+            let touchmove = event => {
+                for (let touche of event.changedTouches) {
+                    move(touche, contexts[touche.identifier])
+                }
+            }
+            let touchend = event => {
+                for (let touche of event.changedTouches) {
+                    end(touche, contexts[touche.identifier])
+                    delete contexts[touche.identifier]
+                }
+
+            }
+            let touchcancel = event => {
+                for (let touche of event.changedTouches) {
+                    cancel(touche, contexts[touche.identifier])
+                    delete contexts[touche.identifier]
+                }
+            }
+
+            circle.addEventListener('mousedown', mousedown)
+
+            circle.addEventListener('touchstart', touchstart)
+            circle.addEventListener('touchmove', touchmove, { passive: false })
+            circle.addEventListener('touchend', touchend)
+            circle.addEventListener('touchcancel', touchcancel)
+    }
+             
+    </script>
+    <script>
+        let imgArr = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+                "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+                "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+                "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"]
+            let container = document.getElementById('carousel')
+            class Carousel{
+                constructor(container){
+                    this._container = container;
+                    this._handler = null;
+                    this.imgSrcArr = null
+                }
+                render() {
+                    for (let i = 0; i < this.imgSrcArr.length; i++) {
+                        let img = document.createElement('img')
+                        img.setAttribute('src', this.imgSrcArr[i])
+                        container.appendChild(img)
+                    }
+                    // let silderArr = container.childNodes
+                     let silderArr = Array.prototype.slice.call(this._container.children)
+                    let position = 0;
+                    let positionNext = position + 1;
+                    let slider = move => {
+                        positionNext = positionNext % silderArr.length
+                        silderArr[positionNext].style.transition = 'ease 0s'
+                        silderArr[positionNext].style.transform = `translate(${100 - 100 * positionNext}%)`
+                        setTimeout(() => {
+                            silderArr[position].style.transition = ''
+                            silderArr[position].style.transform = `translate(${- 100 - 100 * position}%)`
+
+                            silderArr[positionNext].style.transition = ''
+                            silderArr[positionNext].style.transform = `translate(${- 100 * positionNext}%)`
+
+                            position = positionNext
+                        }, 1000)
+                        // setTimeout(slider, 1000)
+                    }
+                    enable(container)
+                    let x =0
+                    this._container.addEventListener('pan',e=>{
+                        if (e.isVertical) return
+                         for (let i of silderArr) {
+                            i.style.transition = ''
+                            i.style.transform = `translateX(${e.dx + x}px)`
+                        }
+                    })
+                    this._container.addEventListener('panend', e => {
+                        if(e.isVertical) return
+                        if(e.isFlick && Math.abs(event.dx) > Math.abs(event.dy)){
+                            if(e.dx > 0){
+                                position = position - 1
+                            }else if(e.dx < 0){
+                                position = position + 1
+                            }
+                        }else{
+                             position = -(Math.round((x + event.dx) / 500));
+                        }
+                        position = Math.max(0, Math.min(position, silderArr.length-1))
+
+                        for (let i of silderArr) {
+                            i.style.transition = ''
+                            i.style.transform = `translateX(${- position * 500}px)`
+                        }
+                        x = -position * 500;
+                    })
+
+                    this._container.addEventListener("mousedown", event => event.preventDefault());
+                    // setTimeout(slider,600)
+                    // let clientX
+                    // let translate
+                    // let start = (e) => {
+                    //     e.preventDefault();
+                    //     clientX = e.clientX
+                    //     translate = - 500 * position
+                    //     document.addEventListener('mousemove', move)
+                    //     document.addEventListener('mouseup', end)
+                    // }
+                    // let move = (e) => {
+                    //     e.preventDefault()
+                    //     let currentX = e.clientX
+
+                    //     for (let i of silderArr) {
+                    //         i.style.transition = ''
+                    //         i.style.transform = `translate(${translate + currentX - clientX}px)`
+                    //     }
+                    // }
+                    // let end = (e) => {
+                    //     let endX = e.clientX
+                    //     document.removeEventListener("mousemove", move);
+                    //     document.removeEventListener("mouseup", end);
+                    //     position = - (Math.round((endX - clientX + translate) / 500))
+                    //     position = Math.max(0, Math.min(position, silderArr.length))
+                    //     for (let i of silderArr) {
+                    //         i.style.transition = ''
+                    //         i.style.transform = `translate(${- position * 500}px)`
+                    //     }
+                    // }
+                    // container.addEventListener('mousedown', start)
+                }
+            }
+            let carousel = new Carousel(container)
+                carousel.imgSrcArr = imgArr
+                carousel.render()
+    
+    </script>
+</body>
+</html>

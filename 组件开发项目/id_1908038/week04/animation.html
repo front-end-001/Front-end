@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="animation.js"></script>
+  <style>
+    #ball {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      background: navy;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="ball"></div>
+  <button onclick="tl.pause();">pause</button>
+  <button onclick="tl.resume();">resume</button>
+  <script>
+
+    let tl = new TimeLine();
+    tl.addAnimation(new DOMElementStyleAnimation(
+      document.getElementById("ball"),
+      "top",
+      0, 0,
+      500, 200,
+      (v) => `${v}px`
+    ));
+    tl.addAnimation(new DOMElementStyleAnimation(
+      document.getElementById('ball'),
+      "left",
+      500, 0,
+      1000, 200,
+      (v) => `${v}px`
+    ));
+    tl.addAnimation(new DOMElementStyleAnimation(
+      document.getElementById('ball'),
+      "top",
+      1000, 200,
+      1500, 0,
+      (v) => `${v}px`
+    ));
+    tl.addAnimation(new DOMElementStyleAnimation(
+      document.getElementById('ball'),
+      "left",
+      1500, 200,
+      2000, 0,
+      (v) => `${v}px`
+    ));
+    tl.startPoint = 2000;
+    tl.rate = -1;
+    tl.start();
+  </script>
+</body>
+
+</html>

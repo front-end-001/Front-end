@@ -2,7 +2,7 @@
   width: 600px;
   height: 400px;
   margin: 10px auto;
-  /* overflow: hidden; */
+  overflow: hidden;
   /* border: 1px solid #ccc; */
   white-space: nowrap;
   outline: 1px solid red;
@@ -10,5 +10,5 @@
 .container > img {
   width: 100%;
   height: 100%;
-  transition: ease .3s;
+  transition: ease .5s;
 }
