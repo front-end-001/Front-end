@@ -168,39 +168,39 @@ class DomElementAnimation {
 
 const tl = new TimeLine();
 
-tl.addAnimation(new DomElementAnimation(
-  document.getElementById('ball'),
-  'transform',
-  0, 0,
-  2000, 500,
-  v => `translateX(${v}px)`
-));
+// tl.addAnimation(new DomElementAnimation(
+//   document.getElementById('ball'),
+//   'transform',
+//   0, 0,
+//   2000, 500,
+//   v => `translateX(${v}px)`
+// ));
 tl.addAnimation(new DomElementAnimation(
   document.getElementById('ball'),
   'top',
   0,    0,
+  1000, 300,
+  v => `${v}px`
+));
+tl.addAnimation(new DomElementAnimation(
+  document.getElementById('ball'),
+  'left',
+  1000, 0,
   2000, 300,
   v => `${v}px`
 ));
 tl.addAnimation(new DomElementAnimation(
   document.getElementById('ball'),
-  'left',
-  2000, 0,
-  4000, 300,
-  v => `${v}px`
-));
-tl.addAnimation(new DomElementAnimation(
-  document.getElementById('ball'),
   'top',
-  4000, 300,
-  6000, 0,
+  2000, 300,
+  3000, 0,
   v => `${v}px`
 ));
 tl.addAnimation(new DomElementAnimation(
   document.getElementById('ball'),
   'left',
-  6000, 300,
-  8000, 0,
+  3000, 300,
+  4000, 0,
   v => `${v}px`
 ));
 
