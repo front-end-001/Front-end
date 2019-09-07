@@ -29,4 +29,13 @@ https://cubic-bezier.com/
 ####总结
 不止实现功能, 需要达到尽可能的完美, 比如注重纯度和明度
 
+####组件设计
+1. 添加attribute和property
+2. 事件
+   addEvent
+   removeEvent
+   triggerEvent
+3. 生命周期
+4. 状态
+
 

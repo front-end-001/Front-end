@@ -79,11 +79,8 @@
 
                         setTimeout(nextFrame, 3000);
                     };
-
                     let x = 0;
-
                     enableGesture(this._container);
-
                     this._container.addEventListener("pan", event => {
                         //console.log("pan")
                         if(event.isVertical)
@@ -115,9 +112,7 @@
                         }
                         x = -position * 500;
                     })
-
                     this._container.addEventListener("mousedown", event => event.preventDefault());
-
 
                     /*let startTransform;
 

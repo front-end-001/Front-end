@@ -3,17 +3,6 @@ function initGesture (main) {
     // 1. 抽象出鼠标移动拖拽的事件; 将移动端和pc端的抽象
     // 2. 判断何时拖拽结束
     // 3. 实现"拖拽结束"的逻辑
-    /*let x = 0, y = 0
-    main.addEventListener("tap", (e) => {
-        main.style.transform = `translate(${e.dx + x}px, ${e.dy + y}px)`
-    })
-    main.addEventListener("panend", (e) => {
-        x = x + e.dx
-        y = y + e.dy
-    })
-    main.addEventListener("pancancel", (e) => {
-        main.style.transform = `translate(${x}px, ${y}px)`
-    })*/
     const start = (e, context) => {
         console.log('start', e.clientX, e.clientY)
         context.startX = e.clientX
@@ -66,7 +55,7 @@ function initGesture (main) {
             context.isFlick = false
         }
         if (context.isPan) {
-            const panendE = new Event("panend")
+            const panendE = new Event("panEnd")
             panendE.dx = dx
             panendE.dy = dy
             panendE.isFlick = context.isFlick
