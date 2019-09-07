@@ -26,7 +26,6 @@ class DOMElementStyleNumberAnimation extends DOMElementStyleAnimation {
 
   tick = (t: number): void => {
     if (!this.fixKeyFrame(t)) return;
-    console.log(t, this.getValue(t));
     this.updateElemStyle(this.getValue(t));
   };
 

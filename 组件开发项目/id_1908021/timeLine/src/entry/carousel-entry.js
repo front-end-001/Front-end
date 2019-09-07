@@ -1,5 +1,5 @@
-import TimeLine from '../animation/Timeline';
-import DOMElementStyleNumberAnimation from '../animation/DOMElementStyleNumberAnimation';
+import TimeLine from '../css-animation-lib/animation/Timeline';
+import DOMElementStyleNumberAnimation from '../css-animation-lib/animation/DOMElementStyleNumberAnimation';
 
 let data = [
   'https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg',
@@ -13,7 +13,7 @@ class Carousel {
     this._container = container;
     this._handler = null;
     this.data = null;
-    enableGesture(this._container);
+    // enableGesture(this._container);
   }
 
   render() {
