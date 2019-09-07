@@ -315,15 +315,25 @@
         this._element.style[this._property] = this._converter(currentValue);
       }
     }
-    let tl = new Timeline()
-    tl.addAnimation(new DomElementStyleNumberAnimation(
+    // let tl = new Timeline()
+    // tl.addAnimation(new DomElementStyleNumberAnimation(
+    //   document.querySelector('.ball'),
+    //   "top",
+    //   0,0,
+    //   1000,200,
+    //   v=>`${v}px`
+    // ))
+    // tl.start()
+
+    let tl2 = new Timeline()
+    tl2.addAnimation(new DomElementStyleNumberAnimation(
       document.querySelector('.ball'),
-      "top",
+      "transform",
       0,0,
-      500,200,
-      v=>`${v}px`
+      1000,200,
+      v=>`translate(${v}px,0)`
     ))
-    tl.start()
+    tl2.start()
   </script>
 </body>
 
