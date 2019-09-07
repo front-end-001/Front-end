@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>时间线</title>
+    <style>
+        div#ball {
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: #009d00;
+            position: absolute;
+            /*transition: top 0.5s ease 0.5ms;*/
+        }
+    </style>
+    <script src="animation.js"></script>
+</head>
+<body>
+<button onclick="tl.pause();">pause</button>
+<button onclick="tl.resume();">resume</button>
+<div id="ball" style="">
+
+</div>
+<script>
+
+
+
+    let tl = new Timeline();
+    tl.addAnimation(new DOMElementStyleNumberAnimation(
+        document.getElementById("ball"),
+        "top",
+        0, 0,
+        500, 200,
+        (v) => `${v}px`
+    ));
+    tl.addAnimation(new DOMElementStyleNumberAnimation(
+        document.getElementById("ball"),
+        "left",
+        500, 0,
+        1000, 200,
+        (v) => `${v}px`
+    ));
+    tl.addAnimation(new DOMElementStyleNumberAnimation(
+        document.getElementById("ball"),
+        "top",
+        1000, 200,
+        1500, 0,
+        (v) => `${v}px`
+    ));
+    tl.addAnimation(new DOMElementStyleNumberAnimation(
+        document.getElementById("ball"),
+        "left",
+        1500, 200,
+        2000, 0,
+        (v) => `${v}px`
+    ));
+    tl.rate = -1;
+    tl.startPoint = 2000;
+    tl.start();
+
+</script>
+</body>
+</html>

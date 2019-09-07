@@ -1,0 +1,58 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: 玉皇大亮
+ * @Date: 2019-08-21 10:54:18
+ * @LastEditTime: 2019-08-22 18:42:14
+ -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="./test_gesture.js"></script>
+</head>
+
+<body>
+    <div id="main" style="width:500px;height:500px;background-color: cadetblue;"></div>
+    <script>
+        let main = document.getElementById("main");
+        enableGesture(main);
+
+        main.addEventListener("pressstart", (e) => {
+            console.log("pressstart");
+        });
+
+        main.addEventListener("pressend", (e) => {
+            console.log("pressend");
+        });
+
+        main.addEventListener("presscancel", (e) => {
+            console.log("presscancel");
+        });
+
+        main.addEventListener("tap", (e) => {
+            console.log("tap");
+        })
+
+        // let x = 0, y = 0;
+        // main.addEventListener("panmove", (e) => {
+        //     main.style.transform = `translate(${x + e.dx}px, ${y + e.dy}px)`;
+        // });
+
+        // main.addEventListener("panend", (e) => {
+        //     x = x + e.dx;
+        //     y = y + e.dy; 
+        // });
+
+        // main.addEventListener("pancancel", (e) => {
+        //     x = 0;
+        //     y = 0;
+        //     main.style.transform = `translate(${x}px, ${y}px)`;
+        // });
+        
+        
+        
+    </script>
+</body>
+
+</html>

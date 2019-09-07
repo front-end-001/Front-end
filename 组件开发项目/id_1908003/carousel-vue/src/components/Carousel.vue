@@ -19,5 +19,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .carousel {}
+// .carousel-step1 {}
 </style>
