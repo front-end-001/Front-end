@@ -130,8 +130,9 @@ let myCB2 = cubicBezier(.7,-0.28,.91,-0.11);
             if(this._status === 'pause'){
                 console.log('re')
                 this._status = 'start'
-                this._pauseTime = Date.now()-this._pauseStart
-                requestAnimationFrame(this._reAnimate)
+                this._pauseTime = Date.now()-this._pauseStart+this._pauseTime
+                this._animate = this._reAnimate
+                requestAnimationFrame(this._animate)
             // this._interval = setInterval(this._animate,16)
             }
             
@@ -148,9 +149,12 @@ let myCB2 = cubicBezier(.7,-0.28,.91,-0.11);
             this._status = 'start'
             let startTime = Date.now()
              this._animate = ()=>{
-                for(let animation of  this._animations)
+                for(let animation of  this._animations){
                 animation.tick(Date.now()-this._pauseTime-startTime)
-                requestAnimationFrame(this._animate)
+                this.removeAnimation(animation)
+                }
+                if(this._animate) requestAnimationFrame(this._animate)
+                
             }
             requestAnimationFrame(this._animate)
         //    this._interval = setInterval(this._animate,16)
@@ -161,8 +165,13 @@ let myCB2 = cubicBezier(.7,-0.28,.91,-0.11);
                 if(!animation.finshed)
                 this._animations.push(animation)
             }
-            removeAnimation(){
-
+            removeAnimation(animation){
+                if(animation.finshed){
+                    var index = this._animations.indexOf(animation); 
+                    if (index > -1) { 
+                        this._animations.splice(index, 1); 
+                    } 
+                }
             }
         
     }

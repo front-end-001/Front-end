@@ -3,9 +3,7 @@ function enableGesture(main){
         //console.log("start")
         context.startX = point.clientX;
         context.startY = point.clientY;
-
         context.startTime = Date.now();
-
         context.isTap = true;
         context.isPan = false;
         context.isPress = false;
