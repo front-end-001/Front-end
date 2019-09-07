@@ -26,11 +26,13 @@ const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const SYSTEM_SYMBOL = Symbol('system');
+const STATE_SYMBOL = Symbol('system');
 
 class Carousel {
   constructor(container, data) {
     this[ATTRIBUTE_SYMBOL] = Object.create(null);
     this[PROPERTY_SYMBOL] = Object.create(null);
+    this[STATE_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
     this[SYSTEM_SYMBOL] = Object.create(null);
 
@@ -38,9 +40,9 @@ class Carousel {
   }
 
   created(container, data) {
-    this._container = container;
-    this._container.classList.add('container');
-    this._handler = null;
+    // this._container = container;
+    this[PROPERTY_SYMBOL]._container = container;
+    this[PROPERTY_SYMBOL]._container.classList.add('container');
     this.data = data;
   }
 
@@ -48,13 +50,15 @@ class Carousel {
     for (let d of this.data) {
       let img = document.createElement('img');
       img.src = d;
-      this._container.appendChild(img);
+      this[PROPERTY_SYMBOL]._container.appendChild(img);
     }
   }
 
   render() {
+    // ?
+    this.mounted();
 
-    let children = Array.prototype.slice.call(this._container.children);
+    let children = Array.prototype.slice.call(this[PROPERTY_SYMBOL]._container.children);
     let position = 0;
 
     let nextFrame = () => {
@@ -82,10 +86,10 @@ class Carousel {
     }
     // setTimeout(nextFrame, 3000)
 
-    this._container.addEventListener('mousedown', e => e.preventDefault());
-    enableGesture(this._container);
+    this[PROPERTY_SYMBOL]._container.addEventListener('mousedown', e => e.preventDefault());
+    enableGesture(this[PROPERTY_SYMBOL]._container);
     let x = 0;
-    this._container.addEventListener('pan', e => {
+    this[PROPERTY_SYMBOL]._container.addEventListener('pan', e => {
       if (e.isVertical) return;
 
       for (let child of children) {
@@ -93,7 +97,7 @@ class Carousel {
         child.style.transform = `translate(${e.dx + x}px)`;
       }
     })
-    this._container.addEventListener('panend', e => {
+    this[PROPERTY_SYMBOL]._container.addEventListener('panend', e => {
       if (e.isVertical) return;
 
       if (e.isFlick && Math.abs(e.dx) > Math.abs(e.dy)) {
