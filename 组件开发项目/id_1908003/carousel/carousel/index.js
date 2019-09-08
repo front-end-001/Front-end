@@ -20,10 +20,11 @@ const Carousel = (function () {
     /** 动画类型 */
     easing: 'line',
     /** @type {object|false} 自动播放配置 */
-    autoplay: {
-      /** 自动轮播时间间隔, 单位 ms */
-      delay: 1000,
-    },
+    autoplay: false,
+    // autoplay: {
+    //   /** 自动轮播时间间隔, 单位 ms */
+    //   delay: 1000,
+    // },
     /** 是否启用手势支持 */
     enableTouch: false,
     /** 轮播方向 1: 正向 -: 反向 */
@@ -89,6 +90,31 @@ const Carousel = (function () {
       }
     }
 
+    get current() {
+      return this[STATUS_SYMBOL].current;
+    }
+
+    set current(val) {
+      const { current, slideEle } = this[STATUS_SYMBOL];
+      const { deriction } = this[PROP_SYMBOL];
+
+      if (typeof val !== 'number') {
+        throw new Error('current need be number');
+      }
+
+      if (val < 0 || val >= slideEle.length) {
+        throw new Error('current need be index of slide');
+      }
+
+      val = Math.floor(val);
+      let d = val - current;
+
+      if (deriction < 0) {
+        d = current - val;
+      }
+
+      this.doSlide(d);
+    }
 
     created() {
       const { data, container } = this[STATUS_SYMBOL];
@@ -119,11 +145,6 @@ const Carousel = (function () {
       nextEle.classList.add('carousel-button-next');
       container.appendChild(nextEle);
 
-
-      if (this.config.autoplay) {
-        this.startAutoPlay();
-      }
-
       container.addEventListener('mousedown', (event) => {
         event.preventDefault();
       });
@@ -140,13 +161,18 @@ const Carousel = (function () {
       container.classList.add('carousel-container');
       // 将子元素转化为普通数组, 存入 status
       this[STATUS_SYMBOL].slideEle = Array.prototype.slice.call(ele.children);
+
+      if (this.config.autoplay) {
+        this.startAutoPlay();
+      }
+      if (this.config.enableTouch) {
+        this.enableGesture();
+      }
     }
 
     /** 手势支持 */
     enableGesture() {
-      if (!this.config.enableTouch) return;
-
-      gesture.enableGesture(this.root);
+      gesture.enableGesture(this[STATUS_SYMBOL].root);
 
       // 能力检测
       let useTouch = false;
@@ -234,7 +260,7 @@ const Carousel = (function () {
         /** 轮播宽度 */
         const width = this.root.offsetWidth;
 
-        const { prevSlideEle, currentSlideEle, nextSlideEle, prevIndex, currentIndex, nextIndex } = this.getActiveEle();
+        const { prevSlideEle, currentSlideEle, nextSlideEle, prevIndex, currentIndex, nextIndex } = this.getActiveEle(this.current);
         const translateX_Val = getTransformXVal(currentSlideEle);
         const dx = translateX_Val + (width * currentIndex);
         prevSlideEle.style.transform = `translateX(${ (-1 * (prevIndex + 1)) * width + dx }px)`;
@@ -249,7 +275,7 @@ const Carousel = (function () {
         /** 轮播宽度 */
         const width = this.root.offsetWidth;
 
-        let { prevSlideEle, currentSlideEle, nextSlideEle, prevIndex, currentIndex, nextIndex } = this.getActiveEle();
+        let { prevSlideEle, currentSlideEle, nextSlideEle, prevIndex, currentIndex, nextIndex } = this.getActiveEle(this.current);
         const translateX_Val = getTransformXVal(currentSlideEle);
         const dx = translateX_Val + (width * currentIndex);
         let dCurrent = 0;
@@ -336,8 +362,16 @@ const Carousel = (function () {
     /**
      * 获取当前激活元素
      */
-    getActiveEle(step = 1) {
-      let { current, slideEle } = this[STATUS_SYMBOL];
+    getActiveEle(current, step = 1) {
+      let { slideEle } = this[STATUS_SYMBOL];
+      if (typeof current !== 'number') {
+        throw new Error('current need be number');
+      }
+      if (current < 0 || current >= slideEle.length) {
+        throw new Error('current need be index of slide');
+      }
+      // 确保整数
+      current = Math.floor(current);
       let realStep = step % slideEle.length;
       let left;
       let right;
@@ -362,13 +396,13 @@ const Carousel = (function () {
       // }
 
       if (realStep > 0) {
-        left = this.getIndex(current, -1);
-        right = this.getIndex(current, step);
+        left = this.getOffsetIndex(current, -1);
+        right = this.getOffsetIndex(current, realStep);
       }
 
       if (realStep < 0) {
-        left = this.getIndex(current, step);
-        right = this.getIndex(current, 1);
+        left = this.getOffsetIndex(current, realStep);
+        right = this.getOffsetIndex(current, 1);
       }
 
       const result = {
@@ -391,7 +425,12 @@ const Carousel = (function () {
     doSlide(step = 1) {
       let { current, slideEle } = this[STATUS_SYMBOL];
       const { deriction, speed } = this[PROP_SYMBOL];
-      const realStep = step * deriction;
+      const realStep = step * deriction % slideEle.length;
+
+      if (realStep === 0) {
+        return;
+      }
+
       const {
         leftSlideEle,
         currentSlideEle,
@@ -399,7 +438,7 @@ const Carousel = (function () {
         leftIndex,
         currentIndex,
         rightIndex,
-      } = this.getActiveEle(realStep);
+      } = this.getActiveEle(current, realStep);
 
       // 获取当前宽度
       const dw = this.container.offsetWidth;
@@ -447,7 +486,7 @@ const Carousel = (function () {
 
       // 动画结束时修改当前指针和清除动画时间线类
       tl.onFinish = () => {
-        this[STATUS_SYMBOL].current = this.getIndex(current, realStep);
+        this[STATUS_SYMBOL].current = this.getOffsetIndex(current, realStep);
         this[STATUS_SYMBOL].timeLine = null;
       };
 
@@ -455,86 +494,11 @@ const Carousel = (function () {
     }
 
 
-    /** 获取对应便宜的 index */
-    getIndex(current, d) {
-      let { slideEle } = this[STATUS_SYMBOL];
-      return (current + slideEle.length + d) % slideEle.length;
-    }
-
-    render() {
-      // 将子元素转化为普通数组
-      const children = Array.prototype.slice.call(this.container.children);
-
-      /** 当前轮播位置 */
-      let position = 0;
-
-      const nextPic = () => {
-        /** 下一轮播位置 */
-        let nextPosition = position + 1;
-        nextPosition = nextPosition % children.length;
-
-        /** 当前轮播元素 */
-        const current = children[position];
-        /** 下一轮播元素 */
-        const next = children[nextPosition];
-
-        next.style.transition = 'ease 0s';
-        next.style.transform = `translate(${ -nextPosition * 100 + 100 }%)`;
-
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            current.style.transform = `translate(${ -100 - 100 * position }%)`;
-            next.style.transition = '';
-            next.style.transform = `translate(${ -nextPosition * 100 }%)`;
-            position = nextPosition;
-          });
-        });
-
-        this[STATUS_SYMBOL].timer = setTimeout(nextPic, 3000);
-      };
-
-      // 注释则不进行自动轮播
-      // this[STATUS_SYMBOL].timer = setTimeout(nextPic, 3000);
-
-      /** 鼠标最初位置 */
-      let startX;
-      /** 水平位移 */
-      let disX;
-      /** 轮播宽度 */
-      const width = this.container.offsetWidth;
-
-      // const start = (event) => {
-      //   event.preventDefault();
-      //   startX = event.clientX;
-      //   disX = 0;
-      //   document.addEventListener('mousemove', move);
-      //   document.addEventListener('mouseup', end);
-      // };
-
-      // const move = (event) => {
-      //   event.preventDefault();
-      //   disX = event.clientX - startX;
-      //   for (let child of children) {
-      //     child.style.transition = 'ease 0s';
-      //     child.style.transform = `translate(${-position * width + disX}px)`;
-      //   }
-      // };
-
-      // const end = () => {
-      //   position = -Math.round((-position * width + disX) / width);
-      //   position = Math.max(0, Math.min(position, children.length - 1));
-      //   for (let child of children) {
-      //     child.style.transition = '';
-      //     child.style.transform = `translate(${-position * width}px)`;
-      //   }
-      //   document.removeEventListener('mousemove', move);
-      //   document.removeEventListener('mouseup', move);
-      // };
-
-      // 注释此行禁止原始拖动代码
-      // this.container.addEventListener('mousedown', start);
-
-      gesture.enableGesture(this.container);
+    /** 获取对应偏移的 index */
+    getOffsetIndex(current, d) {
+      const { slideEle } = this[STATUS_SYMBOL];
+      const total = slideEle.length;
+      return (current + total + d) % total;
     }
   }
   return Carousel;
