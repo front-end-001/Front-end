@@ -2,10 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="73db1d9f-ca39-4c27-9458-e1bfd8f58a6b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/src/enableGesture.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/dist/demo.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/carousel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/components/Carousel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/components/Component.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/components/Div.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/components/Tab.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/components/Tabwinter.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/js/enableGesture.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/winter/Div.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/winter/ScrollView.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/winter/Tab.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src/winter/Text.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/webpack.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/组件开发项目/id_1908060/carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/组件开发项目/id_1908060/src/carousel.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,16 +32,21 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/组件开发项目/id_1908060" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/有好货页面/id_1908060/webpack-demo" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/dist" />
+      <recent name="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/src" />
+      <recent name="$PROJECT_DIR$/组件开发项目/id_1908060/webpack-demo/js" />
+      <recent name="$PROJECT_DIR$/组件开发项目/id_1908060" />
       <recent name="$PROJECT_DIR$/组件开发项目/id_1908060/src" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/有好货页面/id_1908060/webpack-demo" />
       <recent name="$PROJECT_DIR$/组件开发项目/id_1908060" />
       <recent name="$PROJECT_DIR$/黑白棋项目/id_1908060" />
     </key>
