@@ -8,7 +8,13 @@ const imageUrls = [
   'https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg'
 ];
 
-const carousel = <Carousel imageUrls={imageUrls} width={800} height={480} />;
+const carousel = (
+  <Carousel imageUrls={imageUrls} width={800} height={480}>
+    <div id="test">
+      <a></a>
+    </div>
+  </Carousel>
+);
 
 window.carousel = carousel;
 

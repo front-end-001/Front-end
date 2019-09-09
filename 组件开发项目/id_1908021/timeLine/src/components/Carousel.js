@@ -30,6 +30,9 @@ export default class Carousel {
     this[PROPERTY_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
     this[STATE_SYMBOL] = Object.create(null);
+
+    this[PROPERTY_SYMBOL].children = [];
+
     this.created(configs);
   }
 
@@ -58,7 +61,6 @@ export default class Carousel {
 
   createChildren() {
     const imageUrls = this[PROPERTY_SYMBOL].imageUrls;
-    console.log(imageUrls);
     if (imageUrls) {
       let i = imageUrls.length;
       for (let url of imageUrls) {
@@ -194,6 +196,15 @@ export default class Carousel {
 
   set imageUrls(value) {
     return (this[PROPERTY_SYMBOL].imageUrls = value);
+  }
+
+  get children() {
+    return this[PROPERTY_SYMBOL].children;
+  }
+
+  appendChild(childNode) {
+    this[PROPERTY_SYMBOL].children.push(childNode);
+    childNode.appendTo(this.root);
   }
 
   getAttribute(name) {
