@@ -1,49 +1,38 @@
-// // console.log(11111)
-// function myCreate(Class){
-//   console.log(arguments)
-//   return new Class
-// }
-// class Component{}
-// class Div{}
-// var a =<Component attribute="1111">
-//   <Div></Div>
-// </Component>
-
-
-// import Carousel from '../component.js'
-// function myCreate(Class,attributes){
-//   console.log(Class,attributes)
-//   var obj=new Class()
-//   for(let name in attributes){
-//     obj.setAttribute(name,attributes[name])
-//   }
-//   return obj
-// }
-
-// var c = <Carousel width="100" ></Carousel>
-// console.log(c)
-// c.appendTo(document.body)
-// setTimeout(_=>{
-//   c.setAttribute('width',200)
-// },3000)
-
-import Carousel from '../component-copy'
+import Tab from './components/tab'
 import './style.css'
+import recommend from './recommend'
 
-function myCreate(Class, attributes) {
-  console.log(Class, attributes)
-  var obj = new Class({
-    el: 'body',
-    data: [
-      "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-      "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-      "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-      "https://static001.geekbang.org/resource/image/88/f1/8807661ef5b82fcb75e8b8f2dbd71ef1.jpg"
-    ],
-    speed:300,
-    arrow:true
-  })
-  return obj
-}
+const component_constructor = ['Tab']
 
-var c = <Carousel  ></Carousel>
+// function myCreate(Class, attributes, ...children) {
+//   console.log(arguments)
+//   if (Class.name && component_constructor.findIndex(name => Class.name === name) > -1) {
+//     var obj = new Class({
+//       el: '#app',
+//       children
+//     })
+//     return obj
+//   } else {
+//     return document.createElement('div')
+//   }
+// }
+
+// var c =
+//   <Tab>
+//     ssss
+//   </Tab>
+
+var test_item1 = document.createElement('div')
+test_item1.id='tab1'
+var test_item2 = document.createElement('div')
+test_item2.innerText = "test2"
+var test_item3 = document.createElement('div')
+test_item3.innerText = "test3"
+
+var tab = new Tab({
+  el: '#app',
+  item: ['推荐', '有趣的店', '品牌新店'],
+  children: [test_item1, test_item2, test_item3]
+})
+console.log(tab)
+recommend()

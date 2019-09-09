@@ -1,8 +1,5 @@
-body{
-  font-family: 'Courier New', Courier, monospace;
-}
 #container {
-  width: 375px;
+  width: 300px;
   overflow: hidden;
   position: relative;
 }
@@ -12,7 +9,7 @@ body{
 }
 
 img {
-  width: 375px;
+  width: 300px;
   flex: 0 0 auto;
 }
 
@@ -42,25 +39,4 @@ img {
   border-radius: 100%;
   border: 1px solid #333;
   cursor: pointer;
-}
-
-#tab_header{
-  background: linear-gradient(to right,#6b25fd, #9233fd);
-  color: white;
-  font-size: 18px;
-  padding: 10px;
-}
-#tab_header>span{
-  margin-right: 20px;
-  position: relative;
-  display: inline-block;
-}
-#tab_header>span.active::before{
-  content: "";
-  display: block;
-  position: absolute;
-  height: 2px;
-  bottom: 0px;
-  background-color: white;
-  width: 100%;
 }
