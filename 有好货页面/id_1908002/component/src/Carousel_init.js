@@ -9,6 +9,7 @@ export class Carousel {
         this[ATTRIBUTE_SYMBOL] = Object.create(null); //存attribute用Object.create(null)，与其他代码没有关系
         this[EVENT_SYMBOL] = Object.create(null); 
         this[STATE_SYMBOL] = Object.create(null); 
+        
         this.created();
     }
 
