@@ -1,113 +1,39 @@
-function cubicBezier(p1x, p1y, p2x, p2y) {
-  const ZERO_LIMIT = 1e-6;
-  // Calculate the polynomial coefficients,
-  // implicit first and last control points are (0,0) and (1,1).
-  const ax = 3 * p1x - 3 * p2x + 1;
-  const bx = 3 * p2x - 6 * p1x;
-  const cx = 3 * p1x;
-
-  const ay = 3 * p1y - 3 * p2y + 1;
-  const by = 3 * p2y - 6 * p1y;
-  const cy = 3 * p1y;
-
-  function sampleCurveDerivativeX(t) {
-      // `ax t^3 + bx t^2 + cx t' expanded using Horner 's rule.
-      return (3 * ax * t + 2 * bx) * t + cx;
-  }
-
-  function sampleCurveX(t) {
-      return ((ax * t + bx) * t + cx ) * t;
-  }
-
-  function sampleCurveY(t) {
-      return ((ay * t + by) * t + cy ) * t;
-  }
-
-  // Given an x value, find a parametric value it came from.
-  function solveCurveX(x) {
-      var t2 = x;
-      var derivative;
-      var x2;
-
-      // https://trac.webkit.org/browser/trunk/Source/WebCore/platform/animation
-      // First try a few iterations of Newton's method -- normally very fast.
-      // http://en.wikipedia.org/wiki/Newton's_method
-      for (let i = 0; i < 8; i++) {
-          // f(t)-x=0
-          x2 = sampleCurveX(t2) - x;
-          if (Math.abs(x2) < ZERO_LIMIT) {
-              return t2;
-          }
-          derivative = sampleCurveDerivativeX(t2);
-          // == 0, failure
-          /* istanbul ignore if */
-          if (Math.abs(derivative) < ZERO_LIMIT) {
-              break;
-          }
-          t2 -= x2 / derivative;
-      }
-
-      // Fall back to the bisection method for reliability.
-      // bisection
-      // http://en.wikipedia.org/wiki/Bisection_method
-      var t1 = 1;
-      /* istanbul ignore next */
-      var t0 = 0;
-
-      /* istanbul ignore next */
-      t2 = x;
-      /* istanbul ignore next */
-      while (t1 > t0) {
-          x2 = sampleCurveX(t2) - x;
-          if (Math.abs(x2) < ZERO_LIMIT) {
-              return t2;
-          }
-          if (x2 > 0) {
-              t1 = t2;
-          } else {
-              t0 = t2;
-          }
-          t2 = (t1 + t0) / 2;
-      }
-
-      // Failure
-      return t2;
-  }
-
-  function solve(x) {
-      return sampleCurveY(solveCurveX(x));
-  }
-
-  return solve;
-}
-
-let linear = cubicBezier(0, 0, 1, 1);
-let ease = cubicBezier(.25, .1, .25, 1);
-let easeIn = cubicBezier(.42, 0, 1, 1);
-let easeOut = cubicBezier(0, 0, .58, 1);
-let easeInOut = cubicBezier(.42, 0, .58, 1);
-let myCB = cubicBezier(.69,-0.85,.25,1);
-
-class TimeLine {
+class Timeline {
   constructor() {
-    this._animations = [];
-    this._timer = null;
+    this.animations = [];
+    // 时间线状态
+    this.status = 'inited';
+    // 动画速率
+    this.rate = 1;
+    // 指定开始位置
+    this.startPoint = 0;
   }
   start() {
+    if (this.status === 'started') {
+      return;
+    }
+
+    this.status = 'started';
     let startTime = Date.now();
-    this._tick = () => {
-      for (let animation of this._animations) {
+    this.pauseTime = 0;
+    this.tick = () => {
+      for (let animation of this.animations) {
           animation.tick(Date.now() - startTime);
       }
-      if (this._tick) {
-        requestAnimationFrame(this._tick);
+      if (this.tick) {
+        requestAnimationFrame(this.tick);
       }
     }
-    // this._timer = setInterval(this._tick, 16);
-    requestAnimationFrame(this._tick);
+    requestAnimationFrame(this.tick);
   }
   pause() {
-
+    if (this.status !== 'started') {
+      return;
+    }
+    this.status = 'paused';
+    this.resumeTick = this.tick;
+    this.tick = null;
+    this.pauseStart = Date.now();
   }
   resume() {
 
@@ -119,7 +45,7 @@ class TimeLine {
 
   }
   addAnimation(animation) {
-    this._animations.push(animation);
+    this.animations.push(animation);
   }
   removeAnimation() {
 
@@ -131,11 +57,15 @@ class DomElementAnimation {
     this._element = element;
     this._property = property;
     this._startTime = startTime;
-    this._startValue = startValue;
     this._endTime = endTime;
-    this._endValue = endValue;
     this._converter = converter;
     this._fixKeyFrame = false;
+    if (!Array.isArray(endValue)) {
+      startValue = [startValue];
+      endValue = [endValue];
+    }
+    this._startValue = startValue;
+    this._endValue = endValue;
   }
   tick(t) {
     // t 从0逐渐增大
@@ -159,49 +89,18 @@ class DomElementAnimation {
     //   (t - this._startTime) / (this._endTime - this._startTime) 
     //   * (this._endValue - this._startValue) + this._startValue);
 
+    // let progress = (t - this._startTime) / (this._endTime - this._startTime);
+    // let displacement = ease(progress) * (this._endValue - this._startValue);
+    // let currentValue = displacement + this._startValue;
+
     let progress = (t - this._startTime) / (this._endTime - this._startTime);
-    let displacement = ease(progress) * (this._endValue - this._startValue);
-    let currentValue = displacement + this._startValue;
+    let displacement = []
+    let currentValue = []
+    for (let i = 0; i < this._endValue.length; i++) {
+      displacement[i] = ease(progress) * (this._endValue[i] - this._startValue[i]);
+      currentValue[i] = displacement[i] + this._startValue[i];
+    }
+
     this._element.style[this._property] = this._converter(currentValue);
   }
 }
-
-const tl = new TimeLine();
-
-// tl.addAnimation(new DomElementAnimation(
-//   document.getElementById('ball'),
-//   'transform',
-//   0, 0,
-//   2000, 500,
-//   v => `translateX(${v}px)`
-// ));
-tl.addAnimation(new DomElementAnimation(
-  document.getElementById('ball'),
-  'top',
-  0,    0,
-  1000, 300,
-  v => `${v}px`
-));
-tl.addAnimation(new DomElementAnimation(
-  document.getElementById('ball'),
-  'left',
-  1000, 0,
-  2000, 300,
-  v => `${v}px`
-));
-tl.addAnimation(new DomElementAnimation(
-  document.getElementById('ball'),
-  'top',
-  2000, 300,
-  3000, 0,
-  v => `${v}px`
-));
-tl.addAnimation(new DomElementAnimation(
-  document.getElementById('ball'),
-  'left',
-  3000, 300,
-  4000, 0,
-  v => `${v}px`
-));
-
-tl.start();
