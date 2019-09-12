@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./9-gesture.js"></script>
+    <script src="./component.js"></script>
+</head>
+<body>
+    <div id="container"></div>
+    <br>
+    <div>
+        <button onclick="c.play()">play</button>
+        <button onclick="c.stop()">stop</button>
+        <button onclick="c.prev()">prev</button>
+        <button onclick="c.next()">next</button>
+    </div>
+
+    <script>
+        /**
+         * 初始化轮播组件
+         * @param dom
+         * @param config
+         */
+        const carouselContaienr = document.getElementById('container')
+        const carouselConfig = {
+            width: 500,
+            height: 280,
+            autoplay: true,
+            duration: 3000,
+            loop: false,
+            imgUrls: [
+                'https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg',
+                'https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg',
+                'https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg',
+                'https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg'
+            ],
+            onClick: (e) => {
+                console.log('click', e)
+            }
+            // on: {
+            //     click: (e) => {
+            //         console.log('click', e)
+            //     }
+            // }
+        }
+        const c = new Carousel(carouselContaienr, carouselConfig)
+        // c.next()
+        // c.prev()
+        // c.play()
+        // c.stop()
+        // c.destory()
+    </script>
+</body>
+</html>
+

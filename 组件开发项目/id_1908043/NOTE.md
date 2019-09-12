@@ -9,3 +9,10 @@ web Animation:
 https://en.wikipedia.org/wiki/Newton's_method
 
 https://github.com/amfe/amfe-cubicbezier/blob/master/src/index.js
+
+设计组件
+
+对象
+Properties
+Methods
+
