@@ -17,7 +17,7 @@ function enableGesture(main){
 			main.dispatchEvent(e);
 			context.pressHandler = null;
 		}, 500)
-	}
+	};
 	let move = (point, context) => {
 		//console.log(context.startX,context.startY);
 		let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
