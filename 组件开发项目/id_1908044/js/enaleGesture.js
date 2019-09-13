@@ -1,11 +1,11 @@
 function enableGesture(main){
-    //changedTouches当前引发触摸事件的列表
-    //touch.identifier 触摸点的唯一标识
     let start = (point, context) => {
         //console.log("start")
         context.startX = point.clientX;
         context.startY = point.clientY;
+
         context.startTime = Date.now();
+
         context.isTap = true;
         context.isPan = false;
         context.isPress = false;
@@ -21,6 +21,7 @@ function enableGesture(main){
         //console.log(context.startX,context.startY);
         let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
         if(dx * dx + dy * dy > 100) {
+
             if(context.pressHandler !== null) {
                 clearTimeout(context.pressHandler);
                 context.pressHandler = null;
@@ -30,7 +31,9 @@ function enableGesture(main){
                 let e = new Event("presscancel");
                 main.dispatchEvent(e);
             }
+
             context.isTap = false;
+
             if(context.isPan == false) {
                 if(Math.abs(dx) > Math.abs(dy)) {
                     context.isVertical = false;
@@ -70,6 +73,7 @@ function enableGesture(main){
             main.dispatchEvent(e);
         }
         let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
+
         let v = Math.sqrt(dx * dx + dy * dy) / (Date.now() - context.startTime);
         //console.log(v);
         if(context.isPan && v > 0.3) {
@@ -119,14 +123,18 @@ function enableGesture(main){
     let mousemove = event => {
         move(event, contexts[mouseSymbol]);
     }
+
     let mouseup = event => {
         document.removeEventListener("mousemove", mousemove);
         document.removeEventListener("mouseup",mouseup);
         end(event, contexts[mouseSymbol]);
         delete contexts[mouseSymbol];
     }
+    main.addEventListener("mousedown", mousedown);
+
 
     let touchstart = event => {
+
         for(let touch of event.changedTouches) {
             contexts[touch.identifier] = Object.create(null);
             start(touch, contexts[touch.identifier]);
