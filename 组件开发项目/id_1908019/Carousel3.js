@@ -54,7 +54,7 @@ class Carousel {
 
         // 绑定 next 点击事件
         this.next.onclick = event => {
-            let picAct = this.root.querySelector('.carousel .dots span.active')
+            let picAct = this.root.querySelector('.carousel-step1 .dots span.active')
             let index = this.dots.indexOf(picAct)
             index = (index + 1) % this.dots.length
             log(index)
@@ -101,5 +101,5 @@ class Carousel {
 
 }
 
-projectAll = eAll('.carousel')
+projectAll = eAll('.carousel-step1')
 projectAll.forEach(carousel => new Carousel(carousel))
