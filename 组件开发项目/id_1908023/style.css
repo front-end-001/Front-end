@@ -2,7 +2,7 @@
   width: 600px;
   height: 400px;
   margin: 10px auto;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* border: 1px solid #ccc; */
   white-space: nowrap;
   outline: 1px solid red;
