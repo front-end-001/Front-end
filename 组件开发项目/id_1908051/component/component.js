@@ -127,11 +127,11 @@ export class Carousel {
         return this[ATTRTiBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
-        if (name == 'width') {
+        if (name === 'width') {
             this.width = value;
             this.triggerEvent('widthChange');
         }
-        if (name = 'imgUrls') {
+        if (name === 'imgUrls') {
             this.imgUrls = value;
         }
         return this[ATTRTiBUTE_SYMBOL][name] = value;
