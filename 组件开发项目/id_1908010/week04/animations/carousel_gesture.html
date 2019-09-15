@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: 玉皇大亮
  * @Date: 2019-08-21 22:07:24
- * @lastTime: 2019-08-29 22:42:08
+ * @lastTime: 2019-09-07 16:31:32
  -->
 <html lang="en">
  <head>
@@ -38,6 +38,8 @@
         "https://static001.geekbang.org/resource/image/82/af/823ef28a64096b4ffce19bca16a573af.jpg",
         "https://static001.geekbang.org/resource/image/ee/70/ee7627bac9defb7621c2489fbacb3a70.jpg"
     ];
+
+    let ease = cubicBezier(.17,.67,.83,.67);
 
     class Carousel {
         constructor(container) {
@@ -91,11 +93,8 @@
                     child.style.transform = `translate(${-position * 500}px)`; //复位
                 }
 
-                startX  =  -position * 500; //与普通的拖拽容器相比，起始点的计算
+                startX  = -position * 500; //与普通的拖拽容器相比，起始点的计算
             });
- 
- 
-    
         }
     }
 

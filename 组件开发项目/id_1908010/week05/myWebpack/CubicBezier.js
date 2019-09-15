@@ -2,10 +2,10 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-25 15:49:17
- * @lastTime: 2019-09-07 17:01:45
+ * @lastTime: 2019-09-07 16:41:56
  * @LastAuthor: Do not edit
  */
-function cubicBezier(p1x, p1y, p2x, p2y) {
+export function cubicBezier(p1x, p1y, p2x, p2y) {
     const ZERO_LIMIT = 1e-6;
     // Calculate the polynomial coefficients,
     // implicit first and last control points are (0,0) and (1,1).

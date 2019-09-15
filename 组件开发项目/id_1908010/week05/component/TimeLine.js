@@ -2,7 +2,7 @@
  * @Author: 玉皇大亮
  * @since: 2019-08-29 19:29:52
  * @LastAuthor: Do not edit
- * @lastTime: 2019-09-07 16:13:35
+ * @lastTime: 2019-09-07 16:56:11
  * @message: TimeLine RequestAnimationFrame 版本
  */
 
@@ -16,7 +16,7 @@ const TimeLineState = {
     paused : 'paused',
 }
 
-class Timeline_RAF {
+class TimeLine {
     constructor() {
         this.animations = [];
         // 状态管理代码
