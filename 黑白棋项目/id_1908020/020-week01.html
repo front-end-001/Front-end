@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>黑白棋</title>
+  <style>
+    #app {
+      display: flex;
+      flex-wrap: wrap;
+      width: 480px;
+    }
+
+    #app>div {
+      position: relative;
+      height: 50px;
+      width: 50px;
+      margin: 5px;
+      background-color: #ccc;
+    }
+
+    #app>div::after {
+      content: '';
+      display: block;
+      height: 40px;
+      width: 40px;
+      top: 5px;
+      left: 5px;
+      border-radius: 100%;
+      position: absolute;
+    }
+
+    #app>div.blank::after {
+      background-color: black;
+    }
+
+    #app>div.white::after {
+      background-color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    const app = $('#app')
+    const color_map = {
+      0: '',
+      1: 'blank',
+      2: 'white'
+    }
+    let arr = [
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 1, 2, 0, 0, 0,
+      0, 0, 0, 2, 1, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0
+    ]
+    let current_color = 1
+    //let round=[[]]
+    render()
+
+    function render() {
+      app.innerHTML = "";
+      arr.forEach((item, index) => {
+        let node = document.createElement('div')
+        node.className = color_map[item]
+        node.innerText = index
+        node.addEventListener('click', (e) => handle_click(e, index))
+        app.appendChild(node)
+      })
+    }
+    function handle_click(e, index) {
+      console.log(e, index)
+      let { x, y } = index_to_pos(index)
+      let ss = [-1, 0]
+
+      while (true) {
+        x += ss[0]
+        y += ss[1]
+        if (current_x < 0) {
+          break
+        }
+        if()
+      }
+
+      arr[index] = current_color
+      current_color = 3 - current_color
+      render()
+    }
+    function $(selector) {
+      return document.querySelector(selector)
+    }
+    function index_to_pos(index) {
+      return {
+        x: index % 8,
+        y: Math.floor(index / 8)
+      }
+    }
+    function round_index(index, n = 8) {
+      return [
+        index - n - 1, index - n, index - n + 1,
+        index - 1, index, index + 1,
+        index + n - 1, index + n, index + n + 1
+      ].filter(item => item > -1 && item < n ** 2)
+    }
+    function r(n = 8) {
+      let arr = []
+      for (let x = 0; x < n; x++) {
+        arr.push(x)
+        arr.push(x * n)
+        arr.push((x + 1) * n - 1)
+        arr.push(n * n - x - 1)
+      }
+      return [...new Set(arr)]
+    }
+  </script>
+</body>
+
+</html>

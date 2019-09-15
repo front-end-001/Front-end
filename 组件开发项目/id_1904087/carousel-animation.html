@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<!-- anything need to search: https://duckduckgo.com/?q=site%3Aw3.org+white-space&search-submit=&ia=web  -->
+<html>
+    <h4>slider-animation</h4>
+    <div id="slider" >
+    </div>
+    <!-- https://www.w3.org/TR/css3-roadmap/#css -->
+    <style>
+        .carousel{
+            width:500px;
+            height:300px;
+            /* 
+            
+            hidden
+            visible 
+            
+            outline: solid 1px grey;
+            */
+            overflow:hidden; 
+            
+            /*
+            https://www.w3.org/TR/css-text-3/#white-space-property
+            normal | pre | nowrap | pre-wrap | break-spaces | pre-line
+
+            */
+            white-space: nowrap;
+        }
+        
+        .carousel>img{
+            width:100%;
+            height:100%;
+            /*
+            https://www.w3.org/Talks/2003/0521-CSS-WWW2003/inline-demo.html
+            图片在一行显示
+            */
+            display:inline-block;
+            /*
+            * https://www.w3.org/TR/css-transitions-1/ 
+            CSS Transitions allows property changes in CSS values to occur smoothly over a specified duration.
+            to animate smoothly from the old state to the new state over time.
+
+            https://www.cnblogs.com/afighter/p/5731293.html
+            ease 由快到慢到更慢 
+            linear:恒速
+            ease-in:越来越快
+            ease-out:越来越慢
+            ease-in-out:先加速后减速
+            
+            transition:ease 0.5s;
+
+            */
+        }
+    </style>
+    <script src="gesture.js"></script>
+    <script src="animation.js"></script>
+      
+    <script>
+
+    let imgList = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+    ];
+      
+      class sliderView {
+        constructor(container) {
+          this._container = container;
+          // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+          // add, remove, replace
+          // add( String [, String [, ...]] )
+          this._container.classList.add("carousel");
+          this.data = null;
+          enableGesture(this._container);
+        }
+
+        render() {
+            let i = this.data.length;
+            for (let d in this.data) {
+                let e = document.createElement("img");
+                e.src = this.data[d];
+                e.id = d;
+                e.style.zIndex = i++;
+                this._container.appendChild(e);
+            }
+
+            let tl = new Timeline(); // or Timeline
+
+            // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice#Array-like
+            // 将 类数组（Array-like）对象/集合转换成一个新数组
+            let children = Array.prototype.slice.call(this._container.children);
+            console.log("size: ", children.length)
+
+            let position = 0;
+            let offsetTimeStart = 0;
+
+            
+            let nextPic = ()=>{
+                let nextPosition = position + 1;
+
+                // 确保按顺序循环播放图片集合 [0, 1, 2...children.length -2,  children.length -1 ]
+                nextPosition = nextPosition % children.length;
+
+                let current = children[position];
+                let next = children[nextPosition];
+
+                //console.log("cur:: ",position,  current);
+                //console.log("next:: ",nextPosition,  next)
+
+                //将next移动到下一帧的位置
+                next.style.transform = `translateX(${500 - 500 * nextPosition}px)`;
+
+                offsetTimeStart = Date.now();
+
+                tl.addAnimation(new DOMElementStyleAnimation(
+                    current,
+                    "transform",
+                    0, - 500 * position,
+                    1000, - 500 - 500 * position,
+                    (v) => `translateX(${v}px)`
+                ));
+                tl.addAnimation(new DOMElementStyleAnimation(
+                    next,
+                    "transform",
+                    0, 500 - 500 * nextPosition,
+                    1000, - 500 * nextPosition,
+                    (v) => `translateX(${v}px)`
+                ));
+                tl.restart();
+
+                position = nextPosition;
+                nextPicTimer = setTimeout(nextPic, 3000);
+            }
+            let nextPicTimer = setTimeout(nextPic, 3000);
+
+
+
+            let offset = 0;
+            this._container.addEventListener("mousedown", event => {
+                //startTransform = - position * 500;
+                tl.pause();
+
+                let currentTime = Date.now();
+                if (currentTime - offsetTimeStart < 1000) {
+                    offset = 500 - ease((currentTime - offsetTimeStart) / 1000) * 500;
+                    console.log(offset);
+                } else {
+                    offset = 0;
+                }
+
+                clearTimeout(nextPicTimer);
+            });
+            this._container.addEventListener("pan", event => {
+                // event.origin.preventDefault();
+                let current = children[position];
+
+                let nextPosition = (position + 1) % children.length;
+                let next = children[nextPosition];
+                let lastPosition = (children.length + position - 1) % children.length;
+                let last = children[lastPosition];
+                last.style.transition = "ease 0s";
+                last.style.transform = `translate(${-500 - 500 * lastPosition + event.dx + offset}px)`;
+
+                next.style.transition = "ease 0s";
+                next.style.transform = `translate(${500 - 500 * nextPosition + event.dx + offset}px)`;
+
+                current.style.transition = "ease 0s";
+                current.style.transform = `translate(${-500 * position + event.dx + offset}px)`;
+            });
+            this._container.addEventListener("panend", event => {
+                // event.origin.preventDefault();
+                let isLeft;
+                if (event.isFlick) {
+                    if (event.dx > 0) {
+                        position--;
+                        isLeft = true;
+                    }
+
+                    if (event.dx < 0) {
+                        position++;
+                        isLeft = false;
+                    }
+
+                } else {
+                    if (event.dx > 250) {
+                        position--;
+                        isLeft = true;
+                    } else if (event.dx < -250) {
+                        position++;
+                        isLeft = false;
+                    } else {
+                        isLeft = event.dx <= 0;
+                    }
+
+                    //position = (Math.round((position * 500 - event.dx) / 500));
+                }
+                position = (children.length + position) % children.length;
+
+                let current = children[position];
+                let nextPosition = (position + 1) % children.length;
+                let next = children[nextPosition];
+                let lastPosition = (children.length + position - 1) % children.length;
+                let last = children[lastPosition];
+
+                if (!isLeft) {
+                    last.style.transition = "";
+                } else {
+                    last.style.transition = "ease 0s";
+                }
+                last.style.transform = `translate(${-500 - 500 * lastPosition}px)`;
+
+                if (isLeft) {
+                    next.style.transition = "";
+                } else {
+                    next.style.transition = "ease 0s";
+                }
+                next.style.transform = `translate(${500 - 500 * nextPosition}px)`;
+
+                current.style.transition = "";
+                current.style.transform = `translate(${-500 * position}px)`;
+            });
+
+            // let startX;
+            // let startTransform;
+            // let start = event =>{
+            //     //https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
+            //     //if the event does not get explicitly handled, its default action should not be taken as it normally would be
+            //     event.preventDefault();
+            //     startX = event.clientX;
+            //     startTransform = - position * 500;
+            //     // this._container只在容器内生效 "粘住效果"有点乱- -
+            //     document.addEventListener("mousemove", move);
+            //     document.addEventListener("mouseup", end);
+            // }
+            // let move = event =>{
+            //     event.preventDefault();
+            //     for(let child of children) {
+            //         child.style.transition = "ease 0s";
+            //         // 让每一张图片都整体联动
+            //         child.style.transform = `translate(${startTransform + event.clientX - startX}px)`;
+            //     }
+                    
+            // }
+
+            // //end时不需要传递event事件？
+            // let end = event=>{
+            //     // this._container只在容器内生效 "粘住效果"有点乱- -
+            //     document.removeEventListener("mousemove", move);
+            //     document.removeEventListener("mouseup", end);
+            //     //位置在第几张图片上 
+            //     //  the value of a number rounded to the nearest integer.
+            //     position = - (Math.round((startTransform + event.clientX - startX) / 500)); 
+
+            //     console.log("p: ", position);
+
+            //     //当前在第几张图片上
+            //     position = Math.max(0, Math.min(position, children.length - 1));
+            //     console.log("pp: ", position);
+
+            //     for(let child of children) {
+            //         child.style.transition = "";
+            //         //负负得正
+            //         child.style.transform = `translate(${ - position * 500}px)`;
+            //     }
+            // }
+
+            //this._container.addEventListener("mousedown",start);
+            this._container.addEventListener("mousedown", event=> event.preventDefault());
+        }
+        
+      }
+      let slider = new sliderView(document.getElementById("slider"));
+      slider.data = imgList;
+      slider.render();
+    </script>
+</html>

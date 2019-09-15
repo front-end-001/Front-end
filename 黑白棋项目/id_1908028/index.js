@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-05 09:37:10
+ * @LastEditTime: 2019-08-09 18:05:19
+ * @LastEditors: Please set LastEditors
+ */
 class OthelloPattern {
   constructor(
     // arr = [
@@ -32,7 +39,7 @@ class OthelloPattern {
   move(x, y, color, checkOnly = false) {
     let ox = x;
     let oy = y;
-    let count = 1;
+    let count = 0;
     if (this.arr[y][x] !== 0) {
       return false;
     }
@@ -106,11 +113,27 @@ class OthelloGame {
   constructor() {
     this.pattern = new OthelloPattern();
     this.color = 2;
-    this.portability = void 0;
+    this.portability = [
+      { x: 4, y: 5, num: 4 },
+      { x: 5, y: 4, num: 4 },
+      { x: 2, y: 3, num: 4 },
+      { x: 3, y: 2, num: 4 }
+    ];
     this.history = [
       { color: 2, arr: this.pattern.arr.map(item => item.slice()) }
     ];
     this.optimal = void 0;
+    this.Fraction = [
+      [500, -25, 10, 5, 5, 10, -25, 500],
+      [-25, -45, 1, 1, 1, 1, -45, -25],
+      [10, 1, 3, 2, 2, 3, 1, 10],
+      [5, 1, 2, 1, 1, 2, 1, 5],
+      [5, 1, 2, 1, 1, 2, 1, 5],
+      [10, 1, 3, 2, 2, 3, 1, 10],
+      [-25, -45, 1, 1, 1, 1, -45, -25],
+      [500, -25, 10, 5, 5, 10, -25, 500]
+    ];
+    this.staus = true;
   }
   checkPass() {
     let check = [];
@@ -121,10 +144,7 @@ class OthelloGame {
           check.push({
             x,
             y,
-            num:
-              this.color === 1
-                ? this.count().white + move.count
-                : this.count().black + move.count
+            num: move.count
           });
         }
       }
@@ -176,6 +196,7 @@ class OthelloGame {
         arr: this.pattern.arr.map(item => item.slice())
       });
       this.color = 3 - this.color;
+      this.staus = false;
     }
     if (this.checkPass()) {
       console.log("passed");
@@ -183,16 +204,43 @@ class OthelloGame {
         console.log("Game Over");
       } else {
         this.color = 3 - this.color;
+        this.staus = false;
       }
     }
   }
+
+  sum(arr = this.pattern.arr, color = 1) {
+    let sum = 0;
+    for (let y = 0; y < arr.length; y++) {
+      for (let x = 0; x < arr[y].length; x++) {
+        if (arr[y][x] === color) {
+          sum = sum + this.Fraction[y][x] * (color === 1 ? 1 : -1);
+        }
+      }
+    }
+    return sum;
+  }
+
+  ai() {
+    setTimeout(function(){
+      this.staus = false;
+    },5000)
+  }
 }
+
+// class Ai extends OthelloGame{
+//   constructor(){
+//     super()
+//   }
+
+// }
 
 // class Ai {
 //   constructor() {
 //     this.pattern = new OthelloPattern();
 //     this.check = [];
 //     this.result = [];
+//     this.opp = 0;
 //   }
 
 //   count(arr) {
@@ -213,41 +261,42 @@ class OthelloGame {
 //     return { white, black };
 //   }
 
-// ai(
-//   portability = [
-//     { i: 0, x: 0, y: 1 },
-//     { i: 1, x: 4, y: 4 },
-//     { i: 2, x: 7, y: 4 }
-//   ],
-//   arr = this.pattern.arr,
-//   color = 2,
-//   check = this.check
-// ) {
-//   for (let [i, position] of portability.entries()) {
-//     let copy = arr.map(item => item.slice());
-//     let copyPattern = new OthelloPattern(copy);
-//     check = [];
-//     copyPattern.move(position.x, position.y, color, false);
-//     for (let y = 0; y < copyPattern.arr.length; y++) {
-//       for (let x = 0; x < copyPattern.arr[y].length; x++) {
-//         let move = copyPattern.move(x, y, 3 - color, true);
-//         if (move.canMove) {
-//           check.push({
-//             i,
-//             x,
-//             y,
-//             num:
-//               3 - color === 1
-//                 ? this.count(copyPattern.arr).white + move.count
-//                 : this.count(copyPattern.arr).black + move.count
-//           });
+//   ai(
+//     portability = [
+//       { i: 0, x: 2, y: 3, num: 4 },
+//       { i: 1, x: 3, y: 2, num: 4 },
+//       { i: 2, x: 4, y: 5, num: 4 },
+//       { i: 3, x: 5, y: 4, num: 4 }
+//     ],
+//     arr = this.pattern.arr,
+//     color = 2,
+//     check = this.check
+//   ) {
+//     for (let [i, position] of portability.entries()) {
+//       let copy = arr.map(item => item.slice());
+//       let copyPattern = new OthelloPattern(copy);
+//       check = [];
+//       copyPattern.move(position.x, position.y, color, false);
+//       for (let y = 0; y < copyPattern.arr.length; y++) {
+//         for (let x = 0; x < copyPattern.arr[y].length; x++) {
+//           let move = copyPattern.move(x, y, 3 - color, true);
+//           if (move.canMove) {
+//             check.push({
+//               i,
+//               x,
+//               y,
+//               num:
+//                 3 - color === 1
+//                   ? this.count(copyPattern.arr).white + move.count
+//                   : this.count(copyPattern.arr).black + move.count
+//             });
+//           }
 //         }
 //       }
-//     }
-//     if (check.length) {
-//       console.log(check);
-//       this.ai(check, copy, 3 - color, []);
+//       if (check.length) {
+//         this.opp++;
+//         this.ai(check, copy, 3 - color, []);
+//       }
 //     }
 //   }
-// }
 // }

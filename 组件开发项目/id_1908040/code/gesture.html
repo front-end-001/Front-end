@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>手势操作</title>
+</head>
+<body>
+  <div id="main" style="width:300px;height:300px;background:navy;"></div>
+  <!-- gesture -->
+  <script src="./gesture.js"></script>
+  <script>
+    let main = document.getElementById('main');
+    let x = 0, y = 0;
+    enableGesture(main);
+
+    main.addEventListener('pressstart', event => {
+      console.log('pressstart');
+    });
+
+    main.addEventListener('pressend', event => {
+      console.log('pressend');
+    });
+
+    main.addEventListener('presscancel', event => {
+      console.log('presscancel');
+    });
+
+    main.addEventListener('pan', event => {
+      console.log('pan');
+      main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+    });
+
+    main.addEventListener('panend', event => {
+      console.log('panend');
+      x = x + event.dx;
+      y = y + event.dy;
+    });
+
+    main.addEventListener('flick', event => {
+      console.log('flick');
+    });
+
+    main.addEventListener('pancancel', event => {
+      console.log('pancancel');
+      main.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    main.addEventListener('tap', event => {
+      console.log('tap');
+    });
+
+    document.addEventListener('touchstart', event => event.preventDefault(), { passive: false });
+  </script>
+</body>
+</html>
