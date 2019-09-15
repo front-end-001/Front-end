@@ -26,4 +26,33 @@
 4）用事件机制，对外暴露事件，tap， pan, 抹平 按下，和 移动。
 5）扩充事件 flick panend，panstart，pancancel, pressstart， pressend，presscancel等。
 
-小知识（chrome 在调试模式下 touch和mouse都触发）;
+
+动画库
+1 了解基础的动画库
+    1.1 css动画库
+        1.1.1 css transition
+        1.1.2 css animation
+    1.2 js自己实现
+        1.1.1 自己实现
+            1.1.1.1 setTimeout
+            1.1.1.2 setInterval
+            1.1.1.3 requestAnimationFrame
+        1.1.2 web animation
+
+2 动画与帧
+    24 - 28 - 60 帧不等
+    关键帧
+    属性动画与位图动画
+    差值算法
+        N次样条差值
+        N贝塞尔曲线
+
+1）首先要有一个时间线控制类，要有开始时间，暂停，恢复，速率，添加动画，移除动画，等功能
+2）动画类，用来实例该动画。
+3）修改当前position，next，prev的计算方法。
+4）添加动画库实现动画效果
+5）增加restart方法
+6）实现动画暂停，就算offset距离，然后捡起操作。
+7）恢复轮播
+
+小知识（chrome 在调试模式下 touch和mouse都触发;
