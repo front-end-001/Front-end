@@ -1,0 +1,32 @@
+{
+  "name": "css-animation-lib",
+  "version": "0.0.1",
+  "description": "css animation lib",
+  "scripts": {
+    "build": "webpack --mode=development",
+    "buildTS": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaoluoHe/Front-end.git"
+  },
+  "keywords": [
+    "css",
+    "animation"
+  ],
+  "author": "xiaoluo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xiaoluoHe/Front-end/issues"
+  },
+  "homepage": "https://github.com/xiaoluoHe/Front-end#readme",
+  "dependencies": {
+    "typescript": "^3.5.3"
+  },
+  "devDependencies": {
+    "ts-loader": "^6.0.4",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
+  }
+}
