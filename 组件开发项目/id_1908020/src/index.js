@@ -1,38 +1,97 @@
-import Tab from './components/tab'
-import './style.css'
-import recommend from './recommend'
+import Carousel from './component/Carousel'
+import Img from './component/Img'
+import Tab from './component/Tab'
+import TabPane from './component/TabPane'
+import Div from './component/Div'
+import Scroll from './component/Scroll'
+import Shop from './component/Shop'
+import './index.css'
 
-const component_constructor = ['Tab']
+function myCreate(Class, attributes, ...children) {
 
-// function myCreate(Class, attributes, ...children) {
-//   console.log(arguments)
-//   if (Class.name && component_constructor.findIndex(name => Class.name === name) > -1) {
-//     var obj = new Class({
-//       el: '#app',
-//       children
-//     })
-//     return obj
-//   } else {
-//     return document.createElement('div')
-//   }
-// }
+  var object = new Class();
+  for (let name in attributes) {
+    object.setAttribute(name, attributes[name]);
+  }
+  for (let child of children) {
+    if (typeof child === "string") {
+      object.appendChild(new Text(child));
+    } else {
+      object.appendChild(child);
+    }
+  }
+  return object;
+}
+const img_list = [
+  "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+  "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+  "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+  "https://static001.geekbang.org/resource/image/88/f1/8807661ef5b82fcb75e8b8f2dbd71ef1.jpg"
+]
+const shop_list = [{
+  avatar: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+  title: '极客时间旗舰店',
+  ad: '好店君：该店被xxx人关注',
+  img: [
+    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg"
+  ]
+}, {
+  avatar: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+  title: '极客时间旗舰店',
+  ad: '好店君：该店被xxx人关注',
+  img: [
+    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg"
+  ]
+}, {
+  avatar: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+  title: '极客时间旗舰店',
+  ad: '好店君：该店被xxx人关注',
+  img: [
+    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg"
+  ]
+}, {
+  avatar: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+  title: '极客时间旗舰店',
+  ad: '好店君：该店被xxx人关注',
+  img: [
+    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg"
+  ]
+}]
 
-// var c =
-//   <Tab>
-//     ssss
-//   </Tab>
+let c =
+  <Tab className="tab">
+    <TabPane title="推荐">
+      <Scroll>
+        <Div className="banner_container">
+          <Carousel className="banner">
+            {img_list.map(img => <Img src={img}></Img>)}
+          </Carousel>
+        </Div>
+        <Div className="shop_container">
+          {shop_list.map(shop => <Shop data={shop}></Shop>)}
+        </Div>
+      </Scroll>
+    </TabPane>
+    <TabPane title="有趣的店">
+      <Img src={'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'}></Img>
+    </TabPane>
+    <TabPane title="品牌新店">
+      <Img src={'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'}></Img>
+    </TabPane>
+  </Tab>
 
-var test_item1 = document.createElement('div')
-test_item1.id='tab1'
-var test_item2 = document.createElement('div')
-test_item2.innerText = "test2"
-var test_item3 = document.createElement('div')
-test_item3.innerText = "test3"
+{/* <Carousel>
+{img_list.map(img => <Img src={img}></Img>)}
+</Carousel>
+<Img src={'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'}></Img> */}
+console.log(c)
 
-var tab = new Tab({
-  el: '#app',
-  item: ['推荐', '有趣的店', '品牌新店'],
-  children: [test_item1, test_item2, test_item3]
-})
-console.log(tab)
-recommend()
+c.appendTo(document.querySelector('#app'))
