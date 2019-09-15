@@ -1,7 +1,7 @@
 .container {
   width: 600px;
   height: 400px;
-  margin: 10px auto;
+  margin: 10px 0 0 700px;;
   /* overflow: hidden; */
   /* border: 1px solid #ccc; */
   white-space: nowrap;
