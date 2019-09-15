@@ -19,7 +19,14 @@ export default class BaseComponent {
 
   created(): void {}
 
+  destroy(): void {
+    this.unmounted();
+    this.ATTRIBUTE._container.removeChild(this.root);
+    this.root = null;
+  }
+
   appendTo(element: HTMLDivElement): void {
+    this.ATTRIBUTE._container = element;
     if (this.root) {
       element.appendChild(this.root);
       this.mounted();
@@ -59,7 +66,7 @@ export default class BaseComponent {
   setAttribute(name: string, value: any): any {
     if (name === 'className' && this.root) {
       // this.root.setAttribute('class', value);
-      this.root.classList.add(value);
+      this.root.className = value;
     }
 
     return (this.ATTRIBUTE[name] = value);

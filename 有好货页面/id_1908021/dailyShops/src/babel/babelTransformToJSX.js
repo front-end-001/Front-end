@@ -1,4 +1,4 @@
-const myComponents = ['Tab', 'TabPane'];
+const myComponents = ['Tab', 'TabPane','ScrollView'];
 
 export default function createElement(NodeClass, attributes, ...children) {
   console.log(arguments);

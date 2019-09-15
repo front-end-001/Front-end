@@ -4,6 +4,7 @@
   "description": "daily shops recomendation page",
   "main": "index.js",
   "scripts": {
+    "start": "webpack-dev-server --open",
     "build": "webpack --mode=development",
     "watch": "webpack --mode=development --watch",
     "buildTS": "tsc",
@@ -26,6 +27,7 @@
     "style-loader": "^1.0.0",
     "ts-loader": "^6.0.4",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8"
+    "webpack-cli": "^3.3.8",
+    "webpack-dev-server": "^3.8.0"
   }
 }

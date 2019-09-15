@@ -12,6 +12,11 @@ module.exports = {
     // Add '.ts' and '.tsx' as a resolvable extension.
     extensions: ['.ts', '.tsx', '.js']
   },
+  mode: 'development',
+  devServer: {
+    contentBase: './dist',
+    hot: true
+  },
   optimization: {
     minimize: false
   },

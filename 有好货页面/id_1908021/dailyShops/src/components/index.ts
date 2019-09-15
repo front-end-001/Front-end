@@ -1,4 +1,5 @@
 import './index.less';
-import Tab from './Tab/index';
+import Tab from './tab/index';
+import ScrollView from './scrollView/index';
 
-export { Tab };
+export { Tab, ScrollView };

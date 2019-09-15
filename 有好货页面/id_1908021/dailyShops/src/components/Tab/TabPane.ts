@@ -1,6 +1,6 @@
 import BaseComponent from '../Base/BaseComponent';
 
-class TabPane extends BaseComponent {
+export default class TabPane extends BaseComponent {
   constructor() {
     super();
     this.created();
@@ -11,13 +11,16 @@ class TabPane extends BaseComponent {
     this.root.classList.add('tab-pane');
   }
 
-  appendChild(child: BaseComponent): BaseComponent {
+  appendChild(child: BaseComponent | string): BaseComponent | string {
     if (this.root) {
-      child.appendTo(this.root);
+      if (typeof child === 'string') {
+        const childNode = document.createTextNode(child);
+        this.root.appendChild(childNode);
+      } else {
+        child.appendTo(this.root);
+      }
       this.PROPERTY.children.push(child);
     }
     return child;
   }
 }
-
-export default TabPane;
