@@ -1,0 +1,14 @@
+.container {
+  width: 600px;
+  height: 400px;
+  margin: 10px 0 0 700px;;
+  /* overflow: hidden; */
+  /* border: 1px solid #ccc; */
+  white-space: nowrap;
+  outline: 1px solid red;
+}
+.container > img {
+  width: 100%;
+  height: 100%;
+  /* transition: ease .5s; */
+}
