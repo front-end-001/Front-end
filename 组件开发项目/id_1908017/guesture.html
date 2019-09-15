@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #main {
+            width: 300px;
+            height: 300px;
+            background-color: #999;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main"></div>
+    <script>
+        const main = document.getElementById('main');
+        const context = Object.create(null);
+        const mouseIndentifer = Symbol('mouse');
+        /**
+         * 业务
+         */
+        let x = 0,
+            y = 0;
+        main.addEventListener('panstart', e => {
+
+        });
+        main.addEventListener('pan', e => {
+            main.style.transform = `translate(${x+e.dx}px, ${y+e.dy}px)`;
+        });
+        main.addEventListener('panend', e => {
+            x = x + e.dx;
+            y = y + e.dy; //dy undefined
+        });
+        main.addEventListener('pancancel', e => {
+
+        });
+
+        /*
+         *  handler
+         */
+        const start = (point, context) => {
+            context.startX = point.clientX;
+            context.startY = point.clientY;
+            context.isTap = true;
+            console.log('start', point.clientX, point.clientY);
+        }
+        const move = (point, context) => {
+            const dx = context.dx = point.clientX - context.startX;
+            const dy = context.dy = point.clientY - context.startY;
+            if (context.isTap && (dx * dx + dy * dy) > 100) {
+                const e = new Event('panstart');
+                e.dx = dx;
+                e.dy = dy;
+                main.dispatchEvent(e);
+                context.isTap = false;
+            }
+            if (!context.isTap) {
+                const pan = new Event('pan');
+                pan.dx = dx;
+                pan.dy = dy;
+                main.dispatchEvent(pan);
+            }
+            console.log('move', point.clientX, point.clientY);
+        }
+
+        const end = (point, context) => {
+                console.log('end', point.clientX, point.clientY, context.isTap);
+                if (context.isTap) {
+                    main.dispatchEvent(new Event('tap'));
+                } else {
+                    main.dispatchEvent(new Event('panend'));
+                }
+            }
+            /**
+             * mouse
+             */
+            //todo let 换成const 能用么:能用，分析一下？
+        const mousedown = event => {
+            document.addEventListener('mousemove', mousemove);
+            document.addEventListener('mouseup', mouseup);
+            // console.log('start', event.clientX, event.clientY);
+            context[mouseIndentifer] = Object.create(null);
+            start(event, context[mouseIndentifer]);
+        }
+        const mousemove = event => {
+            // console.log('mousemove', event);
+            // console.log('move', event.clientX, event.clientY);
+            move(event, context[mouseIndentifer]);
+        }
+        const mouseup = event => {
+            document.removeEventListener('mousemove', mousemove);
+            document.removeEventListener('mouseup', mouseup);
+            // console.log('end', event.clientX, event.clientY);
+            end(event, context[mouseIndentifer]);
+            delete context[mouseIndentifer];
+        }
+
+        main.addEventListener('mousedown', mousedown);
+        /*
+        touch
+        */
+        const touchstart = event => {
+            for (let touch of event.changedTouches) {
+                // console.log('start', touch.clientX, touch.clientY)
+                context[touch.identifier] = Object.create(null)
+                start(touch, context[touch.identifier])
+            }
+        }
+        const touchmove = event => {
+            //不需要绑定到 document
+            for (let touch of event.changedTouches) {
+                // console.log('move', touch.clientX, touch.clientY)
+                move(touch, context[touch.identifier]);
+            }
+        }
+        const touchend = event => {
+            for (let touch of event.changedTouches) {
+                // console.log('end', touch.clientX, touch.clientY)
+                end(touch, context[touch.identifier]);
+            }
+        }
+        const touchcancel = event => {
+            //不总是发生
+            for (let touch of event.changedTouches) {
+                console.log('cancel', touch.clientX, touch.clientY)
+            }
+        }
+
+        main.addEventListener('touchstart', touchstart);
+        main.addEventListener('touchmove', touchmove);
+        main.addEventListener('touchend', touchend);
+        main.addEventListener('touchcancel', touchcancel);
+    </script>
+</body>
+
+</html>

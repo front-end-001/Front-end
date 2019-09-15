@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			#main{
+				width: 300px;
+				height: 300px;
+				background: blue;
+			}
+		</style>
+	</head>
+
+		<div id="main" style="width:300px;height:300px;background-color:navy"></div>
+		<script src="js/gesture.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+		let main = document.getElementById("main");
+		
+		let x = 0, y = 0;
+		main.addEventListener("pan", event => {
+		    console.log(event.dx, event.dy);
+		    main.style.transform = `translate(${event.dx + x}px, ${ event.dy + y}px)`;
+		})
+		
+		main.addEventListener("panend", event => {
+		    x = x + event.dx;
+		    y = y + event.dy;
+		})
+		
+		main.addEventListener("pancancel", event => {
+		    console.log("cancel")
+		    main.style.transform = `translate(${x}px, ${y}px)`;
+		})
+		
+		
+		function_name (main);
+		
+		</script>
+
+
+	</body>
+</html>
