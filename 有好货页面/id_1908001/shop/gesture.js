@@ -1,4 +1,4 @@
-function initGesture (main) {
+const initGesture = (main) => {
     // down - start move up - end
     // 1. 抽象出鼠标移动拖拽的事件; 将移动端和pc端的抽象
     // 2. 判断何时拖拽结束
@@ -42,6 +42,7 @@ function initGesture (main) {
         }
     }
     const end = (e, context) => {
+        console.log('-----',context.isPan)
         if (context.isTap) {
             main.dispatchEvent(new Event("tap"))
         }
@@ -95,11 +96,13 @@ function initGesture (main) {
         }
     }
     const touchmove = e => {
+        console.log('0000')
         for(const touch of e.changedTouches) {
             move(touch, contexts[touch.identifier])
         }
     }
     const touchend = e => {
+        console.log('111')
         for(const touch of e.changedTouches) {
             end(touch, contexts[touch.identifier])
         }
@@ -115,3 +118,4 @@ function initGesture (main) {
     main.addEventListener("touchend", touchend)
     main.addEventListener("touchcancel", touchcancel)
 }
+export default initGesture
