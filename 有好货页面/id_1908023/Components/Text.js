@@ -1,30 +1,23 @@
+// 要认真写 symbol 的名字，跟注释差不多的作用
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
-const STATE_SYMBOL = Symbol("state");
+const STATE_SYMBOL = Symbol('state');
 
-class Tap {
-  constructor() {
+class Text {
+  // 属性要在 constructor 里面写
+  constructor(config) {
+    // 存 attribute 和 property 一定要用纯净的对象
     this[ATTRIBUTE_SYMBOL] = Object.create(null);
     this[PROPERTY_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
     this[STATE_SYMBOL] = Object.create(null);
 
+    this.text = config || '';
+
     this[PROPERTY_SYMBOL].children = [];
-    this[PROPERTY_SYMBOL].headers = [];
 
     this.created();
-  }
-
-  created() {
-    this.root = document.createElement('div');
-    this.headerContainer = document.createElement('div');
-    this.contentContainer = document.createElement('div');
-    this.headerContainer.className = 'tab-header-container';
-    this.contentContainer.className = 'tab-content-container';
-
-    this.root.appendChild(this.headerContainer);
-    this.root.appendChild(this.contentContainer);
   }
 
   appendTo(element) {
@@ -32,13 +25,23 @@ class Tap {
     this.mounted();
   }
 
-  mounted() {}
-
   appendChild(child) {
     this.children.push(child);
-    child.appendTo(this.contentContainer);
+    child.appendTo(this.root);
   }
+
+  // 生命周期
+  created() {
+    this.root = document.createElement('span');
+    this.root.innerText = this.text;
+  }
+
+  mounted() {}
   
+  get children() {
+    return this[PROPERTY_SYMBOL].children;
+  }
+
   getAttriute(name) {
     if (name === 'style') {
       return this.root.getAttribute('style');
@@ -57,18 +60,11 @@ class Tap {
     }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
-
-  get children() {
-    return this[PROPERTY_SYMBOL].children;
-  }
-
+  
   addEventListener(type, listener) {
-    // 创建一个容器来存放事件
     if (!this[EVENT_SYMBOL][type]) {
-      // this[EVENT_SYMBOL][type] = [];
       this[EVENT_SYMBOL][type] = new Set();
     }
-    // this[EVENT_SYMBOL][type].push(listener);
     this[EVENT_SYMBOL][type].add(listener);
   }
   removeEventLister(type, listener) {
@@ -84,4 +80,4 @@ class Tap {
   }
 }
 
-export default Tap;
+export default Text;

@@ -14,12 +14,17 @@ module.exports = {
       {
         test: /\.less$/,
         exclude: /(node_modules|bower_components)/,
-        use: ['style-loader', 'css-loader', 'less-loader'],
+        use: [
+          'style-loader', 
+          'css-loader', 
+          'less-loader', 
+          { loader: 'postcss-loader'},
+        ],
       },
       {
         test: /\.css$/,
         exclude: /(node_modules|bower_components)/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader', { loader: 'postcss-loader'}],
       },
       {
         test: /\.jsx?$/,
