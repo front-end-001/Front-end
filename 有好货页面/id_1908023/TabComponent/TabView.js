@@ -3,8 +3,8 @@ const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol("state");
 
-class Tap {
-  constructor() {
+export default class TapView {
+  constructor(config) {
     this[ATTRIBUTE_SYMBOL] = Object.create(null);
     this[PROPERTY_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
@@ -18,10 +18,15 @@ class Tap {
 
   created() {
     this.root = document.createElement('div');
+    this.root.style.display = "flex";
     this.headerContainer = document.createElement('div');
     this.contentContainer = document.createElement('div');
-    this.headerContainer.className = 'tab-header-container';
-    this.contentContainer.className = 'tab-content-container';
+    this.contentContainer.style.whiteSpace = "nowrap";
+    this.contentContainer.style.overflow = "hidden";
+    this.contentContainer.style.flex = "1";
+    this.headerContainer.style.height = "93px";
+    // this.headerContainer.className = 'tab-header-container';
+    // this.contentContainer.className = 'tab-content-container';
 
     this.root.appendChild(this.headerContainer);
     this.root.appendChild(this.contentContainer);
@@ -32,13 +37,36 @@ class Tap {
     this.mounted();
   }
 
-  mounted() {}
+  mounted() { }
 
   appendChild(child) {
+    console.log(child);
     this.children.push(child);
+
+    let title = child.getAttribute('tab-title') || '';
+    this[PROPERTY_SYMBOL].headers.push(title);
+    
+    let header = document.createElement('div');
+    header.innerText = title;
+    header.style.display = 'inline-block';
+    header.style.height = '93px';
+    header.style.fontSize = '46px';
+    header.style.fontFamily = 'PingFang SC';
+    header.style.margin = '20px 35px 0 35px';
+    this.headerContainer.appendChild(header);
     child.appendTo(this.contentContainer);
+
+    for (let i = 0; i < this.contentContainer.children.length; i++) {
+      this.contentContainer.children[i].style.width = '100%';
+      this.contentContainer.children[i].style.height = '100%';
+      this.contentContainer.children[i].style.display = 'inline-block';
+    }
   }
-  
+
+  get children() {
+    return this[PROPERTY_SYMBOL].children;
+  }
+
   getAttriute(name) {
     if (name === 'style') {
       return this.root.getAttribute('style');
@@ -51,6 +79,8 @@ class Tap {
   setAttribute(name, value) {
     if (name === 'style') {
       this.root.setAttribute('style', value);
+      this.root.style.display = 'flex';
+      this.root.style.flexDirection = 'column';
     }
     if (name === 'class') {
       this.root.setAttribute('class', value);
@@ -65,10 +95,8 @@ class Tap {
   addEventListener(type, listener) {
     // 创建一个容器来存放事件
     if (!this[EVENT_SYMBOL][type]) {
-      // this[EVENT_SYMBOL][type] = [];
       this[EVENT_SYMBOL][type] = new Set();
     }
-    // this[EVENT_SYMBOL][type].push(listener);
     this[EVENT_SYMBOL][type].add(listener);
   }
   removeEventLister(type, listener) {
@@ -83,5 +111,3 @@ class Tap {
     }
   }
 }
-
-export default Tap;

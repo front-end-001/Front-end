@@ -4,7 +4,7 @@ const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
-class TapItem {
+export default class ScrollView {
   // 属性要在 constructor 里面写
   constructor() {
     // 存 attribute 和 property 一定要用纯净的对象
@@ -31,6 +31,12 @@ class TapItem {
   // 生命周期
   created() {
     this.root = document.createElement('div');
+    this.root.addEventListener('touchmove', e => {
+      e.cancelBubble = true;
+      e.stopImmediatePropagation();
+    }, {
+      passive: false
+    })
   }
 
   mounted() {}
@@ -39,7 +45,7 @@ class TapItem {
     return this[PROPERTY_SYMBOL].children;
   }
 
-  getAttriute(name) {
+  getAttribute(name) {
     if (name === 'style') {
       return this.root.getAttribute('style');
     }
@@ -76,5 +82,3 @@ class TapItem {
     }
   }
 }
-
-export default TapItem;
