@@ -40,7 +40,6 @@ export default class TapView {
   mounted() { }
 
   appendChild(child) {
-    console.log(child);
     this.children.push(child);
 
     let title = child.getAttribute('tab-title') || '';
@@ -67,7 +66,7 @@ export default class TapView {
     return this[PROPERTY_SYMBOL].children;
   }
 
-  getAttriute(name) {
+  getAttribute(name) {
     if (name === 'style') {
       return this.root.getAttribute('style');
     }
