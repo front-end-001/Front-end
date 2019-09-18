@@ -4,12 +4,15 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Div {
+export default class Tabview {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
+
+        this[PROPERTY_SYMBOL].header = [];
+        this[PROPERTY_SYMBOL].children = [];
         
         this.created();
     }
@@ -21,18 +24,51 @@ export default class Div {
 
     created(){
         this.root = document.createElement("div");
-        this.root.style.width = "100%";
-        this.root.style.height = "100%";
-        this.root.style.display = "inline-block";
+        this.root.style.display = "flex";
+        this.root.style.flexDirection = "column";
+        this.headerContainer = document.createElement("div");
+        this.contextContainer = document.createElement('div');
+        this.contextContainer.style.flex = "1";
+        this.contextContainer.style.whiteSpace = 'nowrap';
+        this.contextContainer.style.overflow = 'hidden';
+        this.headerContainer.style.height = "93px";
+        this.root.appendChild(this.headerContainer);
+        this.root.appendChild(this.contextContainer);
+        
     }
     mounted(){
-
+        
     }
     unmounted(){
 
     }
     update(){
 
+    }
+
+    appendChild(child){
+        this.children.push(child);
+
+        let title = child.getAttribute("tab-title") || '';
+        this[PROPERTY_SYMBOL].header.push(title);
+
+        let header = document.createElement('header');
+        header.style.display = "inline-block";
+        header.style.height = "93px";
+        header.style.fontFamily = "PingFang SC";
+        header.style.fontSize = "46px";
+        header.style.margin = "20px 35px 0 35px";
+        header.innerText = title;
+
+        this.headerContainer.appendChild(header);
+
+        child.appendTo(this.contextContainer);
+         
+
+    }
+
+    get children() {
+        return this[PROPERTY_SYMBOL].children;
     }
 
     
@@ -51,10 +87,8 @@ export default class Div {
     set urls(value){
     	return this[PROPERTY_SYMBOL].urls = value;
     }
-    appendChild(child){
-        child.appendTo(this.root);
 
-    }
+
 
     getAttribute(name){
         return this[ATTRIBUTE_SYMBOL][name]
@@ -62,9 +96,10 @@ export default class Div {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute('style',value);
-            this.root.style.width = "100%";
-            this.root.style.height = "100%";
-            this.root.style.display = "inline-block";
+            this.root.style.display = "flex";
+            this.root.style.flexDirection = "column"
+            // this.width = value;
+            // this.triggerEvent("widthchange");
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

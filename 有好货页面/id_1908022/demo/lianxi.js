@@ -74,6 +74,11 @@ export default class Carousel{
 		},2000)
 	}
 
+
+	appendChild(child){
+
+	}
+
 	unmounted() {
 
 	}
