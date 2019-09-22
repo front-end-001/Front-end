@@ -1,10 +1,9 @@
-// import { PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL, EVENT_SYMBOL, STATE_SYMBOL } from '../until/Symbol'
-
 const PROPERTY_SYMBOL = Symbol("property"); //名字跟注释差不多，为了调试方便
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-export default class Div {
+
+export default class Text {
   constructor(config) {
     this[PROPERTY_SYMBOL] = Object.create(null);//避免找原型链上的同名方法
     this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -12,46 +11,38 @@ export default class Div {
     this[STATE_SYMBOL] = Object.create(null);
 
     this.created();
-    this.children = []
-  }
-  
-  created() {
-    this.node = document.createElement("div");
-  }
-  mounted() {
-    this.node.addEventListener('click',e=>{
-      console.log(this)
-      this.triggerEvent('click',e)
-    })
   }
 
+  appendTo(element) {
+    element.appendChild(this._root);
+    this.mounted();
+  }
+
+  created() {
+    this._root = document.createElement("div");
+  }
+  mounted() {
+    
+  }
+  unmounted() {
+
+  }
   update() {
 
   }
-  appendTo(el) {
-    el.appendChild(this.node);
-    this.mounted();
+  srcChange() {
+
   }
-  appendChild(child) {
-    if (Array.isArray(child)) {
-      this.children = child
-    } else {
-      this.children.push(child)
-    }
-    this.children.forEach(child => {
-      child.appendTo(this.node)
-      child.parent = this
-    })
+  appendChild(child){
+    console.error(child)
+    this._root.innerText(child)
   }
   getAttribute(name) {
     return this[ATTRIBUTE_SYMBOL][name]
   }
   setAttribute(name, value) {
-    if (name === "className") {
-      this.node.classList.add(value)
-    }
-    if (name === "style") {
-      this.node.style = value
+    if (name == "className") {
+      this._root.classList.add(value)
     }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
@@ -65,10 +56,10 @@ export default class Div {
       return;
     this[EVENT_SYMBOL][type].delete(listener);
   }
-  triggerEvent(type,...arg) {
+  triggerEvent(type) {
     if (!this[EVENT_SYMBOL][type])
       return;
     for (let event of this[EVENT_SYMBOL][type])
-      event.call(this,arg);
+      event.call(this);
   }
 }

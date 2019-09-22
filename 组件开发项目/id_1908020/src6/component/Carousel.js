@@ -18,7 +18,7 @@ export default class Carousel {
     this._active_index = 0
     this._width = 0
     this._speed = 300
-    this._data=[]
+    this._data = []
 
     this.created();
   }
@@ -41,11 +41,14 @@ export default class Carousel {
     this._root.appendChild(this._wrapper)
 
     let pan = e => {
-      this._wrapper.style.transition = "transform 0s"
-      this._wrapper.style.transform = `translate(${e.dx + this._move_px}px,0)`
+      if (Math.abs(e.dy) < 10) {
+        this._wrapper.style.transition = "transform 0s"
+        this._wrapper.style.transform = `translate(${e.dx + this._move_px}px,0)`
+      }
     }
     let panend = e => {
       this._move_px = e.dx + this._move_px
+      console.error(this._move_px)
       console.log(e)
       if (e.isFlick) {
         if (e.dx > 0) {
@@ -65,14 +68,13 @@ export default class Carousel {
         if (index === undefined) index = this._index_arr.length - 1
         this.move(index)
       }
-
     }
     enableGesture(this._root)
     this._root.addEventListener('pan', pan)
     this._root.addEventListener('panend', panend)
   }
   mounted() {
-    this._width=this._root.offsetWidth
+    this._width = this._root.offsetWidth
   }
   unmounted() {
 
@@ -81,16 +83,16 @@ export default class Carousel {
 
   }
   appendChild(child) {
-    let arr=[]
-    if (!Array.isArray(child)){
+    let arr = []
+    if (!Array.isArray(child)) {
       arr.push(child)
-    }else{
-      arr=child
+    } else {
+      arr = child
     }
     arr.forEach(item => {
       item._root.style = "width:100%;flex:0 0 auto;"
       item.appendTo(this._wrapper)
-      this._data.push(item) 
+      this._data.push(item)
     })
   }
   //切换页面
@@ -110,9 +112,9 @@ export default class Carousel {
         this._active_index = 0
       } else if (index >= this._data.length) {
         this._wrapper.style.transition = `transform ${this._speed}ms`
-        this._wrapper.style.transform = `translate(-${this._width * (index-1)}px,0)`
-        this._move_px = -this._width * (index-1)
-        this._active_index = index-1
+        this._wrapper.style.transform = `translate(-${this._width * (index - 1)}px,0)`
+        this._move_px = -this._width * (index - 1)
+        this._active_index = index - 1
       }
     }
 
@@ -132,7 +134,7 @@ export default class Carousel {
   }
   setAttribute(name, value) {
     if (name == "style") {
-      this._root.style=value
+      this._root.style = value
     }
     if (name == "className") {
       this._root.classList.add(value)
