@@ -42,11 +42,12 @@ function aaaa() {
 }
 
 let c =
-<Div className="container">
-    <Div className="container" style="color:red;" on-click={aaaa.bind(this)}>111</Div>
-    <Div className="container" style="color:yellow;" >111</Div>
-    asdfasdf
-    <Div className="container" style="color:green;" >111</Div>
-</Div>
+  <Div className="container1" >
+    <Div className="container2" style="color:red;" on-click={aaaa.bind(this)}>111</Div>
+    <Div className="container3" style="color:yellow;" >111</Div>
+    <Div className="container4" style="color:yellow;" >111</Div>
+    {/* asdfasdf
+    <Div className="container" style="color:green;" >111</Div> */}
+  </Div>
 
 c.appendTo(document.querySelector('#app'))

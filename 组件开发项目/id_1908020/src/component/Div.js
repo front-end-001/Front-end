@@ -14,15 +14,16 @@ export default class Div {
     this.created();
     this.children = []
   }
-  
+
   created() {
     this.node = document.createElement("div");
+    console.log(this.getAttribute('className'),'created')
   }
   mounted() {
-    this.node.addEventListener('click',e=>{
-      console.log(this)
-      this.triggerEvent('click',e)
-    })
+    console.log(this.getAttribute('className'),'mounted')
+    // this.node.addEventListener('click',e=>{
+    //   this.triggerEvent('click',e)
+    // })
   }
 
   update() {
@@ -40,7 +41,7 @@ export default class Div {
     }
     this.children.forEach(child => {
       child.appendTo(this.node)
-      child.parent = this
+      // child.parent = this
     })
   }
   getAttribute(name) {
