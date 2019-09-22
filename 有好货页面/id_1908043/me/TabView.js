@@ -30,11 +30,13 @@ export default class Tab {
 
     created(){
         this.root = document.createElement("div");
+        this.root.style.display = "flex";
         this.headerContainer = document.createElement("div");
         this.contentContainer = document.createElement("div");
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "hidden";
-        this.contentContainer.style.height = "100%";
+        // this.contentContainer.style.height = "100%";
+        this.contentContainer.style.flex = "1";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
         this[STATE].h = 0;
@@ -43,8 +45,8 @@ export default class Tab {
 
     }
     render() {
-        enableGesture(this.contentContainer)
-        this.handleGesture()
+        // enableGesture(this.contentContainer)
+        // this.handleGesture()
     }
     unmounted(){
 
@@ -61,6 +63,11 @@ export default class Tab {
 
         let header = document.createElement("header");
         header.innerText = title;
+        header.style.display = "inline-block";
+        // header.style.height = '22px';
+        header.style.fontFamily = 'PingFang SC';
+        header.style.fontSize = '20px';
+        header.style.margin = '10px 17px 10px 17px';
         this.headerContainer.appendChild(header);
         child.appendTo(this.contentContainer);
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
@@ -90,6 +97,8 @@ export default class Tab {
     setAttribute(name, value){
         if (name == "style") {
             this.root.setAttribute("style", value);
+            this.root.style.display = "flex";
+            this.root.style.flexDirection = "column";
         }
         if (name == "class") {
             this.root.setAttribute("class", value);

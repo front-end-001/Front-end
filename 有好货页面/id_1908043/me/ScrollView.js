@@ -23,6 +23,13 @@ export default class Carousel {
 
     created(){
         this.root = document.createElement("div");
+        // TODO: 处理切屏幕
+        this.root.addEventListener("touchmove",function(e){
+            e.cancelBubble = true;
+            e.stopImmediatePropagation();
+        }, {
+            passive:false
+        });
     }
 
     mounted(){
