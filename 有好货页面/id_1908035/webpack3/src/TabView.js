@@ -1,5 +1,6 @@
 // import '../swiper_under/gesture'
 // import '../swiper_under/ainimate'
+import enableGesture from './gesture'
 const PROPERTY_SYMBOL = Symbol('property')
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const EVENT_SYMBOL = Symbol('event')
@@ -31,7 +32,53 @@ export default class Tab{
         this.contentContainer.style.overflow = "hidden";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
-        this[STATE_SYMBOL].h = 0;
+        this[STATE_SYMBOL].position = 0
+        this[STATE_SYMBOL].x = 0
+        enableGesture(this.contentContainer);
+
+        this.contentContainer.addEventListener("pan", event => {
+            if(event.isVertical)
+                return;
+            for(let child of this.contentContainer.children) {
+                console.log(child)
+                child.style.transition = "ease 0s";
+                child.style.transform = `translate(${event.dx + this[STATE_SYMBOL].x}px`;
+            }
+        })
+        this.contentContainer.addEventListener("panend", event => {
+
+            if(event.isVertical)
+                return;
+            let width = this.contentContainer.getBoundingClientRect().width;
+            if(event.isFlick){
+                if(event.dx > 0) {
+                    this[STATE_SYMBOL].position = this[STATE_SYMBOL].position - 1;
+                }
+                if(event.dx<0){
+                    this[STATE_SYMBOL].position = this[STATE_SYMBOL].position + 1;
+                }
+            }else{
+                if(event.dx > width/2) {
+                    this[STATE_SYMBOL].position = this[STATE_SYMBOL].position - 1;
+                }
+                if(event.dx < -width/2) {
+                    this[STATE_SYMBOL].position = this[STATE_SYMBOL].position + 1;
+                }
+            }
+            
+            if(this[STATE_SYMBOL].position>=this.contentContainer.children.length){
+                this[STATE_SYMBOL].position = this.contentContainer.children.length -1
+            }
+            if(this[STATE_SYMBOL].position<=0){
+                this[STATE_SYMBOL].position = 0
+            }
+            for(let child of this.contentContainer.children) {
+                child.style.transform = `translate(${-this[STATE_SYMBOL].position *width}px)`;
+            }
+            this[STATE_SYMBOL].x = -this[STATE_SYMBOL].position * width;
+            
+        })
+        
     }
     mounted(){
        
@@ -45,7 +92,7 @@ export default class Tab{
     }
     appendChild(child){
         this.children.push(child);
-
+        const n = this.children.length-1;
         let title = child.getAttribute("tab-title") || "";
         this[PROPERTY_SYMBOL].headers.push(title);
 
@@ -54,6 +101,17 @@ export default class Tab{
         header.style.margin = "10px 18px 0px"
         header.innerText = title;
         this.headerContainer.appendChild(header);
+        header.addEventListener('click',event=>{
+            for(let i = 0; i < this.contentContainer.children.length; i ++) {
+                this.contentContainer.children[i].style.width = "100%";
+                this.contentContainer.children[i].style.height = "100%";
+                // this.contentContainer.children[i].style.display = "none";
+                this.contentContainer.children[i].style.transform =`translateX(-${n*100}%)`
+                this.contentContainer.children[i].style.transition = 'ease 0.5s'
+            }
+            // console.log(child.root.style)
+            // child.style.display="inline-block"
+        })
         child.appendTo(this.contentContainer);
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.width = "100%";

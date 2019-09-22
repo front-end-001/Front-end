@@ -1,13 +1,22 @@
 import Carousel from './component'
 import TabView from './TabView'
 import Div from './Div'
+import ScrollView from './scrollView'
+import Text from './text'
 function myCreate(Class, attributes,...children){
     console.log(arguments)  
     var object = new Class();
     for(let name in attributes)
         object.setAttribute(name, attributes[name]);
-    for(let child of children)
-    object.appendChild(child)
+    for(let child of children){
+        if(typeof child ==='string'){
+            console.log(new Text(child),2222222)
+            object.appendChild(new Text(child))
+        }else{
+            object.appendChild(child)
+        }
+    }
+    
     return object; 
 }
 
@@ -20,8 +29,10 @@ const ImgsUrl = [
 // var c = <Carousel width="300"ImgsUrl={ImgsUrl}autoPlay="true">
 // </Carousel>
 var c = <TabView>
-    <Div tab-title="推荐"style="background:#8bc34a"></Div>
-    <Div tab-title="有趣的店"style="background:#03a9f4"></Div>
-    <Div tab-title="品牌新店"style="background:pink"></Div>
+    <ScrollView tab-title="推荐"style="background:#8bc34a">
+    <Div>推荐</Div>
+    </ScrollView>
+    <ScrollView tab-title="有趣的店"style="background:#03a9f4"><Div>有趣的店</Div></ScrollView>
+    <ScrollView tab-title="品牌新店"style="background:pink"><Div>品牌新店</Div></ScrollView>
 </TabView>
 c.appendTo(document.body);

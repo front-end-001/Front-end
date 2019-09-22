@@ -31,12 +31,17 @@ export default class Div{
         
     }
     appendChild(child){
+        console.log(child)
+    //    this.root.appendChild(child)
         this.children.push(child);
+        child.appendTo(this.root);
     }
     get children(){
-       return this[PROPERTY_SYMBOL].width
+       return this[PROPERTY_SYMBOL].children
     }
-    
+    get style(){
+        return this.root.style
+    }
     getAttribute(name){
         return this[ATTRIBUTE_SYMBOL][name]
     }
