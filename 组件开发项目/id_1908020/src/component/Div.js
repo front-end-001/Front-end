@@ -21,9 +21,9 @@ export default class Div {
   }
   mounted() {
     console.log(this.getAttribute('className'),'mounted')
-    // this.node.addEventListener('click',e=>{
-    //   this.triggerEvent('click',e)
-    // })
+    this.node.addEventListener('click',e=>{
+      this.triggerEvent('click',e)
+    })
   }
 
   update() {
@@ -31,6 +31,10 @@ export default class Div {
   }
   appendTo(el) {
     el.appendChild(this.node);
+    this.children.forEach(child => {
+      child.appendTo(this.node)
+      // child.parent = this
+    })
     this.mounted();
   }
   appendChild(child) {
@@ -39,10 +43,8 @@ export default class Div {
     } else {
       this.children.push(child)
     }
-    this.children.forEach(child => {
-      child.appendTo(this.node)
-      // child.parent = this
-    })
+    console.log(child,'child')
+
   }
   getAttribute(name) {
     return this[ATTRIBUTE_SYMBOL][name]

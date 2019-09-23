@@ -44,10 +44,11 @@ function aaaa() {
 let c =
   <Div className="container1" >
     <Div className="container2" style="color:red;" on-click={aaaa.bind(this)}>111</Div>
-    <Div className="container3" style="color:yellow;" >111</Div>
-    <Div className="container4" style="color:yellow;" >111</Div>
+    <Div className="container3" style="color:green;" >222</Div>
+    <Div className="container4" style="color:blue;" >333</Div>
     {/* asdfasdf
     <Div className="container" style="color:green;" >111</Div> */}
   </Div>
 
 c.appendTo(document.querySelector('#app'))
+console.log(c)
