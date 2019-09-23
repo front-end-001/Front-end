@@ -8,12 +8,15 @@ export default class TabItem extends Component {
 
   create() {
     const children = this.children;
-
     const tabItem = <div class="o-tab-item">
       {children}
     </div>;
 
     return tabItem;
+  }
+
+  get title() {
+    return this[ATTR_SYMBOL]['tab-title'];
   }
 
   attrInterceptor(name, value) {

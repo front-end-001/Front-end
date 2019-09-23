@@ -2,12 +2,19 @@ import Component from './component'
 
 export default function myCreate(creater, attrs, ...children) {
   if (!creater) return '';
-  console.log(creater, attrs, children);
   if (typeof creater === 'string') {
+    console.log('构造元素', creater, attrs, children);
     const ele = document.createElement(creater);
     if (attrs) {
       for (const attrName in attrs) {
-        ele.setAttribute(attrName, attrs[attrName]);
+        // on- 开头为事件绑定
+        const EventStart = 'on-';
+        if (attrName.startsWith(EventStart)) {
+          const eventName = attrName.substring(EventStart.length);
+          ele.addEventListener(eventName, attrs[attrName]);
+        } else {
+          ele.setAttribute(attrName, attrs[attrName]);
+        }
       }
     }
     for (const child of children) {
@@ -17,7 +24,6 @@ export default function myCreate(creater, attrs, ...children) {
         } else if (child instanceof Element) {
           ele.appendChild(child);
         } else if (child instanceof Component) {
-          // ele.appendChild(child.$root);
           child.appendTo(ele);
         }
       }
@@ -32,5 +38,6 @@ export default function myCreate(creater, attrs, ...children) {
     }
     return ele;
   }
+  console.log('构造组件', creater, attrs, children);
   return new creater(attrs, children);
 }
