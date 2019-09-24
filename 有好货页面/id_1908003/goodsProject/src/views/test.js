@@ -1,3 +1,4 @@
+import Carousel from '../components/Carousel'
 // 轮播用例
 (function () {
   const imgList = [{

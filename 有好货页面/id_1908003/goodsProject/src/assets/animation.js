@@ -1,4 +1,4 @@
-const anime = (function () {
+export default (function () {
 
   class Timeline {
     constructor({ rate = 1, direction = 1 }) {

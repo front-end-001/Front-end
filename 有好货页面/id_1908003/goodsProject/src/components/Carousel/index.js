@@ -1,17 +1,10 @@
-const Carousel = (function () {
+import gesture from '../../assets/gesture';
+import anime from '../../assets/animation';
+import Component, { PROP_SYMBOL, ATTR_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../component';
+import { getTransformXVal } from '../../assets/utils';
+import './index.css';
 
-  /**
-   * 获取元素的 translateX 值
-   * @param {Element} el 元素
-   * @returns {number}
-   */
-  function getTransformXVal(el) {
-    let trasVal = window
-      .getComputedStyle(el)
-      .getPropertyValue('transform');
-    const mat = trasVal.match(/^matrix\((.+)\)$/);
-    return mat ? parseFloat(mat[1].split(', ')[4]) : 0;
-  }
+export default (function () {
 
   /** 默认 props */
   const DEFAULT_PROP = {
