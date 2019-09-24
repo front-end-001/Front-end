@@ -72,15 +72,18 @@ export default function enableGesture(main) {
   let contexts = Object.create(null)
   let mouseSymbol = Symbol('mouse')
   let mousedown = e => {
+    e.stopPropagation()
     document.addEventListener('mousemove', mousemove)
     document.addEventListener('mouseup', mouseup)
     contexts[mouseSymbol] = Object.create(null)
     start(e, contexts[mouseSymbol])
   }
   let mousemove = e => {
+    e.stopPropagation();
     move(e, contexts[mouseSymbol])
   }
   let mouseup = e => {
+    e.stopPropagation();
     document.removeEventListener('mousemove', mousemove)
     document.removeEventListener('mouseup', mouseup)
     end(e, contexts[mouseSymbol])

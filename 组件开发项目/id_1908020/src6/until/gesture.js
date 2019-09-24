@@ -72,15 +72,18 @@ export default function enableGesture(main) {
   let contexts = Object.create(null)
   let mouseSymbol = Symbol('mouse')
   let mousedown = e => {
+    e.stopPropagation()
     document.addEventListener('mousemove', mousemove)
     document.addEventListener('mouseup', mouseup)
     contexts[mouseSymbol] = Object.create(null)
     start(e, contexts[mouseSymbol])
   }
   let mousemove = e => {
+    e.stopPropagation();
     move(e, contexts[mouseSymbol])
   }
   let mouseup = e => {
+    e.stopPropagation();
     document.removeEventListener('mousemove', mousemove)
     document.removeEventListener('mouseup', mouseup)
     end(e, contexts[mouseSymbol])
@@ -89,23 +92,27 @@ export default function enableGesture(main) {
 
 
   let touchstart = e => {
+    e.stopPropagation();
     for (const touch of e.changedTouches) {
       contexts[touch.identifier] = Object.create(null)
       start(touch, contexts[touch.identifier])
     }
   }
   let touchmove = e => {
+    e.stopPropagation();
     for (const touch of e.changedTouches) {
       move(touch, contexts[touch.identifier])
     }
   }
   let touchend = e => {
+    e.stopPropagation();
     for (const touch of e.changedTouches) {
       end(touch, contexts[touch.identifier])
       delete contexts[touch.identifier]
     }
   }
   let touchcancel = e => {
+    e.stopPropagation();
     for (const touch of e.changedTouches) {
       cancel(touch, contexts[touch.identifier])
       delete contexts[touch.identifier]
