@@ -2,9 +2,9 @@
  * @Description: In User Settings Edit
  * @Author: 玉皇大亮
  * @Date: 2019-08-21 20:52:40
- * @lastTime: 2019-09-07 14:56:08
+ * @lastTime: 2019-09-07 15:21:38
  */
-function enableGesture(main) {
+export function enableGesture(main) {
 
     let start = (point, ctx) => {
         ctx.startX = point.clientX;
