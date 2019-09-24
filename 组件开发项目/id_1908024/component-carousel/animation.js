@@ -36,7 +36,9 @@ class Timeline {
                     (Date.now() - this.pauseTime - startTime) * this._rate + this._startPoint,
                 )
             }
-            this._timer = setTimeout(this._tick, 16)
+            if (this._tick) {
+                this._timer = setTimeout(this._tick, 16)
+            }
         }
         this._timer = setTimeout(this._tick, 16)
     }
