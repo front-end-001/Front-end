@@ -1,5 +1,5 @@
 
-function enableGesture(main) {
+export function enableGesture(main) {
 
     // 索引结构好习惯
     let contexts = Object.create(null);
