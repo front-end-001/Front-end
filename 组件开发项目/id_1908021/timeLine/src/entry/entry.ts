@@ -1,6 +1,6 @@
-import TimeLine from '../animation/Timeline';
-import DOMElementStyleNumberAnimation from '../animation/DOMElementStyleNumberAnimation';
-import AlgType from '../algorithm/Type';
+import TimeLine from '../css-animation-lib/animation/Timeline';
+import DOMElementStyleNumberAnimation from '../css-animation-lib/animation/DOMElementStyleNumberAnimation';
+import AlgType from '../css-animation-lib/algorithm/Type';
 
 let tl = new TimeLine();
 
