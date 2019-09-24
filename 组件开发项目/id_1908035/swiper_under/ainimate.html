@@ -93,7 +93,7 @@
                 if(event.isVertical)
                     return;
                 for(let child of children) {
-                    child.style.transition = "ease 0s";
+                    // child.style.transition = "ease 0s";
                     child.style.transform = `translated(${event.dx + x}px`;
                 }
             })
@@ -110,11 +110,11 @@
                 } else {
                     position = -(Math.round((x + event.dx) / 500));
                 }
-                 
-                position = Math.max(0, Math.min(position, children.length - 1));
-
+                position = position%children.length
+                // position = Math.max(0, Math.min(position, children.length - 1));
+                console.log(position)
                 for(let child of children) {
-                    child.style.transition = "";
+                    // child.style.transition = "";
                     child.style.transform = `translate(${-position * 500}px)`;
                 }
                 x = -position * 500;

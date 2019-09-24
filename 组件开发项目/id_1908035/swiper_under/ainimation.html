@@ -149,6 +149,7 @@ let myCB2 = cubicBezier(.7,-0.28,.91,-0.11);
             this._status = 'start'
             let startTime = Date.now()
              this._animate = ()=>{
+                 console.log(this.rate)
                 for(let animation of  this._animations){
                 animation.tick(Date.now()-this._pauseTime-startTime)
                 this.removeAnimation(animation)
@@ -159,8 +160,8 @@ let myCB2 = cubicBezier(.7,-0.28,.91,-0.11);
             requestAnimationFrame(this._animate)
         //    this._interval = setInterval(this._animate,16)
         }
-        set rate(value){}
-        get rate(){}
+        set rate(value){ this.rate = value }
+        get rate(){ return 1 }
             addAnimation(animation) {
                 if(!animation.finshed)
                 this._animations.push(animation)
@@ -186,7 +187,7 @@ let myCB2 = cubicBezier(.7,-0.28,.91,-0.11);
             this._convert = convert
         }
         tick(t){
-            if(t>this._endTime){
+            if(t>=this._endTime){
                 t = this._endTime
                 this.finshed = true
             }
@@ -226,4 +227,5 @@ let myCB2 = cubicBezier(.7,-0.28,.91,-0.11);
         (v)=>`${v}px`
     ))
     tl.start()
+    // tl.rate = 4
 </script>
