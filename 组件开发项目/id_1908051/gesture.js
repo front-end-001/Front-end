@@ -1,4 +1,4 @@
-function enableGesture(main) {
+export default function enableGesture(main) {
     let start = (point, context) => {
         console.log('start');
         context.startX = point.clientX;
