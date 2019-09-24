@@ -3,7 +3,7 @@
  *
  * @param main - 容器
  */
-function enableGesture(main) {
+export default function enableGesture(main) {
 	let start = (point, context) => {
 		// 开始位置
 		context.startX = point.clientX;
@@ -107,15 +107,15 @@ function enableGesture(main) {
 	};
 	// 取消事件
 	let cancel = (point, context) => {
-		if(context.isPan) {
+		if (context.isPan) {
 			let e = new Event("pancancel");
 			main.dispatchEvent(e);
 		}
-		if(context.isPress) {
+		if (context.isPress) {
 			let e = new Event("presscancel");
 			main.dispatchEvent(e);
 		}
-		if(context.pressHandler !== null) {
+		if (context.pressHandler !== null) {
 			let e = new Event("pancancel");
 			main.dispatchEvent(e);
 			clearTimeout(context.pressHandler);
