@@ -1,21 +1,19 @@
+import  {
+    Component,
+    PROPERTY_SYMBOL,
+    ATTRIBUTE_SYMBOL,
+    EVENT_SYMBOL,
+    STATE_SYMBOL
+} from './Component.js';
 import {
   TimeLine, DOMElementStyleNumberAnimation, ease
 } from '../lib/animation.js';
 import enableGesture from '../lib/gesture.js';
 
-const PROPERTY_SYMBOL = Symbol('property');
-const ATTRIBUTE_SYMBOL = Symbol('attribute');
-const EVENT_SYMBOL = Symbol('event');
-const STATE_SYMBOL = Symbol('state');
-
 // property attribute 如何存
-class Carousel {
+class CarouselView extends Component {
   constructor(config) {
-    // Object.create(null)不会去找原型链
-    this[PROPERTY_SYMBOL] = Object.create(null);
-    this[ATTRIBUTE_SYMBOL] = Object.create(null);
-    this[EVENT_SYMBOL] = Object.create(null);
-    this[STATE_SYMBOL] = Object.create(null);
+    super();
     // life cycle
     this.created();
   }
@@ -217,9 +215,6 @@ class Carousel {
     this[PROPERTY_SYMBOL].root.addEventListener('mousedown', event => event.preventDefault());
     document.addEventListener("touchmove", event => event.preventDefault(), {passive:false})
   }
-  getAttribute(name) {
-    return this[ATTRIBUTE_SYMBOL][name];
-  }
   setAttribute(name, value) {
     // hook
     if (name === 'style') {
@@ -237,26 +232,6 @@ class Carousel {
     }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
-  addEventListener(type, listener) {
-    if (!this[EVENT_SYMBOL][type]) {
-      this[EVENT_SYMBOL][type] = new Set();
-    }
-    this[EVENT_SYMBOL][type].add(listener);
-  }
-  removeEventListener(type, listener) {
-    if (!this[EVENT_SYMBOL][type]) {
-      return;
-    }
-    this[EVENT_SYMBOL][type].delete(listener);
-  }
-  triggerEvent(type) {
-    if (!this[EVENT_SYMBOL].type) {
-      return;
-    }
-    for (let event of this[EVENT_SYMBOL][type]) {
-      event.call(this);
-    }
-  }
   log() {
     console.log('width:', this.width);
   }
@@ -268,4 +243,4 @@ class Carousel {
   }
 }
 
-export default Carousel
+export default CarouselView

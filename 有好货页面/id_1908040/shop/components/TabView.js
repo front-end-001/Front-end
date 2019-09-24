@@ -1,23 +1,19 @@
 /**
  * @file TabView组件
  */
-
+import {
+    Component,
+    PROPERTY_SYMBOL,
+    ATTRIBUTE_SYMBOL,
+    EVENT_SYMBOL,
+    STATE_SYMBOL
+  } from './Component.js';
 import { ease, TimeLine, DOMElementStyleNumberAnimation } from '../lib/animation.js';
 import enableGesture from '../lib/gesture.js';
 
-const PROPERTY_SYMBOL = Symbol('property');
-const ATTRIBUTE_SYMBOL = Symbol('attribute');
-const EVENT_SYMBOL = Symbol('event');
-const STATE_SYMBOL = Symbol('state');
-
-class TabView {
+class TabView extends Component {
   constructor(config) {
-    this[PROPERTY_SYMBOL] = Object.create(null);
-    this[ATTRIBUTE_SYMBOL] = Object.create(null);
-    this[EVENT_SYMBOL] = Object.create(null);
-    this[STATE_SYMBOL] = Object.create(null);
-
-    this[PROPERTY_SYMBOL].children = [];
+    super();
     this[PROPERTY_SYMBOL].headers = [];
     this[PROPERTY_SYMBOL].position = 0;
     this[PROPERTY_SYMBOL].nextPosition = 1;
@@ -25,14 +21,10 @@ class TabView {
 
     this.created();
   }
-  appendTo(element) {
-    element.appendChild(this.root);
-    this.mounted();
-  }
   created() {
     // 初始化包含tab按钮和tab内容的容器
-    this.root = document.createElement('div');
-    this.root.style.display = 'flex';
+    this[PROPERTY_SYMBOL].root = document.createElement('div');
+    this[PROPERTY_SYMBOL].root.style.display = 'flex';
     this.headContainer = document.createElement('div');
     this.contentContainer = document.createElement('div');
 
@@ -42,21 +34,132 @@ class TabView {
     this.contentContainer.style.flex = '1';
     this.headContainer.style.height = '93px';
 
-    this.root.appendChild(this.headContainer);
-    this.root.appendChild(this.contentContainer);
-    this[STATE_SYMBOL].h = 0;
+    this[PROPERTY_SYMBOL].root.appendChild(this.headContainer);
+    this[PROPERTY_SYMBOL].root.appendChild(this.contentContainer);
+
+    enableGesture(this.contentContainer);
+
+    this[PROPERTY_SYMBOL].root.addEventListener("touchmove", function(e){
+      // 手机端手势不触发
+      e.cancelBubble = true;
+      e.stopImmediatePropagation();
+    }, {passive:false});
+
+    this[STATE_SYMBOL].position = 0; // n
+
+    // 在create中绑定事件
+    this.contentContainer.addEventListener('pan', event => {
+      if (event.isVertical) {
+        return;
+      }
+
+      event.preventDefault();
+
+      let dx = event.dx;
+
+      console.log(dx);
+
+      if (this[STATE_SYMBOL].position === 0 && dx > 0) {
+        dx = dx / 2;
+      }
+
+      if (this[STATE_SYMBOL].position === this.contentContainer.children.length - 1 && dx < 0) {
+        dx = dx / 2;
+      }
+
+      let width = this.contentContainer.getBoundingClientRect().width;
+
+      for (let i = 0; i < this.contentContainer.children.length; i++) {
+        this.contentContainer.children[i].style.transition = 'transfrom ease 0s';
+        this.contentContainer.children[i].style.transform = `translateX(${dx - width * this[STATE_SYMBOL].position}px)`;
+      }
+    });
+
+    // 当移动的非常快时，即便图片不靠近窗口也需要能移动过去  flick/swipe  足够快、足够远
+    this.contentContainer.addEventListener('panend', event => {
+      if (event.isVertical) {
+        return;
+      }
+
+      event.preventDefault();
+
+      let width = this.contentContainer.getBoundingClientRect().width;
+
+      let isLeft;
+      if (event.isFlick) {
+        // x分量大于y的分量才触发
+        // console.log('flick');
+        if (event.dx > 0) {
+          this[STATE_SYMBOL].position--;
+          isLeft = true;
+        }
+        if (event.dx < 0) {
+          this[STATE_SYMBOL].position++;
+          isLeft = false;
+        }
+      } else {
+        if (event.dx > width / 2) {
+          this[STATE_SYMBOL].position--;
+          isLeft = true;
+        } else if (event.dx < - width / 2) {
+          this[STATE_SYMBOL].position++;
+          isLeft = false;
+        } else if(event.dx > 0) {
+          isLeft = false;
+        } else {
+          isLeft = true;
+        }
+      }
+
+      if (this[STATE_SYMBOL].position < 0) {
+        this[STATE_SYMBOL].position = 0
+      }
+
+      if (this[STATE_SYMBOL].position >= this.contentContainer.children.length) {
+        this[STATE_SYMBOL].position = this.contentContainer.children.length - 1;
+      }
+
+      for (let i = 0; i < this.contentContainer.children.length; i++) {
+        this.contentContainer.children[i].style.transition = 'transfrom ease 0.5s';
+        this.contentContainer.children[i].style.transform = `translateX(${- width * this[STATE_SYMBOL].position}px)`;
+      }
+    });
   }
   mounted() {
-    this._drag();
-    this._click();
+    // this._drag();
+    // this._click();
     Array.prototype.slice.call(this.headContainer.children)[0].style.borderBottom = '1px solid black';
     Array.prototype.slice.call(this.headContainer.children)[0].style.fontWeight = 'normal';
   }
-  unmountd() {}
-  update() {}
   // tab头点击
   _click() {
     let tabTitles = Array.prototype.slice.call(this.headContainer.children);
+    for (let i = 0; i < tabTitles.length; i++) {
+      let position = this[PROPERTY_SYMBOL].position;
+      let nextPosition = position;
+      // void function() {
+        tabTitles[i].addEventListener('click', event => {
+          for (let j = 0; j < tabTitles.length; j++) {
+            tabTitles[j].style.borderBottom = 'none';
+            tabTitles[j].style.fontWeight = 'lighter';
+          }
+          console.log(i);
+            // 点击之后的位置
+            nextPosition = i;
+            tabTitles[i].style.borderBottom = '1px solid black';
+            tabTitles[i].style.fontWeight = 'normal';
+
+          
+          // 设置tab-content动画
+          if (!this[PROPERTY_SYMBOL].tl) {
+            this[PROPERTY_SYMBOL].tl = new TimeLine();
+          }
+          this._nextPic(position, nextPosition);
+        });
+      // }();
+    }
+
+    /*
     this.headContainer.addEventListener('click', event => {
       let position = this[PROPERTY_SYMBOL].position;
       let nextPosition = position;
@@ -81,51 +184,7 @@ class TabView {
       }
       this._nextPic(position, nextPosition);
     });
-  }
-  _nextPic(position, nextPosition) {
-      let tabViewWidth = window.innerWidth;
-      let current = this.contentContainer.children[position],
-        next = this.contentContainer.children[nextPosition];
-
-      this[PROPERTY_SYMBOL].tl.removeAllAnimations();
-      if (position < nextPosition) {
-        // 从右往左
-        this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
-          current,
-          'transform',
-          0, -tabViewWidth * position,
-          1000, -tabViewWidth - tabViewWidth * position,
-          (v) => `translateX(${v}px)`
-        ));
-        this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
-          next,
-          'transform',
-          0, tabViewWidth - tabViewWidth * nextPosition,
-          1000, -tabViewWidth * nextPosition,
-          (v) => `translateX(${v}px)`
-        ));
-      } else if (position > nextPosition) {
-        // 从左往右
-        this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
-          current,
-          'transform',
-          0, -tabViewWidth * position,
-          1000, -tabViewWidth + tabViewWidth * position,
-          (v) => `translateX(${-v}px)`
-        ));
-        console.log('current', -tabViewWidth * position, -tabViewWidth + tabViewWidth * position);
-        this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
-          next,
-          'transform',
-          0, tabViewWidth - tabViewWidth * nextPosition,
-          1000, tabViewWidth * nextPosition,
-          (v) => `translateX(${-v}px)`
-        ));
-        console.log('next', tabViewWidth - tabViewWidth * nextPosition, tabViewWidth * nextPosition);
-      }
-      this[PROPERTY_SYMBOL].tl.restart();
-
-      this[PROPERTY_SYMBOL].position = nextPosition;
+    */
   }
   // tab内容拖拽
   _drag() {
@@ -271,7 +330,8 @@ class TabView {
     */
   }
   appendChild(child) {
-    this.children.push(child);
+    let n = this[PROPERTY_SYMBOL].children.length;
+    this[PROPERTY_SYMBOL].children.push(child);
 
     let title = child.getAttribute('tab-title') || '';
     this[PROPERTY_SYMBOL].headers.push(title);
@@ -285,50 +345,122 @@ class TabView {
     header.style.margin = '30px 15px 0 15px';
     // 注意 innerText和textContent的不同   https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent#Differences_from_innerText
     this.headContainer.appendChild(header);
+
+    header.addEventListener('click', event => {
+      console.log(n);
+      for (let i = 0; i < this.contentContainer.children.length; i++) {
+        // 切换方法二：css translate
+        this.contentContainer.children[i].style.transition = 'ease 0.5s';
+        this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`;
+        /* 切换方法一： display
+        this.contentContainer.children[i].style.width = '100%';
+        this.contentContainer.children[i].style.height = '100%';
+        this.contentContainer.children[i].style.display = 'none';
+        */
+
+        // 切换方法三：js animation -- 暂未实现
+        
+      }
+      // child.style.display = 'inline-block'
+    });
+
     child.appendTo(this.contentContainer);
     for (let i = 0; i < this.contentContainer.children.length; i++) {
       this.contentContainer.children[i].style.width = '100%';
       this.contentContainer.children[i].style.height = '100%';
+      this.contentContainer.children[i].style.verticalAlign = 'top';
       this.contentContainer.children[i].style.display = 'inline-block';
     }
   }
-  get children() {
-    return this[PROPERTY_SYMBOL].children;
+  _tabTo(position, nextPosition) {
+    let tabViewWidth = this[PROPERTY_SYMBOL].root.style.width;
+    let current = this.contentContainer.children[position],
+      next = this.contentContainer.children[nextPosition];
+
+    this[PROPERTY_SYMBOL].tl.removeAllAnimations();
+    if (position < nextPosition) {
+      // 从右往左
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        current,
+        'transform',
+        0, -tabViewWidth * position,
+        1000, -tabViewWidth - tabViewWidth * position,
+        (v) => `translateX(${v}px)`
+      ));
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        next,
+        'transform',
+        0, tabViewWidth - tabViewWidth * nextPosition,
+        1000, -tabViewWidth * nextPosition,
+        (v) => `translateX(${v}px)`
+      ));
+    } else if (position > nextPosition) {
+      // 从左往右
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        current,
+        'transform',
+        0, -tabViewWidth * position,
+        1000, -tabViewWidth + tabViewWidth * position,
+        (v) => `translateX(${-v}px)`
+      ));
+      console.log('current', -tabViewWidth * position, -tabViewWidth + tabViewWidth * position);
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        next,
+        'transform',
+        0, tabViewWidth - tabViewWidth * nextPosition,
+        1000, tabViewWidth * nextPosition,
+        (v) => `translateX(${-v}px)`
+      ));
+      console.log('next', tabViewWidth - tabViewWidth * nextPosition, tabViewWidth * nextPosition);
+    }
+    this[PROPERTY_SYMBOL].tl.restart();
+
+    this[PROPERTY_SYMBOL].position = nextPosition;
   }
-  getAttribute(name) {
-    if (name === 'style') {
-      return this.root.getAttribute('style');
+  _nextPic(position, nextPosition) {
+    let tabViewWidth = window.innerWidth;
+    let current = this.contentContainer.children[position],
+      next = this.contentContainer.children[nextPosition];
+
+    this[PROPERTY_SYMBOL].tl.removeAllAnimations();
+    if (position < nextPosition) {
+      // 从右往左
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        current,
+        'transform',
+        0, -tabViewWidth * position,
+        1000, -tabViewWidth - tabViewWidth * position,
+        (v) => `translateX(${v}px)`
+      ));
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        next,
+        'transform',
+        0, tabViewWidth - tabViewWidth * nextPosition,
+        1000, -tabViewWidth * nextPosition,
+        (v) => `translateX(${v}px)`
+      ));
+    } else if (position > nextPosition) {
+      // 从左往右
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        current,
+        'transform',
+        0, -tabViewWidth * position,
+        1000, -tabViewWidth + tabViewWidth * position,
+        (v) => `translateX(${-v}px)`
+      ));
+      console.log('current', -tabViewWidth * position, -tabViewWidth + tabViewWidth * position);
+      this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
+        next,
+        'transform',
+        0, tabViewWidth - tabViewWidth * nextPosition,
+        1000, tabViewWidth * nextPosition,
+        (v) => `translateX(${-v}px)`
+      ));
+      console.log('next', tabViewWidth - tabViewWidth * nextPosition, tabViewWidth * nextPosition);
     }
-    return this[ATTRIBUTE_SYMBOL][name];
-  }
-  setAttribute(name, value) {
-    // hook
-    if (name === 'style') {
-      this.root.setAttribute('style', value);
-      this.root.style.display = 'flex';
-      this.root.style.flexDirection = 'column';
-    }
-    return (this[ATTRIBUTE_SYMBOL][name] = value);
-  }
-  addEventListener(type, listener) {
-    if (!this[EVENT_SYMBOL][type]) {
-      this[EVENT_SYMBOL][type] = new Set();
-    }
-    this[EVENT_SYMBOL][type].add(listener);
-  }
-  removeEventListener(type, listener) {
-    if (!this[EVENT_SYMBOL][type]) {
-      return;
-    }
-    this[EVENT_SYMBOL][type].delete(listener);
-  }
-  triggerEvent(type) {
-    if (!this[EVENT_SYMBOL].type) {
-      return;
-    }
-    for (let event of this[EVENT_SYMBOL][type]) {
-      event.call(this);
-    }
+    this[PROPERTY_SYMBOL].tl.restart();
+
+    this[PROPERTY_SYMBOL].position = nextPosition;
   }
 }
 
