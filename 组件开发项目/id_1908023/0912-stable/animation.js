@@ -51,19 +51,18 @@ class Timeline {
   }
 
   // 这个有 bug 
-  restart() {
-    if (this.tick) {
-      this.tick = null;
-    }
-    // 如果是暂停状态，会有这个临时保存的状态，也要清楚掉
-    this.resumeTick = null;
-    this.status = 'init';
-    requestAnimationFrame(() => this.start())
+  // restart() {
+  //   if (this.tick) {
+  //     this.tick = null;
+  //     // 如果是暂停状态，会有这个临时保存的状态，也要清楚掉
+  //     this.resumeTick = null;
+  //   }
+  //   this.status = 'init';
   //   for (let animation of this.animations) {
   //     animation.resetTick();
   //   }
   //   this.start();
-  }
+  // }
   
   addAnimation(animation) {
     this.animations.push(animation);
