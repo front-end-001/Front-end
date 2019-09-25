@@ -1,0 +1,275 @@
+.container {
+  width:1080px;
+  margin: 0 auto;
+  position: relative;
+  height: 2550px;
+  // 背景图片
+  .bg-content{
+    height:732px;
+    position: relative;
+    background: url('./img/nav/bg_sp.png') no-repeat center -482px;
+    overflow: hidden;
+    z-index: 1;
+    .bg{
+      position: absolute;
+      &.bg1{
+        width: 414px;
+        height: 430px;
+        top: -215px;
+        left: -217px;
+      }
+      &.bg2{
+        width: 325px;
+        left: 514px;
+        top: -190px;
+      }
+      &.bg3{
+        width: 888px;
+        right: -444px;
+        top: -551px;
+      }
+    }
+  }
+  // 导航部分
+  .nav-top-container{
+    position: absolute;
+    z-index: 2;
+    top: 160px;
+    width: 100%;
+    padding: 0 34px 0 34px;
+    .title{
+      width: 100%;
+      // padding: 0 210px 0 68px;
+      display: flex;
+      justify-content: space-between;
+      .arrow{
+        display: block;
+        width: 210px;
+        // width: 68px;
+        background: red;
+        height: 25px;
+      }
+      .theme{
+        width: 215px;
+        height: 63px;
+        img{
+          width: 100%;
+        }
+      }
+      .share{
+        width: 210px;
+        height: 53px;
+        background: green;
+      }
+    }
+    .nav{
+      list-style: none;
+      display: flex;
+      margin-top: 64px;
+      margin-left: -36px;
+      position: relative;
+      z-index: 3;
+      li{
+        padding: 0 36px;;
+        height:43px;
+        font-size:46px;
+        font-family:PingFangSC;
+        font-weight:300;
+        color:rgba(255,255,255,1);
+        line-height:35px;
+        position: relative;
+        text-align: center;
+        i{
+          position: absolute;
+          bottom: -19px;
+          left: 50%;
+          margin-left: -30px;
+          width:60px;
+          height:6px;
+          background:rgba(255,255,255,1);
+          border-radius:3px;
+          display: none;
+        }
+        &.active {
+          font-weight: 500;
+          i{
+            display: block
+          }
+        }
+      }
+    }
+  }
+  // 底部内容
+  .content{
+    padding: 0 34px 34px;
+    width: 100%;
+    position: absolute;
+    top: 383px;
+    left: 0;
+    background: #ddd;
+    .nav{
+      width: 100%;
+      display: flex;
+      position: relative;
+      z-index: 5;
+      justify-content: space-between;
+      color: #fff;
+      height:100px;
+      .nav-left{
+        // width:320px;
+        height:60px;
+        font-size:46px;
+        font-family:PingFangSC;
+        font-weight:500;
+        line-height:60px;
+      }
+      .nav-right{
+        width:496px;
+        height:60px;
+        background:rgba(254,254,254,1);
+        border-radius:30px;
+        display: flex;
+        span{
+          flex: 1;
+          text-align: center;
+          font-size:34px;
+          font-family:PingFangSC;
+          font-weight:400;
+          color:rgba(255,125,49,1);
+          line-height:60px;
+          &.active{
+            width:173px;
+            height:60px;
+            color: #fff;
+            background:linear-gradient(90deg,rgba(253,147,1,1),rgba(250,129,1,1));
+            border-radius:30px;
+          }
+        }
+      }
+    }
+    .main{
+      width: 100%;
+      .main-item{
+        width: 100%;
+        display: flex;
+        margin-top: 16px;
+        justify-content: space-between;
+        position: relative;
+        z-index: 6;
+        .single{
+          width: 673px;
+          height: 673px;
+          position: relative;
+          img{
+            width: 100%;
+            display: block;
+          }
+          .explain{
+            width: 100%;
+            position: absolute;
+            bottom: 31px;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            .explain-left{
+              margin-left: 26px;
+              img{
+                width: 151px;
+                display: block;
+              }
+              span{
+                display: block;
+                width:111px;
+                height:23px;
+                font-size:32px;
+                font-family:PingFangSC;
+                font-weight:400;
+                color:rgba(255,255,255,1);
+                line-height:26px;
+                margin-top: 21px;
+              }
+            }
+            .btn{
+              width:142px;
+              height:62px;
+              background:rgba(254,254,254,0.3);
+              border-radius:30px;
+              text-align: center;
+              line-height: 62px;
+              padding-right: 10px;
+              transform: translate(-27px,12px);
+              ::after{
+                display: block;
+                content: '';
+                width: 0px;
+                height: 0px;
+                transform: rotate(45deg);
+                position: absolute;
+                top: 22px;
+                right: 22px;
+                border: 10px solid #fff;
+                border-bottom-color: transparent;
+                border-left-color: transparent;
+              }
+              span{
+                width:65px;
+                height:32px;
+                font-size:34px;
+                font-family:PingFangSC;
+                font-weight:400;
+                color:rgba(255,255,255,1);
+              }
+            }
+          }
+        }
+        .double{
+          width: 326px;
+          img{
+            width: 100%;
+            display: block;
+          }
+          .bottom{
+            &:nth-child(2) {
+              margin-top: 21px;
+            }
+            position: relative;
+            .explain{
+              width: 100%;
+              position: absolute;
+              bottom: 24px;
+              left: 0;
+              display: flex;
+              justify-content: space-between;
+              .explain-left{
+                margin-left: 26px;
+                img{
+                  width: 151px;
+                  display: block;
+                }
+                span{
+                  display: block;
+                  // width:125px;
+                  height:29px;
+                  font-size:32px;
+                  font-family:PingFangSC;
+                  font-weight:400;
+                  color:rgba(255,255,255,1);
+                  line-height:26px;
+                  margin-top: 21px;
+                }
+              }
+              .btn{
+                width: 16px;
+                height: 16px;
+                border: 3px solid #fff;
+                transform: translate(-24px, 29px) rotate(45deg);
+                border-bottom-color: transparent;
+                border-left-color: transparent;            
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

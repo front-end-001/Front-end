@@ -122,7 +122,7 @@ const gesture = (function () {
 
   /**
    * touchstart
-   * @param {TouchEvent} event 
+   * @param {TouchEvent} event
    */
   const touchstart = (event) => {
     let touch;
@@ -139,7 +139,7 @@ const gesture = (function () {
 
   /**
    * touchmove
-   * @param {TouchEvent} event 
+   * @param {TouchEvent} event
    */
   const touchmove = (event) => {
     let touch;
@@ -155,7 +155,7 @@ const gesture = (function () {
 
   /**
    * touchend
-   * @param {TouchEvent} event 
+   * @param {TouchEvent} event
    */
   const touchend = (event) => {
     let touch;
@@ -172,7 +172,7 @@ const gesture = (function () {
 
   /**
    * touchcancel
-   * @param {TouchEvent} event 
+   * @param {TouchEvent} event
    */
   const touchcancel = (event) => {
     let touch;

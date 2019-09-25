@@ -2,8 +2,8 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-18 16:38:23
- * @LastEditTime: 2019-08-18 17:41:58
- * @LastEditors: Please set LastEditors
+ * @lastTime: 2019-09-07 17:01:20
+ * @LastAuthor: Do not edit
  */
 function enableGesture(main) {
 
