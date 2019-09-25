@@ -95,11 +95,11 @@ function cubicBezier(p1x, p1y, p2x, p2y) {
 }
 
 class Timeline {
-    //inited, started, paused, 
+    //inited, started, paused,
     constructor(){
         this._animations = [];
         this.status = "inited";
-        this._rate = 1
+        this._rate = 1;
         this._startPoint = 0;
     }
     pause(){
@@ -185,8 +185,8 @@ class DOMElementStyleNumberAnimation { //补间动画
                 t = this._startTime;
                 this._fixKeyFrame = false;
             }
-                
-            
+
+
         } else {
             this._fixKeyFrame = true;
         }

@@ -1,0 +1,25 @@
+.TabList {
+    padding: 12px 12px 10px 12px;
+    height: 21px;
+}
+
+.TabList-item {
+    color: white;
+    font-size: 15px;
+    margin-right: 12px;
+    position: relative;
+}
+
+.TabList-item.is-active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: white;
+    bottom: -6px;
+    left: 0;
+}
+
+.TabList-item + .TabList-item {
+    margin-left: 12px;
+}

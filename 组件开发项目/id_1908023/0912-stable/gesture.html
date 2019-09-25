@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      background: #d9d9d9;
+    }
+    .main {
+      width: 200px;height: 200px; background: blueviolet;
+      cursor: move;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main" class="main"></div>
+
+  <script src="gesture.js"></script>
+  <script>
+    const main = document.getElementById('main');
+    enableGesture(main);
+
+    let x = 0, y = 0;
+    main.addEventListener('pan', e => {
+      main.style.transform = `translate(${e.dx + x}px, ${e.dy + y}px)`;
+    })
+    main.addEventListener('panend', e => {
+      x = e.dx + x;
+      y = e.dy + y;
+    })
+  </script>
+</body>
+
+</html>
