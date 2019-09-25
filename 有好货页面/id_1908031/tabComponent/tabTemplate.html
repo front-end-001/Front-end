@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<style>
+	*{margin:0; padding: 0;}
+	ul,li{list-style: none;}
+
+	.tab-menu-wrapper{padding-left: 20px;display: block;overflow: hidden;}
+	.tab-menu-wrapper li{float:left;padding-right: 10px;}
+	.tab-current-menu{color: red;}
+	.tab-current-menu2{color: blue;}
+</style>
+<body>
+<div class="tab">
+	<ul class="tab-menu-wrapper">
+		<li class="J_tab-menu tab-current-menu">menu1</li>
+		<li class="J_tab-menu">menu2</li>
+		<li class="J_tab-menu">menu3</li>
+	</ul>
+	<div class="tab-content-wrapper">
+		<div class="J_tab-content"><div>content1</div></div>
+		<div class="J_tab-content" style="display:none;">content2</div>
+		<div class="J_tab-content" style="display:none;">content3</div>
+	</div>
+</div>
+
+<div class="tab J_tab">
+	<ul class="tab-menu-wrapper">
+		<li class="J_tab-menu tab-current-menu2">menu1</li>
+		<li class="J_tab-menu">menu2</li>
+		<li class="J_tab-menu">menu3</li>
+	</ul>
+	<div class="tab-content-wrapper">
+		<div class="J_tab-content"><div>content1</div></div>
+		<div class="J_tab-content" style="display:none;">content2</div>
+		<div class="J_tab-content" style="display:none;">content3</div>
+	</div>
+</div>
+</body>
+</html>

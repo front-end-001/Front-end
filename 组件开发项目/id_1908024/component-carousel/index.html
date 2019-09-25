@@ -1,0 +1,28 @@
+<body></body>
+
+<script src="cubicBezier.js"></script>
+<script src="animation.js"></script>
+<script src="gesture.js"></script>
+<script src="carousel.js"></script>
+<script>
+    let data = [
+        'https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg',
+        'https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg',
+        'https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg',
+    ]
+
+    var c = new Carousel({})
+
+    const b = document.querySelector('body')
+    c.addEventListener('widthchange', () => {
+        console.log('1')
+    })
+    c.setAttribute('data', data)
+    c.setAttribute('width', '500px')
+    c.setAttribute('height', '300px')
+    c.autoPlay = true
+
+    c.appendTo(b)
+
+    // c.setAttribute('width', '600px')
+</script>

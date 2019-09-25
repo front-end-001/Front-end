@@ -159,6 +159,6 @@ P1:
 
 [轮播整合动画库--使用动画库实现轮播并适应拖拽](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/carousel-with-animation.html)
 
-
+[轮播组件改造](https://yangtoude.github.io/front-end/%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/id_1908040/code/carousel-component.html)
 
 
