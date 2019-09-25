@@ -1,3 +1,5 @@
+import enableGesture from '../gesture.js';
+
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
@@ -30,6 +32,80 @@ export default class TapView {
 
     this.root.appendChild(this.headerContainer);
     this.root.appendChild(this.contentContainer);
+
+
+
+    // 拖拽
+    // this.contentContainer.addEventListener('mousedown', e => e.preventDefault());
+    enableGesture(this.contentContainer);
+
+    this[STATE_SYMBOL].position = 0;
+
+    document.addEventListener("touchmove", function (e) {
+      if (e.touches.length == 1)
+        e.preventDefault();
+    }, {
+      passive: false
+    })
+
+    // let children = Array.from(this.contentContainer.children);
+    // let position = 0;
+    // 移动中
+    this.contentContainer.addEventListener('pan', e => {
+      if (e.isVertical) return;
+
+      e.origin.preventDefault();
+
+      let width = this.contentContainer.getBoundingClientRect().width;
+      let dx = e.dx;
+
+      if (this[STATE_SYMBOL].position === 0 && e.dx > 0)
+        dx = dx / 2;
+
+      if (this[STATE_SYMBOL].position === this.contentContainer.children.length - 1 && e.dx < 0)
+        dx = dx / 2;
+
+      for (let i = 0; i < this.contentContainer.children.length; i++) {
+        this.contentContainer.children[i].style.transition = 'transform ease 0s';
+        this.contentContainer.children[i].style.transform = `translate(${dx - width * this[STATE_SYMBOL].position}px)`;
+      }
+    })
+
+    // 移动结束
+    this.contentContainer.addEventListener('panend', e => {
+      if (e.isVertical) return;
+      e.origin.preventDefault();
+
+      let width = this.contentContainer.getBoundingClientRect().width;
+
+      if (e.isFlick && Math.abs(e.dx) > Math.abs(e.dy)) {
+        if (e.dx > 0) {
+          this[STATE_SYMBOL].position--;
+        } else {
+          this[STATE_SYMBOL].position++;
+        }
+      } else {
+        if (e.dx > width / 2) {
+          this[STATE_SYMBOL].position--;
+        } else if (e.dx < -width / 2) {
+          this[STATE_SYMBOL].position++;
+        }
+      }
+
+      if (this[STATE_SYMBOL].position < 0) {
+        this[STATE_SYMBOL].position = 0;
+      }
+
+      if (this[STATE_SYMBOL].position >= this.contentContainer.children.length - 1) {
+        this[STATE_SYMBOL].position = this.contentContainer.children.length - 1;
+      }
+
+      for (let i = 0; i < this.contentContainer.children.length; i++) {
+        this.contentContainer.children[i].style.transition = 'transform ease 0.5s';
+        this.contentContainer.children[i].style.transform = `translateX(${-width * this[STATE_SYMBOL].position}px)`;
+      }
+
+    })
   }
 
   appendTo(element) {
@@ -40,11 +116,12 @@ export default class TapView {
   mounted() { }
 
   appendChild(child) {
+    let n = this.children.length;
     this.children.push(child);
 
     let title = child.getAttribute('tab-title') || '';
     this[PROPERTY_SYMBOL].headers.push(title);
-    
+
     let header = document.createElement('div');
     header.innerText = title;
     header.style.display = 'inline-block';
@@ -53,11 +130,26 @@ export default class TapView {
     header.style.fontFamily = 'PingFang SC';
     header.style.margin = '20px 35px 0 35px';
     this.headerContainer.appendChild(header);
+
+    header.addEventListener('click', e => {
+      this[STATE_SYMBOL].position = n;
+      for (let i = 0; i < this.contentContainer.children.length; i++) {
+        // this.contentContainer.children[i].style.width = '100%';
+        // this.contentContainer.children[i].style.height = '100%';
+        // this.contentContainer.children[i].style.display = 'none';
+        this.contentContainer.children[i].style.transition = `transform 0.5s ease`;
+        this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`;
+      }
+      // child.style.display = 'inline-block';
+      // child.setAttribute('style', 'display:inline-block');
+    })
+
     child.appendTo(this.contentContainer);
 
     for (let i = 0; i < this.contentContainer.children.length; i++) {
       this.contentContainer.children[i].style.width = '100%';
       this.contentContainer.children[i].style.height = '100%';
+      this.contentContainer.children[i].style.verticalAlign = 'top';
       this.contentContainer.children[i].style.display = 'inline-block';
     }
   }
@@ -75,6 +167,7 @@ export default class TapView {
     }
     return this[ATTRIBUTE_SYMBOL][name];
   }
+
   setAttribute(name, value) {
     if (name === 'style') {
       this.root.setAttribute('style', value);
@@ -87,14 +180,10 @@ export default class TapView {
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
 
-  get children() {
-    return this[PROPERTY_SYMBOL].children;
-  }
-
   addEventListener(type, listener) {
     // 创建一个容器来存放事件
     if (!this[EVENT_SYMBOL][type]) {
-      this[EVENT_SYMBOL][type] = new Set();
+      this[EVENT_SYMBOL][type] = new Set;
     }
     this[EVENT_SYMBOL][type].add(listener);
   }
@@ -105,6 +194,8 @@ export default class TapView {
     this[EVENT_SYMBOL][type].delete(listener);
   }
   triggerEvent(type) {
+    if (!this[EVENT_SYMBOL][type])
+      return;
     for (let event of this[EVENT_SYMBOL][type]) {
       event.call(this, type);
     }
