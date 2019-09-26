@@ -51,8 +51,6 @@
                         y = y + direction[1];
                     }
                     moveSuccess = moveSuccess || canmove;
-
-
                     if (canmove && !checkOnly) {
                         let [c, d] = [i, j];
                         while (1) {
@@ -66,7 +64,6 @@
                     }
                 }
                 return moveSuccess;
-
             }
         }
         checkPass = (color) => {
