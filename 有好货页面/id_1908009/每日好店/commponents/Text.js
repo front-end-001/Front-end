@@ -3,20 +3,26 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Scroll {
+export default class Text {
     constructor(config) {
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
+        this[STATE_SYMBOL] = Object.create(null);
+
+        this.text = config || "";
+
+        this[PROPERTY_SYMBOL].children = [];
+
         this.created();
     }
+
+  
+
     created() {
-        this.root = document.createElement("div");
-        // this.root.addEventListener('touchmove',function(e){
-        //     e.cancelBubble = true
-        //     e.stopImmediatePropagation();
-        // },{ passive:false})
-        
+        this.root = document.createElement("span");
+        this.root.innerText = this.text;
+        this[STATE_SYMBOL].h = 0;
     }
     mounted() {
 
@@ -27,15 +33,18 @@ export default class Scroll {
     update() {
 
     }
-    get style(){
-        return this.root.style
-    }
     appendTo(element) {
         element.appendChild(this.root);
         this.mounted();
     }
+
     appendChild(child) {
+        this.children.push(child);
         child.appendTo(this.root);
+    }
+
+    get children() {
+        return this[PROPERTY_SYMBOL].children;
     }
     getAttribute(name) {
         if (name == "style") {

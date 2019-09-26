@@ -1,3 +1,5 @@
+import enable from '../js/gesture.js';
+import animation from '../js/animation.js'
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
@@ -13,6 +15,8 @@ export default class Tab {
         this[PROPERTY_SYMBOL].children = [];
         this[PROPERTY_SYMBOL].headers = [];
 
+        this[STATE_SYMBOL].key = 0
+        this[STATE_SYMBOL].position = 0
         this.created();
         that = this
     }
@@ -25,6 +29,7 @@ export default class Tab {
     created() {
         this.root = document.createElement("div");
         this.headerContainer = document.createElement("div");
+        this.headerContainer.setAttribute('class','header')
 
         this.contentContainer = document.createElement("div");
         this.contentContainer.style.whiteSpace = "nowrap";
@@ -33,101 +38,80 @@ export default class Tab {
 
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
-        this[STATE_SYMBOL].h = 0;
-        this.headerContainer.addEventListener('click', this.itemClick)
-        this.BtnArr=[]
-        this.position = 0
+     
+
+        enable(this.contentContainer)
+
+        this.root.addEventListener('touchmove',function(e){
+            e.cancelBubble = true
+            e.stopImmediatePropagation();
+        },{ passive:false})
+     
+        this.contentContainer.addEventListener('pan', e => {
+            //e.origin.preventDefault();
+             if(e.isVertical) return;
+          
+            let width = this.contentContainer.getBoundingClientRect().width
+            let dx = e.dx
+            if (this[STATE_SYMBOL].position == 0 && e.dx > 0 || this[STATE_SYMBOL].position == this.contentContainer.children.length - 1 && e.dx < 0){
+                dx = dx/2
+            }
+    
+            for (let i = 0; i < this.contentContainer.children.length; i++) {
+                this.contentContainer.children[i].style.transition = 'transform ease 0s';
+                this.contentContainer.children[i].style.transform = `translateX(${ dx - width * this[STATE_SYMBOL].position}px)`
+            }
+
+        }) 
+
+        this.contentContainer.addEventListener('panend', e => {
+            if(e.isVertical) return;
+            let width = this.contentContainer.getBoundingClientRect().width
+            let isLeft;
+            if(e.isFlick){
+                if(e.dx > 0){
+                    this[STATE_SYMBOL].position --
+                    isLeft = true
+                }
+                if (e.dx < 0) {
+                    this[STATE_SYMBOL].position++
+                    isLeft = false
+                }
+            }else{
+                if(e.dx > width/2){
+                    this[STATE_SYMBOL].position--
+                    isLeft = true
+                }else if(e.dx < -width/2){
+                    this[STATE_SYMBOL].position++
+                    isLeft = false
+                }else if(e.dx > 0){
+                    isLeft = false;
+                }else{
+                    isLeft = true;
+                }
+            }
+            if (this[STATE_SYMBOL].position < 0){
+                this[STATE_SYMBOL].position = 0
+            }
+            if (this[STATE_SYMBOL].position >= this.contentContainer.children.length-1){
+                this[STATE_SYMBOL].position = this.contentContainer.children.length - 1
+            }
+          
+            for (let i = 0; i < this.contentContainer.children.length; i++) {
+                this.contentContainer.children[i].style.transition = 'transform ease 0.5s';
+                this.contentContainer.children[i].style.transform = `translateX(${-width * this[STATE_SYMBOL].position}px)`
+            }
+        })
+      
+       
     }
     mounted() {
-        this.enable(this.contentContainer)
         // let width = parseInt(this.contentContainer.parentElement.style.width.slice(0,-2))
-        let width = this.contentContainer.getBoundingClientRect().width;
-        let silderArr = this.children
-        this.position = 0;
-        let x = 0
-        this.contentContainer.addEventListener('pan', e => {
-
-            if (e.isVertical) return
-            //position = (silderArr.length + position) % silderArr.length
-            let current = silderArr[this.position].root
-
-            let positionNext = (this.position + 1) % silderArr.length
-            let next = silderArr[positionNext].root
-
-            let positionLast = (silderArr.length + this.position - 1) % silderArr.length
-            let last = silderArr[positionLast].root
-
-            if (this.position != 0) {
-                last.style.transition = 'ease 0s'
-                last.style.transform = `translate(${-width - width * this.positionLast + e.dx}px)`
-            }
-
-            next.style.transition = 'ease 0s'
-            next.style.transform = `translate(${width - width * positionNext + e.dx}px)`
-
-            if (this.position != silderArr.length - 1) {
-                current.style.transition = 'ease 0s'
-                current.style.transform = `translate(${- width * this.position + e.dx}px)`
-            }
-
-        })
-        this.contentContainer.addEventListener('panend', e => {
-            if (e.isVertical) return
-            if (e.isFlick && Math.abs(e.dx) > Math.abs(e.dy)) {
-                if (e.dx > 0) {
-                    this.position = this.position - 1
-                } else if (e.dx < 0) {
-                    this.position = this.position + 1
-                }
-            } else {
-                this.position = -(Math.round((x + e.dx) / width));
-            }
-            this.position = Math.max(0, Math.min(this.position, silderArr.length - 1))
-           // this.position = (silderArr.length + position) % silderArr.length
-            let current = silderArr[this.position].root
-
-            let positionNext = (this.position + 1) % silderArr.length
-            let next = silderArr[positionNext].root
-
-            
-
-            let positionLast = (silderArr.length + this.position - 1) % silderArr.length
-            let last = silderArr[positionLast].root
-
-            last.style.transition = 'ease 0s'
-            last.style.transform = `translate(${-width - width * positionLast}px)`
-
-            next.style.transition = 'ease 0s'
-            next.style.transform = `translate(${width - width * positionNext}px)`
-
-            current.style.transition = 'ease 0s'
-            current.style.transform = `translate(${- width * this.position}px)`
-        })
+      //  let width = this.contentContainer.getBoundingClientRect().width;
+        
+      
     }
-    changePage(){
-        console.log(this.position)
-        let width = this.contentContainer.getBoundingClientRect().width;
-        let silderArr = this.children
-     //  this.position = Math.max(0, Math.min(this.position, silderArr.length - 1))
-        console.log(this.position)
-        // position = (silderArr.length + position) % silderArr.length
-        let current = silderArr[this.position].root
-
-        let positionNext = (this.position + 1) % silderArr.length
-        let next = silderArr[positionNext].root
-
-        let positionLast = (silderArr.length + this.position - 1) % silderArr.length
-        let last = silderArr[positionLast].root
-
-        last.style.transition = 'ease 0s'
-        last.style.transform = `translate(${-width - width * positionLast}px)`
-
-        next.style.transition = 'ease 0s'
-        next.style.transform = `translate(${width - width * positionNext}px)`
-
-        current.style.transition = 'ease 0s'
-        current.style.transform = `translate(${- width * this.position}px)`
-    }
+   
     unmounted() {
 
     }
@@ -141,19 +125,40 @@ export default class Tab {
         
         let header = document.createElement("div");
         header.innerText = title;
+        header.setAttribute('key', this[STATE_SYMBOL].key++)
         this.headerContainer.appendChild(header);
-        header.style.display = 'inline-block'
-        header.style.whiteSpace = "nowrap";
-        header.style.height = 0.50 + 'rem'
-        header.style.fontSize = 0.36 + 'rem'
-        header.setAttribute('data-name', title)
-        this.BtnArr.push(header)
 
         child.appendTo(this.contentContainer);
+
+        this.headerContainer.addEventListener('click', event => {
+            let idx = event.target.getAttribute('key')
+            this[STATE_SYMBOL].position = idx
+
+            for (let i = 0; i < this.contentContainer.children.length; i++) {
+                this.contentContainer.children[i].style.width = "100%";
+                this.contentContainer.children[i].style.height = "100%";
+                // this.contentContainer.children[i].style.display = "none";
+             //   this.contentContainer.children[i].style.transition = 'ease 0.5s';
+                let an = new animation
+                an.addAnimation(
+                    this.contentContainer.children[i],
+                    "transform",
+                    0,-100,
+                    500, - idx * 100,
+                    (v) => `translateX(${v}%)`
+                )
+                an.start()
+               // this.contentContainer.children[i].style.transform = `translateX(${ - idx * 100}%)`
+            }
+            //this.contentContainer.children[idx].style.display='inline-block'
+        })
+
         for (let i = 0; i < this.contentContainer.children.length; i++) {
             this.contentContainer.children[i].style.width = "100%";
             this.contentContainer.children[i].style.height = "100%";
             this.contentContainer.children[i].style.display = "inline-block";
+            this.contentContainer.children[i].style.overflowY = "auto";
+            this.contentContainer.children[i].style.whiteSpace='normal';
         }
     }
     get children() {
@@ -171,21 +176,6 @@ export default class Tab {
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
-    itemClick(e){
-        switch (e.target.dataset.name){
-            case '推荐':
-                that.position = 0
-            break;
-            case '有趣的店':
-                that.position = 1
-                 break;
-            case '品牌新店':
-                that.position = 2
-                console.log(that.position)
-                break;
-        }  
-        that.changePage()
-    }
     // addEventListener(type, listener) {
     //     if (!this[EVENT_SYMBOL][type])
     //         this[EVENT_SYMBOL][type] = new Set;
@@ -202,175 +192,6 @@ export default class Tab {
         for (let event of this[EVENT_SYMBOL][type])
             event.call(this);
     }
-    enable(circle) {
-        let start = (point, context) => {
-            context.startX = point.clientX
-            context.startY = point.clientY
-            context.isTap = true
-            context.isPan = false
-            context.startTime = Date.now()
-
-            context.isPress = false
-
-            context.pressHandler = setTimeout(() => {
-                context.isPress = true;
-                context.isTap = false;
-                let e = new Event("pressstart");
-                circle.dispatchEvent(e);
-                context.pressHandler = null;
-            }, 500)
-
-        }
-        let move = (point, context) => {
-            let dx = point.clientX - context.startX
-            let dy = point.clientY - context.startY
-            if (dx * dx + dy * dy > 100) {
-                if (context.pressHandler !== null) {
-                    clearTimeout(context.pressHandler);
-                    context.pressHandler = null;
-                    context.isPress = false;
-                } else if (context.isPress) {
-                    context.isPress = false;
-                    let e = new Event("presscancel");
-                    circle.dispatchEvent(e);
-                }
-
-                context.isTap = false
-
-                if (context.isPan == false) {
-                    //.log(point.clientX, dy)
-                    if (Math.abs(dx) > Math.abs(dy)) {
-                        context.isVertical = false
-                        context.isHorizontal = true
-                    } else {
-                        context.isVertical = true
-                        context.isHorizontal = false
-                    }
-                    let e = new Event('panstart')
-                    e.startX = point.clientX
-                    e.startY = point.clientY
-                    circle.dispatchEvent(e)
-                    context.isPan = true
-                }
-            }
-            if (context.isPan) {
-                let e = new Event('pan')
-                e.dx = dx
-                e.dy = dy
-                e.isVertical = context.isVertical
-                e.isHorizontal = context.isHorizontal
-                circle.dispatchEvent(e)
-            }
-
-            context.dx = dx
-            context.dy = dy
-        }
-        let end = (point, context) => {
-            if (context.pressHandler !== null) {
-                clearTimeout(context.pressHandler);
-            }
-            if (context.isPress) {
-                let e = new Event("pressend");
-                circle.dispatchEvent(e);
-            }
-            if (context.isTap) {
-                // console.log('tap')
-                let e = new Event('tap')
-                circle.dispatchEvent(e)
-            }
-            let dx = point.clientX - context.startX
-            let dy = point.clientY - context.startY
-            let v = Math.sqrt(dx * dx + dy * dy) / (Date.now() - context.startTime)
-            if (context.isPan && v > 0.3) {
-                context.isFlick = true
-                let e = new Event('Flick')
-                e.dx = dx
-                e.dy = dy
-                circle.dispatchEvent(e)
-            } else {
-                context.isFlick = false
-            }
-            if (context.isPan) {
-                // console.log('pan')
-                let dx = point.clientX - context.startX, dy = point.clientY - context.startY
-                let e = new Event('panend')
-                e.dx = dx
-                e.dy = dy
-                e.isFlick = context.isFlick
-                e.isVertical = context.isVertical
-                e.isHorizontal = context.isHorizontal
-                circle.dispatchEvent(e)
-            }
-
-        }
-        let cancle = (point, context) => {
-            if (context.isPan) {
-                let e = new Event("pancancel");
-                circle.dispatchEvent(e);
-            }
-            if (context.isPress) {
-                let e = new Event("presscancel");
-                circle.dispatchEvent(e);
-            }
-            if (context.pressHandler !== null) {
-                let e = new Event("pancancel");
-                circle.dispatchEvent(e);
-                clearTimeout(context.pressHandler);
-            }
-        }
-
-        let contexts = Object.create(null)
-        let mouseSymbol = Symbol('mouse')
-        let mousedown = event => {
-            event.preventDefault();
-            document.addEventListener('mousemove', mousemove)
-            document.addEventListener('mouseup', mouseup)
-            contexts[mouseSymbol] = Object.create(null)
-            start(event, contexts[mouseSymbol])
-        }
-        let mousemove = event => {
-            event.preventDefault();
-            move(event, contexts[mouseSymbol])
-        }
-        let mouseup = event => {
-            document.removeEventListener('mousemove', mousemove)
-            document.removeEventListener('mouseup', mouseup)
-            end(event, contexts[mouseSymbol])
-            delete contexts[mouseSymbol]
-        }
-
-
-        let touchstart = event => {
-            for (let touche of event.changedTouches) {
-                contexts[touche.identifier] = Object.create(null)
-                start(touche, contexts[touche.identifier])
-            }
-
-        }
-        let touchmove = event => {
-            for (let touche of event.changedTouches) {
-                move(touche, contexts[touche.identifier])
-            }
-        }
-        let touchend = event => {
-            for (let touche of event.changedTouches) {
-                end(touche, contexts[touche.identifier])
-                delete contexts[touche.identifier]
-            }
-
-        }
-        let touchcancel = event => {
-            for (let touche of event.changedTouches) {
-                cancel(touche, contexts[touche.identifier])
-                delete contexts[touche.identifier]
-            }
-        }
-
-        circle.addEventListener('mousedown', mousedown)
-        circle.addEventListener('touchstart', touchstart)
-        circle.addEventListener('touchmove', touchmove, { passive: false })
-        circle.addEventListener('touchend', touchend)
-        circle.addEventListener('touchcancel', touchcancel)
-    }
+   
 }
 

@@ -1,0 +1,9 @@
+.header {
+    font-size: 0.36rem;
+    overflow: hidden;
+}
+
+.header div{
+    float: left;
+    margin: 0.2rem;
+}
