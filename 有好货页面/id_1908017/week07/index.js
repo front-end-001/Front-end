@@ -1,4 +1,5 @@
 import { h, BaseComponent } from './js/component';
+import { Text } from './js/Text';
 class HelloWorld extends BaseComponent {
   created() {
     super.created();
@@ -20,5 +21,6 @@ function clickHandler(e) {
   console.log('clickHandler', e, this);
 }
 (<HelloWorld title='show a title' on-click={clickHandler} >
-  children text
+  <Text>row1</Text>
+  <Text>row2</Text>
 </HelloWorld>).mount(document.getElementById('app'));

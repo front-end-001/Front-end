@@ -7,7 +7,7 @@ export function h(component, props, ...children) {
       instance.setAttribute(name, val);
     }
   }
-  console.log('children', children);
+  instance.appendChildren(children);
   return instance;
 }
 export const ATTR_SYMBOL = Symbol('attr');
@@ -52,6 +52,12 @@ export class BaseComponent {
       for (let listener of eventMap[eventName]) {
         listener.call(this, args);
       }
+    }
+  }
+
+  appendChildren(children) {
+    for (let child of children) {
+      child.mount(this.root);
     }
   }
 }
