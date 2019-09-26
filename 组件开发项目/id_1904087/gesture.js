@@ -112,19 +112,22 @@ function enableGesture(main) {
     //--------------------------------------//
 
     let mousedown = event => {
+        //event.preventDefault();
         document.addEventListener("mousemove", mousemove);
         document.addEventListener("mouseup", mouseup);
-        start(event, mouseSymbol);
+        contexts[mouseSymbol] = Object.create(null)
+        start(event, contexts[mouseSymbol]);
     }
 
     let mousemove = event => {
-        move(event, mouseSymbol);
+        event.preventDefault();
+        move(event, contexts[mouseSymbol]);
     }
 
     let mouseup = event => {
         document.removeEventListener("mousemove", mousemove);
         document.removeEventListener("mouseup", mouseup);
-        end(event, mouseSymbol);
+        end(event, contexts[mouseSymbol]);
         //delete contexts[mouseSymbol];
     }
 

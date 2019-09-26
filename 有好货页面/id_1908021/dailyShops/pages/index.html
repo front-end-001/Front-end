@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html style="font-size:108px">
+  <head>
+    <meta charset="utf-8" />
+
+    <!--禁止电话号码和邮箱识别-->
+    <meta content="telephone=no,email=no" name="format-detection" />
+
+    <!--TODO:添加一个网页标题-->
+    <title>每日一店</title>
+
+    <!--TODO:改成你想要的缩放比例-->
+    <!-- <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    /> -->
+
+    <style type="text/css">
+      html,
+      body,
+      .root,
+      .content {
+        margin: 0 0 0 0;
+        padding: 0 0 0 0;
+        width: 100%;
+        height: 100%;
+        background-color: #efefef;
+      }
+      /* body {
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-touch-callout: none;
+      } */
+      /* 
+      * {
+        -webkit-text-size-adjust: none;
+      } */
+      
+      .header {
+        height: 0.574rem;
+        background-color: #892bfd;
+        margin: 0 0 0 0;
+        padding: 0.48rem 0 0 0;
+        display: flex;
+        justify-content: center;
+      }
+
+      .icon-header {
+        width: 1.99rem;
+        height: 0.574rem;
+        background-image: url('../imgs/dailyShops/mipmap-xxhdpi/icon 每日好店.png');
+      }
+    </style>
+
+    <script type="text/javascript">
+      //   关闭选择;
+      // document.addEventListener('selectstart', function(e) {
+      //   e.preventDefault();
+      // });
+      //   避免鼠标变成文本选择形状;
+      // document.addEventListener('mousedown', function(e) {
+      //   e.preventDefault();
+      // });
+      //避免上下滚屏
+      // document.addEventListener(
+      //   'touchmove',
+      //   function(e) {
+      //     if (e.touches.length == 2) e.preventDefault();
+      //   },
+      //   { passive: false }
+      // );
+      document.addEventListener(
+        'touchmove',
+        function(e) {
+          if (e.touches.length == 1) e.preventDefault();
+        },
+        {
+          passive: false
+        }
+      );
+    </script>
+  </head>
+  <body>
+    <div id="root" class="root">
+      <h1 id="header" class="header">
+        <i class="icon-header" alt="每日好店"></i>
+      </h1>
+      <div id="content" class="content"></div>
+    </div>
+  </body>
+  <script src="../dist/index.bundle.js"></script>
+</html>

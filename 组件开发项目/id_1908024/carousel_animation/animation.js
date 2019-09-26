@@ -69,6 +69,10 @@ class Timeline {
         this._animations.push(animation)
     }
 
+    clear() {
+        this._animations = []
+    }
+
     removeAnimation(animation) {}
 }
 

@@ -1,17 +1,30 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/css-animation-lib/entry/entry.ts',
-  // entry: './src/css-animation-lib/entry/carousel-entry.js',
+  entry: {
+    components: './src/entry/component-entry.js',
+    timeline: './src/entry/entry.ts',
+    'carousel-animation': './src/entry/carousel-entry.js'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'timeline.bundle.js'
+    filename: '[name].bundle.js'
   },
   resolve: {
     // Add '.ts' and '.tsx' as a resolvable extension.
     extensions: ['.ts', '.js']
   },
   module: {
-    rules: [{ test: /\.ts$/, use: 'ts-loader' }]
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'ts-loader'
+      }
+      ,
+      {
+        test: /\.(js|jsx)$/,
+        use: 'babel-loader'
+      }
+    ]
   }
 };
