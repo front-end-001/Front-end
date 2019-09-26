@@ -1,15 +1,15 @@
-
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-export  default class Div {
+
+export class Carousel {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        this[PROPERTY_SYMBOL].children=[];
+        
         this.created();
     }
 
@@ -20,10 +20,16 @@ export  default class Div {
 
     created(){
         this.root = document.createElement("div");
-        this[STATE_SYMBOL].h=0;
+        this.root.style.width = "300px";
+        this.root.style.height = "300px";
+        this[STATE_SYMBOL].h = 0;
+        this.root.style.backgroundColor = `hsl(${this[STATE_SYMBOL].h}, 100%, 50%)`;
     }
     mounted(){
-        
+        this.root.addEventListener("click", () => {
+            this[STATE_SYMBOL].h += 60;
+            this.root.style.backgroundColor = `hsl(${this[STATE_SYMBOL].h}, 60%, 70%)`;
+        })
     }
     unmounted(){
 
@@ -32,22 +38,24 @@ export  default class Div {
 
     }
 
-    appendChild(child){
-        this.children.push(child);
-        child.appendTo(this.root)
+    
+    log(){
+        console.log("width:", this.width);
     }
-    get children(){
-        return this[PROPERTY_SYMBOL].children;
+    get width(){
+        return this[PROPERTY_SYMBOL].width;
+    }
+    set width(value){
+        console.log("property change");
+        return this[PROPERTY_SYMBOL].width = value;
     }
     getAttribute(name){
-        if(name=="style"){
-            return  this.root.getAttribute('style');
-        }
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
-        if(name == "style") {
-            this.root.setAttribute("style", value);
+        if(name == "width") {
+            this.width = value;
+            console.log("attibute change");
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
