@@ -1,17 +1,26 @@
+//业务代码
 import TabView from "./components/TabView";
-import Div from "./components/Div";
 import ScrollView from "./components/ScrollView";
+
+import Div from "./components/Div";
 import Text from "./components/Text";
 
 function myCreate(Class, attributes, ...children){
     var object = new Class();
-    for(let name in attributes)//遍历普通对象，
+    //遍历普通对象，
+    for(let name in attributes) {
+        //处理事件
+        if (name.match(/^on-([\s\S]+)$/)) {
+            object.addEventListener(RegExp.$1, attributes[name]);
+        }
         object.setAttribute(name, attributes[name]);
+    }
     for(let child of children)//遍历孩子，集合，数组
         if (typeof child === 'string') {
             object.appendChild(new Text(child));
-        } else 
+        } else {
             object.appendChild(child);
+        }
     return object; 
 }
 
@@ -22,10 +31,15 @@ function myCreate(Class, attributes, ...children){
     <Div tab-title="品牌新店" style="background-color: #0000ff"></Div>
 </TabView>
 c.appendTo(document.body); */
-
-
+function loadMore() {
+    console.log("load more");
+    setTimeout(() => {
+        this.setAttribute("placeHolderText", "没有更多了！")
+    }, 1000);
+}
+/* on-scrollToBottom={loadMore.bind(this, 'my')} */
 var c = <TabView style="width:100%;height:100%;">
-    <ScrollView tab-title="推荐" style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
+    <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
      abc abc abc  abc abc abc
      abc abc abc abc abc abc
      abc abc abc  abc abc abc

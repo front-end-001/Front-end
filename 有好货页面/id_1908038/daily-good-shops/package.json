@@ -1,8 +1,8 @@
 {
-  "name": "webpack2",
+  "name": "daily-good-shops",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/script1.js",
+  "main": "./src/index.js",
   "scripts": {
     "start": "webpack-dev-server --open",
     "watch": "webpack --watch",

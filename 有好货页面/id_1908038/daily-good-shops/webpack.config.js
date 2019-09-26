@@ -1,6 +1,6 @@
 const path = require('path');
 module.exports = {
-    entry: './src/script1.js',
+    entry: './src/index.js',
     output: {
       filename: 'bundle.js',
       path: path.resolve(__dirname, 'dist')
@@ -21,7 +21,7 @@ module.exports = {
     mode: "development",
     devServer: {
         contentBase: './dist',
-        host: '192.168.72.57',
+        host: '127.0.0.1',
         hot: true
     },
     optimization: {
