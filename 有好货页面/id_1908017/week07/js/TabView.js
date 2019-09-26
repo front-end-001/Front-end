@@ -1,12 +1,13 @@
 import { BaseComponent, ATTR_SYMBOL, STATE_SYMBOL } from "./component";
 
-export class Tab extends BaseComponent {
+export class TabView extends BaseComponent {
   created() {
     this[STATE_SYMBOL].pos = null;
     this.root = document.createElement('div');
     this.headers = document.createElement('div');
     this.root.appendChild(this.headers);
     this.contents = document.createElement('div');
+    this.contents.style.height = '500px';
     this.root.appendChild(this.contents);
   }
   appendChildren(children) {
