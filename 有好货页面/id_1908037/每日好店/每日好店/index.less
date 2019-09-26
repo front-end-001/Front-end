@@ -1,0 +1,349 @@
+.container {
+  width:1080px;
+  margin: 0 auto;
+  position: relative;
+  height: 4672px;
+  // 背景图片
+  .bg-content{
+    height:732px;
+    position: relative;
+    background: url('./img/nav/bg_sp.png') no-repeat center -482px;
+    overflow: hidden;
+    z-index: 1;
+    .bg{
+      position: absolute;
+      &.bg1{
+        width: 414px;
+        height: 430px;
+        top: -215px;
+        left: -217px;
+      }
+      &.bg2{
+        width: 325px;
+        left: 514px;
+        top: -190px;
+      }
+      &.bg3{
+        width: 888px;
+        right: -444px;
+        top: -551px;
+      }
+    }
+  }
+  // 导航部分
+  .nav-top-container{
+    position: absolute;
+    top: 160px;
+    width: 100%;
+    padding: 0 34px 0 34px;
+    z-index: 2;
+    .title{
+      width: 100%;
+      // padding: 0 210px 0 68px;
+      display: flex;
+      justify-content: space-between;
+      .arrow{
+        display: block;
+        width: 210px;
+        // width: 68px;
+        background: red;
+        height: 25px;
+      }
+      .theme{
+        width: 215px;
+        height: 63px;
+        img{
+          width: 100%;
+        }
+      }
+      .share{
+        width: 210px;
+        height: 53px;
+        background: green;
+      }
+    }
+    .nav{
+      list-style: none;
+      display: flex;
+      margin-top: 64px;
+      margin-left: -36px;
+      li{
+        padding: 0 36px;;
+        height:43px;
+        font-size:46px;
+        font-family:PingFangSC;
+        font-weight:300;
+        color:rgba(255,255,255,1);
+        line-height:35px;
+        position: relative;
+        text-align: center;
+        i{
+          position: absolute;
+          bottom: -19px;
+          left: 50%;
+          margin-left: -30px;
+          width:60px;
+          height:6px;
+          background:rgba(255,255,255,1);
+          border-radius:3px;
+          display: none;
+        }
+        &.active {
+          font-weight: 500;
+          i{
+            display: block
+          }
+        }
+      }
+    }
+  }
+  // 底部内容
+  .content{
+    padding: 0 34px;
+    width: 100%;
+    position: absolute;
+    top: 383px;
+    left: 0;
+    background: #eee;
+    .banner{
+      position: relative;
+      z-index: 3;
+      width: 1012px;
+      height: 492px;
+      position: relative;
+      .item-list {
+        img{
+          width: 100%;
+          display: block;
+        }
+      }
+      .spot{
+        position: absolute;
+        bottom: 30px;
+        right: 88px;
+        display: flex;
+        span{
+          display: block;
+          margin-right: 15px;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background:rgba(245,245,245,0.2);
+          &.active{
+            background:rgba(245,245,245,1);
+          }
+        }
+      }
+    }
+    .collection{
+      padding-top: 69px;
+      .title{
+        font-size:46px;
+        font-family:PingFangSC;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        line-height:35px;
+      }
+      .head{
+        width: 100%;
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        .head-item{
+          width: 495px;
+          height: 361px;
+          padding: 28px 34px 30px 35px;
+          background:rgba(254,254,254,1);
+          border-radius:18px;
+          .top{
+            display: flex;
+            justify-content: space-between;
+            .logo{
+              width: 78px;
+              height: 78px;
+              img{
+                width: 100%;
+              }
+            }
+            .right{
+              h3{
+                font-size:36px;
+                font-family:PingFangSC;
+                font-weight:400;
+                color:rgba(51,51,51,1);
+                line-height:36px;
+              }
+              span{
+                margin-top: 14px;
+                display: block;
+                width: 75px;
+                height: 36px;
+                img{
+                  width: 100%;
+                  display: block;
+                }
+              }
+            }
+          }
+          .img{
+            margin-top: 26px;
+            display: flex;
+            justify-content: space-between;
+            img{
+              width: 199px;
+              height: 199px;
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    .shop-item{
+      width: 1012px;
+      height: 1048px;
+      background:rgba(254,254,254,1);
+      border-radius:36px;
+      background: #fff;
+      margin-top: 35px;
+      padding: 33px 35px 61px 34px;
+      .top{
+        display: flex;
+        justify-content: space-between;
+        .left{
+          display: flex;
+          justify-content: space-between;
+          .logo{
+            width: 106px;
+            height: 106px;
+            img{
+              display: block;
+              width: 100%;
+            }
+          }
+          .text{
+            margin-left: 15px;
+            h3{
+              font-size:46px;
+              font-family:PingFangSC;
+              font-weight:500;
+              color:rgba(51,51,51,1);
+              line-height:46px;
+              margin-top: 7px;
+            }
+            span{
+              display: block;
+              width: 75px;
+              height: 36px;
+              margin-top: 17px;
+              img{
+                width: 100%;
+              }
+            }
+          }
+        }
+        .btn{
+          width: 160px;
+          height: 72px;
+          background: linear-gradient(90deg,rgba(255,172,0,1),rgba(254,201,0,1));
+          border-radius: 36px;
+          text-align: center;
+          position: relative;
+          padding-right: 10px;
+          margin-right: 10px;
+          ::after{
+            display: block;
+            content: '';
+            width: 16px;
+            height: 16px;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 26px;
+            right: 25px;
+            border: 3px solid #fff;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+          }
+          span{
+            font-size: 40px;
+            font-family: PingFangSC;
+            font-weight: 400;
+            color :rgba(255,255,255,1);
+            line-height: 72px;
+          }
+        }
+      }
+      .title{
+        width:942px;
+        height:98px;
+        background:rgba(245,245,245,1);
+        border-radius:16px;
+        padding-left: 97px;
+        position: relative;
+        margin-top: 27px;
+        i{
+          display: block;
+          width: 53px;
+          height: 53px;
+          position: absolute;
+          left: 26px;
+          top: 24px;
+        }
+        h3{
+          height:36px;
+          font-size:36px;
+          font-family:PingFangSC;
+          font-weight:300;
+          color:rgba(51,51,51,1);
+          line-height:98px; 
+        }
+      }
+      .img{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        .left{
+          width: 626px;
+          height: 626px;
+          img{
+            display: block;
+            width: 100%;
+          }
+        }
+        .right{
+          width: 310px;
+          display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          img{
+            display: block;
+            width: 100%;
+          }
+        }
+      }
+    }
+    .footer{
+      margin-top: 41px;
+      font-size:32px;
+      font-family:PingFangSC;
+      font-weight:300;
+      color:rgba(136,136,136,1);
+      line-height:32px;
+      text-align: right;
+      padding-right: 32px;
+      position: relative;
+      &::after{
+        content: '';
+        display: block;
+        width: 13px;
+        height: 13px;
+        border: 3px solid #888;
+        transform: rotate(45deg);
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+        position: absolute;
+        right: 18px;
+        top: 7px;
+      }
+    }
+  }
+}

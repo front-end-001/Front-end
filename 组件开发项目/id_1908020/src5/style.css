@@ -1,0 +1,66 @@
+body{
+  font-family: 'Courier New', Courier, monospace;
+}
+#container {
+  width: 375px;
+  overflow: hidden;
+  position: relative;
+}
+
+.wrapper {
+  display: flex;
+}
+
+img {
+  width: 375px;
+  flex: 0 0 auto;
+}
+
+.left-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  cursor: pointer;
+}
+
+.right-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 100%;
+  border: 1px solid #333;
+  cursor: pointer;
+}
+
+#tab_header{
+  background: linear-gradient(to right,#6b25fd, #9233fd);
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+}
+#tab_header>span{
+  margin-right: 20px;
+  position: relative;
+  display: inline-block;
+}
+#tab_header>span.active::before{
+  content: "";
+  display: block;
+  position: absolute;
+  height: 2px;
+  bottom: 0px;
+  background-color: white;
+  width: 100%;
+}
