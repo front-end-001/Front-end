@@ -7,8 +7,9 @@ class Timeline {
   }
 
   pause() {
-    if (this.status != 'started')
+    if (this.status != 'started') {
       return;
+    }
     this.status = 'paused';
     this.resumeTick = this._tick;
     this._tick = null
@@ -16,8 +17,9 @@ class Timeline {
   }
 
   resume() {
-    if (this.status != 'paused')
+    if (this.status != 'paused') {
       return;
+    }
     this.status = "started";
     this.pauseTime += Date.now() - this._pauseStart;
     this._tick = this.resumeTick;
@@ -25,8 +27,9 @@ class Timeline {
   }
 
   start() {
-    if (this.status == 'started')
+    if (this.status == 'started') {
       return;
+    }
     this.status = 'started';
     let startTime = Date.now();
     this.pauseTime = 0;
@@ -62,7 +65,7 @@ class Timeline {
     this._animations.push(animation);
   }
 
-  removeAnimation(animation) {}
+  removeAnimation(animation) { }
 }
 
 class DOMElementStyleNumberAnimation {
@@ -108,42 +111,42 @@ class DOMElementStyleNumberAnimation {
 
 class DOMElementStyleVectorAnimation {
   constructor(element, property, startTime, startValue, endTime, endValue, converter) {
-      this._element = element;
-      this._property = property;
-      this._startTime = startTime;
-      this._startValue = startValue;
-      this._endTime = endTime;
-      this._endValue = endValue;
-      this._converter = converter;
-      this._fixKeyFrame = false;
+    this._element = element;
+    this._property = property;
+    this._startTime = startTime;
+    this._startValue = startValue;
+    this._endTime = endTime;
+    this._endValue = endValue;
+    this._converter = converter;
+    this._fixKeyFrame = false;
   }
   tick(t) {
-      if (t > this._endTime) {
-          if (!this._fixKeyFrame)
-              return;
-          else {
-              t = this._endTime;
-              this._fixKeyFrame = false;
-          }
-      } else if (t < this._startTime) {
-          if (!this._fixKeyFrame)
-              return;
-          else {
-              t = this._startTime;
-              this._fixKeyFrame = false;
-          }
-      } else {
-          this._fixKeyFrame = true;
+    if (t > this._endTime) {
+      if (!this._fixKeyFrame)
+        return;
+      else {
+        t = this._endTime;
+        this._fixKeyFrame = false;
       }
-      let progress = (t - this._startTime) / (this._endTime - this._startTime);
-
-      let displacement = [];
-      let currentValue = [];
-
-      for (let i = 0; i < this._endValue.length; i++) {
-          displacement[i] = ease(progress) * (this._endValue[i] - this._startValue[i]);
-          currentValue[i] = displacement[i] + this._startValue[i];
+    } else if (t < this._startTime) {
+      if (!this._fixKeyFrame)
+        return;
+      else {
+        t = this._startTime;
+        this._fixKeyFrame = false;
       }
-      this._element.style[this._property] = this._converter(currentValue);
+    } else {
+      this._fixKeyFrame = true;
+    }
+    let progress = (t - this._startTime) / (this._endTime - this._startTime);
+
+    let displacement = [];
+    let currentValue = [];
+
+    for (let i = 0; i < this._endValue.length; i++) {
+      displacement[i] = ease(progress) * (this._endValue[i] - this._startValue[i]);
+      currentValue[i] = displacement[i] + this._startValue[i];
+    }
+    this._element.style[this._property] = this._converter(currentValue);
   }
 }

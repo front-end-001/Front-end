@@ -126,7 +126,7 @@ class Timeline {
                     animation.tick( (Date.now() - startTime - this.pauseTime) * this._rate + this._startPoint );
                 }
             }
-            console.log(this._tick);
+            // console.log(this._tick);
             if(this._tick){
                 requestAnimationFrame(this._tick);
             }
@@ -198,7 +198,6 @@ class DOMElementStyleAnimation{
         let progress = ( t - this._startTime ) / ( this._endTime - this._startTime);
         let displacement = linear(progress) * ( this._endValue - this._startValue );
         let currentValiue = displacement + this._startValue;
-
         this._element.style[this._property] = this._converter(currentValiue);
     }
 }
@@ -249,7 +248,7 @@ class DOMElementStyleVectorAnimation{
 
         // let displacement = ease(progress) * ( this._endValue - this._startValue );
         // let currentValiue = displacement + this._startValue;
-        console.log(currentValiue);
+        // console.log(currentValiue);
         this._element.style[this._property] = this._converter(currentValiue);
     }
 }
