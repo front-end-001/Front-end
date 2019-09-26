@@ -132,6 +132,7 @@ export default class Carousel{
 		if(!this[EVENT_SYMBOL][type])
 			this[EVENT_SYMBOL][type] = new Set;
 		this[EVENT_SYMBOL][type].add(listener);
+		console.log('todolist');
 	}
 
 	removeEventListener(type,listener){
