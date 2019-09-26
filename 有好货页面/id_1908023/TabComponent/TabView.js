@@ -26,9 +26,28 @@ export default class TapView {
     this.contentContainer.style.whiteSpace = "nowrap";
     this.contentContainer.style.overflow = "hidden";
     this.contentContainer.style.flex = "1";
-    this.headerContainer.style.height = "93px";
+    // this.headerContainer.style.height = "93px";
+    // 页头背景颜色
+    this.headerContainer.style.backgroundColor = "#ff9900";
+    this.headerContainer.style.color = '#fff';
+    this.headerContainer.style.fontSize = '50px';
     // this.headerContainer.className = 'tab-header-container';
     // this.contentContainer.className = 'tab-content-container';
+    const headerBar = document.createElement('div');
+    const backIcon = document.createElement('div');
+    // backIcon.style.color = '#fff';
+    // backIcon.style.fontSize = '50px';
+    backIcon.innerText = '<';
+    const headerTitle = document.createElement('div');
+    // headerTitle.style.color = '#fff';
+    headerTitle.innerHTML = '<span>每日好店</span>';
+    const headerShare = document.createElement('div');
+    // headerShare.style.color = '#fff';
+    headerShare.innerHTML = 'share';
+    headerBar.appendChild(backIcon);
+    headerBar.appendChild(headerTitle);
+    headerBar.appendChild(headerShare);
+    // this.headerContainer.appendChild(headerBar);
 
     this.root.appendChild(this.headerContainer);
     this.root.appendChild(this.contentContainer);
@@ -103,7 +122,9 @@ export default class TapView {
       for (let i = 0; i < this.contentContainer.children.length; i++) {
         this.contentContainer.children[i].style.transition = 'transform ease 0.5s';
         this.contentContainer.children[i].style.transform = `translateX(${-width * this[STATE_SYMBOL].position}px)`;
+        this.headerContainer.children[i].style.borderBottom = '';
       }
+      this.headerContainer.children[this[STATE_SYMBOL].position].style.borderBottom = '5px solid white';
 
     })
   }
@@ -125,21 +146,27 @@ export default class TapView {
     let header = document.createElement('div');
     header.innerText = title;
     header.style.display = 'inline-block';
-    header.style.height = '93px';
+    // header.style.height = '93px';
     header.style.fontSize = '46px';
     header.style.fontFamily = 'PingFang SC';
     header.style.margin = '20px 35px 0 35px';
+    // header.style.color = 'white';
+    // header.style.borderBottom = '5px solid #ccc';
     this.headerContainer.appendChild(header);
 
+    this.headerContainer.children[0].style.borderBottom = '5px solid white';
+    
     header.addEventListener('click', e => {
       this[STATE_SYMBOL].position = n;
       for (let i = 0; i < this.contentContainer.children.length; i++) {
+        this.headerContainer.children[i].style.borderBottom = '';
         // this.contentContainer.children[i].style.width = '100%';
         // this.contentContainer.children[i].style.height = '100%';
         // this.contentContainer.children[i].style.display = 'none';
-        this.contentContainer.children[i].style.transition = `transform 0.5s ease`;
+        this.contentContainer.children[i].style.transition = `transform 0.2s ease`;
         this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`;
       }
+      this.headerContainer.children[n].style.borderBottom = '5px solid white';
       // child.style.display = 'inline-block';
       // child.setAttribute('style', 'display:inline-block');
     })
