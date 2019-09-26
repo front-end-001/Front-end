@@ -23,10 +23,46 @@ function myCreate(Class, attributes, ...children){
 
 var c = <TabView style="width:100%;height:100%;">
     <ScrollView tab-title="推荐" style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
+     xxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
      
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
+     xxxxxxxxxxxxxxxxxxx
     </ScrollView>
-    <ScrollView tab-title="有趣的店"  style="background-color:lightgreen;"></ScrollView>
-    <ScrollView tab-title="品牌新店" style="background-color:pink;"></ScrollView>
+    <ScrollView tab-title="有趣的店"></ScrollView>
+    <ScrollView tab-title="品牌新店"></ScrollView>
 </TabView>
 console.log(document.body);
 c.appendTo(document.body);

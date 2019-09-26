@@ -40,13 +40,15 @@ export default class ScrollView {
     update(){
 
     }
+    get style(){
+        return this.root.style;
+    }
 
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
     }
-
-
+   
     get children(){
         return this[PROPERTY_SYMBOL].children;
     }

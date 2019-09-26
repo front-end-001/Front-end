@@ -34,6 +34,9 @@ export default class TabView {
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
         this[STATE_SYMBOL].h = 0;
+
+        
+
     }
     mounted(){
 
@@ -47,7 +50,7 @@ export default class TabView {
 
     appendChild(child){
         this.children.push(child);
-
+        let n = this.children.length;
         let title = child.getAttribute("tab-title") || "";
         this[PROPERTY_SYMBOL].headers.push(title);
 
@@ -59,6 +62,15 @@ export default class TabView {
         header.style.fontSize = "46px";
         header.style.margin = "20px 35px 0 35px";
         this.headerContainer.appendChild(header);
+
+        header.addEventListener('click',event=>{
+            for(let i = 0; i<this.contentContainer.children.length;i++){
+                this.contentContainer.children[i].style.width='100%';
+                this.contentContainer.children[i].style.height='100%';
+                this.contentContainer.children[i].style.transition='ease 0.5s';
+                this.contentContainer.children[i].style.transform=`translateX(${ -n * 100}%)`;
+            }
+        })
         child.appendTo(this.contentContainer);
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.width = "100%";
@@ -67,8 +79,7 @@ export default class TabView {
         }
 
     }
-
-
+    
     get children(){
         return this[PROPERTY_SYMBOL].children;
     }
