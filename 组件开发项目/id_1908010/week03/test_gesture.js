@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: 玉皇大亮
  * @Date: 2019-08-21 20:52:40
- * @LastEditTime: 2019-08-22 19:05:29
+ * @lastTime: 2019-09-07 14:56:08
  */
 function enableGesture(main) {
 

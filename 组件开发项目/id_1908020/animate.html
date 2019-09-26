@@ -22,34 +22,34 @@
 <body>
   <div class="ball"></div>
   <script>
-// copy start
-function cubicBezier(p1x, p1y, p2x, p2y) {
-    const ZERO_LIMIT = 1e-6;
-    // Calculate the polynomial coefficients,
-    // implicit first and last control points are (0,0) and (1,1).
-    const ax = 3 * p1x - 3 * p2x + 1;
-    const bx = 3 * p2x - 6 * p1x;
-    const cx = 3 * p1x;
+    // copy start
+    function cubicBezier(p1x, p1y, p2x, p2y) {
+      const ZERO_LIMIT = 1e-6;
+      // Calculate the polynomial coefficients,
+      // implicit first and last control points are (0,0) and (1,1).
+      const ax = 3 * p1x - 3 * p2x + 1;
+      const bx = 3 * p2x - 6 * p1x;
+      const cx = 3 * p1x;
 
-    const ay = 3 * p1y - 3 * p2y + 1;
-    const by = 3 * p2y - 6 * p1y;
-    const cy = 3 * p1y;
+      const ay = 3 * p1y - 3 * p2y + 1;
+      const by = 3 * p2y - 6 * p1y;
+      const cy = 3 * p1y;
 
-    function sampleCurveDerivativeX(t) {
+      function sampleCurveDerivativeX(t) {
         // `ax t^3 + bx t^2 + cx t' expanded using Horner 's rule.
         return (3 * ax * t + 2 * bx) * t + cx;
-    }
+      }
 
-    function sampleCurveX(t) {
-        return ((ax * t + bx) * t + cx ) * t;
-    }
+      function sampleCurveX(t) {
+        return ((ax * t + bx) * t + cx) * t;
+      }
 
-    function sampleCurveY(t) {
-        return ((ay * t + by) * t + cy ) * t;
-    }
+      function sampleCurveY(t) {
+        return ((ay * t + by) * t + cy) * t;
+      }
 
-    // Given an x value, find a parametric value it came from.
-    function solveCurveX(x) {
+      // Given an x value, find a parametric value it came from.
+      function solveCurveX(x) {
         var t2 = x;
         var derivative;
         var x2;
@@ -58,18 +58,18 @@ function cubicBezier(p1x, p1y, p2x, p2y) {
         // First try a few iterations of Newton's method -- normally very fast.
         // http://en.wikipedia.org/wiki/Newton's_method
         for (let i = 0; i < 8; i++) {
-            // f(t)-x=0
-            x2 = sampleCurveX(t2) - x;
-            if (Math.abs(x2) < ZERO_LIMIT) {
-                return t2;
-            }
-            derivative = sampleCurveDerivativeX(t2);
-            // == 0, failure
-            /* istanbul ignore if */
-            if (Math.abs(derivative) < ZERO_LIMIT) {
-                break;
-            }
-            t2 -= x2 / derivative;
+          // f(t)-x=0
+          x2 = sampleCurveX(t2) - x;
+          if (Math.abs(x2) < ZERO_LIMIT) {
+            return t2;
+          }
+          derivative = sampleCurveDerivativeX(t2);
+          // == 0, failure
+          /* istanbul ignore if */
+          if (Math.abs(derivative) < ZERO_LIMIT) {
+            break;
+          }
+          t2 -= x2 / derivative;
         }
 
         // Fall back to the bisection method for reliability.
@@ -83,75 +83,77 @@ function cubicBezier(p1x, p1y, p2x, p2y) {
         t2 = x;
         /* istanbul ignore next */
         while (t1 > t0) {
-            x2 = sampleCurveX(t2) - x;
-            if (Math.abs(x2) < ZERO_LIMIT) {
-                return t2;
-            }
-            if (x2 > 0) {
-                t1 = t2;
-            } else {
-                t0 = t2;
-            }
-            t2 = (t1 + t0) / 2;
+          x2 = sampleCurveX(t2) - x;
+          if (Math.abs(x2) < ZERO_LIMIT) {
+            return t2;
+          }
+          if (x2 > 0) {
+            t1 = t2;
+          } else {
+            t0 = t2;
+          }
+          t2 = (t1 + t0) / 2;
         }
 
         // Failure
         return t2;
-    }
+      }
 
-    function solve(x) {
+      function solve(x) {
         return sampleCurveY(solveCurveX(x));
+      }
+
+      return solve;
     }
 
-    return solve;
-}
-
-let linear = cubicBezier(0, 0, 1, 1);
-let ease = cubicBezier(.25, .1, .25, 1);
-let easeIn = cubicBezier(.42, 0, 1, 1);
-let easeOut = cubicBezier(0, 0, .58, 1);
-let easeInOut = cubicBezier(.42, 0, .58, 1);
-let myCB = cubicBezier(.69,-0.85,.25,1);
-// copy end
+    let linear = cubicBezier(0, 0, 1, 1);
+    let ease = cubicBezier(.25, .1, .25, 1);
+    let easeIn = cubicBezier(.42, 0, 1, 1);
+    let easeOut = cubicBezier(0, 0, .58, 1);
+    let easeInOut = cubicBezier(.42, 0, .58, 1);
+    let myCB = cubicBezier(.69, -0.85, .25, 1);
+    // copy end
 
 
 
 
-// 描述时间线的类
-class Timeline {
-    // 4个状态:
-    // inited started paused
-    constructor() {
+    // 描述时间线的类
+    class Timeline {
+      // 4个状态:
+      // inited started paused
+      constructor() {
         this._animations = [];
         this.status = "inited";
         this._rate = 1;
+        this._startPoint=0
     }
 
-    // 暂停
-    pause() {
-        if(this.status !== "started") {
-            return;
+      // 暂停
+      pause() {
+        if (this.status !== "started") {
+          return;
         }
+        //清除 requestAnimationFrame 的动画
         this._resumeTick = this._tick;
         this._tick = null;
         this._pauseStart = Date.now();
         this.status = "paused";
-    }
+      }
 
-    // 重新启动(恢复)
-    resume() {
-        if(this.status !== "paused") {
-            return;
+      // 重新启动(恢复)
+      resume() {
+        if (this.status !== "paused") {
+          return;
         }
         this.pauseTime += Date.now() - this._pauseStart;
         this._tick = this._resumeTick;
         requestAnimationFrame(this._tick);
-    }
+      }
 
-    // 时间线如何开始
-    start() {
-        if(this.status === "started") {
-            return;
+      // 时间线如何开始
+      start() {
+        if (this.status === "started") {
+          return;
         }
         this.status = "started";
         let startTime = Date.now();
@@ -159,64 +161,64 @@ class Timeline {
 
         // 1秒60帧 所以16ms/帧
         this._tick = () => {
-            // 把加入进来的animation都执行一遍
-            for (let animation of this._animations) {
-                if (!animation.finished) {
-                    // 计算当前时间点在时间线上的位置
-                    animation.tick((Date.now() - this.pauseTime - startTime) * this._rate + this._startPoint);
-                }
+          // 把加入进来的animation都执行一遍
+          for (let animation of this._animations) {
+            if (!animation.finished) {
+              // 计算当前时间点在时间线上的位置
+              animation.tick((Date.now() - this.pauseTime - startTime) * this._rate );
             }
-            if(this._tick) {
-                requestAnimationFrame(this._tick);
-            }
+          }
+          if (this._tick) {
+            requestAnimationFrame(this._tick);
+          }
         };
 
         requestAnimationFrame(this._tick);
-    }
+      }
 
-    restart() {
-        if(this._tick) {
-            this._tick = null;
-            this._resumeTick = null;
+      restart() {
+        if (this._tick) {
+          this._tick = null;
+          this._resumeTick = null;
         }
         this.status = "inited";
         requestAnimationFrame(() => {
-            this.start();
+          this.start();
         });
-    }
+      }
 
-    set startPoint(value) {
+      set startPoint(value) {
         this._startPoint = value;
-    }
+      }
 
-    get startPoint() {
+      get startPoint() {
         return this._startPoint;
-    }
+      }
 
-    // rate属性
-    set rate(value){
+      // rate属性
+      set rate(value) {
         this._rate = value;
-    }
+      }
 
-    get rate(){
+      get rate() {
         return this._rate;
-    }
+      }
 
-    // 添加动画
-    addAnimation(animation) {
+      // 添加动画
+      addAnimation(animation) {
         this._animations.push(animation);
+      }
+
+      // 移除动画
+      removeAnimation(animation) {
+
+      }
     }
 
-    // 移除动画
-    removeAnimation(animation) {
-
-    }
-}
-
-// 描述动画的类
-// 它可以有很多种 比如针对JS的 或者针对一个Element中的一个属性进行Animation
-class DomElementStyleNumberAnimation {
-    constructor(element, property, startTime, startValue, endTime, endValue, converter) {
+    // 描述动画的类
+    // 它可以有很多种 比如针对JS的 或者针对一个Element中的一个属性进行Animation
+    class DomElementStyleNumberAnimation {
+      constructor(element, property, startTime, startValue, endTime, endValue, converter) {
         // 真正的私有要用Symbol
         this._element = element;
         this._property = property;
@@ -227,43 +229,43 @@ class DomElementStyleNumberAnimation {
         this._converter = converter;
         // 非关键帧
         this._fixKeyFrame = false;
-    }
+      }
 
-    // 接收时间线上的时间点 然后做一些操作
-    tick(t) {
+      // 接收时间线上的时间点 然后做一些操作
+      tick(t) {
         // 只有2个点(start end) 所以只能用线性插值
         // 线性插值:
 
         // (t - startTime) /(endTime - startTime) :当前时间过去的比例
-        if(t > this._endTime) {
-            //如果不是关键帧
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._endTime;
-            }
-        } else if(t < this._startTime) {
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._startTime;
-                this._fixKeyFrame = false;
-            }
+        if (t > this._endTime) {
+          //如果不是关键帧
+          if (!this._fixKeyFrame) {
+            return;
+          } else {
+            t = this._endTime;
+          }
+        } else if (t < this._startTime) {
+          if (!this._fixKeyFrame) {
+            return;
+          } else {
+            t = this._startTime;
+            this._fixKeyFrame = false;
+          }
         } else {
-            // 关键帧
-            this._fixKeyFrame = true;
+          // 关键帧
+          this._fixKeyFrame = true;
         }
 
-        let progress = (t - this._startTime) /(this._endTime - this._startTime);
+        let progress = (t - this._startTime) / (this._endTime - this._startTime);
         let displacement = myCB(progress) * (this._endValue - this._startValue);
         // console.log(myCB);
         let currentValue = this._startValue + displacement;
         this._element.style[this._property] = this._converter(currentValue);
+      }
     }
-}
 
-class DomElementStyleVectorAnimation {
-    constructor(element, property, startTime, startValue, endTime, endValue, converter) {
+    class DomElementStyleVectorAnimation {
+      constructor(element, property, startTime, startValue, endTime, endValue, converter) {
         // 真正的私有要用Symbol
         this._element = element;
         this._property = property;
@@ -274,45 +276,64 @@ class DomElementStyleVectorAnimation {
         this._converter = converter;
         // 非关键帧
         this._fixKeyFrame = false;
-    }
+      }
 
-    // 接收时间线上的时间点 然后做一些操作
-    tick(t) {
+      // 接收时间线上的时间点 然后做一些操作
+      tick(t) {
         // 只有2个点(start end) 所以只能用线性插值
         // 线性插值:
 
         // (t - startTime) /(endTime - startTime) :当前时间过去的比例
-        if(t > this._endTime) {
-            //如果不是关键帧
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._endTime;
-            }
-        } else if(t < this._startTime) {
-            if(!this._fixKeyFrame) {
-                return;
-            } else {
-                t = this._startTime;
-                this._fixKeyFrame = false;
-            }
+        if (t > this._endTime) {
+          //如果不是关键帧
+          if (!this._fixKeyFrame) {
+            return;
+          } else {
+            t = this._endTime;
+          }
+        } else if (t < this._startTime) {
+          if (!this._fixKeyFrame) {
+            return;
+          } else {
+            t = this._startTime;
+            this._fixKeyFrame = false;
+          }
         } else {
-            // 关键帧
-            this._fixKeyFrame = true;
+          // 关键帧
+          this._fixKeyFrame = true;
         }
 
-        let progress = (t - this._startTime) /(this._endTime - this._startTime);
+        let progress = (t - this._startTime) / (this._endTime - this._startTime);
 
         let displacement = [];
         let currentValue = [];
-        for(let i = 0; i < this._endValue.length; i++) {
-            displacement[i] = myCB(progress) * (this._endValue[i] - this._startValue[i]);
-            currentValue[i] = this._startValue[i] + displacement[i];
+        for (let i = 0; i < this._endValue.length; i++) {
+          displacement[i] = myCB(progress) * (this._endValue[i] - this._startValue[i]);
+          currentValue[i] = this._startValue[i] + displacement[i];
         }
 
         this._element.style[this._property] = this._converter(currentValue);
+      }
     }
-}
+    // let tl = new Timeline()
+    // tl.addAnimation(new DomElementStyleNumberAnimation(
+    //   document.querySelector('.ball'),
+    //   "top",
+    //   0,0,
+    //   1000,200,
+    //   v=>`${v}px`
+    // ))
+    // tl.start()
+
+    let tl2 = new Timeline()
+    tl2.addAnimation(new DomElementStyleNumberAnimation(
+      document.querySelector('.ball'),
+      "transform",
+      0,0,
+      1000,200,
+      v=>`translate(${v}px,0)`
+    ))
+    tl2.start()
   </script>
 </body>
 
