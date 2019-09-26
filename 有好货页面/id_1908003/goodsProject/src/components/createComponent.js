@@ -1,5 +1,7 @@
 import Component from './component'
 
+// todo: 构造基础元素构造函数, 已抹平基础元素和组件元素的差异
+
 export default function myCreate(creater, attrs, ...children) {
   if (!creater) return '';
   if (typeof creater === 'string') {

@@ -26,6 +26,11 @@ export default class Tab extends Component {
     return tab;
   }
 
+  /**
+   * 设置当前激活 tab 项
+   */
+  setCurrent() {}
+
   attrInterceptor(name, value) {
     if (name === 'style') {
       this.$root.style = value;

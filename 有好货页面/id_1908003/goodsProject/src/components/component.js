@@ -40,8 +40,15 @@ export default class Component {
     
     this[STATUS_SYMBOL].root = root;
 
+    // on- 开头为事件绑定
+    const EventStart = 'on-';
     for(const attrName in attrs) {
-      this.setAttr(attrName, attrs[attrName]);
+      if (attrName.startsWith(EventStart)) {
+        const eventName = attrName.substring(EventStart.length);
+        this.addEventListener(eventName, attrs[attrName]);
+      } else {
+        this.setAttr(attrName, attrs[attrName]);
+      }
     }
   }
 
