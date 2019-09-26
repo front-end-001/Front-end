@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .carousel {
+            width: 500px;
+            height: 300px;
+            /* overflow: hidden; */
+            outline: 1px solid blue;
+            white-space: nowrap;
+        }
+
+        .carousel>img {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+        }
+    </style>
+    <script src="gesture.js"></script>
+    <script src="animation.js"></script>
+</head>
+
+<body>
+    <div id="container">
+
+    </div>
+
+    <script>
+        let data = [
+            "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+            "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+            "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+            "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+        ];
+
+        class Carousel {
+            constructor(container) {
+                // _开头的属性表示私有属性 但实际上该属性并不会因为以_开头就真的成为一个私有属性
+                this._container = container;
+                this._container.classList.add("carousel");
+
+                // handler用于保存和时序相关的操作
+                this.handler = null;
+                this.data = null;
+            }
+
+            // 本方法用于渲染组件本体
+            render() {
+                for (let d of this.data) {
+                    let e = document.createElement("img");
+                    e.src = d;
+                    this._container.appendChild(e);
+                }
+
+                let children = Array.prototype.slice.call(this._container.children);
+
+                let position = 0;
+
+                // 使用animation 实现动画 并可同时实现鼠标操作
+                // 实质上就是使用pause 暂停正在播放的动画
+                let tl = new Timeline;
+                let offsetStartTime = 0;
+
+                let nextPic = function () {
+                    let nextPosition = position + 1;
+                    nextPosition = nextPosition % children.length;
+
+                    let current = children[position],
+                        next = children[nextPosition];
+
+                    // 将next放到正确的位置上
+                    // next.style.transition = "ease 0s";
+                    // next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+                    offsetStartTime = Date.now();
+
+                    tl.addAnimation(
+                        new DOMElementStyleAnimation(
+                            current,
+                            "transform",
+                            0, - 500 * position,
+                            500, -500 - 500 * position,
+                            (v) => `translateX(${v}px)`
+                    ));
+                    tl.addAnimation(
+                        new DOMElementStyleAnimation(
+                            next,
+                            "transform",
+                            0, 500 -500 * nextPosition,
+                            500, -500 * nextPosition,
+                            (v) => `translateX(${v}px)`
+                    ));
+                    position = nextPosition;
+                    console.log("position",position)
+                    tl.restart();
+                    // setTimeout(() => {
+                    //     // 把current挪出视口
+                    //     current.style.transition = "ease 0.5s";
+                    //     current.style.transform = `translate(${-100 - 100 * position}%)`;
+
+                    //     console.log(position);
+
+                    //     // 把next挪进视口
+                    //     next.style.transition = "ease 0.5s";
+                    //     next.style.transform = `translate(${-100 * nextPosition}%)`;
+
+                        
+                        
+                        // position = nextPosition;
+                    // }, 16);
+                     nextPicTimer = setTimeout(nextPic, 2000);
+
+                };
+                let nextPicTimer = setTimeout(nextPic, 2000);
+
+                let x = 0;
+                let offset = 0;
+                enableGesture(this._container);
+                this._container.addEventListener("touchstart", event => {
+                    clearTimeout(nextPicTimer)
+                    tl.pause();
+                })
+                this._container.addEventListener("mousedown", event => {
+                    tl.pause();
+                    let currentTime = Date.now();
+                    if(currentTime - offsetStartTime < 1000 ) {
+                        offset = (500 - ease((currentTime - offsetStartTime) / 1000) * 500);
+                    } else {
+                        offset = 0;
+                    }
+                    clearTimeout(nextPicTimer)
+                })
+                this._container.addEventListener("mouseup", event => {
+                    nextPicTimer = setTimeout(nextPic, 2000);
+                })
+                this._container.addEventListener("pan", event => {
+                    //console.log("pan")
+                    if (event.isVertical)
+                        return;
+                    for (let child of children) {
+                        child.style.transition = "ease 0s";
+                        child.style.transform = `translateX(${event.dx + x}px`;
+                    }
+                    
+                    let current = children[position];
+                    let next = children[(children.length + position + 1) % children.length];
+                    let nextPosition = (children.length + position + 1) % children.length;
+                    let prev = children[(children.length + position - 1) % children.length];
+                    let prevPosition = (children.length + position - 1) % children.length;
+                    next.style.transition = "ease 0s";
+                    next.style.transform = `translate(${500 - 500 * nextPosition + event.dx + offset }px)`;
+                    prev.style.transition = "ease 0s";
+                    prev.style.transform = `translate(${-500 - 500 * prevPosition+ event.dx + offset }px)`;
+                    current.style.transition = "ease 0s";
+                    current.style.transform = `translate(${-500 * position+ event.dx + offset}px)`;
+                })
+                this._container.addEventListener("panend", event => {
+                    if (event.isVertical)
+                        return;
+                    if (event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)) {
+                        if (event.dx > 0) {
+                            position = position - 1;
+                        }
+                        if (event.dx < 0) {
+                            position = position + 1;
+                        }
+                    } else {
+                        position = (Math.round((position * 500 - event.dx) / 500));
+                    }
+
+                    position = (children.length + position) % children.length;
+
+                    let current = children[position];
+                    let next = children[(children.length + position + 1) % children.length];
+                    let nextPosition = (children.length + position + 1) % children.length;
+                    let prev = children[(children.length + position - 1) % children.length];
+                    let prevPosition = (children.length + position - 1) % children.length;
+                    next.style.transition = "";
+                    next.style.transform = `translate(${500 - 500 * nextPosition}px)`;
+                    prev.style.transition = "";
+                    prev.style.transform = `translate(${-500 - 500 * prevPosition}px)`;
+                    current.style.transition = "";
+                    current.style.transform = `translate(${-500 * position}px)`;
+                    for (let child of children) {
+                        child.style.transition = "";
+                        child.style.transform = `translate(${-position * 500}px)`;
+                    }
+                    x = -position * 500;
+                })
+
+                this._container.addEventListener("mousedown", event => event.preventDefault());
+            }
+        }
+
+        let carousel = new Carousel(document.getElementById("container"));
+        carousel.data = data;
+        carousel.render();
+    </script>
+</body>
+
+</html>

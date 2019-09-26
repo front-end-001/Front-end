@@ -1,0 +1,49 @@
+.tab-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  .tab-header {
+    display: flex;
+    flex-wrap: nowrap;
+    color: white;
+    font-size: 50px;
+    height: 1.2rem;
+    font-family: PingFangSC-Medium, Microsoft YaHei, sans-serif;
+    font-weight: lighter;
+    background-color: #892bfd;
+    justify-content: flex-start;
+    .tab-header-item {
+      margin: 0.2rem 0.333rem 0.185rem 0.333rem;
+    }
+    .tab-header-item-active {
+      font-weight: 500;
+    }
+    .tab-header-item-active:after {
+      content: '';
+      display: block;
+      position: relative;
+      height: 3px;
+      width: 70%;
+      background-color: white;
+      top: 0.15rem;
+      left: 15%;
+    }
+  }
+  .tab-panes-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    .tab-pane {
+      height: 100%;
+      width: 100%;
+      background-color: antiquewhite;
+      overflow: hidden;
+      display: none;
+    }
+    .tab-pane-active {
+      display: block;
+    }
+  }
+}
