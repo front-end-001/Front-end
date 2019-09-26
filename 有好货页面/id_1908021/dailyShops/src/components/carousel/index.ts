@@ -15,9 +15,9 @@ interface Config {
 }
 
 const defaultConfig: Config = {
-  duration: 1000,
+  duration: 3000,
   autoPlay: true,
-  speed: 500
+  speed: 1000
 };
 
 /**
@@ -53,12 +53,10 @@ export default class Carousel extends BaseComponent {
 
     this.root = document.createElement('div');
     this.root.classList.add(CLASS_NAME);
-    this.root.style.width = `${this.width || this.root.offsetWidth}px`;
-    this.root.style.height = `${this.height || this.root.offsetHeight}px`;
-    this.createChildren();
   }
 
   createChildren() {
+    console.log(this.PROPERTY.imageUrls);
     const imageUrls = this.PROPERTY.imageUrls;
     if (imageUrls && this.root) {
       let i = imageUrls.length;
@@ -73,6 +71,7 @@ export default class Carousel extends BaseComponent {
   }
 
   nextPicture() {
+    if (!this.root) return;
     let position = this.PROPERTY.position;
     let children = this.PROPERTY.children;
     this.PROPERTY.offsetTimeStart = 0;
@@ -82,9 +81,9 @@ export default class Carousel extends BaseComponent {
 
     let current = (this.PROPERTY.current = children[position]),
       next = children[nextPosition];
-    next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
 
     this.PROPERTY.offsetTimeStart = Date.now();
+    console.log(this.PROPERTY.speed)
 
     this.PROPERTY.tl.addAnimation(
       new DOMElementStyleNumberAnimation(
@@ -148,7 +147,7 @@ export default class Carousel extends BaseComponent {
     if (this.PROPERTY.autoPlay) {
       this.addAnimation();
     }
-    this._addEventListeners();
+    // this._addEventListeners();
   }
 
   destroy(): void {
@@ -200,4 +199,26 @@ export default class Carousel extends BaseComponent {
   next() {}
 
   prev() {}
+
+  setAttribute(name: string, value: any): any {
+    super.setAttribute(name, value);
+    if (name === 'imageUrls') {
+      this.createChildren();
+    }
+
+    // 处理style Attributes
+    // HTMLElement.setAttribute是一个异步方法
+    // 这里用setTimout保证通过height/width attributes设置的样式不会被style里的所覆盖
+    setTimeout(() => {
+      let valueStr = value;
+      if (typeof value !== 'string') {
+        valueStr = value + 'px';
+      }
+      if (name === 'height' && this.root) {
+        this.root.style.height = valueStr;
+      } else if (name === 'width' && this.root) {
+        this.root.style.width = valueStr;
+      }
+    }, 0);
+  }
 }
