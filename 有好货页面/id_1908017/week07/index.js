@@ -1,26 +1,19 @@
-import { h, BaseComponent } from './js/component';
+import { h } from './js/component';
+import { Tab } from './js/Tab';
+import { Scroll } from './js/Scroll';
 import { Text } from './js/Text';
-class HelloWorld extends BaseComponent {
-  created() {
-    super.created();
-    this.root.innerText = 'hello world';
-  }
-  setAttribute(name, val) {
-    super.setAttribute(name, val);
-    if (name === 'title') {
-      this.root.setAttribute(name, val);
-    }
-  }
-  mounted() {
-    this.root.addEventListener('click', e => {
-      this.triggerEvent('click', e);
-    })
-  }
-}
-function clickHandler(e) {
-  console.log('clickHandler', e, this);
-}
-(<HelloWorld title='show a title' on-click={clickHandler} >
-  <Text>row1</Text>
-  <Text>row2</Text>
-</HelloWorld>).mount(document.getElementById('app'));
+
+(<Tab >
+  <Scroll tab-title="推荐">
+    <Text>scroll1</Text>
+    <Text>some Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Text</Text>
+  </Scroll>
+  <Scroll tab-title="有趣的店">
+    <Text>scroll2</Text>
+    <Text>some Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Text</Text>
+  </Scroll>
+  <Scroll tab-title="品牌新店">
+    <Text>scroll3</Text>
+    <Text>some Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Textsome Text some Text some Text some Text some Text some Text</Text>
+  </Scroll>
+</Tab>).mount(document.getElementById('app'));
