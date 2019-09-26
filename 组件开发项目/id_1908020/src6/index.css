@@ -1,0 +1,77 @@
+body {
+  font-family: PingFangSC-Regular, Arial, Tahoma, sans-serif;
+  background-color: #EEEEED;
+}
+
+.tab>.tab_item {
+  background: linear-gradient(to right, #6b25fd, #9233fd);
+  font-size: 16px;
+  color: white;
+  padding: 12px;
+}
+
+.tab>.tab_item>div.active::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: -6px;
+  width: 80%;
+  left: 10%;
+  height: 3px;
+  border-radius: 6px;
+  background-color: white;
+}
+
+.tab>.tab_item>div {
+  margin-right: 25px;
+  position: relative;
+}
+
+.banner_container {
+  position: relative;
+  padding-top: 10px;
+  background: linear-gradient(to right, #6b25fd, #9233fd);
+}
+
+.banner_container::after{
+  position: absolute;
+  display: block;
+  content: '';
+  height: 50%;
+  width: 100%;
+  bottom: 0;
+  background-color: #EEEEED;
+  z-index: 0;
+}
+
+.banner {
+  z-index: 10;
+  position: relative;
+  margin: 0 12px;
+  border-radius: 12px;
+}
+.shop_avatar{
+  height: 37px;
+  width: 37px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.shop_title{
+  font-size: 16px;
+}
+.shop{
+  background-color: white;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.shop_container{
+  padding: 10px;
+}
+.shop_ad{
+  padding: 10px;
+  background-color: #EEEEED;
+  border-radius: 4px;
+  font-size: 14px;
+}

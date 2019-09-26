@@ -36,6 +36,8 @@
   const carousel = new Carousel(carouselEle, imgList);
   carousel.init();
 
+  window.carousel = carousel;
+
 }());
 
 // 动画用例
