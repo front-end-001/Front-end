@@ -16,11 +16,9 @@
     }
 
     #swiper {
-      height: 300px;
       margin: 10px 0 0 10px;
       overflow: hidden;
       position: relative;
-      width: 500px;
       white-space: nowrap;
     }
 
@@ -35,16 +33,6 @@
       z-index: 1;
     }
 
-    #swiper::before {
-      left: 0;
-      content: '<';
-    }
-
-    #swiper::after {
-      right: 0;
-      content: '>';
-    }
-
     img {
       display: inline-block;
       height: 100%;
@@ -53,11 +41,14 @@
       transition: ease 0.5s;
     }
   </style>
-  <script src="./gesture.js"></script>
 </head>
 
 <body>
   <div id="swiper"></div>
+  <script src="./gesture.js"></script>
+  <script src="./cubicBezier.js"></script>
+  <script src="./animation.js"></script>
+  <script src="./component.js"></script>
   <script>
     let data = [
       "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
@@ -65,89 +56,99 @@
       "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
       "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
     ];
-    class Swiper {
-      constructor(container, data, options) {
-        this._container = container;
-        this.data = data
-      }
 
-      init() {
-        for (let d of this.data) {
-          let e = document.createElement('img')
-          e.src = d
-          this._container.appendChild(e)
-        }
-      }
+    class Swiper extends Component {
 
-      move() {
-        let children = Array.prototype.slice.call(this._container.children);
+      constructor(options) {
+        super(options, options);
+      }
+      loop() {
+        let children = Array.from(this.root.children);
         let position = 0;
         let nextFrame = () => {
-          let nextPosition = position + 1;
-          nextPosition = nextPosition % children.length
-          console.log(3 - position)
-          let prev = children[3 - position],
-              current = children[position],
-              next = children[nextPosition];
-          //把prev摆到正确的位置
-          prev.style = "ease 0s";
-          prev.style =  `translate(${100 - 100 * nextPosition}%)`;
-          //把next摆到正确的位置
-          // next.style.transition = "ease 0s";
-          // next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+          /*
+            position 0 nextPosition (0 + 1) % 4 = 1 nextPosition (position + 1) % 4 = 1
+            position 1 nextPosition (1 + 1) % 4 = 2 nextPosition (position + 1) % 4 = 1
+            position 2 nextPosition (2 + 1) % 4 = 3 nextPosition (position + 1) % 4 = 1
+            position 3 nextPosition (3 + 1) % 4 = 0 nextPosition (position + 1) % 4 = 1
+          */
+          let nextPosition = (position + 1) % children.length; // 计算下一张图的位置
+          // 这种方法的优势在于 不管图片有多少张 只移动两张
+          let current = children[position];
+          let next = children[nextPosition];
+          // 把next放到正确的位置
+          next.style.transition = "ease 0s"; // transition-duration 时长为0，不会产生过渡效果
+          next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               //把current挪出视口
               current.style.transition = ""; //transition置空，css中的属性就会生效
-              current.style.transform = `translate(${- 100 - 100 * position}%)`
+              current.style.transform = `translate(${- 100 - 100 * position}%)`;
               //把next挪进视口
               next.style.transition = "";
-              next.style.transform = `translate(${- 100 * nextPosition}%)`
-              position = nextPosition;
-            });
-          })
-          setTimeout(() => {
-            nextFrame() // 多次调用 方便调试
-          }, 3000)
-        }
-        setTimeout(() => {
-          nextFrame() // 第一次调用
-        }, 3000)
-        let startX = 0;
-        enableGesture(this._container);
-        this._container.addEventListener('panstart', event => {
-          console.log('panstart')
-        })
+              next.style.transform = `translate(${- 100 * nextPosition}%)`;
 
-        this._container.addEventListener('pan', event => {
-          if (event.isVertical) { // 上下
+              position = nextPosition;
+            })
+          })
+          setTimeout(nextFrame, this[PROPERTY_SYMBOL].delay || 3000);
+        }
+        setTimeout(nextFrame, this[PROPERTY_SYMBOL].delay || 3000);
+      }
+
+      created() {
+
+      }
+
+      mounted() {
+        enableGesture(this.root);
+        // 挂载
+        for (let i = 0; i < this[ATTRIBUTE_SYMBOL].data.length; i++) {
+          const e = this[ATTRIBUTE_SYMBOL].data[i];
+          const img = document.createElement('img');
+          img.src = e;
+          this.root.appendChild(img);
+        }
+
+        this.root.style.cssText = `width: ${this[PROPERTY_SYMBOL].width}px; height: ${this[PROPERTY_SYMBOL].height}px;`;
+        if (this[PROPERTY_SYMBOL].autoplay) {
+          this.loop();
+        }
+
+        const children = this.root.children;
+        let startX = 0;
+        let position = 0;
+        this.root.addEventListener('pan', event => {
+          if (event.isVertical) {
             return;
           }
+          // 暂停
           for (let child of children) {
             child.style.transition = 'ease 0s';
             child.style.transform = `translate(${event.dx + startX}px)`;
           }
         })
 
-        this._container.addEventListener('panend', event => {
-          if (event.isVertical) { // 上下
-            return;
+        this.root.addEventListener('panend', event => {
+          // let children = Array.from(children);
+
+          if (event.isVertical) {
+            return
           }
+
           if (event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)) {
             if (event.dx > 0) {
-              position -= 1;
+              position -= 1
             }
+
             if (event.dx < 0) {
-              position += 1 // position = 4 的问题
-              // position = 4 的问题
+              position += 1
             }
           } else {
             position = -(Math.round((startX + event.dx) / 500));
           }
-          // position = - (Math.round((startTransform + event.clientX - startX) / 500));
-          // position最大值为3
+          // 最大3
           position = Math.max(0, Math.min(position, children.length - 1));
-          // 根据position归位置
           for (let child of children) {
             child.style.transition = "";
             child.style.transform = `translate(${-position * 500}px)`;
@@ -155,11 +156,22 @@
           startX = -position * 500;
         })
 
-        this._container.addEventListener('flick', event => {
+        this.root.addEventListener('flick', event => {
           console.log('flick')
         })
 
-        this._container.addEventListener('pancancel', event => {
+        this.root.addEventListener('pancancel', event => {
+        })
+
+        this.root.addEventListener('pressstart', event => {
+          console.log('pressstart')
+        })
+
+        this.root.addEventListener('pressend', event => {
+          console.log('pressend')
+        })
+
+        this.root.addEventListener('presscancel', event => {
           for (let child of children) {
             child.style.transition = "";
             child.style.transform = `translate(${-position * 500}px)`;
@@ -167,24 +179,20 @@
           startX = -position * 500;
         })
 
-        this._container.addEventListener('pressstart', event => {
-          console.log('pressstart')
-        })
 
-        this._container.addEventListener('pressend', event => {
-          console.log('pressend')
-        })
-
-        this._container.addEventListener('presscancel', event => {
-          console.log('presscancel')
-        })
-
-        this._container.addEventListener('mousedown', event => event.preventDefault())
+        this.root.addEventListener('mousedown', event => event.preventDefault())
       }
+
     }
-    const swiper = new Swiper(document.getElementById('swiper'), data)
-    swiper.init()
-    swiper.move()
+
+    const swiper = new Swiper({
+      autoplay: true,
+      delay: 1000,
+      width: '500',
+      height: '300',
+    });
+    swiper.setAttribute('data', data);
+    swiper.appendTo(document.getElementById('swiper'));
   </script>
 </body>
 
