@@ -68,7 +68,6 @@ export default class BaseComponent {
       // this.root.setAttribute('class', value);
       this.root.className = value;
     }
-
     return (this.ATTRIBUTE[name] = value);
   }
 
