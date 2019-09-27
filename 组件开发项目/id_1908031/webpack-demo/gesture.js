@@ -1,5 +1,4 @@
-// teacher demo
-export default function enableGesture(main){
+export function enableGesture(main){
 	let start = (point, context) => {
 		//console.log("start")
 		context.startX = point.clientX;
@@ -17,7 +16,7 @@ export default function enableGesture(main){
 			main.dispatchEvent(e);
 			context.pressHandler = null;
 		}, 500)
-	};
+	}
 	let move = (point, context) => {
 		//console.log(context.startX,context.startY);
 		let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
@@ -44,6 +43,7 @@ export default function enableGesture(main){
 					context.isHorizontal = false;
 				}
 				let e = new Event("panstart");
+				e.origin = origin;
 				e.startX = context.startX;
 				e.startY = context.startY;
 				main.dispatchEvent(e);
