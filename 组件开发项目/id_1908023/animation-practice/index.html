@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .ball {
+      width: 50px;
+      height: 50px;
+      background: palevioletred;
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="margin: 50px 100px">
+    <button onclick="tl.pause()">pause</button>
+    <button onclick="tl.resume()">resume</button>
+    <!-- <button onclick="tl.restart()">restart</button> -->
+  </div>
+  <div id='ball' class="ball"></div>
+
+  <script src="./cubicBezier.js"></script>
+  <script src="./animation.js"></script>
+  <script>
+    let linear = cubicBezier(0, 0, 1, 1);
+    let ease = cubicBezier(.25, .1, .25, 1);
+    let easeIn = cubicBezier(.42, 0, 1, 1);
+    let easeOut = cubicBezier(0, 0, .58, 1);
+    let easeInOut = cubicBezier(.42, 0, .58, 1);
+    let myCB = cubicBezier(.69, -0.85, .25, 1);
+
+    const tl = new Timeline();
+
+    // tl.addAnimation(new DomElementAnimation(
+    //   document.getElementById('ball'),
+    //   'background',
+    //   0, [0, 0, 0],
+    //   2000, [155, 155, 155],
+    //   v => `rgb(${v[0]},${v[1]},${v[2]})`
+    // ));
+
+    // tl.addAnimation(new DomElementAnimation(
+    //   document.getElementById('ball'),
+    //   'transform',
+    //   0, 0,
+    //   2000, 500,
+    //   v => `translateX(${v}px)`
+    // ));
+    tl.addAnimation(new DomElementAnimation(
+      document.getElementById('ball'),
+      'top',
+      0, 0,
+      1000, 300,
+      v => `${v}px`
+    ));
+    tl.addAnimation(new DomElementAnimation(
+      document.getElementById('ball'),
+      'left',
+      1000, 0,
+      2000, 300,
+      v => `${v}px`
+    ));
+    tl.addAnimation(new DomElementAnimation(
+      document.getElementById('ball'),
+      'top',
+      2000, 300,
+      3000, 0,
+      v => `${v}px`
+    ));
+    tl.addAnimation(new DomElementAnimation(
+      document.getElementById('ball'),
+      'left',
+      3000, 300,
+      4000, 0,
+      v => `${v}px`
+    ));
+
+    tl.start();
+  </script>
+</body>
+
+</html>
