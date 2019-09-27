@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Gesture</title>
+    <script src="gesture.js"></script>
+  </head>
+  <body>
+    <div id="main" style="width: 100px; height:100px; background:coral;"></div>
+    <script>
+      //移动端阻止放大（老师移动端代码github地址？）
+      document.addEventListener("touchstart", event => event.preventDefault(), {
+        passive: false
+      });
+      let x = 0,
+        y = 0;
+      let main = document.getElementById("main");
+      enableGesture(main);
+      main.addEventListener("pressstart", event => {
+        console.log("pressstart");
+      });
+      main.addEventListener("press", event => {
+        console.log("press");
+      });
+      main.addEventListener("pressend", event => {
+        console.log("pressend");
+      });
+      main.addEventListener("presscancel", event => {
+        console.log("presscancel");
+      });
+      main.addEventListener("tap", event => {
+        console.log("tap");
+      });
+      main.addEventListener("flick", event => {
+        console.log("flick");
+      });
+      main.addEventListener("pan", event => {
+        console.log("pan");
+        main.style.transform = `translate(${event.dx + x}px,${event.dy + y}px)`;
+      });
+      main.addEventListener("panend", event => {
+        console.log("panend");
+        x += event.dx;
+        y += event.dy;
+      });
+      main.addEventListener("pancancel", event => {
+        console.log("pancancel");
+        main.style.transform = `translate(${x}px,${y}px)`;
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!--
+ * @Author: 玉皇大亮
+ * @since: 2019-08-28 21:44:31
+ * @LastAuthor: Do not edit
+ * @lastTime: 2019-08-29 22:31:23
+ * @message: 
+ -->
+<div id="ball" style="position: absolute; left: 0; top: 0; width: 50px; height: 50px; border-radius: 50%; background-color: navy"></div>
+<div style="margin-top: 200px;">
+    <button onclick="timeLine.pause();">暂停动画</button>
+    <button onclick="timeLine.resume();">恢复动画</button>
+</div>
+<script src="./animations/DomElementStyleNumberAnimation.js"></script>
+<script src="./animations/DomElementStyleNumberAnimation_Fix_Keyframe.js"></script>
+<script src="./animations/DomElementStyleVectorAnimation.js"></script>
+<script src="./animations/Timeline.js"></script>
+<script src="./animations/Timeline_RAF.js"></script>
+<script src="./animations/CubicBezier.js"></script>
+
+<script>
+    let timeLine = new Timeline_RAF();
+    //应用关键帧修复方法调用
+    
+    {
+        timeLine.addAnimation(new DomElementStyleNumberAnimation_Fix_Keyframe(
+            document.getElementById('ball'),
+            'left', 
+            0, 0,
+            500, 100, 
+            (v) => `${v}px`
+        ));
+        timeLine.addAnimation(new DomElementStyleNumberAnimation_Fix_Keyframe(
+            document.getElementById('ball'),
+            'top',
+            500, 0,
+            1000, 100, 
+            (v) => `${v}px`
+        ));
+        timeLine.addAnimation(new DomElementStyleNumberAnimation_Fix_Keyframe(
+            document.getElementById('ball'),
+            'left',
+            1000, 100,
+            1500, 0, 
+            (v) => `${v}px`
+        ));
+        timeLine.addAnimation(new DomElementStyleNumberAnimation_Fix_Keyframe(
+            document.getElementById('ball'),
+            'top',
+            1500, 100,
+            2000, 0, 
+            (v) => `${v}px`
+        ));
+    }
+    // Color Animation
+    {
+        timeLine.addAnimation(new DomElementStyleVectorAnimation(
+            document.getElementById('ball'),
+            'backgroundColor', 
+            0, RED, 
+            500, GREEN, 
+            (v) => `rgb(${v[0]}, ${v[1]}, ${v[2]})`
+        ));
+        timeLine.addAnimation(new DomElementStyleVectorAnimation(
+            document.getElementById('ball'),
+            'backgroundColor',
+            500, GREEN,
+            1000, BLUE, 
+            (v) => `rgb(${v[0]}, ${v[1]}, ${v[2]})`
+        ));
+        timeLine.addAnimation(new DomElementStyleVectorAnimation(
+            document.getElementById('ball'),
+            'backgroundColor',
+            1000, BLUE,
+            1500, IDONKNOW, 
+            (v) => `rgb(${v[0]}, ${v[1]}, ${v[2]})`
+        ));
+        timeLine.addAnimation(new DomElementStyleVectorAnimation(
+            document.getElementById('ball'),
+            'backgroundColor',
+            1500, IDONKNOW,
+            2000, RED, 
+            (v) => `rgb(${v[0]}, ${v[1]}, ${v[2]})`
+        ));
+    }
+
+    //没有关键帧修复方法调用
+    // timeLine.addAnimation(new DomElementStyleNumberAnimation(
+    //     document.getElementById('ball'),
+    //     'left', 
+    //     0, 0,
+    //     500, 100, 
+    //     (v) => `${v}px`
+    // ));
+    // timeLine.addAnimation(new DomElementStyleNumberAnimation(
+    //     document.getElementById('ball'),
+    //     'top',
+    //     500, 0,
+    //     1000, 100, 
+    //     (v) => `${v}px`
+    // ));
+    // timeLine.addAnimation(new DomElementStyleNumberAnimation(
+    //     document.getElementById('ball'),
+    //     'left',
+    //     1000, 100,
+    //     1500, 0, 
+    //     (v) => `${v}px`
+    // ));
+    // timeLine.addAnimation(new DomElementStyleNumberAnimation(
+    //     document.getElementById('ball'),
+    //     'top',
+    //     1500, 100,
+    //     2000, 0, 
+    //     (v) => `${v}px`
+    // ));
+    timeLine.start();
+
+</script>
+
+

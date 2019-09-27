@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>carousel</title>
+  <style>
+    #ball {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: lightcoral;
+      position: absolute;
+    }
+
+  </style>
+  <link href="./carousel/index.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div id="app">
+    <div id="carousel" style="width: 500px; height: 300px;"></div>
+
+    <!-- 动画测试用例 -->
+    <div id="animation">
+      <div style="width: 500px; height: 300px; background-color: lightblue; position: relative;">
+        <div id="ball"></div>
+      </div>
+      <div>
+        <button id="btn-play">开始</button>
+        <button id="btn-pause">暂停</button>
+        <button id="btn-restart">重新开始</button>
+        <button id="btn-reverse">反向</button>
+        <button id="btn-acc">2倍速</button>
+        <button id="btn-dcc">1倍速</button>
+      </div>
+    </div>
+    <!-- 手势测试用例 -->
+    <div id="gesture" style="width: 500px; height: 300px; background-color: darkseagreen;"></div>
+  </div>
+  <script src="./carousel/component.js"></script>
+  <script src="./carousel/cubic.js"></script>
+  <script src="./carousel/animation.js"></script>
+  <script src="./carousel/gesture.js"></script>
+  <script src="./carousel/index.js"></script>
+  <script src="./app.js"></script>
+</body>
+
+</html>
