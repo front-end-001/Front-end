@@ -5,7 +5,7 @@ import Component from './component'
 export default function myCreate(creater, attrs, ...children) {
   if (!creater) return '';
   if (typeof creater === 'string') {
-    console.log('构造元素', creater, attrs, children);
+    // console.log('构造元素', creater, attrs, children);
     const ele = document.createElement(creater);
     if (attrs) {
       for (const attrName in attrs) {
@@ -40,6 +40,6 @@ export default function myCreate(creater, attrs, ...children) {
     }
     return ele;
   }
-  console.log('构造组件', creater, attrs, children);
+  // console.log('构造组件', creater, attrs, children);
   return new creater(attrs, children);
 }

@@ -44,6 +44,60 @@
       passive: false
     });
   </script>
+  <script>
+    // function check() {
+    //   if (domReady && data) {
+    //     render();
+    //   }
+    // }
+    // function render() {
+    //   console.log(data);
+    // }
+    // let data;
+    // let domReady = false;
+    // document.addEventListener('DOMContentLoaded', (event) => {
+    //   domReady = true;
+    //   check();
+    // });
+
+    // let req = new XMLHttpRequest();
+    // req.open('get', './data.json', true);
+    // req.send(null);
+
+    // req.addEventListener('readystatechange', (event) => {
+    //   if (req.readyState === 4) {
+    //     data = req.responseText;
+    //     check();
+    //   }
+    // })
+
+    function happen(obj, type, config) {
+      return new Promise((resolve, reject) => {
+        obj.addEventListener(type, resolve, config);
+      })
+    }
+
+    // happen(document, 'DOMContentLoaded').then(() => {
+    //   console.log('000000000');
+    // })
+
+    // fetch('./data.json').then(res => {
+    //   console.log('-------------');
+    //   console.log(res);
+    //   return res.json();
+    // }).then(data => {
+    //   console.log('-------------');
+    //   console.log(data);
+    // })
+
+    void async function() {
+      const [result, evt] = await Promise.all([
+        fetch('./data.json').then(res => res.json()),
+        happen(document, 'DOMContentLoaded'),
+      ]);
+      console.log(result);
+    }();
+  </script>
 </head>
 
 <body>
