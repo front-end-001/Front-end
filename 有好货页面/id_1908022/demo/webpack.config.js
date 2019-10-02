@@ -17,7 +17,7 @@ var path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './index.js',
+  entry: './src/index.js',
   module: {
         rules: [
             {
@@ -37,7 +37,7 @@ module.exports = {
         ]
   },
   devServer: {
-    contentBase: path.resolve(''),
+    contentBase: path.resolve('./dev'),
     hot: true
   },
   output: {
@@ -46,7 +46,8 @@ module.exports = {
   },
   optimization: {
     minimize: false
-  }
+  },
+  devtool: 'cheap-eval-source-map'
 };
 
 
