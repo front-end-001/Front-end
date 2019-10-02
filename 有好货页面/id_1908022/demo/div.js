@@ -65,6 +65,7 @@ export default class Div {
             this.root.style.width = "100%";
             this.root.style.height = "100%";
             this.root.style.display = "inline-block";
+            this.root.style.verticalAlign = "top";
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

@@ -1,4 +1,4 @@
-/* import Tabview from "./tabView.js";
+import Tabview from "./tabView.js";
 import Div from "./div.js";
 import Carousel from "./lianxi.js";
 
@@ -34,9 +34,9 @@ var c = <Tabview style="width: 100%;height: 100%;display: block;">
 	<Div tab-title="有趣的店" style="background: blueviolet;"></Div>
 	<Div tab-title="品牌新店" style="background: orange;"></Div>
 </Tabview>
-c.appendTo(document.body); */
+c.appendTo(document.body);
 
-import List from './list.js';
+/* import List from './list.js';
 let urls = [
     "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
     "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
@@ -64,4 +64,4 @@ c.addEventListener('click',() => {console.log(111)});
 c.addEventListener('click', f);
 c.removeEventListener('click', f);
 c.triggerEvent('click');
-console.log(c);
+console.log(c); */

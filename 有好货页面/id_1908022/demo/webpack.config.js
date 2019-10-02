@@ -37,12 +37,12 @@ module.exports = {
         ]
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: path.resolve(''),
     hot: true
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'foo.bundle.js'
+    filename: 'main.js'
   },
   optimization: {
     minimize: false
