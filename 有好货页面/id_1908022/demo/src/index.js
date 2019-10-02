@@ -15,7 +15,6 @@ let config = {
 
 
 function myCreate(Class, attributes, ...children){
-	console.log(Class);
     var object = new Class(config);
     for(let name in attributes)
         object.setAttribute(name, attributes[name]);
