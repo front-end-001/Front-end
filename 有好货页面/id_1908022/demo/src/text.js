@@ -4,14 +4,14 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Div {
-    constructor(config){
+export default class Text {
+    constructor(text){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         
-        this.created();
+        this.created(text);
     }
 
     appendTo(element){
@@ -19,11 +19,11 @@ export default class Div {
         this.mounted();
     }
 
-    created(){
-        this.root = document.createElement("div");
-        this.root.style.width = "100%";
-        this.root.style.height = "100%";
-        this.root.style.display = "inline-block";
+    created(text){
+        this.root = document.createElement("span");
+        this.root.style.whiteSpace = 'normal';
+        this.root.style.fontSize = '30px'; 
+        this.root.innerText = text;
     }
     mounted(){
 
@@ -66,7 +66,6 @@ export default class Div {
             this.root.style.height = "100%";
             this.root.style.display = "inline-block";
             this.root.style.verticalAlign = "top";
-            this.root.style.overflowY = 'scroll';
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
