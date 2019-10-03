@@ -5,6 +5,8 @@ import {
   DOMElementStyleNumberAnimation,
   ease
 } from "~/lib/animation";
+import ListContainer from './ListContainer'
+import mockListData from './mockListData'
 
 import "./Swiper.css";
 
@@ -164,15 +166,21 @@ export default class Swiper extends Component {
           : (position - 2 + children.length + condition) % children.length;
       nextFrame(condition);
     });
+
+    Array.from(document.getElementsByClassName("Swiper-item")).map(el => {
+      // el.addEventListener("scroll", e => {
+      //   this.triggerEvent('', )
+      // });
+    });
   }
 
   render() {
     return (
       <div className="Swiper">
         <div className="Swiper-container">
-          <div className="Swiper-item">1</div>
-          <div className="Swiper-item">2</div>
-          <div className="Swiper-item">3</div>
+          <ListContainer data={mockListData} index={1} />
+          <ListContainer index={2} />
+          <ListContainer index={3} />
         </div>
       </div>
     );

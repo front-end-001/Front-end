@@ -18,7 +18,7 @@ const MyCreate = (Class, attr, ...children) => {
   }
 
   for(let child of children) {
-    if(typeof child === 'string') {
+    if(typeof child === 'string' || typeof child === 'number') {
       child = new Text({children: child})
     }
     if(child instanceof Array) {
