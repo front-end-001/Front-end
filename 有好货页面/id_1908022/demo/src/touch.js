@@ -31,23 +31,29 @@ export function enableGesture(main){
         }
 
         let dX = point.clientX - context.startX , dY = point.clientY - context.startY;
-        if(Math.abs(dX) > Math.abs(dY)){
-            context.isVertical = false;
-            context.isHorizontal = true;
-        }else{
-            context.isVertical = true;
-            context.isHorizontal = false;
-        }
+        
 
-        if((dX * dX + dY * dY) > 100){
+        if( Math.abs(dX) > 10 || Math.abs(dY) > 10){
             context.isTap = false;
             if(!context.isPan){
+                context.isPan = true;
+                if(Math.abs(dX) > Math.abs(dY)){
+                    context.isVertical = false;
+                    context.isHorizontal = true;
+                }else{
+                    context.isVertical = true;
+                    context.isHorizontal = false;
+                }
+
                 let e = new Event('panstart');
+                e.origin = origin;
                 e.startX = context.startX;
                 e.startY = context.startY;
+                e.isVertical = context.isVertical;
                 main.dispatchEvent(e);
-                context.isPan = true;
             }
+
+            
         }
         if(context.isPan){
             let e = new Event('panmove');

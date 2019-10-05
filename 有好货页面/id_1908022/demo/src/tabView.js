@@ -28,13 +28,13 @@ export default class Tabview {
         this.root.style.display = "flex";
         this.root.style.flexDirection = "column";
         this.headerContainer = document.createElement("div");
-        this.contextContainer = document.createElement('div');
-        this.contextContainer.style.flex = "1";
-        this.contextContainer.style.whiteSpace = 'nowrap';
-        this.contextContainer.style.overflow = 'hidden';
+        this.contentContainer = document.createElement('div');
+        this.contentContainer.style.flex = "1";
+        this.contentContainer.style.whiteSpace = 'nowrap';
+        this.contentContainer.style.overflow = 'hidden';
         this.headerContainer.style.height = "93px";
         this.root.appendChild(this.headerContainer);
-        this.root.appendChild(this.contextContainer);
+        this.root.appendChild(this.contentContainer);
 
         this.root.addEventListener("touchmove",function(e){ 
             e.cancelBubble = true;
@@ -44,55 +44,59 @@ export default class Tabview {
         });
 
 
-        enableGesture(this.contextContainer);
-        let children = this.contextContainer.children;
+        enableGesture(this.contentContainer);
+        let children = this.contentContainer.children;
         let x = 0;
         let position = 0;
+        this[STATE_SYMBOL].position = 0;
         let shouldMove = true;
-        let contextContainerWidth = this.contextContainer.offsetWidth;
-        // console.log(contextContainerWidth);
+        let contentContainerWidth = this.contentContainer.offsetWidth;
+        // console.log(contentContainerWidth);
 
         /* this._carousel.addEventListener('panstart',event => {
             console.log('start',event);  
         }) */
 
         //监听滑动
-        this.contextContainer.addEventListener('panmove',event => {
+        this.contentContainer.addEventListener('panmove',event => {
             if(event.isVertical) return;
             event.origin.preventDefault();
-            x = position * -this.contextContainer.offsetWidth;
+            let dX = event.dX;
+            if(this[STATE_SYMBOL].position == 0 || this[STATE_SYMBOL].position == (children.length - 1))
+                dX = dX / 2;
+            x = this[STATE_SYMBOL].position * -this.contentContainer.offsetWidth;
             for(let child of children){
-                child.style.transition = "ease 0s";
-                child.style.transform = `translateX(${event.dX + x}px)`
+                child.style.transition = "transform ease 0s";
+                child.style.transform = `translateX(${dX + x}px)`
             } 
         })
 
         //监听滑动结束
-        this.contextContainer.addEventListener('panend',event => {
+        this.contentContainer.addEventListener('panend',event => {
             if(event.isVertical) return;
             event.origin.preventDefault();
 
             if(event.isFlick){
                 if(event.dX > 0){
-                    position -= 1;
+                    this[STATE_SYMBOL].position -= 1;
                 }else if(event.dX < 0){
-                    position += 1;
+                    this[STATE_SYMBOL].position += 1;
                 }
             }else{
-                x = position * -this.contextContainer.offsetWidth;
-                position = -Math.round((event.dX + x) / this.contextContainer.offsetWidth);
+                x = this[STATE_SYMBOL].position * -this.contentContainer.offsetWidth;
+                this[STATE_SYMBOL].position = -Math.round((event.dX + x) / this.contentContainer.offsetWidth);
             }
             
-            position = Math.max(0, Math.min(position,children.length -1 ));
+            this[STATE_SYMBOL].position = Math.max(0, Math.min(this[STATE_SYMBOL].position,children.length -1 ));
             for(let child of children){
-                child.style.transition = "";
-                child.style.transform = `translateX(${position * -this.contextContainer.offsetWidth}px)`;
+                child.style.transition = "transform ease 0s";
+                child.style.transform = `translateX(${this[STATE_SYMBOL].position * -this.contentContainer.offsetWidth}px)`;
             }
             
         })
 
         //监听快滑手势
-        /* this.contextContainer.addEventListener('flick',event => {
+        /* this.contentContainer.addEventListener('flick',event => {
             if(event.isVertical) return;
             event.origin.preventDefault();
             shouldMove = false;
@@ -106,7 +110,7 @@ export default class Tabview {
             // console.log(position);
             for(let child of children){
                 child.style.transition = "";
-                child.style.transform = `translateX(${position * -this.contextContainer.offsetWidth}px)`;
+                child.style.transform = `translateX(${position * -this.contentContainer.offsetWidth}px)`;
             }
             
         }) */
@@ -140,13 +144,19 @@ export default class Tabview {
         this.headerContainer.appendChild(header);
 
         header.addEventListener('click', () => {
-            for(let item of  this.contextContainer.children){
+            for(let item of  this.contentContainer.children){
                 item.style.transition = 'ease .5s';
                 item.style.transform = `translateX(${- n * 100}%)`;
             }
         })
 
-        child.appendTo(this.contextContainer);
+        child.appendTo(this.contentContainer);
+        for(let i = 0; i < this.contentContainer.children.length; i ++) {
+            this.contentContainer.children[i].style.width = "100%";
+            this.contentContainer.children[i].style.height = "100%";
+            this.contentContainer.children[i].style.verticalAlign = "top";
+            this.contentContainer.children[i].style.display = "inline-block";
+        }
          
 
     }

@@ -4,6 +4,15 @@ import Carousel from "./lianxi.js";
 import ListView from "./ListView.js";
 import {create} from "./create.js";
 
+function loadMore(a){
+	console.log(a);
+	console.log("load more");
+
+	setTimeout(() => {
+		this.setAttribute('placeHolder', '没有更多了');
+	}, 1000)
+}
+
 window.render = function(obj, root) {
 	var c = <Tabview style="width: 100%;height: 100%;display: block;">
 	<Div tab-title="推介" style="background: greenyellow;">
@@ -11,7 +20,7 @@ window.render = function(obj, root) {
 			123
 		</Carousel>
 	</Div>
-	<Div tab-title="有趣的店" style="background: blueviolet;">
+	<Div tab-title="有趣的店" placeHolder="load more" on-scrollToBottom={loadMore} style="background: blueviolet;-webkit-overflow-scrolling:touch;"> 
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
