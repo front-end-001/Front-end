@@ -1,37 +1,11 @@
 import Tabview from "./tabView.js";
 import Div from "./div.js";
 import Carousel from "./lianxi.js";
-import Text from './text.js';
+import ListView from "./ListView.js";
+import {create} from "./create.js";
 
-let urls = [
-    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-    "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
-];
-
-let config = {
-	urls: urls
-}
-
-
-function myCreate(Class, attributes, ...children){
-    var object = new Class(config);
-    for(let name in attributes)
-        object.setAttribute(name, attributes[name]);
-    for(let child of children){
-		if(typeof(child)  === "string"){
-			object.appendChild(new Text(child));
-		}else {
-			object.appendChild(child);
-		}
-	}
-    	
-    return object; 
-}
-
-
-var c = <Tabview style="width: 100%;height: 100%;display: block;">
+window.render = function(obj, root) {
+	var c = <Tabview style="width: 100%;height: 100%;display: block;">
 	<Div tab-title="推介" style="background: greenyellow;">
 		<Carousel style="width: 500px;height: 300px;">
 			123
@@ -106,9 +80,12 @@ var c = <Tabview style="width: 100%;height: 100%;display: block;">
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
 	  123
 	</Div>
-	<Div tab-title="品牌新店" style="background: orange;"></Div>
+	<Div tab-title="品牌新店" style="background: orange;">
+		<ListView data={obj}></ListView>
+	</Div>
 </Tabview>
 c.appendTo(document.body);
+}
 
 /* import List from './list.js';
 let urls = [

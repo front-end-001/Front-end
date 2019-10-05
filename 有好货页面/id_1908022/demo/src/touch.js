@@ -1,7 +1,7 @@
 export function enableGesture(main){
     let contexts = Object.create(null);
     
-    let start = (point,context) => {
+    let start = (point,context,origin) => {
         // console.log('start',point.clientX,point.clientY);
         context.startTime = Date.now();
         context.startX = point.clientX;
@@ -18,7 +18,7 @@ export function enableGesture(main){
             context.pressHandle = null;
         },500)
     }
-    let move = (point,context) => {
+    let move = (point,context,origin) => {
         // console.log('move',point.clientX,point.clientY);
         if(context.pressHandle !== null){
             context.isPress = false;
@@ -53,12 +53,13 @@ export function enableGesture(main){
             let e = new Event('panmove');
             e.dX = dX;
             e.dY = dY;
+            e.origin = origin;
             e.isVertical = context.isVertical;
             e.isHorizontal = context.isHorizontal;
             main.dispatchEvent(e);
         }
     }
-    let end = (point,context) => {
+    let end = (point,context,origin) => {
         // console.log('end',point.clientX,point.clientY);
         let dX = point.clientX - context.startX , dY = point.clientY - context.startY;
         if(context.pressHandle !== null){
@@ -79,6 +80,8 @@ export function enableGesture(main){
         if(context.isPan && v >= 0.3){
             context.isFlick = true;
             let e = new Event('flick');
+            e.origin = origin;
+            e.isVertical = context.isVertical;
             e.dX = dX;
             e.dY = dY;
             main.dispatchEvent(e);
@@ -87,9 +90,11 @@ export function enableGesture(main){
         }
             
         if(context.isPan){
+            console.log('panend');
             let e = new Event('panend');
             e.dX = dX;
             e.dY = dY;
+            e.origin = origin;
             e.isVertical = context.isVertical;
             e.isHorizontal = context.isHorizontal;
             e.isFlick = context.isFlick;
@@ -98,7 +103,7 @@ export function enableGesture(main){
             
     }
 
-    let cancle = (point,context) => {
+    let cancle = (point,context,origin) => {
         if(context.isTap){
             let e = new Event('tapcancle');
             main.dispatchEvent(e);
@@ -122,38 +127,38 @@ export function enableGesture(main){
         main.addEventListener('mousemove',mouseMove);
         main.addEventListener('mouseup',mouseUp);
         contexts[mouseSymbol] = Object.create(null);
-        start(event, contexts[mouseSymbol]);
+        start(event, contexts[mouseSymbol],event);
     }
     let mouseMove = event => {
-        move(event, contexts[mouseSymbol]);
+        move(event, contexts[mouseSymbol],event);
     }
     let mouseUp = event => {
         main.removeEventListener('mousemove',mouseMove);
         main.removeEventListener('mouseup',mouseUp);
-        end(event, contexts[mouseSymbol]);
+        end(event, contexts[mouseSymbol],event);
     }
     main.addEventListener('mousedown',mouseDown);
 
     let touchStart = event => {
         for(let point of event.changedTouches){
             contexts[point.identifier] = Object.create(null);
-            start(point,contexts[point.identifier]);
+            start(point,contexts[point.identifier],event);
         }
     }
     let touchMove = event => {
         for(let point of event.changedTouches){
-            move(point,contexts[point.identifier]);
+            move(point,contexts[point.identifier],event);
         }
     }
     let touchEnd = event => {
         for(let point of event.changedTouches){
-            end(point,contexts[point.identifier]);
+            end(point,contexts[point.identifier],event);
             delete contexts[point.identifier];
         }
     }
     let touchCancle = event => {
         for(let point of event.changedTouches){
-            cancle(point,contexts[point.identifier]);
+            cancle(point,contexts[point.identifier],event);
             delete contexts[point.identifier];
         }
     }

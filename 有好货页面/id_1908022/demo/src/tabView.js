@@ -36,6 +36,13 @@ export default class Tabview {
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contextContainer);
 
+        this.root.addEventListener("touchmove",function(e){ 
+            e.cancelBubble = true;
+            e.stopImmediatePropagation();
+        }, {
+            passive:false
+        });
+
 
         enableGesture(this.contextContainer);
         let children = this.contextContainer.children;
@@ -43,7 +50,7 @@ export default class Tabview {
         let position = 0;
         let shouldMove = true;
         let contextContainerWidth = this.contextContainer.offsetWidth;
-        console.log(contextContainerWidth);
+        // console.log(contextContainerWidth);
 
         /* this._carousel.addEventListener('panstart',event => {
             console.log('start',event);  
@@ -52,6 +59,7 @@ export default class Tabview {
         //监听滑动
         this.contextContainer.addEventListener('panmove',event => {
             if(event.isVertical) return;
+            event.origin.preventDefault();
             x = position * -this.contextContainer.offsetWidth;
             for(let child of children){
                 child.style.transition = "ease 0s";
@@ -62,10 +70,19 @@ export default class Tabview {
         //监听滑动结束
         this.contextContainer.addEventListener('panend',event => {
             if(event.isVertical) return;
-            if(!shouldMove) return shouldMove = true;
+            event.origin.preventDefault();
+
+            if(event.isFlick){
+                if(event.dX > 0){
+                    position -= 1;
+                }else if(event.dX < 0){
+                    position += 1;
+                }
+            }else{
+                x = position * -this.contextContainer.offsetWidth;
+                position = -Math.round((event.dX + x) / this.contextContainer.offsetWidth);
+            }
             
-            x = position * -this.contextContainer.offsetWidth;
-            position = -Math.round((event.dX + x) / this.contextContainer.offsetWidth);
             position = Math.max(0, Math.min(position,children.length -1 ));
             for(let child of children){
                 child.style.transition = "";
@@ -75,9 +92,9 @@ export default class Tabview {
         })
 
         //监听快滑手势
-        this.contextContainer.addEventListener('flick',event => {
+        /* this.contextContainer.addEventListener('flick',event => {
             if(event.isVertical) return;
-
+            event.origin.preventDefault();
             shouldMove = false;
 
             if(event.dX > 0){
@@ -89,11 +106,10 @@ export default class Tabview {
             // console.log(position);
             for(let child of children){
                 child.style.transition = "";
-            console.log(event.dX,contextContainerWidth);
                 child.style.transform = `translateX(${position * -this.contextContainer.offsetWidth}px)`;
             }
             
-        })
+        }) */
         
     }
     mounted(){

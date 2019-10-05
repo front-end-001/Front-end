@@ -22,15 +22,49 @@ html,body {
 }
 body {
     -webkit-user-select: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(196, 155, 155, 0);
     -webkit-touch-callout: none;
 }
 * {
     -webkit-text-size-adjust:none;
 }
 </style>
-
 <script>
+    /* let data = null;
+    let domReady = false;
+
+    function check(){
+        if(!data)
+            return;
+        if(!domReady)
+            return;
+        render();       
+    }
+
+    function render(){
+        console.log(data);
+    }
+
+    document.addEventListener('DOMContentLoaded', event => {
+        domReady = true;
+        check();
+    })
+    window.addEventListener('load', event => {
+    })
+
+
+
+    let request = new XMLHttpRequest();
+    request.open('get','./aaa.json', true);
+    request.send(null);
+
+    request.addEventListener('readystatechange', event => {
+        if(request.readyState == 4){
+            data  = request.responseText;
+            check();
+        }
+    }) */
+
     function happen(Object, type, config){
         return new Promise((reslove, reject) => {
             Object.addEventListener(type, reslove , config);
@@ -42,9 +76,13 @@ body {
             let scriptElement = document.createElement("script");
             scriptElement.src = src;
             scriptElement,addEventListener("load", resolve)
-            document.getElementsByTagName('head')[0] .appendChild(scriptElement);
+            document.documentElement.appendChild(scriptElement);
         })
     }
+
+    /* loadScript('./a.js').then(() => {
+        window.render()
+    }) */
 
     void async function(){
         let [obj, event] = await Promise.all([
@@ -53,12 +91,35 @@ body {
             }()),
             // (await fetch('./aaa.json')).json(), 
             happen(document, "DOMContentLoaded"),
-            loadScript('./main.js')
+            loadScript('./a.js')
         ])
 
-        window.render(obj, document.body); 
+        window.render(obj, document.body);
     }();
+
+    /* happen(document, 'DOMContentLoaded').then(() => {
+        console.log(document.body);
+    })
+
+    fetch('./aaa.json').then(
+        response => response.json()
+    ).then(
+        obj => console.log(obj)
+    ); */
+
+    /* Promise.all([
+        happen(document, 'DOMContentLoaded'),
+        fetch('./aaa.json').then(response => response.json()),
+    ]).then(results => {
+        console.log(results);
+    }) */
+
+    
+
+
+    
 </script>
+
 
 <script type="text/javascript">
     //关闭选择
@@ -77,14 +138,16 @@ body {
     document.addEventListener("touchstart",function(e){ 
         e.preventDefault(); 
     }, {passive:false});*/
-    /* document.addEventListener("touchmove",function(e){ 
+    document.addEventListener("touchmove",function(e){ 
         if(e.touches.length == 1) 
             e.preventDefault(); 
     }, {
         passive:false
-    }) */
+    })
 </script>
 </head>
 <body>
+    <!-- <img src="https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg" alt=""> -->
+<script src="./main.js"></script>
 </body>
 </html>

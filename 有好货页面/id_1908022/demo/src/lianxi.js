@@ -76,7 +76,7 @@ export default class Carousel{
 
 
 	appendChild(child){
-
+		// child.appendTo(this.root);
 	}
 
 	unmounted() {
