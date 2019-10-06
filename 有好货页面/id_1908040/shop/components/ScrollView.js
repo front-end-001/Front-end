@@ -2,18 +2,17 @@
  * @file ScrollView组件
  */
 import {
-  Component,
-  PROPERTY_SYMBOL,
-  ATTRIBUTE_SYMBOL,
-  EVENT_SYMBOL,
-  STATE_SYMBOL
-} from './Component.js';
+    Component,
+    PROPERTY_SYMBOL,
+    ATTRIBUTE_SYMBOL
+  } from './Component.js';
 
 class ScrollView extends Component {
-  constructor(config) {
+  constructor() {
     super();
+    this.created();
   }
-  created() {
+  created () {
     this[PROPERTY_SYMBOL].root = document.createElement('div');
     this[PROPERTY_SYMBOL].placeHolder = document.createElement('div');
     this[PROPERTY_SYMBOL].placeHolder.style.backgroundColor = 'lightgreen';
@@ -31,20 +30,34 @@ class ScrollView extends Component {
       */
 
       // 加载更多的思路2:，利用占位元素
-      let clientRect = this[PROPERTY_SYMBOL].root.getBoundingClientRect();
-      let placeHolderRect = this[
-        PROPERTY_SYMBOL
-      ].placeHolder.getBoundingClientRect();
-      console.log(clientRect.bottom, placeHolderRect.top);
-      if (clientRect.bottom < placeHolderRect.top) {
-        this.triggerEvent('scrollToBottom');
-      }
+     let clientRect = this[PROPERTY_SYMBOL].root.getBoundingClientRect();
+     let placeHolderRect = this[PROPERTY_SYMBOL].placeHolder.getBoundingClientRect();
+    //  console.log(clientRect.bottom, placeHolderRect.top);
+     if (clientRect.bottom < placeHolderRect.top) {
+       this.triggerEvent('scrollToBottom');
+     }
     });
   }
   appendChild(child) {
-    this[PROPERTY_SYMBOL].children.push(child);
+    this.children.push(child);
     child.appendTo(this[PROPERTY_SYMBOL].root);
     this[PROPERTY_SYMBOL].root.appendChild(this[PROPERTY_SYMBOL].placeHolder);
+  }
+  get children() {
+    return this[PROPERTY_SYMBOL].children;
+  }
+  get style() {
+    return this[PROPERTY_SYMBOL].root.style;
+  }
+  setAttribute(name, value) {
+    // hook
+    if (name === 'style') {
+      this[PROPERTY_SYMBOL].root.setAttribute('style', value);
+    }
+    if (name === "placeHolderText") {
+      this[PROPERTY_SYMBOL].placeHolder.innerText = value;
+    }
+    return this[ATTRIBUTE_SYMBOL][name] = value;
   }
 }
 

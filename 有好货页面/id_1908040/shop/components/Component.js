@@ -20,6 +20,10 @@ class Component {
     element.appendChild(this[PROPERTY_SYMBOL].root);
     this.mounted();
   }
+  appendChild(child) {
+    this.children.push(child);
+    child.appendTo(this[PROPERTY_SYMBOL].root);
+  }
   created() {}
   mounted() {}
   unmount() {}
@@ -45,9 +49,6 @@ class Component {
       this[PROPERTY_SYMBOL].placeHolder.innerText = value;
     }
     return (this[ATTRIBUTE_SYMBOL][name] = value);
-  }
-  setStyle(name, value) {
-    this[PROPERTY_SYMBOL].root.style[name] = value;
   }
   addEventListener(type, listener) {
     if (!this[EVENT_SYMBOL][type]) {

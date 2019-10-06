@@ -1,17 +1,11 @@
-import  {
-    Component,
-    PROPERTY_SYMBOL,
-    ATTRIBUTE_SYMBOL,
-    EVENT_SYMBOL,
-    STATE_SYMBOL
-} from './Component.js';
+import { Component, PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL } from './Component.js';
 import {
   TimeLine, DOMElementStyleNumberAnimation, ease
 } from '../lib/animation.js';
 import enableGesture from '../lib/gesture.js';
 
 // property attribute 如何存
-class CarouselView extends Component {
+class Carousel extends Component {
   constructor(config) {
     super();
     // life cycle
@@ -28,18 +22,14 @@ class CarouselView extends Component {
   }
   mounted() {
     // 追加图片
-    this._drag();
+    // this._drag();
     // this._animation();
   }
   setData(data) {
-    this[PROPERTY_SYMBOL].data = data;
+    this[PROPERTY_SYMBOL].data = data.map(item => item.imageUrl);
     this._clearChildren();
     this._render();
     this._animation();
-  }
-  appendTo(element) {
-    element.appendChild(this[PROPERTY_SYMBOL].root);
-    this.mounted();
   }
   _render() {
     for (let d of this[PROPERTY_SYMBOL].data) {
@@ -77,22 +67,25 @@ class CarouselView extends Component {
       let current = this[PROPERTY_SYMBOL].children[position],
         next = this[PROPERTY_SYMBOL].children[nextPosition];
 
+      // 获取父元素的宽度
+      let offsetWidth = this[PROPERTY_SYMBOL].root.getBoundingClientRect().width;
+
       this[PROPERTY_SYMBOL].offsetTimeStart = Date.now();
 
       this[PROPERTY_SYMBOL].tl.removeAllAnimations();
       this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
         current,
         'transform',
-        0, -500 * position,
-        1000, -500 - 500 * position,
+        0, -offsetWidth * position,
+        1000, -offsetWidth - offsetWidth * position,
         (v) => `translateX(${v}px)`
       ));
 
       this[PROPERTY_SYMBOL].tl.addAnimation(new DOMElementStyleNumberAnimation(
         next,
         'transform',
-        0, 500 - 500 * nextPosition,
-        1000, -500 * nextPosition,
+        0, offsetWidth - offsetWidth * nextPosition,
+        1000, -offsetWidth * nextPosition,
         (v) => `translateX(${v}px)`
       ));
       this[PROPERTY_SYMBOL].tl.restart();
@@ -108,12 +101,14 @@ class CarouselView extends Component {
   _drag() {
     enableGesture(this[PROPERTY_SYMBOL].root);
 
+    // 获取父元素的宽度
+    let offsetWidth = this[PROPERTY_SYMBOL].root.getBoundingClientRect().width;
     let offset = 0;
     this[PROPERTY_SYMBOL].root.addEventListener('mousedown', event => {
       this[PROPERTY_SYMBOL].tl.pause();
       let currentTime = Date.now();
       if (currentTime - this[PROPERTY_SYMBOL].offsetTimeStart < 1000) {
-        offset = 500 - ease((currentTime - this[PROPERTY_SYMBOL].offsetTimeStart) / 1000) * 500;
+        offset = offsetWidth - ease((currentTime - this[PROPERTY_SYMBOL].offsetTimeStart) / 1000) * offsetWidth;
         console.log(offset);
       } else {
         offset = 0;
@@ -141,13 +136,13 @@ class CarouselView extends Component {
       let last = children[lastPosition];
 
       last.style.transition = 'ease 0s';
-      last.style.transform = `translate(${-500 - 500 * lastPosition + event.dx + offset}px)`;
+      last.style.transform = `translate(${-offsetWidth - offsetWidth * lastPosition + event.dx + offset}px)`;
 
       next.style.transition = 'ease 0s';
-      next.style.transform = `translate(${500 - 500 * nextPosition + event.dx + offset}px)`;
+      next.style.transform = `translate(${offsetWidth - offsetWidth * nextPosition + event.dx + offset}px)`;
 
       current.style.transition = 'ease 0s';
-      current.style.transform = `translate(${- 500 * position + event.dx + offset}px)`;
+      current.style.transform = `translate(${- offsetWidth * position + event.dx + offset}px)`;
     });
 
     // 当移动的非常快时，即便图片不靠近窗口也需要能移动过去  flick/swipe  足够快、足够远
@@ -198,23 +193,26 @@ class CarouselView extends Component {
         last.style.transition = 'ease 0s';
       }
       
-      last.style.transform = `translate(${-500 - 500 * lastPosition}px)`;
+      last.style.transform = `translate(${-offsetWidth - offsetWidth * lastPosition}px)`;
 
       if (isLeft) {
         next.style.transition = '';
       } else {
         next.style.transition = 'ease 0s';
       }
-      next.style.transform = `translate(${500 - 500 * nextPosition}px)`;
+      next.style.transform = `translate(${offsetWidth - offsetWidth * nextPosition}px)`;
 
       current.style.transition = '';
-      current.style.transform = `translate(${- 500 * this[PROPERTY_SYMBOL].position}px)`;
+      current.style.transform = `translate(${- offsetWidth * this[PROPERTY_SYMBOL].position}px)`;
     });
 
     // 阻止图片鼠标默认的拖拽行为
     this[PROPERTY_SYMBOL].root.addEventListener('mousedown', event => event.preventDefault());
     document.addEventListener("touchmove", event => event.preventDefault(), {passive:false})
   }
+  // getAttribute(name) {
+  //   return this[ATTRIBUTE_SYMBOL][name];
+  // }
   setAttribute(name, value) {
     // hook
     if (name === 'style') {
@@ -243,4 +241,4 @@ class CarouselView extends Component {
   }
 }
 
-export default CarouselView
+export default Carousel
