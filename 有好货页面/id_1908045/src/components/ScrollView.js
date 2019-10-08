@@ -16,21 +16,19 @@ export default class ScrollView {
 
     create() {
         this.root = document.createElement('div')
-        this.root.style.overflow='hidden'
-        
-        
-        this.loadRefresh=document.createElement('div')
+        this.root.style.overflow = 'hidden'
+        this.root.style.position = 'relative'
+
+
+        this.loadRefresh = document.createElement('div')
+        this.loadRefresh.classList.add('load-refresh')
         this.loadRefresh.innerText = '下拉刷新'
-        this.loadRefresh.style.position='absolute'
-        this.loadRefresh.style.width='100%'
-        this.loadRefresh.style.textAlign = 'center'
-        this.loadRefresh.style.backgroundColor = 'lightblue'
-        this.loadRefresh.style.height='30px'
-        this.loadRefresh.style.lineHeight='30px'
-        this.loadRefresh.style.transform=`translateY(-30px)`
+        this.loadRefresh.style.height = '30px'
+        this.loadRefresh.style.lineHeight = '30px'
+        this.loadRefresh.style.transform = `translateY(-30px)`
         this.root.appendChild(this.loadRefresh)
 
-        this.container=document.createElement('div')
+        this.container = document.createElement('div')
         this.container.style.width = '100%'
         this.container.style.height = '100%'
         this.container.style.overflowY = 'auto'
@@ -38,19 +36,22 @@ export default class ScrollView {
 
         enableGesture(this.container)
 
-        let refreshing=false
+        let refreshing = false
         this.container.addEventListener("pan", event => {
-            if (!event.isVertical || event.dy < 0||refreshing) {
+            if (!event.isVertical || event.dy < 0 || refreshing) {
+                return
+            }
+            if (this.container.scrollTop > 0) {
                 return
             }
             const index = this[ATTRIBUTE_SYMBOL].index
             const width = this.container.getBoundingClientRect().width
             const dy = event.dy / 2
-            if(dy>30){
+            if (dy > 30) {
                 this.loadRefresh.innerText = '释放更新'
             }
             this.container.style.transition = 'ease 0s'
-            this.loadRefresh.style.transform=`translateY(${dy-30}px)`
+            this.loadRefresh.style.transform = `translateY(${dy - 30}px)`
             this.container.style.transform = `translateY(${dy}px)`
             if (!triggered) {
                 this.triggerEvent('scrollToBottom', 'a')
@@ -58,15 +59,18 @@ export default class ScrollView {
             }
         });
 
-        const resetTransform= ()=> {
-            refreshing=false
+        const resetTransform = () => {
+            refreshing = false
             this.loadRefresh.innerText = '下拉刷新'
             this.container.style.transition = 'ease 0s'
-            this.loadRefresh.style.transform=`translateY(${-30}px)`
+            this.loadRefresh.style.transform = `translateY(${-30}px)`
             this.container.style.transform = `translateY(${0}px)`
         }
         this.container.addEventListener("panend", event => {
-            if (!event.isVertical || event.dy < 0||refreshing) {
+            if (!event.isVertical || event.dy < 0 || refreshing) {
+                return
+            }
+            if (this.container.scrollTop > 0) {
                 return
             }
             const index = this[ATTRIBUTE_SYMBOL].index
@@ -74,13 +78,13 @@ export default class ScrollView {
 
             const dy = event.dy / 2
             this.container.style.transition = 'ease 0s'
-            if(dy>30){
-                this.loadRefresh.style.transform=`translateY(${0}px)`
+            if (dy > 30) {
+                this.loadRefresh.style.transform = `translateY(${0}px)`
                 this.container.style.transform = `translateY(${30}px)`
-                refreshing=true
+                refreshing = true
                 this.triggerEvent('refresh', resetTransform)
-            }else{
-               resetTransform()
+            } else {
+                resetTransform()
             }
         });
 
@@ -98,13 +102,19 @@ export default class ScrollView {
 
         let triggered = false
 
+        const loadDone = e => {
+            if (e === 'done') {
+                triggered = false
+            }
+        }
+
         this.container.addEventListener('scroll', event => {
             let clientRect = this.container.getBoundingClientRect()
             let placeHolderRect = this.placeHolder.getBoundingClientRect()
             console.log(clientRect.bottom, placeHolderRect.top)
             if (clientRect.bottom > placeHolderRect.top) {
                 if (!triggered) {
-                    this.triggerEvent('scrollToBottom', 'a')
+                    this.triggerEvent('scrollToBottom', loadDone)
                     triggered = true
                 }
             }
@@ -114,6 +124,7 @@ export default class ScrollView {
             //     this.triggerEvent('scrollToBottom','a')
             // }
         })
+
     }
 
     get children() {
