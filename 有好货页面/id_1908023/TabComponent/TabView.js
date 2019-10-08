@@ -60,12 +60,19 @@ export default class TapView {
 
     this[STATE_SYMBOL].position = 0;
 
-    document.addEventListener("touchmove", function (e) {
-      if (e.touches.length == 1)
-        e.preventDefault();
+    this.root.addEventListener('touchmove', e => {
+      e.cancelBubble = true;
+      e.stopImmediatePropagation();
     }, {
       passive: false
     })
+
+    // document.addEventListener("touchmove", function (e) {
+    //   if (e.touches.length == 1)
+    //     e.preventDefault();
+    // }, {
+    //   passive: false
+    // })
 
     // let children = Array.from(this.contentContainer.children);
     // let position = 0;
@@ -93,6 +100,7 @@ export default class TapView {
     // 移动结束
     this.contentContainer.addEventListener('panend', e => {
       if (e.isVertical) return;
+      
       e.origin.preventDefault();
 
       let width = this.contentContainer.getBoundingClientRect().width;
