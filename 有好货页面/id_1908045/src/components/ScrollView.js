@@ -124,7 +124,6 @@ export default class ScrollView {
             //     this.triggerEvent('scrollToBottom','a')
             // }
         })
-
     }
 
     get children() {
