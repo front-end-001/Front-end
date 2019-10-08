@@ -1,18 +1,30 @@
-const path = require('path')
-const pathResolve = targetPath => path.resolve(__dirname, targetPath)
+// import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path')
+const pathResolve = targetPath => path.resolve(__dirname, targetPath)
+
 
 
 module.exports = {
-    entry: './src/index.js',
+    entry: "./index.js",
     output: {
         path: pathResolve('dist'),
         filename: '[name].js',
     },
     module: {
         rules: [
+            {
+                test: /\.js$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@babel/preset-env'],
+                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
+                    }
+                }
+            },
             {
                 test: /\.(sa|sc|c)ss$/, 
                 use: [{
@@ -42,23 +54,34 @@ module.exports = {
             }
         ]
     },
+    mode: 'development',
     devServer: {
-        contentBase: pathResolve('dist'), //本地服务器所加载文件的目录
-        port: '8080', //设置端口号8080
-        inline: true, // 文件修改后实时刷新（浏览器刷新）
-        historyApiFallback: true, 
-        hot: true
+        contentBase: './dist',
+        hot: true,
+        host: '192.168.1.135',
+        port: 8080,
+    },
+    optimization: {
+        minimize: false
     },
     plugins: [
+        /**
+         * html-webpack-plugin 的作用是：当使用 webpack打包时，创建一个 html 文件，
+         * 并把 webpack 打包后的静态文件自动插入到这个 html 文件当中.
+         * 所以打包的css文件被插入到html文件中,使得css可以被找到
+         */
         new htmlWebpackPlugin({
-            // filename: pathResolve('dist/index.html'),
-            template: pathResolve('src/index.html'),
+            filename: pathResolve('dist/index.html'),
+            title: "每日好店",
+            meta: {
+                viewport: 'width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no',
+            }
+
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),
         new MiniCssExtractPlugin({
-            // contenthash 根据css文件内容生成hash值
-            filename: 'css/[name].[contenthash:7].css', 
-        }),
+            filename: 'css/[name].[contenthash].css',
+        })
     ]
 }

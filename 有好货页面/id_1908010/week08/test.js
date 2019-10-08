@@ -47,7 +47,6 @@ window.render = function(data, root) {
             </ScrollView>
             <ScrollView tab-title="有趣的店" style="-webkit-overflow-scrolling:touch;background-color:lightgreen;white-space:normal;font-size:50px;font-size:50px;overflow:scroll;">
             def def def def def def def def def
-             def def def def def def def def def 
             def def def def def def def def def 
             def def def def def def def def def 
             def def def def def def def def def 
@@ -62,8 +61,9 @@ window.render = function(data, root) {
             def def def def def def def def def 
             def def def def def def def def def 
             def def def def def def def def def 
-            def def def def def def def def def def def def def def def def def def 
-        
+            def def def def def def def def def 
+            def def def def def def def def def 
+            def def def def def def def def def 
             </ScrollView>
             <ScrollView tab-title="品牌新店" style="background-color:pink;"></ScrollView>
         </TabView>

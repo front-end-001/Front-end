@@ -17,7 +17,7 @@ module.exports = {
     mode: "development",
     devServer: {
         contentBase: "./dist",
-        hot: trueew
+        hot: true
     },
     optimization: {
         minimize: false
