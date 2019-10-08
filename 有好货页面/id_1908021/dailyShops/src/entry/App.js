@@ -1,4 +1,4 @@
-import { Tab, ScrollView, Carousel } from '../components/index';
+import { Tab, ScrollView, Carousel, ListView, Title } from '../components/index';
 import createElement from '../babel/babelTransformToJSX';
 
 const imageUrls = [
@@ -13,6 +13,9 @@ function loadMore() {
     this.setAttribute('placeHolderText', '没有更多啦 *_* ！');
   }, 1000);
 }
+
+const data1 = [111, 222];
+const data2 = { a: 111, b: 222 };
 
 const App = (
   <Tab className="tab-root">
@@ -30,15 +33,8 @@ const App = (
           imageUrls={imageUrls}
           style="border-radius:20px;margin-top:20px"
         ></Carousel>
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
+        <Title level="3">超多人收藏的店！</Title>
+        <ListView data={data1}></ListView>
       </ScrollView>
     </Tab.TabPane>
     <Tab.TabPane title={'有趣的店'}>2222</Tab.TabPane>

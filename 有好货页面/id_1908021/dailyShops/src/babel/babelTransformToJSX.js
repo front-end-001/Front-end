@@ -1,18 +1,10 @@
-const myComponents = ['Tab', 'TabPane', 'ScrollView', 'Carousel'];
+const myComponents = ['Tab', 'TabPane', 'ScrollView', 'Carousel', 'ListView', 'Title'];
 
 export default function createElement(NodeClass, attributes, ...children) {
   console.log(arguments);
 
   if (NodeClass instanceof Function && myComponents.indexOf(NodeClass.name) >= 0) {
     const object = new NodeClass();
-
-    for (let child of children) {
-      object.appendChild(child);
-    }
-
-    if (!object.isValid()) {
-      throw Error(`Invalid componet: ${NodeClass.name}`);
-    }
 
     for (let attr in attributes) {
       if (attr.match(/^on-([\s\S]+)$/)) {
@@ -21,6 +13,15 @@ export default function createElement(NodeClass, attributes, ...children) {
         object.setAttribute(attr, attributes[attr]);
       }
     }
+    
+    for (let child of children) {
+      object.appendChild(child);
+    }
+
+    if (!object.isValid()) {
+      throw Error(`Invalid componet: ${NodeClass.name}`);
+    }
+
     return object;
   } else {
     // TODO 白名单校验 -> 如何判断一个字符串标签是标准HTML标签
