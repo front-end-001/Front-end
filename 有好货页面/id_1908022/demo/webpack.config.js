@@ -42,8 +42,8 @@ module.exports = {
   },
   devServer: {
     contentBase: path.resolve('./dev'),
-    host: '192.168.1.108',
-    port: '8080',
+    /* host: '192.168.1.108',
+    port: '8080', */
     hot: true
   },
   output: {

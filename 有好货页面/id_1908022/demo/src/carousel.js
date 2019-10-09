@@ -49,6 +49,7 @@ export default class Carousel{
 			point.setAttribute('style','display: inline-block;width: 15px;height: 15px;background: transparent;border: 1px solid #fff;border-radius: 50%;margin-right: 10px;cursor: pointer;');
 			this.pointer.appendChild(point);
 		}
+		this.pointer.children[0].style.background = '#ffffff';
 		this.root.appendChild(this.container);
 		this.root.appendChild(this.pointer);
 
