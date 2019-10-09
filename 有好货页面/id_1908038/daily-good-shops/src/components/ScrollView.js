@@ -34,7 +34,7 @@ export default class ScrollView {
             //获取元素大小
             let clientRect = this.root.getBoundingClientRect();
             let placeHolderRect = this.placeHolder.getBoundingClientRect();
-            if (clientRect.bottom < placeHolderRect. top) {
+            if (clientRect.bottom < placeHolderRect.top) {
                 if (triggered) {
                     this.triggerEvent('scrollToBottom');
                     triggered = true;
