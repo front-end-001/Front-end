@@ -1,6 +1,6 @@
 import Tabview from "./tabView.js";
 import Div from "./div.js";
-import Carousel from "./lianxi.js";
+import Carousel from "./carousel.js";
 import ListView from "./ListView.js";
 import {create} from "./create.js";
 
@@ -16,8 +16,7 @@ function loadMore(a){
 window.render = function(obj, root) {
 	var c = <Tabview style="width: 100%;height: 100%;display: block;">
 	<Div tab-title="推介" style="background: greenyellow;">
-		<Carousel style="width: 500px;height: 300px;">
-			123
+		<Carousel style="width: 100%;height: auto;position: relative;padding: 20px;box-sizing: border-box;">
 		</Carousel>
 	</Div>
 	<Div tab-title="有趣的店" placeHolder="load more" on-scrollToBottom={loadMore} style="background: blueviolet;-webkit-overflow-scrolling:touch;"> 

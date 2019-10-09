@@ -2,11 +2,18 @@ import Text from './text.js';
 import Wrapper from './wrapper.js';
 
 let urls = [
-    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-    "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+    "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg",
+    "https://gw.alicdn.com/imgextra/i4/122/O1CN01QcEEAP1ClusnDag9x_!!122-0-lubanu.jpg",
+    "https://aecpm.alicdn.com/simba/img/TB14ab1KpXXXXclXFXXSutbFXXX.jpg_q50.jpg",
+    "https://gw.alicdn.com/imgextra/i1/1141228/O1CN01QaESyl1KwSvmg9rrG_!!1141228-0-lubanu.jpg"
 ];
+
+/* let urls = [
+    "../img/01.jpg",
+    "../img/02.jpg",
+    "../img/03.jpg",
+    "../img/04.jpg"
+]; */
 
 let config = {
 	urls: urls

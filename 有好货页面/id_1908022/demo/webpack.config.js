@@ -33,11 +33,17 @@ module.exports = {
                       plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
+            },
+            {
+              test: /\.(png|jpg|jpeg|gif|bmp)$/,
+              use: 'url-loader'
             }
         ]
   },
   devServer: {
     contentBase: path.resolve('./dev'),
+    host: '192.168.1.108',
+    port: '8080',
     hot: true
   },
   output: {
