@@ -1,7 +1,7 @@
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const PROPERTY_SYMBOL = Symbol("property");
 
-export class MyScrollView {
+export class MyDiv {
     constructor() {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL] = Object.create(null);
@@ -58,7 +58,33 @@ export class MyScrollView {
         
         this[PROPERTY_SYMBOL].children.push(child);
 
-        child.appendTo(this._container);
+        // 把header单独拿出来，作为TAB的title，不用独立设置div
+        let title =  child.getAttribute("tab-title") || "default-title";
+
+        this[PROPERTY_SYMBOL].headers.push(title);
+        let header = document.createElement("header");
+        header.innerText = title;
+
+        this._headerContainer.push(header);
+
+
+        // 把div设置成contentContainer的子元素
+        child.appendTo(this._contentContainer);
+        
+        // set css style;
+        child.style.width = "100%";
+        child.style.height = "100%";
+        child.style.display = "inline-block";
+
+
+        /* //  这里其实没有必要循环设置，唯一的好处就是怕被别的地方覆盖
+        for(let i = 0; i < this._contentContainer.children.length; i ++) {
+            this.contentContainer.children[i].style.width = "100%";
+            this.contentContainer.children[i].style.height = "100%";
+            this.contentContainer.children[i].style.display = "inline-block";
+        }
+        */
+
 
     }
 
@@ -66,24 +92,12 @@ export class MyScrollView {
         return this[PROPERTY_SYMBOL].children;
     }
 
-    get style() {
-        return this._container.style;
-    }
 
 
 
     created() {
         this._container = document.createElement("div");
-        //阻止冒泡但是允许默认事件 
-        //没法使用touch操作，所以需要注释掉，在tabview中使用
-        /*
-        this._container.addEventListener("touchmove", e=> {
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        },{
-            passive: false
-        });
-        */
+
     }
 
 

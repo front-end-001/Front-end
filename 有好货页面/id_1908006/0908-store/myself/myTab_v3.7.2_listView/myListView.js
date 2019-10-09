@@ -1,10 +1,15 @@
+import {MyDiv} from "./myDiv.js"
+import {myCreate} from "./myCreate.js"
+
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const PROPERTY_SYMBOL = Symbol("property");
+const EVENT_SYMBOL= Symbol("event");
 
-export class MyScrollView {
+export class MyListView {
     constructor() {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL] = Object.create(null);
+        this[EVENT_SYMBOL] = Object.create(null);
 
         this[PROPERTY_SYMBOL].children = [];
         this[PROPERTY_SYMBOL].headers = [];
@@ -23,6 +28,7 @@ export class MyScrollView {
         if(name === "style") {
             this._container.setAttribute("style", value);
         }
+
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
 
@@ -60,6 +66,10 @@ export class MyScrollView {
 
         child.appendTo(this._container);
 
+        // 每次在最后都追加 placeHolder, 对于存在的元素，需要先摘下来，再追加到末尾
+        // 利用这个特性，保证placeHolder永远在最后
+        this._container.append(this.placeHolder);
+
     }
 
     get children() {
@@ -74,17 +84,11 @@ export class MyScrollView {
 
     created() {
         this._container = document.createElement("div");
-        //阻止冒泡但是允许默认事件 
-        //没法使用touch操作，所以需要注释掉，在tabview中使用
-        /*
-        this._container.addEventListener("touchmove", e=> {
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        },{
-            passive: false
-        });
-        */
-    }
+
+        let element = <MyDiv><MyDiv>abc</MyDiv> xyz </MyDiv>;
+        element.appendTo(this._container);
+
+   }
 
 
     mounted() {

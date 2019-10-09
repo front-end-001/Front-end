@@ -158,7 +158,7 @@ export class MyTabView {
 
 
         this._contentContainer.addEventListener("pan", event => {
-            console.log("pan");
+            //console.log("pan");
             if (event.isVertical) return; // 如果垂直分量大，就不移动
 
             let width = this._contentContainer.getBoundingClientRect().width;
@@ -173,7 +173,6 @@ export class MyTabView {
                 dx = dx / 2;
             }
 
-            console.log(dx);
             for (let i = 0; i < this._contentContainer.children.length; i++) {
                 this._contentContainer.children[i].style.transition = "transform ease 0s";
                 this._contentContainer.children[i].style.transform = `translateX(${dx - width * this[STATE_SYMBOL].position}px)`;
@@ -185,7 +184,7 @@ export class MyTabView {
             if (event.isVertical) return; // 如果垂直分量大，就不移动
 
             let width = this._contentContainer.getBoundingClientRect().width;
-            console.log("original postion: ", this[STATE_SYMBOL].position)
+            //console.log("original postion: ", this[STATE_SYMBOL].position)
 
 
             let isLeft; // 这个变量的含义是， 是否是左边的照片进入current
@@ -216,7 +215,7 @@ export class MyTabView {
             // tab 不需要循环
             //this[STATE_SYMBOL].position = (children.length + this[STATE_SYMBOL].position) % children.length;
 
-            console.log("new postion: ", this[STATE_SYMBOL].position);
+            //console.log("new postion: ", this[STATE_SYMBOL].position);
 
             if (this[STATE_SYMBOL].position < 0) {
                 this[STATE_SYMBOL].position = 0;

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<!--禁止电话号码和邮箱识别-->
+<meta content="telephone=no,email=no" name="format-detection"/>
+
+<!--TODO:添加一个网页标题-->
+<title>每日好店</title>
+
+<!-- 缩放有问题
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+-->
+
+<!-- 1. 传统方式 -->
+<!-- <script type="text/javascript">
+
+    let data = null;
+    let domReady = false;
+
+    function check() {
+        if(!data) return;
+        if(!domReady) return;
+
+        render();
+    }
+
+    function render() {
+        console.log(document.body);
+        console.log(data);
+    }
+    
+
+    //先执行，body加载完，就触发
+    document.addEventListener("DOMContentLoaded", event => {
+        domReady = true;
+        check();
+    });
+    
+    // 后执行，需要等img加载完，才触发, 一般性能埋点，才会用这个
+    /*
+    window.addEventListener("load", event=>{
+    });
+    */
+    
+    let request = new XMLHttpRequest();
+
+    // 1. method, 2, URL path, 3, isAsync
+    request.open("get", "./data.json", true);
+    request.send(null);
+
+    request.addEventListener("readystatechange",event => {
+        if (request.readyState == 4) {
+            data = request.responseText;
+            check();
+        }
+    });
+</script> -->
+
+<script charset="utf-8" type="text/javascript">
+    // 方式一 : fetch.then 得到response， 然后response.json 得到的还是一个promise，然后then 得到obj结果
+    /*
+    fetch("./data.json").then(response => {
+        response.json().then(obj=> {
+            console.log(obj);
+        })
+    })
+    */
+
+    // 方式二：链式表达式
+    /*
+    fetch("./data.json").then(response => response.json()).then(obj=> {
+        console.log("method-2:", obj);
+    })
+    */
+
+    // 使用happen包装DOMContentLoaded事件
+
+    function happen(object, type, config) {
+        return new Promise((resolve, reject)=>{
+            object.addEventListener(type, resolve, config);
+        });
+    }
+
+    function loadScript(src) {
+        return new Promise((resolve, reject)=>{
+            let scriptElement = document.createElement("script");
+            scriptElement.src = src;
+            scriptElement.addEventListener("load", resolve);
+            //document.documentElement.appendChild(scriptElement);
+            document.getElementsByTagName("head")[0].appendChild(scriptElement);
+        });
+    }
+
+    /*
+    loadScript("./a.js").then(()=>{
+        console.log("a.js was loaded");
+    });
+    */
+
+    // fetch 需要去取数据，所以一般说来耗时最长，一定要写在第一个
+    void async function() {
+        let [obj, event] = await Promise.all([
+            (async function () { // async () => {   等价
+                return await (await fetch("./data.json")).json();
+            })(),
+            happen(document, "DOMContentLoaded"),
+            loadScript("./main.js")
+        ]);
+
+        //console.log(obj, event);
+
+        // 这个就是在script.js中定义的window.render, 通过bable的main.js合成后引入
+        window.render(obj, document.body);
+
+    }();
+
+
+
+
+    /*
+    happen(document, "DOMContentLoaded").then(()=>{
+        console.log(document.body);
+    });
+    */
+
+    // 使用promise.all 完成传统方式的两个事件的调用
+
+    // promise.all 参数是一个可迭代的内容，这里我们传递一个数组
+    /*
+    Promise.all([
+        happen(document, "DOMContentLoaded"),
+        fetch("./data.json").then(response=> response.json()) // 这里要 .json 一下，获得一个promise
+    ]).then(results => {
+        console.log(results);
+    });
+    */
+
+
+
+
+    // IIFE - immediately invoke function expression
+    /* 原型， 这里使用void 表示不关心执行结果，返回的是undefined，语义比较合适
+    void async function() {
+    }();
+     */
+
+    // 这个是串行操作的
+    /*
+    void async function() {
+        let [obj, event] = await Promise.all([
+            fetch("./data.json").then(response => response.json()),
+            happen(document, "DOMContentLoaded")
+        ]);
+
+        console.log(obj, event);
+
+    }(); // 这里千万别忘了，需要定义完以后，立刻调用
+    */
+
+    // 这个是完全并行的操作
+    void async function() {
+        let [obj, event] = await Promise.all([
+            (async function () { // async () => {   等价
+                return await (await fetch("./data.json")).json();
+            })(),
+            happen(document, "DOMContentLoaded")
+        ]);
+
+        console.log(obj, event);
+
+    }();
+
+</script>
+
+
+<style type="text/css">
+html,body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    width:100%;
+    height:100%;
+}
+body {
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+}
+
+* {
+    -webkit-text-size-adjust:none;
+}
+</style>
+
+<script type="text/javascript">
+    //关闭选择
+    //document.addEventListener("selectstart",function(e){ e.preventDefault(); });
+    //避免鼠标变成文本选择形状
+    //document.addEventListener("mousedown",function(e){ e.preventDefault(); });
+    //避免上下滚屏
+    //document.addEventListener("touchmove",function(e){ if(e.touches.length == 2) e.preventDefault(); }, {passive:false});
+    document.addEventListener("touchmove",function(e){ if(e.touches.length == 1) e.preventDefault(); }, {passive:false});
+    //document.addEventListener("touchstart",function(e){ if(e.touches.length == 1) e.preventDefault(); }, {passive:false});
+
+
+</script>
+</head>
+<body>
+<script src="main.js"></script>
+</body>
+</html>

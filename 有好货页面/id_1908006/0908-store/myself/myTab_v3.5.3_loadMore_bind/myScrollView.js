@@ -1,10 +1,12 @@
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const PROPERTY_SYMBOL = Symbol("property");
+const EVENT_SYMBOL= Symbol("event");
 
 export class MyScrollView {
     constructor() {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL] = Object.create(null);
+        this[EVENT_SYMBOL] = Object.create(null);
 
         this[PROPERTY_SYMBOL].children = [];
         this[PROPERTY_SYMBOL].headers = [];
@@ -42,9 +44,9 @@ export class MyScrollView {
         this[EVENT_SYMBOL][type].delete(listener);
     }
 
-    triggerEvent(type) {
+    triggerEvent(type, ...args) {
         for (let event of this[EVENT_SYMBOL][type]) {
-            event.call(this);
+            event.call(this, ...args);
         }
     }
 
@@ -84,6 +86,17 @@ export class MyScrollView {
             passive: false
         });
         */
+
+        // 每次滚动都有可能到底，必须监听scroll事件
+        
+        this._container.addEventListener("scroll", event => {
+            let clientRect = this._container.getBoundingClientRect();
+            console.log(this._container.scrollTop, clientRect.height, this._container.scrollHeight);
+
+            if (this._container.scrollHeight - this._container.scrollTop <= clientRect.height) {
+                this.triggerEvent("scrollToBottom");
+            }
+        }) 
     }
 
 

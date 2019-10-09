@@ -1,14 +1,15 @@
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const PROPERTY_SYMBOL = Symbol("property");
 
-export class MyScrollView {
-    constructor() {
+export class MyText {
+    constructor(config) {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL] = Object.create(null);
 
         this[PROPERTY_SYMBOL].children = [];
         this[PROPERTY_SYMBOL].headers = [];
 
+        this.text = config || "";
         this.created();
     }
 
@@ -57,7 +58,6 @@ export class MyScrollView {
     appendChild(child) {
         
         this[PROPERTY_SYMBOL].children.push(child);
-
         child.appendTo(this._container);
 
     }
@@ -66,24 +66,13 @@ export class MyScrollView {
         return this[PROPERTY_SYMBOL].children;
     }
 
-    get style() {
-        return this._container.style;
-    }
 
 
 
     created() {
-        this._container = document.createElement("div");
-        //阻止冒泡但是允许默认事件 
-        //没法使用touch操作，所以需要注释掉，在tabview中使用
-        /*
-        this._container.addEventListener("touchmove", e=> {
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        },{
-            passive: false
-        });
-        */
+        this._container = document.createElement("span");
+        this._container.innerText = this.text;
+
     }
 
 
