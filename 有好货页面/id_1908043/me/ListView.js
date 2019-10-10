@@ -1,10 +1,11 @@
+import { myCreate } from './create';
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Carousel {
+export default class ListView {
     constructor(){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -18,29 +19,15 @@ export default class Carousel {
 
     appendTo(element){
         element.appendChild(this.root);
+
+        element = <div><img style="width:130px;height:130px;"></img>abc</div>
+
+
         this.mounted();
     }
 
     created(){
         this.root = document.createElement("div");
-        this.placeHolder= document.createElement("div");
-        // this.placeHolder.innerText = "加载更多";
-        this.placeHolder.style.backgroundColor = 'lightGreen';
-        this.root.appendChild(this.placeHolder);
-
-        this.root.addEventListener('scroll', event => {
-            const clientRet = this.root.getBoundingClientRect()
-            console.log(this.root.scrollHeight - this.root.scrollTop <= clientRet.height)
-            // if (this.root.scrollHeight - this.root.scrollTop <= clientRet.height) {
-            //     this.triggerEvent('scrollToBottom')
-            // }
-
-            const placeHolderRect = this.placeHolder.getBoundingClientRect()
-            console.log(clientRet.bottom, placeHolderRect.top, clientRet.bottom > placeHolderRect.top)
-            if (clientRet.bottom > placeHolderRect.top) {
-                this.triggerEvent('scrollToBottom')
-            }
-        })
     }
 
     mounted(){
@@ -50,19 +37,24 @@ export default class Carousel {
     unmounted(){
 
     }
-
     update(){
 
+    }
+
+    render () {
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        return <div>
+            {
+                data.map(item => (
+                    <div><span>{item.a}</span><span>{item.b}</span></div>
+                ))
+            }
+        </div>
     }
 
     appendChild(child) {
         this.children.push(child)
         child.appendTo(this.root)
-        this.root.appendChild(this.placeHolder);
-    }
-
-    get style() {
-        return this.root.style;
     }
 
     get children() {
@@ -72,7 +64,6 @@ export default class Carousel {
     getDOM () {
         return this.root;
     }
-
     getAttribute(name){
         if (name == 'style') {
             return this.root.getAttribute('style')
@@ -86,15 +77,11 @@ export default class Carousel {
         if (name == 'style') {
             this.root.setAttribute('style', value)
         }
-        if (name === 'placeHolderText') {
-            this.placeHolder.innerText = value;
-        }
         if(name === 'class') {
             this.root.setAttribute('class', value);
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
-
     addEventListener(type, listener){
         if(!this[EVENT_SYMBOL][type])
             this[EVENT_SYMBOL][type] = new Set;
@@ -106,6 +93,8 @@ export default class Carousel {
         this[EVENT_SYMBOL][type].delete(listener);
     }
     triggerEvent(type){
+        if(!this[EVENT_SYMBOL][type])
+            return;
         for(let event of this[EVENT_SYMBOL][type])
             event.call(this);
     }

@@ -1,30 +1,26 @@
 import TabView from './TabView'
 import ScrollView from './ScrollView'
 import Text from './Text'
-import ListView from './ListView';
 
-import { myCreate } from './create.js';
+function myCreate(Class, attributes, ...children) {
+    var object = new Class()
 
-
-// function myCreate(Class, attributes, ...children) {
-//     var object = new Class()
-
-//     for(let name in attributes) {
-//         if(name.match(/^on-([\s\S]+)$/)) {
-//             object.addEventListener(RegExp.$1, attributes[name]);
-//         } else {
-//             object.setAttribute(name, attributes[name])
-//         }
-//     }
-//     for(let child of children) {
-//         if (typeof child === 'string') {
-//             object.appendChild(new Text(child))
-//         } else {
-//             object.appendChild(child)
-//         }
-//     }
-//     return object
-// }
+    for(let name in attributes) {
+        if(name.match(/^on-([\s\S]+)$/)) {
+            object.addEventListener(RegExp.$1, attributes[name]);
+        } else {
+            object.setAttribute(name, attributes[name])
+        }
+    }
+    for(let child of children) {
+        if (typeof child === 'string') {
+            object.appendChild(new Text(child))
+        } else {
+            object.appendChild(child)
+        }
+    }
+    return object
+}
 
 // var t = <Text>abc</Text>
 // t.appendTo(document.body)
@@ -43,10 +39,9 @@ function loadMore (event) {
     console.log('loadMore', event);
 }
 
-window.render = function() {
+window.render = (obj, ele) => {
     var d = <TabView style="width:100%;height:100%;">
         <ScrollView tab-title="推荐" placeHolderText="加载更多" on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
-        <ListView></ListView>
         abc abc abc  abc abc abc
         abc abc abc abc abc abc
         abc abc abc  abc abc abc
@@ -79,3 +74,7 @@ window.render = function() {
     </TabView>
     d.appendTo(document.body);
 }
+
+
+
+
