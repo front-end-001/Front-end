@@ -1,14 +1,18 @@
+import { create } from './create'
+
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const PROPERTY_SYMBOL = Symbol('property')
 const EVENT_SYMBOL = Symbol('event')
 const STATE_SYMBOL = Symbol('state')
 
-export default class Component {
+export default class ListView {
   constructor(config = {}) {
     this[ATTRIBUTE_SYMBOL] = Object.create(null)
     this[PROPERTY_SYMBOL] = Object.create(null)
     this[EVENT_SYMBOL] = Object.create(null)
     this[STATE_SYMBOL] = Object.create(null)
+
+    this[PROPERTY_SYMBOL].children = []
 
     this.created()
   }
@@ -20,6 +24,8 @@ export default class Component {
 
   created() {
     this.root = document.createElement('div')
+
+    this.render().appendTo(this.root)
   }
 
   mounted() {
@@ -28,6 +34,21 @@ export default class Component {
   unmounted() { }
 
   update() {
+  }
+
+  render() {
+    let data = this[ATTRIBUTE_SYMBOL]['data'] || []
+
+    console.log(data, 'data')
+
+    return <div>
+      {
+        data.map(item =>
+          <div><span>{item.a}</span></div>
+        )
+      }
+    </div>
+
   }
 
   appendChild(child) {
@@ -40,14 +61,21 @@ export default class Component {
   }
 
   getAttribute(name) {
-    if(name=='style')
+    if (name == 'style')
       this.root.getAttribute('style')
     return this[ATTRIBUTE_SYMBOL][name]
   }
 
   setAttribute(name, value) {
-    if(name=='style')
-      this.root.setAttribute('style',value)
+    if (name == 'style')
+      this.root.setAttribute('style', value)
+    if (name == 'data') {
+      this[PROPERTY_SYMBOL][name] = this[ATTRIBUTE_SYMBOL][name] = value
+
+      this.root.innerHTML = ''
+      this.render().appendTo(this.root)
+      return value
+    }
     return this[PROPERTY_SYMBOL][name] = this[ATTRIBUTE_SYMBOL][name] = value
   }
 
