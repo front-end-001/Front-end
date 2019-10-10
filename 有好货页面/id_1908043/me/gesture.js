@@ -41,7 +41,7 @@ export default function enableGesture (main) {
             }
         }
 
-        if (Math.abs(dx) > Math.abs(dy)) {
+        if (Math.abs(dx) < Math.abs(dy)) {
             context.isVertical = true
             context.isHorizontal = false
         } else {

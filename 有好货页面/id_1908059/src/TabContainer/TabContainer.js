@@ -15,10 +15,19 @@ export default class TabContainer extends Component {
   }
 
   render() {
-    const {tabIndex} = this.getProperty("state");
+    const { tabIndex } = this.getProperty("state");
     return (
       <div className="TabContainer">
-        <TabList props={{tabIndex}} />
+        <TabList
+          props={{
+            tabIndex,
+            onTabChange: tabIndex => {
+              this.setProperty("state", {
+                tabIndex
+              });
+            }
+          }}
+        />
         <Swiper />
       </div>
     );
