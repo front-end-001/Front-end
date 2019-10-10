@@ -14,6 +14,10 @@ export default class ScrollView {
 		this.created();
 	}
 
+	get style() {
+		return this.root.style;
+	}
+
 	get children() {
 		return this[PROPERTY_SYMBOL].children;
 	}
@@ -21,6 +25,7 @@ export default class ScrollView {
 	appendChild(child) {
 		this.children.push(child);
 		child.appendTo(this.root);
+		this.root.appendChild(this.placeHolder);
 	}
 
 	// attribute 方式
@@ -56,9 +61,12 @@ export default class ScrollView {
 	}
 
 	// 触发事件
-	triggerEvent(type) {
+	triggerEvent(type, ...args) {
+		if (!this[EVENT_SYMBOL][type]) {
+			return;
+		}
 		for (let event of this[EVENT_SYMBOL][type]) {
-			event.call(this);
+			event.call(this, ...args);
 		}
 	}
 
@@ -70,11 +78,29 @@ export default class ScrollView {
 	// 生命周期
 	created() {
 		this.root = document.createElement('div');
-		// 底层能滑，外层不能滑
+		this.placeHolder = document.createElement('div');
+		this.placeHolder.innerText = '加载更多';
+		this.placeHolder.style.backgroundColor = 'lightgreen';
+		// todo 技巧 -- 永远向最底部添加元素
+		this.root.appendChild(this.placeHolder);
+
+		/*// 底层能滑，外层不能滑
 		this.root.addEventListener('touchmove',function(e){
 			e.cancelBubble = true;
 			e.stopImmediatePropagation();
-		}, {passive: false});
+		}, {passive: false});*/
+		this.root.addEventListener('scroll', event => {
+			let clientRect = this.root.getBoundingClientRect();
+			let placeHolderRect = this.root.getBoundingClientRect();
+			// 判断滚动到底部
+			if(clientRect.bottom < placeHolderRect.top){
+				this.triggerEvent('scrollToBottom');
+			}
+
+			/*if (this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
+				this.triggerEvent('scrollToBottom');
+			}*/
+		});
 		this[STATE_SYMBOL].h = 0;
 	}
 

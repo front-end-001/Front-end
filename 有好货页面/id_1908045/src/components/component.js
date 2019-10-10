@@ -1,3 +1,7 @@
+const ATTRIBUTE_SYMBOL = Symbol('attribute')
+const PROPERTY_SYMBOL = Symbol('property')
+const EVENT_SYMBOL = Symbol('event')
+const STATE_SYMBOL = Symbol('state')
 
 export default class Component {
   constructor(config = {}) {
@@ -6,13 +10,12 @@ export default class Component {
     this[EVENT_SYMBOL] = Object.create(null)
     this[STATE_SYMBOL] = Object.create(null)
 
-    this.root = null
-
     this.created()
   }
 
   appendTo(element) {
     element.appendChild(this.root)
+    this.mounted()
   }
 
   created() {

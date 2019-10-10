@@ -1,4 +1,4 @@
-export default function enableGesture(main) {
+export function enableGesture(main) {
   const pressDuration = 500;
   let contexts = Object.create(null);
 //   let mouseSymbol = Symbol("mouse");
@@ -56,7 +56,35 @@ export default function enableGesture(main) {
           context.pressHandler = null;
       }, pressDuration);
   }
-  let move = (point, context) => {
+  let move = (point, context,origin) => {
+      if(Math.abs(point.clientX-context.startX)>10||Math.abs(point.clientY-context.startY)>10){
+          context.isTap=false
+
+          if(context.isPan==false){
+            context.isPan==true
+            if(context.isPress){
+                context.isPress==false
+                var e=new Event('presscancel')
+                main.dispatchEvent(e)
+            }
+            if(Math.abs(point.clientX-context.startTime)<Math.abs(point.clientY-context.startY)){
+                context.isVertical=true
+            }else{
+                context.isVertical=false
+            }
+
+            var e=new Event('panstart')
+            e.origin=origin
+            e.startX=context.startX
+            e.startY=context.startY
+            e.isVertical=context.isVertical
+            main.dispatchEvent(e)
+
+            if(context.pressHander){
+                clearTimeout(context.pressHandler)
+            }
+          }
+      }
       let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
       if (dx * dx + dy * dy > 100) {
           if (context.isPan == false) {

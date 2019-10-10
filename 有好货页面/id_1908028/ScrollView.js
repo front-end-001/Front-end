@@ -1,8 +1,8 @@
 /*
  * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-09-15 20:20:59
- * @LastEditTime: 2019-09-15 20:23:31
+ * @Date: 2019-09-26 19:18:15
+ * @LastEditTime: 2019-09-26 19:28:34
  * @LastEditors: Please set LastEditors
  */
 const PROPERTY_SYMBOL = Symbol("property");
@@ -29,25 +29,48 @@ export default class ScrollView {
 
   created() {
     this.root = document.createElement("div");
-    this.root.addEventListener(
-      "touchmove",
-      function(e) {
-        e.cancelBubble = true;
-        e.stopImmediatePropagation();
-      },
-      {
-        passive: false
+    this.placeHolder = document.createElement("div");
+    //this.placeHolder.innerText = "加载更多";
+    this.placeHolder.style.backgroundColor = "lightgreen";
+    this.root.appendChild(this.placeHolder);
+    /*this.root.addEventListener("touchmove",function(e){ 
+            e.cancelBubble = true;
+            e.stopImmediatePropagation();
+        }, {
+            passive:false
+        });*/
+
+    let triggered = false;
+
+    this.root.addEventListener("scroll", event => {
+      let clientRect = this.root.getBoundingClientRect();
+      let placeHolderRect = this.placeHolder.getBoundingClientRect();
+      //console.log(clientRect.bottom, )
+      if (clientRect.bottom < placeHolderRect.top) {
+        if (triggered) {
+          this.triggerEvent("scrolToBottom");
+          triggered = true;
+        }
       }
-    );
+      //console.log(this.root.scrollHeight, clientRect.height, this.root.scrollTop );
+      /*if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
+                this.triggerEvent("scrolToBottom", "b");
+            }*/
+    });
     this[STATE_SYMBOL].h = 0;
   }
   mounted() {}
   unmounted() {}
   update() {}
 
+  get style() {
+    return this.root.style;
+  }
+
   appendChild(child) {
     this.children.push(child);
     child.appendTo(this.root);
+    this.root.appendChild(this.placeHolder);
   }
 
   get children() {
@@ -63,6 +86,9 @@ export default class ScrollView {
     if (name == "style") {
       this.root.setAttribute("style", value);
     }
+    if (name == "placeHolderText") {
+      this.placeHolder.innerText = value;
+    }
     return (this[ATTRIBUTE_SYMBOL][name] = value);
   }
   addEventListener(type, listener) {
@@ -73,8 +99,8 @@ export default class ScrollView {
     if (!this[EVENT_SYMBOL][type]) return;
     this[EVENT_SYMBOL][type].delete(listener);
   }
-  triggerEvent(type) {
+  triggerEvent(type, ...args) {
     if (!this[EVENT_SYMBOL][type]) return;
-    for (let event of this[EVENT_SYMBOL][type]) event.call(this);
+    for (let event of this[EVENT_SYMBOL][type]) event.call(this, ...args);
   }
 }

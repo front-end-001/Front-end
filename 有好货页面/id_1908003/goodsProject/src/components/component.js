@@ -1,3 +1,6 @@
+/**
+ * todo: 维护组件父子关系, 删除子组件是否能监听
+ */
 import { deepClone } from '../assets/utils';
 
 export const PROP_SYMBOL = Symbol('property');
@@ -37,8 +40,15 @@ export default class Component {
     
     this[STATUS_SYMBOL].root = root;
 
+    // on- 开头为事件绑定
+    const EventStart = 'on-';
     for(const attrName in attrs) {
-      this.setAttr(attrName, attrs[attrName]);
+      if (attrName.startsWith(EventStart)) {
+        const eventName = attrName.substring(EventStart.length);
+        this.addEventListener(eventName, attrs[attrName]);
+      } else {
+        this.setAttr(attrName, attrs[attrName]);
+      }
     }
   }
 
@@ -53,6 +63,15 @@ export default class Component {
     }
     this.triggerEvent('mounted', root);
   }
+
+  /** 移除元素 */
+  remove() {
+    this.destroy();
+    this.$root.remove()
+    this.triggerEvent('destroyed', this);
+  }
+
+  destroy() {}
 
   /**
    * 默认构建方法
