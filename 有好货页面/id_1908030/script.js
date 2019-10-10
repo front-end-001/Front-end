@@ -1,6 +1,7 @@
 import ScrollView from "./ScrollView.js";
 import TabView from "./TabView.js";
 import Div from "./Div.js";
+import ListView from "./ListView.js";
 
 import { create } from "./create.js"
 
@@ -13,7 +14,8 @@ function loadMore() {
 window.render = () => {
     var c = <TabView stle="width: 100%; height: 100%">
         <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
-            dsfdsfsfd
+        <ListView></ListView>
+            {/* dsfdsfsfd
             gdgfd
             fgdshgfhgjhgj
             hjkhktyuuyuuiiy
@@ -30,7 +32,7 @@ window.render = () => {
             rrrrrrrrrrrrrrrrrr
             ytuuuuuuuuuu
             uuuuuuuuuuuuuu
-            uuuuuuuuu
+            uuuuuuuuu */}
         </ScrollView>
         <ScrollView tab-title="有趣的店" style="background-color:blue;">dsfds</ScrollView>
         <ScrollView tab-title="品牌新店" style="background-color:red;">sdfdsfsd</ScrollView>
