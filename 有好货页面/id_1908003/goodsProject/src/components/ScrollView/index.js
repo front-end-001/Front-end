@@ -1,6 +1,5 @@
 import Component, {
   PROP_SYMBOL,
-  ATTR_SYMBOL,
   EVENT_SYMBOL,
   STATUS_SYMBOL
 } from '../component';
@@ -8,33 +7,21 @@ import createComponent from '../createComponent';
 import './index.css';
 
 export default class ScrollView extends Component {
-  constructor(attrs, children) {
-    super(attrs, children);
+  constructor(attrs) {
+    super(attrs);
   }
 
-  create() {
+  render() {
     const children = this.children;
-    const tabItem = <div class="o-scroll">{children}</div>;
+    const tabItem = <div class = "o-scroll">{ children }</div>;
 
     return tabItem;
   }
 
-  mounted(root) {
-    root.addEventListener(
-      'touchmove',
-      function(e) {
-        e.cancelBubble = true;
-        e.stopImmediatePropagation();
-      },
-      {
-        passive: false
-      }
-    );
-  }
-
-  attrInterceptor(name, value) {
-    if (name === 'style') {
-      this.$root.style = value;
-    }
+  mounted() {
+    this.$el.addEventListener('touchmove', function (e) {
+      e.cancelBubble = true;
+      e.stopImmediatePropagation();
+    }, { passive: false});
   }
 }

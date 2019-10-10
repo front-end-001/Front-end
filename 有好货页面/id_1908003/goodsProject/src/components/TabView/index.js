@@ -1,19 +1,18 @@
-import Component, { PROP_SYMBOL, ATTR_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../component';
+import Component, { PROP_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../component';
 import createComponent from '../createComponent';
 import './index.css';
 
 export default class Tab extends Component {
-  constructor(attrs, children) {
-    super(attrs, children);
+  constructor(attrs) {
+    super(attrs);
   }
 
-  create() {
+  render() {
     const children = this.children;
-    console.log(this);
+    const headers = children.map(child => child.title);
     const fuc = (evt) => {
       console.log('click', evt);
     };
-    const headers = children.map(child => child.title);
     const tab = <div class="o-tab">
       <div class="o-tab-header">
         {headers.map((header) => (<div on-click={fuc} >{header}</div>))}
@@ -22,12 +21,6 @@ export default class Tab extends Component {
         {children}
       </div>
     </div>;
-
-    if (this[ATTR_SYMBOL].current) {
-      this[STATUS_SYMBOL].current = parseInt(this[ATTR_SYMBOL].current, 10);
-    } else {
-      this[STATUS_SYMBOL].current = children[0].key;
-    }
     return tab;
   }
 
@@ -49,9 +42,4 @@ export default class Tab extends Component {
     return this[STATUS_SYMBOL].current;
   }
 
-  attrInterceptor(name, value) {
-    if (name === 'style') {
-      this.$root.style = value;
-    }
-  }
 };

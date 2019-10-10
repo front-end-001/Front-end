@@ -2,11 +2,11 @@ import Component, { PROP_SYMBOL, ATTR_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from
 import createComponent from '../createComponent';
 
 export default class TabItem extends Component {
-  constructor(attrs, children) {
-    super(attrs, children);
+  constructor(attrs) {
+    super(attrs);
   }
 
-  create() {
+  render() {
     const children = this.children;
     const tabItem = <div class="o-tab-item">
       {children}
@@ -19,9 +19,4 @@ export default class TabItem extends Component {
     return this[ATTR_SYMBOL]['tab-title'];
   }
 
-  attrInterceptor(name, value) {
-    if (name === 'style') {
-      this.$root.style = value;
-    }
-  }
 };

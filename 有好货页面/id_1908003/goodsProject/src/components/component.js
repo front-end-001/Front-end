@@ -1,146 +1,227 @@
 /**
- * todo: 维护组件父子关系, 删除子组件是否能监听
+ * 对象结构整理:
+ * - cid 组件 ID
+ * - name 组件名称
+ * - $el 真实组件根元素
+ * - children 子组件
+ * - events 事件监听集合
+ * 
+ * 生命周期整理: 参考 vue 什么周期设计
+ * create: 组件创建, 拥有属性和 child 关联
+ * mounted: 组件挂载
+ * updated: 组件生命周期中重新调用 render 函数
+ * destroy: 组件销毁, 主要销毁子组件和事件监听器
+ * 
+ * 默认事件整理:
+ * mounted 组件挂载
+ * destroyed 组件销毁
+ * 
+ * 重要方法:
+ * $init 初始化
+ * $render: 渲染函数
+ * 
+ * 其它模块:
+ * - 属性校验模块: propTypes
+ * - 属性变更监听模块: propWatchers
+ * - 特殊属性处理模块:
+ *   - ref 引用 todo:
+ *   - classObj 支持对象模式 todo:
+ *   - styleObj 支持对象模式 todo:
+ *   - on-* 事件绑定属性
  */
-import { deepClone } from '../assets/utils';
+import { deepClone, getRandomStr } from '../assets/utils';
 
 export const PROP_SYMBOL = Symbol('property');
 export const ATTR_SYMBOL = Symbol('attribute');
 export const EVENT_SYMBOL = Symbol('event');
 export const STATUS_SYMBOL = Symbol('status');
 
+// on- 开头为事件绑定
+const EventStart = 'on-';
+
+/**
+ * 属性值验证函数
+ * @param {any} value 属性值
+ * @param {any} condition 条件
+ */
+function validateProp(value, condition) {
+  if (!condition || !Array.isArray(condition)) {
+    return;
+  }
+
+  if (!Array.isArray(condition)) {
+    return value instanceof condition;
+  }
+
+  let result = false;
+  for (let i = 0; i < condition.length; i += 1) {
+    if (value instanceof condition[i]) {
+      result = true;
+    }
+  }
+  return result;
+}
+
 export default class Component {
   /**
    * @param {object} attrs 属性对象
-   * @param {array} children 子元素
    */
-  constructor(attrs, children) {
-    this[ATTR_SYMBOL] = Object.create(null);
+  constructor(attrs, tagName = 'div') {
     this[PROP_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
     this[STATUS_SYMBOL] = Object.create(null);
+    this[ATTR_SYMBOL] = attrs;
 
+    this[STATUS_SYMBOL].cid = getRandomStr();
+    this[STATUS_SYMBOL].$el = null;
     this[STATUS_SYMBOL].children = [];
-    this[STATUS_SYMBOL].root = null;
-
-    this.init(attrs, children);
+    this[PROP_SYMBOL].events = [];
+    // 属性类型验证
+    this.propTypes = {};
+    // 属性变更监听
+    this.propWatchers = {};
   }
 
-  init(attrs, children) {
-    this[STATUS_SYMBOL].children = children;
+  /** 组件实例id */
+  get cid() {
+    return this[STATUS_SYMBOL].cid;
+  }
+  /** 组件名称 */
+  get name() {
+    return this.constructor.name;
+  }
+  /** 获取子节点 */
+  get children() {
+    return this[STATUS_SYMBOL].children;
+  }
+  /** 获取组件真实的 dom 元素 */
+  get $el() {
+    return this[STATUS_SYMBOL].$el;
+  }
 
-   let root;
+  /** 生命周期方法*/
+  create() {}
+  mounted() {}
+  updated() {}
+  destroy() {}
+
+  $init() {
+    const attrs = this[ATTR_SYMBOL];
+    let el;
     if (typeof this.create === 'function') {
-      root = this.create();
+      this.create();
     }
-    this.triggerEvent('created');
 
-    if (!(root instanceof Element)) {
-      throw new Error('created need return element');
+    for (const attrName in attrs) {
+      this.$setProp(attrName, attrs[attrName]);
     }
-    
-    this[STATUS_SYMBOL].root = root;
 
-    // on- 开头为事件绑定
-    const EventStart = 'on-';
-    for(const attrName in attrs) {
-      if (attrName.startsWith(EventStart)) {
-        const eventName = attrName.substring(EventStart.length);
-        this.addEventListener(eventName, attrs[attrName]);
-      } else {
-        this.setAttr(attrName, attrs[attrName]);
+    this.$render();
+  }
+
+  $render() {
+    // todo: 重复渲染状态设计, 当前是强制重新构造 dom
+    let newEl;
+    if (typeof this.render === 'function') {
+      newEl = this.render();
+      if (newEl instanceof Component) {
+        newEl = newEl.$el;
       }
     }
+    if (!(newEl instanceof Element)) {
+      throw new Error(`${this.name} Error: render() error, need return element`);
+    }
+
+    // 绑定事件
+    const evtCollection = Object.entries(this[EVENT_SYMBOL]);
+    evtCollection.forEach(([evtName, evtFucSet]) => {
+      if (!evtFucSet) return;
+      evtFucSet.forEach((evtFuc) => {
+        newEl.addEventListener(evtName, evtFuc, false);
+      });
+    });
+
+    const currentEl = this[STATUS_SYMBOL].$el;
+
+    if (currentEl && currentEl.parentNode) {
+      currentEl.parentNode.replaceChild(newEl, currentEl);
+      if (typeof this.updated === 'function') {
+        this.updated();
+      }
+    }
+    this[STATUS_SYMBOL].$el = newEl;
   }
 
-  /** 挂载 */
-  appendTo(container) {
-    const { root } = this[STATUS_SYMBOL];
-    if (!root) return;
+  /** 渲染函数, 需要组件构造者重写 */
+  render() {
+    return document.createElement(this[STATUS_SYMBOL].tagName);
+  }
 
-    container.appendChild(root);
-    if (typeof this.mounted === 'function') {
-      this.mounted(root);
+  /**
+   * 挂载
+   * appendChild 那存在问题, 挂载在具体哪个元素下
+   * 因为具体组件结构
+   */
+  appendChild(child) {
+    if (!child) return;
+    this[STATUS_SYMBOL].children.push(child);
+  }
+
+  /** 另一种挂载方法 */
+  appendTo(container) {
+    if (!this.$el || !container) return;
+
+    if (container instanceof Element) {
+      container.appendChild(this.$el);
+    } else if (container instanceof Element) {
+      container.appendChild(this.$el);
     }
-    this.triggerEvent('mounted', root);
+
+    if (typeof this.mounted === 'function') {
+      this.mounted();
+      this.triggerEvent('mounted');
+    }
   }
 
   /** 移除元素 */
   remove() {
-    this.destroy();
-    this.$root.remove()
-    this.triggerEvent('destroyed', this);
+    // 移除元素需要递归查找所以子元素
+    function doDestroy(ele) {
+      if (ele.children) {
+        for (let i = 0; i < ele.children.length; i += 1) {
+          if (typeof ele.children[i].destroy === 'function') {
+            ele.children[i].destroy();
+          }
+        }
+      }
+      if (typeof ele.destroy === 'function') {
+        ele.destroy();
+      }
+    }
+    doDestroy(this);
+    this.$el.remove();
+    this.triggerEvent('destroyed');
   }
-
-  destroy() {}
-
-  /**
-   * 默认构建方法
-   * @return {Element} 组件根元素
-   */
-  create() {
-    return document.createElement('div');
-  }
-
-  mounted(ele) {}
-
-  /**
-   * 属性修改拦截器
-   * @param {string} type 属性名
-   * @param {string} value 属性值
-   */
-  attrInterceptor(type, value) {}
-
-  /**
-   * 属性修改拦截器
-   * @param {string} type 属性名
-   * @param {string} value 属性值
-   */
-  propInterceptor(type, value) {}
-
-  /**
-   * 属性修改拦截器
-   * @param {string} type 属性名
-   * @param {string} value 属性值
-   */
-  statusInterceptor(type, value) {}
 
   /**
    * 获取状态
    * @param {string} name 状态名
    */
-  getStatus(name) {
-    return this[STATUS_SYMBOL][name];
-  }
-
-  /**
-   * 返回全部状态
-   */
-  getAllStatus() {
+  $getStatus(name) {
+    if (name) {
+      return this[STATUS_SYMBOL][name];
+    }
     return deepClone(this[STATUS_SYMBOL]);
   }
 
   /**
-   * 设置状态
-   * @param {string} name 状态名
-   * @param {any} value 状态值
-   */
-  setStatus(name, value) {
-    if (typeof this.attrInterceptor === 'function') {
-      this.statusInterceptor(name, value);
-    }
-    this[STATUS_SYMBOL][name] = value;
-  }
-
-  /**
    * 获取状态
    * @param {string} name 状态名
    */
-  getProp(name) {
-    return this[PROP_SYMBOL][name];
-  }
-
-  /** 返回全部属性 */
-  getAllProp() {
+  $getProp(name) {
+    if (name) {
+      return this[PROP_SYMBOL][name];
+    }
     return deepClone(this[PROP_SYMBOL]);
   }
 
@@ -149,55 +230,26 @@ export default class Component {
    * @param {string} name 属性名
    * @param {any} value 属性值
    */
-  setProp(name, value) {
-    if (typeof this.attrInterceptor === 'function') {
-      this.propInterceptor(name, value);
+  $setProp(name, value) {
+    // 添加属性和绑定事件
+    if (name.startsWith(EventStart)) {
+      // todo: 添加多个事件如何处理
+      // 验证, 只有函数才进行绑定
+      if (typeof value === 'function') {
+        const eventName = name.substring(EventStart.length);
+        this.addEventListener(eventName, value);
+      }
+      return;
     }
+    // 属性验证
+    validateProp(value, this.propTypes[name]);
+    const oldVal = this[PROP_SYMBOL][name];
+    // 设置属性
     this[PROP_SYMBOL][name] = value;
-  }
-
-  /**
-   * 获取属性
-   * @param {string} name 属性名
-   */
-  getAttr(name) {
-    return this[ATTR_SYMBOL][name];
-  }
-
-  /**
-   * 返回全部属性
-   */
-  getAllAttr() {
-    return deepClone(this[ATTR_SYMBOL]);
-  }
-
-  /**
-   * 设置属性
-   * @param {string} name 属性名
-   * @param {string} value 属性值
-   */
-  setAttr(name, value) {
-    if (typeof this.attrInterceptor === 'function') {
-      this.attrInterceptor(name, value);
+    // 属性监听, 监听通过设置代理
+    if (this.propWatchers[name] && typeof this.propWatchers[name] === 'function') {
+      this.propWatchers[name](value, oldVal);
     }
-    this[ATTR_SYMBOL][name] = value;
-  }
-
-  appendChild(child) {
-    this[STATUS_SYMBOL].children.push(child);
-    if (child instanceof Component) {
-      child.appendTo(this.$root);
-    } else {
-      this.$root.appendChild(child);
-    }
-  }
-
-  get children() {
-    return this[STATUS_SYMBOL].children;
-  }
-
-  get $root() {
-    return this[STATUS_SYMBOL].root;
   }
 
   /**
@@ -205,9 +257,13 @@ export default class Component {
    * @param {string} type 事件名
    * @param {function} listener 执行函数
    */
-  addEventListener(type, listener) {
+  addEventListener(type, listener, option = false) {
     if (!this[EVENT_SYMBOL][type]) {
       this[EVENT_SYMBOL][type] = new Set();
+    }
+
+    if (this.$el) {
+      this.$el.addEventListener(type, listener, option);
     }
 
     this[EVENT_SYMBOL][type].add(listener);
@@ -222,6 +278,11 @@ export default class Component {
     if (!this[EVENT_SYMBOL][type]) {
       return;
     }
+
+    if (this.$el) {
+      this.$el.removeEventListener(type, listener);
+    }
+
     this[EVENT_SYMBOL][type].delete(listener);
   }
 
@@ -238,4 +299,3 @@ export default class Component {
     });
   }
 };
-
