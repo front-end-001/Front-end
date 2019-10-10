@@ -1,6 +1,8 @@
+import BaseComponent from '../components/Base/BaseComponent';
+
 const myComponents = ['Tab', 'TabPane', 'ScrollView', 'Carousel', 'ListView', 'Title'];
 
-export default function createElement(NodeClass, attributes, ...children) {
+function createElement(NodeClass, attributes, ...children) {
   console.log(arguments);
 
   if (NodeClass instanceof Function && myComponents.indexOf(NodeClass.name) >= 0) {
@@ -13,7 +15,7 @@ export default function createElement(NodeClass, attributes, ...children) {
         object.setAttribute(attr, attributes[attr]);
       }
     }
-    
+
     for (let child of children) {
       object.appendChild(child);
     }
@@ -28,12 +30,24 @@ export default function createElement(NodeClass, attributes, ...children) {
     let elem;
     try {
       elem = document.createElement(NodeClass);
+      for (let attr in attributes) {
+        elem.setAttribute(attr, attributes[attr]);
+      }
+
       for (let child of children) {
         let childElem = child;
-        if (typeof childElem === 'string') {
-          childElem = document.createTextNode(child);
+        if (childElem instanceof Element) {
+          elem.appendChild(childElem);
         }
-        elem.appendChild(childElem);
+        // 原生节点也可以嵌套定制节点
+        // <div> <Title></<Title> </div>
+        else if (childElem instanceof BaseComponent) {
+          childElem.appendTo(elem);
+        } else {
+          if (typeof childElem === 'string' && childElem.startsWith('//')) return elem;
+          childElem = document.createTextNode(childElem.toString());
+          elem.appendChild(childElem);
+        }
       }
     } catch (e) {
       elem = undefined;
@@ -42,3 +56,5 @@ export default function createElement(NodeClass, attributes, ...children) {
     return elem;
   }
 }
+
+export { createElement };

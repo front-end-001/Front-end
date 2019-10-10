@@ -21,7 +21,7 @@ class Title extends BaseComponent {
   }
 
   appendChild(child: any): any {
-    if (this.root && typeof child === 'string') {
+    if (this.root) {
       let innerNode = document.createElement(heads[this.ATTRIBUTE.level]);
       innerNode.innerText = child;
       this.PROPERTY.children.push(innerNode);
