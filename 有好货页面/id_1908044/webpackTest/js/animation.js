@@ -281,3 +281,4 @@ class DomElementStyleVectorAnimation {
   }
 }
 module.exports = {Timeline,DomElementStyleNumberAnimation,DomElementStyleVectorAnimation,}
+
