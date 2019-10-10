@@ -23,6 +23,15 @@ export default class Carousel {
 
     created(){
         this.root = document.createElement("div");
+
+        this.root.addEventListener('scroll', event => {
+            const clientRet = this.root.getBoundingClientRect()
+            console.log(this.root.scrollHeight - this.root.scrollTop <= clientRet.height)
+
+            if (this.root.scrollHeight - this.root.scrollTop <= clientRet.height) {
+                this.triggerEvent('scrollToBottom')
+            }
+        })
     }
 
     mounted(){
@@ -40,6 +49,10 @@ export default class Carousel {
     appendChild(child) {
         this.children.push(child)
         child.appendTo(this.root)
+    }
+
+    get style() {
+        return this.root.style;
     }
 
     get children() {
@@ -70,6 +83,7 @@ export default class Carousel {
     }
 
     addEventListener(type, listener){
+        console.log('addEventListener', type, listener)
         if(!this[EVENT_SYMBOL][type])
             this[EVENT_SYMBOL][type] = new Set;
         this[EVENT_SYMBOL][type].add(listener);

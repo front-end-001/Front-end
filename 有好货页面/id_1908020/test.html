@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="020-1组-吴玮琦">
+  <title>Carousel</title>
+  <style>
+    #container {
+      width: 300px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .wrapper {
+      display: flex;
+    }
+
+    img {
+      width: 300px;
+      flex: 0 0 auto;
+    }
+
+    .left-btn {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 100%;
+      border: 1px solid #333;
+      cursor: pointer;
+    }
+
+    .right-btn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 100%;
+      border: 1px solid #333;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script src="gesture.js"></script>
+  <script>
+    class Carousel {
+      constructor({ el, data }) {
+        this._container = document.querySelector(el)
+        this._data = data
+        // 当前的索引
+        this._active_index = 0
+        // 移动了多少距离
+        this._move_px = 0
+        // 用来吸附判断位置的数组
+        this._index_arr = data.map((value, index) => -300 * index)
+        this._wrapper = document.createElement('div')
+        this.render()
+      }
+      //切换页面
+      move(index) {
+        if (index >= 0 && index < this._data.length) {
+          console.log('move')
+          this._wrapper.style.transition = "transform .3s"
+          this._wrapper.style.transform = `translate(-${300 * index}px,0)`
+          this._move_px = -300 * index
+          this._active_index = index
+        }
+      }
+      render() {
+        this._wrapper.classList.add('wrapper')
+        this._data.forEach(url => {
+          let img = document.createElement('img')
+          img.src = url
+          this._wrapper.appendChild(img)
+        });
+        this._container.appendChild(this._wrapper)
+        // 向左按钮
+        let left_btn = document.createElement('div')
+        left_btn.classList.add('left-btn')
+        left_btn.innerText = "<"
+        left_btn.addEventListener('click', e => this.move(this._active_index - 1))
+        this._container.appendChild(left_btn)
+        // 向右按钮
+        let right_btn = document.createElement('div')
+        right_btn.classList.add('right-btn')
+        right_btn.innerText = ">"
+        right_btn.addEventListener('click', e => this.move(this._active_index + 1))
+        this._container.appendChild(right_btn)
+
+
+        let pan = e => {
+          this._wrapper.style.transition = "transform 0s"
+          this._wrapper.style.transform = `translate(${e.dx + this._move_px}px,0)`
+        }
+        let panend = e => {
+          this._move_px = e.dx + this._move_px
+          console.log(e)
+          if (e.isFlick) {
+            if (e.dx > 0) {
+              this.move(this._active_index - 1)
+            }
+            if (e.dx < 0) {
+              this.move(this._active_index +1)
+            }
+          } else {
+            // 搞一个自动吸附的效果
+            let index
+            for (let i = 0; i < this._index_arr.length; i++) {
+              if (this._move_px - 150 < this._index_arr[i] && this._move_px - 150 > this._index_arr[i + 1]) {
+                index = i
+              }
+            }
+            if (index === undefined) index = this._index_arr.length - 1
+            this.move(index)
+          }
+
+        }
+        enableGesture(this._container)
+        this._container.addEventListener('pan', pan)
+        this._container.addEventListener('panend', panend)
+      }
+    }
+    const carousel = new Carousel({
+      el: '#container',
+      data: [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/88/f1/8807661ef5b82fcb75e8b8f2dbd71ef1.jpg"
+      ]
+    })
+  </script>
+</body>
+
+</html>

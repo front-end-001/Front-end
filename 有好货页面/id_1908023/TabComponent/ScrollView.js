@@ -26,21 +26,36 @@ export default class ScrollView {
   appendChild(child) {
     this.children.push(child);
     child.appendTo(this.root);
+    this.root.appendChild(this.placeHolder);
   }
 
   // 生命周期
   created() {
     this.root = document.createElement('div');
-    this.root.addEventListener('touchmove', e => {
-      e.cancelBubble = true;
-      e.stopImmediatePropagation();
-    }, {
-      passive: false
+    this.placeHolder = document.createElement('div');
+    this.placeHolder.style.backgroundColor = 'lightgreen';
+    this.root.appendChild(this.placeHolder);
+
+    let triggered = false;
+
+    this.root.addEventListener('scroll', event => {
+      let clientRect = this.root.getBoundingClientRect();
+      let placeHolderRect = this.placeHolder.getBoundingClientRect();
+      if (clientRect.bottom < placeHolderRect.top) {
+        if (triggered) {
+          this.triggerEvent("scrolToBottom");
+          triggered = true;
+        }
+      }
     })
   }
 
-  mounted() {}
-  
+  get style() {
+    return this.root.style;
+  }
+
+  mounted() { }
+
   get children() {
     return this[PROPERTY_SYMBOL].children;
   }
@@ -63,7 +78,7 @@ export default class ScrollView {
     }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
-  
+
   addEventListener(type, listener) {
     if (!this[EVENT_SYMBOL][type]) {
       this[EVENT_SYMBOL][type] = new Set();
