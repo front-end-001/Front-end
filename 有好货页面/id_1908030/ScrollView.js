@@ -43,7 +43,7 @@ export default class ScrollView {
     }
     appendChild(child) {
         this.children.push(child);
-        let title = child.getAttribute("tab-title") || "";
+        let title = child.getAttribute("tab-title") || "ff";
         this[PROPERTY_SYMBOL].headers.push(title);
 
         let header = document.createElement("div");

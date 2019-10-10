@@ -9,7 +9,6 @@ class Component {
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
-        this[STATE_SYMBOL] = Object.create(null);
 
         this.created();
     }

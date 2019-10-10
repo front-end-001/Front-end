@@ -1,4 +1,4 @@
-const myComponents = ['Tab', 'TabPane','ScrollView'];
+const myComponents = ['Tab', 'TabPane', 'ScrollView', 'Carousel'];
 
 export default function createElement(NodeClass, attributes, ...children) {
   console.log(arguments);
@@ -15,18 +15,29 @@ export default function createElement(NodeClass, attributes, ...children) {
     }
 
     for (let attr in attributes) {
-      object.setAttribute(attr, attributes[attr]);
+      if (attr.match(/^on-([\s\S]+)$/)) {
+        object.addEventListener(RegExp.$1, attributes[attr]);
+      } else {
+        object.setAttribute(attr, attributes[attr]);
+      }
     }
     return object;
-  } else if (typeof NodeClass === 'string') {
-    // const textNode = document.createTextNode( vnode );
-    // return container.appendChild( textNode );
   } else {
-    // // TODO 白名单校验
-    // const elem = document.createElement(NodeClass);
-    // for (let child of children) {
-    //   elem.appendChild(child);
-    // }
-    // return elem;
+    // TODO 白名单校验 -> 如何判断一个字符串标签是标准HTML标签
+    let elem;
+    try {
+      elem = document.createElement(NodeClass);
+      for (let child of children) {
+        let childElem = child;
+        if (typeof childElem === 'string') {
+          childElem = document.createTextNode(child);
+        }
+        elem.appendChild(childElem);
+      }
+    } catch (e) {
+      elem = undefined;
+      console.error(`Not supported HTML tag: ${NodeClass}!`);
+    }
+    return elem;
   }
 }

@@ -36,6 +36,7 @@
             -webkit-text-size-adjust: none;
         }
         .mytab-content-box {
+            border: 2px solid #000;
         }
         .tab {
             color: #fff;
@@ -62,11 +63,11 @@
         //     passive: false
         // });
         // 单指
-        document.addEventListener("touchmove", function (e) {
-            if (e.touches.length == 1) e.preventDefault();
-        }, {
-            passive: false
-        });
+        // document.addEventListener("touchmove", function (e) {
+        //     if (e.touches.length == 1) e.preventDefault();
+        // }, {
+        //     passive: false
+        // });
         // 双击缩放关闭
         // document.addEventListener("touchstart", function (e) {
         //     e.preventDefault();

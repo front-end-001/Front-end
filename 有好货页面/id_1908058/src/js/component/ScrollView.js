@@ -23,14 +23,45 @@ export default class ScrollView {
 
     created(){
         this.root = document.createElement("div");
+
+        this.placeHolder = document.createElement('div');
+        // this.placeHolder.innerText = "家爱更多";
+        this.placeHolder.style.backgroundColor = "blue";
+        this.root.appendChild(this.placeHolder);
+        let triggered = false;
+
+        this.root.addEventListener('scroll', event=>{
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            // console.log()
+            if(clientRect.bottom > placeHolderRect.top){
+                if(!triggered){
+                    this.triggerEvent('scrollToBottom');
+                    triggered = true
+                }
+                
+            }
+
+        })
+
+        // this.root.addEventListener('scroll', event=>{
+        //     let clientRect = this.root.getBoundingClientRect();
+
+        //     if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height ){
+        //         console.log("dao di le");
+        //         this.triggerEvent('scrollToBottom');
+        //     }
+
+        //     console.log(this.root.scrollHeight, clientRect.height, this.root.scrollTop);
+        // })
         //释放
-        this.root.addEventListener("touchmove",function(e){ 
-            // console.log(e);
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {
-            passive:false
-        });
+        // this.root.addEventListener("touchmove",function(e){ 
+        //     // console.log(e);
+        //     e.cancelBubble = true;
+        //     e.stopImmediatePropagation();
+        // }, {
+        //     passive:false
+        // });
         // this[STATE_SYMBOL].h = 0;
     }
     mounted(){
@@ -42,10 +73,13 @@ export default class ScrollView {
     update(){
 
     }
-
+    get style(){
+        return this.root.style;
+    }
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
+        this.root.appendChild(this.placeHolder);
     }
 
 
@@ -61,6 +95,9 @@ export default class ScrollView {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if(name == "placeHolderText"){
+            this.placeHolder.innerText = value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
