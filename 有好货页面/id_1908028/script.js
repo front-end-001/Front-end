@@ -1,9 +1,9 @@
 /*
  * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-09-15 20:24:13
- * @LastEditTime: 2019-09-15 20:26:51
- * @LastEditors: Please set LastEditors
+ * @Date: 2019-09-26 19:18:15
+ * @LastEditTime: 2019-09-26 19:18:15
+ * @LastEditors: your name
  */
 import TabView from "./TabView.js";
 import ScrollView from "./ScrollView.js";
@@ -11,10 +11,15 @@ import ScrollView from "./ScrollView.js";
 import Div from "./Div.js";
 import Text from "./Text.js";
 function myCreate(Class, attributes, ...children) {
-  console.log(children);
-
   var object = new Class();
-  for (let name in attributes) object.setAttribute(name, attributes[name]);
+  for (let name in attributes) {
+    if (name.match(/^on-([\s\S]+)$/)) {
+      object.addEventListener(RegExp.$1, attributes[name]);
+    } else {
+      object.setAttribute(name, attributes[name]);
+    }
+  }
+
   for (let child of children) {
     if (typeof child === "string") {
       object.appendChild(new Text(child));
@@ -26,16 +31,141 @@ function myCreate(Class, attributes, ...children) {
   return object;
 }
 
+function loadMore() {
+  //console.log(a);
+  //console.log("load more");
+  //console.log(this);
+  setTimeout(() => {
+    this.setAttribute("placeHolderText", "没有更多啦！");
+  }, 5000);
+}
+
 var c = (
   <TabView style="width:100%;height:100%;">
     <ScrollView
       tab-title="推荐"
+      placeHolderText="load more"
+      on-scrolToBottom={loadMore}
       style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px"
-    ></ScrollView>
-    <ScrollView
-      tab-title="有趣的店"
-      style="background-color:lightgreen;"
-    ></ScrollView>
+    >
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc
+    </ScrollView>
+    <ScrollView tab-title="有趣的店" style="background-color:lightgreen;">
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+      def def def def def def def def def def def def def def def def def def
+    </ScrollView>
     <ScrollView
       tab-title="品牌新店"
       style="background-color:pink;"
