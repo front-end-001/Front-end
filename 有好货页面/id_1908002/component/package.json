@@ -1,26 +1,33 @@
 {
-  "name": "example",
+  "name": "project",
   "version": "1.0.0",
-  "description": "example",
+  "description": "project",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "project"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.6.0",
-    "@babel/plugin-syntax-jsx": "^7.2.0",
-    "@babel/preset-env": "^7.6.0",
-    "babel-loader": "^8.0.6",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0"
+    "css-loader": "^3.2.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
-    "@babel/cli": "^7.6.0",
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
     "@babel/plugin-transform-react-jsx-source": "^7.5.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1"
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-spritejsx": "^1.0.7"
   }
 }

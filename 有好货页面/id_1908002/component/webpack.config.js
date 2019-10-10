@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/main.js",
+    entry: "./src/script.js",
     module: {
         rules: [
             {
@@ -8,15 +8,20 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                       presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
+                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
-                }
+                },
+                
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
             }
         ]
     },
     mode: "development",
     devServer: {
-        contentBase: './dist',
+        contentBase: "./dist",
         hot: true
     },
     optimization: {

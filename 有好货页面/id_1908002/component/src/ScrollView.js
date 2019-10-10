@@ -3,14 +3,14 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Text {
+export default class ScrollView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
 
-        this.text = config || "";
+
         this[PROPERTY_SYMBOL].children = [];
 
         this.created();
@@ -22,15 +22,27 @@ export default class Text {
     }
 
     created(){
-        this.root = document.createElement("span");
-        this.root.innerText = this.text;
-        this.root.addEventListener("touchmove",function(e){ 
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {
-            passive:false
-        });
-        this[STATE_SYMBOL].h = 0;
+        this.root = document.createElement("div");
+        this.placeHolder = document.createElement("div");
+        this.updatePlaceHolder();
+        this.placeHolder.style.backgroundColor = "red";
+        this.root.appendChild(this.placeHolder);
+
+        let triggered = false;
+
+        this.root.addEventListener("scroll", event => {
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            if (clientRect.bottom >= placeHolderRect.bottom - 1) {
+                if (!triggered) {
+                    this.triggerEvent("scrollToBottom");
+                    triggered = true;
+                }
+            }
+            // if (this.root.scrollHeight - this.root.scrollTop <= clientRect.height + 1) {
+            //     this.triggerEvent("scrollToBottom");
+            // }
+        })
     }
     mounted(){
 
@@ -42,9 +54,19 @@ export default class Text {
 
     }
 
+    updatePlaceHolder() {
+        this.placeHolder.innerText = this.getAttribute("placeHolderText") || "加载更多";
+    }
+
+
+    get style() {
+        return this.root.style;
+    }
+
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
+        this.root.appendChild(this.placeHolder);
     }
 
 
@@ -52,7 +74,7 @@ export default class Text {
         return this[PROPERTY_SYMBOL].children;
     }
     getAttribute(name){
-        if(name == "style") {
+        if (name == "style") {
             return this.root.getAttribute("style");
         }
         return this[ATTRIBUTE_SYMBOL][name]
@@ -60,6 +82,10 @@ export default class Text {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if (name == "placeHolderText") {
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            this.updatePlaceHolder();
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

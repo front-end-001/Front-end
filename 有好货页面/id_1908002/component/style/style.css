@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* make height:100% work */
+html, body {
+    height: 100%;
+}
+
+.carousel {
+    width: 500px;
+    height: 300px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    outline: 1px solid navy;
+    display: flex;
+}
+.carousel>img {
+    width: 100%;
+    height: 100%;
+    transition: ease 0.5s;
+}
+.indicator {
+    display: flex;
+    height: 14px;
+    width: 56px;
+    border-radius: 7px;
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    z-index: 2;
+}
+.indicator>div {
+    height: 8px;
+    width: 8px;
+    background-color: white;
+    margin: 3px;
+    border-radius: 50%;
+}
+.indicator>div:hover {
+    cursor: pointer;
+}
