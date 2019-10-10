@@ -31,7 +31,7 @@
 
         void async function () {
             let [obj, event] = await Promise.all([
-                //fetch('https://static001.geekbang.org/univer/classes/js_dev/data/getRecommendationPageData').then(response => response.json()),
+                fetch('https://static001.geekbang.org/univer/classes/js_dev/data/getRecommendationPageData').then(response => response.json()),
                 happen(document, 'DOMContentLoaded'),
                 loadScript('./main.js')
             ])

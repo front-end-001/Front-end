@@ -38,9 +38,15 @@ export default class ListView {
 
     }
     render () {
+        let data = this[ATTRIBUTE_SYMBOL]['data'] || []
         return <div>
             <div class="carousel-container">
 
+            </div>
+            <div>
+                {
+                data.map((item) => (<div></div>))
+                }
             </div>
             <div class={'title'}>超多人收藏的店！</div>
             <div class="flex" style={'margin-bottom: 10px;'}>
@@ -112,7 +118,6 @@ export default class ListView {
                 </footer>
             </div>
         </div>
-
     }
     appendChild (child) {
         this.children.push(child)
@@ -125,10 +130,14 @@ export default class ListView {
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute (name, value) {
-        this[ATTRIBUTE_SYMBOL][name] = value
+        console.log(name, value)
+        if (name === 'style') {
+            this.root.setAttribute('style', value)
+        }
         if (name === 'data') {
+            this[ATTRIBUTE_SYMBOL][name] = value
+            console.log(this[ATTRIBUTE_SYMBOL])
             this.root.innerHTML = ''
-
             this.render().appendTo(this.root)
             return value
         }

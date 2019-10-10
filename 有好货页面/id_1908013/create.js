@@ -17,18 +17,18 @@ export default function myCreate(Class, attributes, ...children) {
     }
 
     for (let child of children) {
-        if (typeof child !== 'object') {
-            object.appendChild(new Text(child.toString()))
-        } else if (child instanceof Array) {
+        if (child instanceof Array) {
             for (let c of child) {
-                if (child !== 'object') {
-                    object.appendChild(new Text(c.toString()))
+                if (typeof c === 'string') {
+                    object.appendChild(new Text(c))
                 } else {
                     object.appendChild(c)
                 }
             }
-        } else {
+        } else if (typeof child === 'object') {
             object.appendChild(child)
+        } else {
+            object.appendChild(new Text(child.toString()))
         }
     }
     return object;
