@@ -74,6 +74,16 @@
         // }, {
         //     passive: false
         // });
+        let data = null;
+        let xhr = new XMLHttpRequest();
+        xhr.open("get","./datas.json",true);
+        xhr.send(null);
+
+        xhr.addEventListener("readystatechange", e => {
+            if(xhr.readyState === 4) {
+                console.log(xhr.responseText)
+            }
+        })
     </script>
 </head>
 
