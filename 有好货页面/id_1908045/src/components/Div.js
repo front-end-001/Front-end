@@ -16,10 +16,12 @@ export default class Div {
 
   appendTo(element) {
     element.appendChild(this.root)
+    this.mounted()
   }
 
   created() {
     this.root = document.createElement('div')
+    this[STATE_SYMBOL].h = 0
   }
 
   mounted() {
@@ -68,5 +70,5 @@ export default class Div {
     }
   }
 
-  
+
 }

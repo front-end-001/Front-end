@@ -6,8 +6,13 @@ import Text from './text'
 function myCreate(Class, attributes,...children){
     console.log(arguments)  
     var object = new Class();
-    for(let name in attributes)
-        object.setAttribute(name, attributes[name]);
+    for(let name in attributes) {
+        if(name.match(/^on-([\s\S]+)$/)){
+            object.addEventListener(RegExp.$1, attributes[name])
+        } else {
+            object.setAttribute(name, attributes[name]);
+        }
+    }
     for(let child of children){
         if(typeof child ==='string'){
             console.log(new Text(child),2222222)
@@ -19,7 +24,13 @@ function myCreate(Class, attributes,...children){
     
     return object; 
 }
-
+function loadMore (){
+    console.log('loading')
+    setTimeout(()=>{
+        this.setAttribute("loadingText", "没有更多啦！");
+    },3000
+)
+}
 const ImgsUrl = [
     "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
     "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
@@ -29,7 +40,56 @@ const ImgsUrl = [
 // var c = <Carousel width="300"ImgsUrl={ImgsUrl}autoPlay="true">
 // </Carousel>
 var c = <TabView>
-    <ScrollView tab-title="推荐"style="background:#8bc34a">
+    <ScrollView tab-title="推荐"style="background:#8bc34a;overflow-y:scroll"on-scrollBottom="loadMore"loadingText="下拉加载更多">
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
+    <Div>推荐</Div>
     <Div>推荐</Div>
     </ScrollView>
     <ScrollView tab-title="有趣的店"style="background:#03a9f4"><Div>有趣的店</Div></ScrollView>

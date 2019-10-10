@@ -59,6 +59,7 @@ function enableGesture(main) {
         let e = new Event('panstart');
         e.startX = context.startX;
         e.startY = context.startY;
+        e.isVertical = context.isVertical;
         main.dispatchEvent(e);
         context.isPan = true;
       }
