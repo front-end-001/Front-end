@@ -1,6 +1,6 @@
 import Component, { PROP_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../component';
 import createComponent from '../createComponent';
-import './index.css';
+import './index.scss';
 
 export default class Tab extends Component {
   constructor(attrs) {
