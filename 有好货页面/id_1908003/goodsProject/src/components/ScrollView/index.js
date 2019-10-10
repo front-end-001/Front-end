@@ -4,7 +4,7 @@ import Component, {
   STATUS_SYMBOL
 } from '../component';
 import createComponent from '../createComponent';
-import './index.css';
+import './index.scss';
 
 export default class ScrollView extends Component {
   constructor(attrs) {
