@@ -21,7 +21,7 @@ module.exports = {
     mode: "development",
     devServer: {
         contentBase: './dist',
-        host: '0.0.0.0',
+        // host: '0.0.0.0',
         // port: 9000,
         hot: true
     },
