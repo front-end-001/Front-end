@@ -131,9 +131,13 @@ export default class Tab {
         child.appendTo(this.contentContainer);
 
         this.headerContainer.addEventListener('click', event => {
+            if (!event.target.getAttribute('key'))return
             let idx = event.target.getAttribute('key')
             this[STATE_SYMBOL].position = idx
-
+            for (let i of this.headerContainer.childNodes){
+                i.setAttribute('class', '')
+            }
+           // this.headerContainer.childNodes.setAttribute('class','')
             for (let i = 0; i < this.contentContainer.children.length; i++) {
                 this.contentContainer.children[i].style.width = "100%";
                 this.contentContainer.children[i].style.height = "100%";
@@ -148,8 +152,10 @@ export default class Tab {
                     (v) => `translateX(${v}%)`
                 )
                 an.start()
+               
                // this.contentContainer.children[i].style.transform = `translateX(${ - idx * 100}%)`
             }
+            event.target.setAttribute('class', 'active')
             //this.contentContainer.children[idx].style.display='inline-block'
         })
 
@@ -173,6 +179,9 @@ export default class Tab {
     setAttribute(name, value) {
         if (name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if (name == "class") {
+            this.root.setAttribute("class", value);
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

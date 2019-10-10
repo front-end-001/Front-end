@@ -12,10 +12,27 @@ export default class Scroll {
     }
     created() {
         this.root = document.createElement("div");
-        // this.root.addEventListener('touchmove',function(e){
-        //     e.cancelBubble = true
-        //     e.stopImmediatePropagation();
-        // },{ passive:false})
+        this.placeholder = document.createElement('div')
+        this.placeholder.innerText = '加载更多'
+        this.placeholder.style.background='pink'
+        this.root.appendChild(this.placeholder)
+
+
+        let trigged = false
+        this.root.addEventListener('scroll',event =>{
+            let clientRect = this.root.getBoundingClientRect()
+            let placeholder = this.placeholder.getBoundingClientRect()
+            if (clientRect.bottom > placeholder.top){
+                if (trigged){
+                    this.triggerEvent('scrolToBottom', 'b') 
+                    trigged = true
+                }
+            }
+            // if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height){
+            //    // console.log('到底啦')
+            //     this.triggerEvent('scrolToBottom','b')
+            // }
+        })
         
     }
     mounted() {
@@ -35,7 +52,9 @@ export default class Scroll {
         this.mounted();
     }
     appendChild(child) {
+       // this.children.push(child)
         child.appendTo(this.root);
+        this.root.appendChild(this.placeholder)
     }
     getAttribute(name) {
         if (name == "style") {
@@ -46,6 +65,12 @@ export default class Scroll {
     setAttribute(name, value) {
         if (name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if (name == "class") {
+            this.root.setAttribute("class", value);
+        }
+        if(name == 'placeHolderText'){
+            this.placeholder.innerText = value
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
@@ -59,10 +84,13 @@ export default class Scroll {
             return;
         this[EVENT_SYMBOL][type].delete(listener);
     }
-    triggerEvent(type) {
+    triggerEvent(type, ...args) {
+        
+       // console.log(this[EVENT_SYMBOL][type])
         if (!this[EVENT_SYMBOL][type])
             return;
-        for (let event of this[EVENT_SYMBOL][type])
-            event.call(this);
+        for (let event of this[EVENT_SYMBOL][type]){
+            event.call(this, ...args);
+        }
     }
 }

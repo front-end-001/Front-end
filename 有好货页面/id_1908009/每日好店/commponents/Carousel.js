@@ -4,7 +4,7 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Tab {
+export default class Carousel {
     constructor() {
         this.ATTRIBUTE_SYMBOL = Object.create(null)
         this.PROPERTY_SYMBOL = Object.create(null)
@@ -13,7 +13,7 @@ export default class Tab {
         this.created();
     }
     created() {
-
+        this.root = document.createElement("div");
     }
     updated() {
 
@@ -38,7 +38,7 @@ export default class Tab {
         element.appendChild(this.root)
         this.mounted()
     }
-    appendChild(child){
+    appendChild(child) {
         child.appendTo(this.root)
     }
 }
