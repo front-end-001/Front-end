@@ -24,6 +24,5 @@
     "less-loader": "^5.0.0",
     "style-loader": "^1.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

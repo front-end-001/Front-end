@@ -54,7 +54,7 @@ export default class Component {
     if (this.componentDidMount) {
       setTimeout(() => {
         // 这里就是想搞成异步的，没想好怎么搞
-        this.componentDidMount.apply(this.root);
+        this.componentDidMount.apply(this);
       });
     }
   }
