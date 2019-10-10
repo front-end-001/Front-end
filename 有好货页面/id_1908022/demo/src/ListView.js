@@ -1,20 +1,20 @@
+import {create} from './create.js';
+import Div from './div.js'
+
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Tabview {
-    constructor(config){
+export default class ListView {
+    constructor(text){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-
-        this[PROPERTY_SYMBOL].header = [];
-        this[PROPERTY_SYMBOL].children = [];
         
-        this.created();
+        this.created(text);
     }
 
     appendTo(element){
@@ -22,22 +22,14 @@ export default class Tabview {
         this.mounted();
     }
 
-    created(){
+    created(text){
         this.root = document.createElement("div");
-        this.root.style.display = "flex";
-        this.root.style.flexDirection = "column";
-        this.headerContainer = document.createElement("div");
-        this.contextContainer = document.createElement('div');
-        this.contextContainer.style.flex = "1";
-        this.contextContainer.style.whiteSpace = 'nowrap';
-        this.contextContainer.style.overflow = 'hidden';
-        this.headerContainer.style.height = "93px";
-        this.root.appendChild(this.headerContainer);
-        this.root.appendChild(this.contextContainer);
+
+        this.render().appendTo(this.root);
         
     }
     mounted(){
-        
+
     }
     unmounted(){
 
@@ -46,31 +38,16 @@ export default class Tabview {
 
     }
 
-    appendChild(child){
-        this.children.push(child);
-
-        let title = child.getAttribute("tab-title") || '';
-        this[PROPERTY_SYMBOL].header.push(title);
-
-        let header = document.createElement('header');
-        header.style.display = "inline-block";
-        header.style.height = "93px";
-        header.style.fontFamily = "PingFang SC";
-        header.style.fontSize = "46px";
-        header.style.margin = "20px 35px 0 35px";
-        header.innerText = title;
-
-        this.headerContainer.appendChild(header);
-
-        child.appendTo(this.contextContainer);
-         
-
+    render() {
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        return <div>
+            {
+                data.map(item => {
+                   return <div><span>{item.aaa}</span><span>{item.bbb}</span></div>;
+                })
+            }
+        </div>;
     }
-
-    get children() {
-        return this[PROPERTY_SYMBOL].children;
-    }
-
     
     log(){
         console.log("width:", this.width);
@@ -87,19 +64,28 @@ export default class Tabview {
     set urls(value){
     	return this[PROPERTY_SYMBOL].urls = value;
     }
+    appendChild(child){
+        child.appendTo(this.root);
 
-
+    }
 
     getAttribute(name){
-        return this[ATTRIBUTE_SYMBOL][name]
+        return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute('style',value);
-            this.root.style.display = "flex";
-            this.root.style.flexDirection = "column"
-            // this.width = value;
-            // this.triggerEvent("widthchange");
+            this.root.style.width = "100%";
+            this.root.style.height = "100%";
+            this.root.style.display = "inline-block";
+            this.root.style.verticalAlign = "top";
+        }
+
+        if(name == 'data'){
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            this.root.innerHTML = '';
+            this.render().appendTo(this.root);
+            return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

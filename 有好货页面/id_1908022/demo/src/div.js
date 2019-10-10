@@ -24,6 +24,29 @@ export default class Div {
         this.root.style.width = "100%";
         this.root.style.height = "100%";
         this.root.style.display = "inline-block";
+        this.placeHolder = document.createElement('div');
+        this.placeHolder.style.background = 'lightgreen';
+        // this.placeHolder.innerText = "加载更多";
+        this.root.appendChild(this.placeHolder);
+
+        this.root.addEventListener('scroll', event => {
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            if(clientRect.bottom < placeHolderRect.top){
+                this.triggerEvent('scrollToBottom', 'aaa');
+            }
+            // if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height){
+            //     this.triggerEvent('scrollToBottom', 'aaa');
+            // }
+            // console.log(this.root.scrollHeight, clientRect.height, this.root.scrollTop);
+        })
+
+        /* this.root.addEventListener("touchmove",function(e){ 
+            e.cancelBubble = true;
+            e.stopImmediatePropagation();
+        }, {
+            passive:false
+        }); */
     }
     mounted(){
 
@@ -53,6 +76,7 @@ export default class Div {
     }
     appendChild(child){
         child.appendTo(this.root);
+        this.root.appendChild(this.placeHolder);
 
     }
 
@@ -65,6 +89,11 @@ export default class Div {
             this.root.style.width = "100%";
             this.root.style.height = "100%";
             this.root.style.display = "inline-block";
+            this.root.style.verticalAlign = "top";
+            this.root.style.overflowY = 'scroll';
+        }
+        if(name == "placeHolder"){
+            this.placeHolder.innerText = value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
@@ -78,8 +107,10 @@ export default class Div {
             return;
         this[EVENT_SYMBOL][type].delete(listener);
     }
-    triggerEvent(type){
+    triggerEvent(type, ...args){
+        if(!this[EVENT_SYMBOL][type])
+            return;
         for(let event of this[EVENT_SYMBOL][type])
-            event.call(this);
+            event.call(this, ...args);
     }
 }
