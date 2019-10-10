@@ -3,7 +3,7 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class TabView {
+export default class ScrollView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -12,7 +12,6 @@ export default class TabView {
         
 
         this[PROPERTY_SYMBOL].children = [];
-        this[PROPERTY_SYMBOL].headers = [];
 
         this.created();
     }
@@ -24,15 +23,29 @@ export default class TabView {
 
     created(){
         this.root = document.createElement("div");
-        this.root.style.display = "flex";
-        this.headerContainer = document.createElement("div");
-        this.contentContainer = document.createElement("div");
-        this.contentContainer.style.whiteSpace = "nowrap";
-        this.contentContainer.style.overflow = "hidden";
-        this.contentContainer.style.flex = "1";
-        this.headerContainer.style.height = "93px";
-        this.root.appendChild(this.headerContainer);
-        this.root.appendChild(this.contentContainer);
+        this.placeHolder = document.createElement("div");
+        // this.placeHolder.innerText = '加载更多';
+        this.placeHolder.style.backgroundColor = 'lightgreen';
+        this.root.appendChild(this.placeHolder);
+
+        let triggered = false;
+        //滚动改造triggered 下拉加载更多
+        this.root.addEventListener('scroll', event => {
+            //获取元素大小
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            if (clientRect.bottom < placeHolderRect.top) {
+                if (triggered) {
+                    this.triggerEvent('scrollToBottom');
+                    triggered = true;
+                }
+            }
+            console.log('scrolled',this.root.scrollHeight, clientRect.height, this.root.scrollTop);
+            // if (this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
+            //     console.log('到底了')
+            //     this.triggerEvent('scrollToBottom');
+            // }
+        });
         this[STATE_SYMBOL].h = 0;
     }
     mounted(){
@@ -47,28 +60,13 @@ export default class TabView {
 
     appendChild(child){
         this.children.push(child);
-
-        let title = child.getAttribute("tab-title") || "";
-        this[PROPERTY_SYMBOL].headers.push(title);
-
-        let header = document.createElement("div");
-        header.innerText = title;
-        header.style.display = "inline-block";
-        header.style.height = "93px";
-        header.style.fontFamily = "PingFang SC";
-        header.style.fontSize = "46px";
-        header.style.margin = "20px 35px 0 35px";
-        this.headerContainer.appendChild(header);
-        child.appendTo(this.contentContainer);
-        for(let i = 0; i < this.contentContainer.children.length; i ++) {
-            this.contentContainer.children[i].style.width = "100%";
-            this.contentContainer.children[i].style.height = "100%";
-            this.contentContainer.children[i].style.display = "inline-block";
-        }
-
+        child.appendTo(this.root);
+        this.root.appendChild(this.placeHolder);
     }
 
-
+    get style() {
+        return this.root.style;
+    }
     get children(){
         return this[PROPERTY_SYMBOL].children;
     }
@@ -81,10 +79,10 @@ export default class TabView {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
-            this.root.style.display = "flex";
-            this.root.style.flexDirection = "column"
         }
-
+        if(name == "placeHolderText") {
+            this.placeHolder.innerText = value;
+        }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     addEventListener(type, listener){
