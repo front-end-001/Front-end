@@ -1,0 +1,75 @@
+<div id="ball" style="position:absolute;width:50px;height:50px;border-radius: 25px;background-color:navy;">
+</div>
+<script>
+class Timeline {
+    constructor(){
+        this._animations = [];
+    }
+    pause(){}
+    resume(){}
+    start(){
+        let startTime = Date.now();
+        setInterval(() => {
+            for(let animation of this._animations){
+                animation.tick(Date.now() - startTime);
+            }
+        }, 16)
+    }
+    set rate(value){}
+    get rate(){}
+    addAnimation(animation){
+        this._animations.push(animation);
+    }
+    removeAnimation(animation){
+    }
+}
+class DOMElementStyleAnimation {
+    constructor(element, property, startTime, startValue, endTime, endValue, converter){
+        this._element = element;
+        this._property = property;
+        this._startTime = startTime;
+        this._startValue = startValue;
+        this._endTime = endTime;
+        this._endValue = endValue;
+        this._converter = converter;
+    }
+    tick(t){
+        if(t > this._endTime)
+            return;
+        if(t < this._startTime)
+            return;
+        this._element.style[this._property] = this._converter((t - this._startTime) / (this._endTime - this._startTime) * (this._endValue - this._startValue) + this._startValue);
+    }
+}
+let tl = new Timeline();
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "top",
+    0, 0,
+    500, 100,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "left",
+    500, 0,
+    1000, 100,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "top",
+    1000, 100,
+    1500, 0,
+    (v) => `${v}px`
+));
+tl.addAnimation(new DOMElementStyleAnimation(
+    document.getElementById("ball"),
+    "left",
+    1500, 100,
+    2000, 0,
+    (v) => `${v}px`
+));
+tl.start();
+
+</script>

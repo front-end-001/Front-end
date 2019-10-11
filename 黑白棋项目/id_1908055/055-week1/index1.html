@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #board {
+      margin: 0 auto;
+      font-size: 0;
+      width: 800px;
+    }
+
+    .chess {
+      background-color: skyblue;
+      border: 1px solid #fff;
+      display: inline-block;
+      height: 98px;
+      width: 98px;
+    }
+
+    .white::after,
+    .black::after
+
+    /* .optional::after  */
+      {
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+    }
+
+    .white::after,
+    .black::after {
+      height: 100%;
+      width: 100%;
+    }
+
+    .white::after {
+      background-color: #fff;
+    }
+
+    .black::after {
+      background-color: #000;
+    }
+
+    .optional::after {
+      height: 20px;
+      width: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="board"></div>
+  <script>
+    const board = document.getElementById('board');
+    const map = [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 1, 0, 0, 0],
+      [0, 0, 0, 1, 2, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    render();
+    function render() {
+      board.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          let d = document.createElement('div');
+          d.addEventListener('click', e => {
+            playChess(i, j, false);
+          })
+          d.classList.add('chess');
+          if (map[i][j] === 1) {
+            d.classList.add('black')
+          } else if (map[i][j] === 2) {
+            d.classList.add('white')
+          }
+          board.appendChild(d);
+        }
+      }
+    }
+
+
+    function playChess(i, j, checkOnly) {
+      if (map[i][j] > 0) {
+        return;
+      }
+
+      let directions = [
+        { x: -1, y: -1 },
+        { x: -1, y: 0 },
+        { x: -1, y: 1 },
+        { x: 0, y: -1 },
+        { x: 0, y: 1 },
+        { x: 1, y: -1 },
+        { x: 1, y: 0 },
+        { x: 1, y: 1 }
+      ];
+      let moveSuccess = false;
+      // 2步
+      // 1 记录可走的地方
+      // 2 回到原位置+上色
+      for (let direction of directions) {
+        // 方便理解
+        let [x, y] = [j, i];
+        let canmove = false;
+        while (true) {
+          x += direction.x;
+          y += direction.y;
+          // 边界
+          if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+            canmove = false;
+            break;
+          }
+
+          if (map[y][x] == 2) {
+            canmove = true;
+          } else if (map[y][x] == 1) {
+            break
+          } else if (map[y][x] == 0) {
+            canmove = false;
+            break;
+          }
+
+        }
+        moveSuccess = moveSuccess || canmove; // 首先是首次的moveSuccess然后是本次的canmove
+        if (canmove && !checkOnly) {
+          while (true) {
+            x -= direction.x;
+            y -= direction.y;
+            map[y][x] = 1
+            if (x === j && y === i) {
+              break;
+            }
+          }
+          render();
+        }
+      }
+      return moveSuccess;
+    }
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			.container{
+				width:500px;
+				height:300px;
+				overflow:hidden;
+				white-space: nowrap;
+			}
+			.carousel{
+				transition:ease 0.5s;
+			}
+			.carousel>img{
+				width:100%;
+				height:100%;
+				display:inline-block;
+				
+			}
+		</style>
+	</head>
+	<div id="container" class="container">
+	</div>
+	<script>
+		let data = [
+			"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1065823702,2275031591&fm=26&gp=0.jpg",
+			"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2046760670,431481929&fm=26&gp=0.jpg",
+			"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=413854135,362570672&fm=26&gp=0.jpg",
+			"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1879388642,3453154810&fm=26&gp=0.jpg"
+		];
+		//class 声明创建一个基于原型继承的具有给定名称的新类。
+		class Carousel {
+			//构造函数方法
+			constructor(container) {
+				this._container = container;
+				//Element.classList 是一个只读属性，返回一个元素的类属性的实时DOMTokenList 集合。
+				//使用 classList 是替代element.className作为空格分隔的字符串访问元素的类列表的一种方便的方法。
+				this._container.classList.add('carousel');
+				this._handle = null;
+				this.data = null;
+			}
+			//渲染函数
+			render (){
+				//创建img添加到页面指定容器
+				for (let d of this.data) {
+					
+					let e = document.createElement('img');
+					
+					e.src = d;
+					
+					this._container.appendChild(e);
+				};
+				//Array.prototype.slice.call(arguments)能将具有length属性的对象(key值为数字)转成数组。[]是Array的示例，所以可以直接使用[].slice（）方法。
+				let children = Array.prototype.slice.call(this._container.children)
+				//计数
+				let position = 0;
+				
+				let nextFrame = ()=>{
+					//向左
+					position++;
+					//去模运算让循环播放动画
+					position = position % children.length;
+					
+					//让所有img同时运动
+					for (let child of children) {
+						child.style.transform=`translate(${-100 * position}%)`
+					};
+					//递归调用自身
+					this._handler = setTimeout(nextFrame, 1000);
+				};
+				//先执行一下
+				this._handler = setTimeout(nextFrame,1000);
+			}
+			
+		}
+		
+		//new一个实例对象出来
+		let carousel = new Carousel(document.getElementById('container'));
+		
+		carousel.data=data;
+		
+		carousel.render();
+		
+	</script>
+
+	</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="container" class="container"></div>
+
+  <canvas id="main"></canvas>
+
+  <script>
+    // const map = [
+    //   [0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 2, 1, 0, 0, 0],
+    //   [0, 0, 0, 1, 2, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0],
+    // ];
+    // const canvas = document.getElementById('main');
+    // const block = 50;
+    // canvas.width = block * 8;
+    // canvas.height = block * 8;
+
+
+    // const ctx = canvas.getContext('2d');
+    // for (let i = 0; i < 8; i++) {
+    //   for (let j = 0; j < 8; j++) {
+    //     ctx.fillStyle = 'burlywood';
+    //     ctx.fillRect(i * block + 1, j * block + 1, block - 2, block - 2);
+    //     if (map[i][j] > 0) {
+    //       ctx.beginPath();
+    //       ctx.arc(i * block + block / 2, j * block + block / 2, block / 2 - 4, 0, 2 * Math.PI);
+    //       ctx.fillStyle = map[i][j] === 1 ? 'black' : 'white';
+    //       // let gradient = ctx.createRadialGradient(i * block + block / 2, j * block + block / 2, 0, i * block + block / 2, j * block + block / 2, block / 2 - 4)
+    //       // if (map[i][j] === 1) {
+    //       //   gradient.addColorStop(0, '#666');
+    //       //   gradient.addColorStop(1, '#000000');
+    //       // } else {
+    //       //   gradient.addColorStop(0, '#ddd');
+    //       //   gradient.addColorStop(1, '#ffffff');
+    //       // }
+    //       // ctx.fillStyle = gradient;
+    //       ctx.fill();
+    //       ctx.closePath();
+    //     }
+    //   }
+    // }
+  </script>
+  <script src="canvas.js"></script>
+</body>
+
+</html>
