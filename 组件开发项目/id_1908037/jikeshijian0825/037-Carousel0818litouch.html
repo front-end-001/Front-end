@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>037</title>
+    <meta name="author" content="037" />
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="main" style="width: 300px;height:300px;background:#000; color:#FFF"></div>
+
+    <script src="gesture.js"></script>
+    <script>
+        let main = document.getElementById("main");
+        enablegesture(main)
+        let x = 0, y = 0;
+
+        // main.addEventListener("Pan", event => {
+        //     console.log(event.clientX, event.clientY);
+        //     main.style.transform = 'transform(${event.dx+x},${event.dy+y})'
+        // })
+        main.addEventListener("flick", event => {
+            console.log("flick");
+            // console.log(event.dx, event.dy);
+            // main.style.transform = 'transform(${event.dx+x},${event.dy+y})'
+            // main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+        })
+        main.addEventListener("pan", event => {
+            console.log(event.dx, event.dy);
+            // main.style.transform = 'transform(${event.dx+x},${event.dy+y})'
+            main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
+        })
+        main.addEventListener("panend", event => {
+            if (event.isFlick) {
+                if (event.dx > 0) {
+
+                    position = position - 1;
+                }
+                if (event.dx < 0) {
+
+                    position = position + 1;
+                }
+            }
+            x = x + event.dx;
+            y = y + event.dy;
+        });
+        main.addEventListener("pancancel", event => {
+            // main.style.transform = 'transform(${x},${y})'
+            console.log("cancel")
+            main.style.transform = `translate(${x}px, ${y}px)`;
+        })
+
+        // //封装
+        // function enablegesture(main){
+
+
+        // }
+
+
+
+
+    </script>
+</body>
+
+</html>

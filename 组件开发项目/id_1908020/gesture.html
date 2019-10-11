@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="020-1组-吴玮琦">
+  <title>Document</title>
+  <style>
+    #main {
+      height: 300px;
+      width: 300px;
+      background-color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main"></div>
+  <script src="gesture.js"></script>
+  <script>
+    let x=0
+    let y=0
+
+    let main = document.getElementById('main')
+    enableGesture(main)
+    // main.addEventListener('tap', e => {
+    //   console.log('tap', e)
+    // })
+    main.addEventListener('pan', e => {
+      //console.log('pan', e)
+      main.style.transform = `translate(${e.dx + x}px, ${e.dy + y}px)`;
+    })
+    main.addEventListener('panend', e => {
+      console.log('panend', e)
+      x = x + e.dx
+      y = y + e.dy
+    })
+
+
+  </script>
+</body>
+
+</html>

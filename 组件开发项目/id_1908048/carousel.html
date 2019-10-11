@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Carousel</title>
+</head>
+<style>
+    .carousel {
+        width: 500px;
+        height: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+         /* overflow: visible;
+        outline: solid 1px blue;
+	transform: translate(100%);  */
+    }
+
+    .carousel>img {
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        transition: ease 0.5s;
+    }
+</style>
+
+<body>
+    <div id="container">
+
+    </div>
+</body>
+<script type="text/javascript">
+    let data = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"];
+    class Carousel {
+        constructor(container, duration = 3000) {
+            this._container = container;
+            this._duration = duration;
+            this._container.classList.add("carousel");
+            this._handler = null;
+            this.data = null;
+        }
+        render() {
+            this._container.innerHTML = "";
+            for (let d in this.data) {
+                let e = document.createElement("img");
+                e.src = this.data[d];
+                if (this.data.length > 2){
+                    e.style.transform= `translate(-100%)`;
+                }
+                
+                this._container.appendChild(e);
+            }
+            let children = Array.prototype.slice.call(this._container.children);
+            let position = 1;
+            let nextFrame = (i = 1) => {
+                let current = children[position];
+                let nextPosition = (position+1)%children.length;
+                let next = children[nextPosition];
+                current.style.transition = (i=== -1) ? "ease 0s" : ""; 
+                current.style.transform = `translate(${-100 - 100 * position}%)`;
+                next.style.transition = "";
+                next.style.transform = `translate(${ - 100 * nextPosition}%)`;
+                let nextNextPosition = (nextPosition + 1) % children.length;
+                let nextNext = children[nextNextPosition];
+                nextNext.style.transition = (i===-1) ? "":"ease 0s";
+                nextNext.style.transform = `translate(${100 - 100 * nextNextPosition}%)`;
+                position = nextPosition;
+                this._handler = setTimeout(() => {
+                    nextFrame();
+                }, this._duration);
+
+            }
+
+            this._handler = setTimeout(() => {
+                nextFrame();
+            }, this._duration);
+
+            let startX, startTransform;
+            let start = event => {
+                event.preventDefault();
+                startX = event.clientX;
+                startTransform = - position * 500;
+		
+                clearTimeout(this._handler);
+                delete(this._handler);
+                document.addEventListener("mousemove", move);
+                document.addEventListener("mouseup", end);
+            }
+            let move = event => {
+                event.preventDefault();
+		        let current = children[position];
+                let nextPosition = (position+1)%children.length;
+                let next = children[nextPosition];
+                let previousPosition = (position + children.length - 1)%children.length;
+	            let previous = children[previousPosition];
+		        current.style.transition = "ease 0s";
+                current.style.transform = `translate(${startTransform + event.clientX - startX}px`;
+                next.style.transition = "ease 0s";
+                next.style.transform = `translate(${ startTransform + 500*(position+1-nextPosition) + event.clientX - startX}px)`;
+	            previous.style.transition = "ease 0s";
+                previous.style.transform = `translate(${ startTransform + 500*(position-1-previousPosition) + event.clientX - startX}px)`;
+            }
+            let end = event => {
+                document.removeEventListener("mousemove", move);
+                document.removeEventListener("mouseup", end);
+                let x = event.clientX - startX;
+                let condition = (x<-250)? 1 : (x>250) ? -1 : 0;
+                position = (position-1+4+condition)%4;
+                nextFrame(condition);
+
+            }
+            this._container.addEventListener("mousedown", start);
+
+        }
+    }
+    let duration = 3000;
+    let carousel = new Carousel(document.getElementById("container"),duration);
+    carousel.data = data;
+    carousel.render();    
+</script>
+
+</html>

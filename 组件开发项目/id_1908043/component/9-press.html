@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+
+    </style>
+    <script src="./9-gesture.js"></script>
+</head>
+<body>
+    <div id="carousel"></div>
+    <script>
+        const imgList = [
+            {url: 'https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg'},
+            {url: 'https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg'},
+            {url: 'https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg'},
+            {url: 'https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg'}
+        ]
+
+        const carouselConfig = {
+            containerStyle: `
+                width: 500px;
+                height: 280px;
+                background: lightgray`
+        }
+
+
+        class Carousel {
+            constructor(container, list, config) {
+                this.container = container
+                this.list = list
+                this.position = 0
+                this.width = 500
+            }
+
+            // 移动到下一张
+            next() {
+                // 旧方式：整体移动
+                // this.position ++
+                // this.position = this.position % this.children.length;
+                // for (let child of this.children) {
+                //     child.style.transform = `translate(${-100 * this.position}%)`;
+                // }
+
+                // return
+
+                // 新方式：移动需要展示的图片，到当前位置和下一个位置
+                // console.log(this.position)
+
+                const currentPosition = this.position
+                // 这里加取余后的值，确保 position 不会超过图片张数
+                const nextPosition = (this.position + 1) % this.children.length
+
+                const current = this.children[currentPosition]
+                const next = this.children[nextPosition]
+
+                // 把 next 放到准备进入的正确位置
+                next.style.transition = 'ease 0s'
+                next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+
+                // 注意：若你想在浏览器下次重绘之前继续更新下一帧动画，那么回调函数自身必须再次调用 window.requestAnimationFrame()
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        // 将 current 移动出去
+                        current.style.transform = `translate(${-100 - 100 * currentPosition}%)`
+                        // 将 next 移动进来
+                        // 恢复 next 的过渡效果
+                        next.style.transition = 'ease 0.5s'
+                        // 将 next 移动进来
+                        next.style.transform = `translate(${ - 100 * nextPosition }%)`
+                        // 位置 + 1,  这里加取余后的值，确保 position 不会超过图片张数
+                        this.position = nextPosition
+                    })
+                })
+            }
+
+            // 开始播放
+            play() {
+                this.next()
+
+                setTimeout(() => {
+                    this.play()
+                }, 3000)
+            }
+
+            handleMouse() {
+                let startX
+                let startTransform
+                const start = event => {
+                    event.preventDefault()
+                    startX = event.clientX
+                    startTransform = - this.position * this.width
+                    document.addEventListener('mousemove', move)
+                    document.addEventListener('mouseup', end)
+                }
+                const move = event => {
+                    event.preventDefault()
+                    for (let child of this.children) {
+                        child.style.transition = 'ease 0s'
+                        child.style.transform = `translate(${startTransform + event.clientX - startX}px)`
+                    }
+                }
+                const end = event => {
+                    event.preventDefault()
+                    document.removeEventListener('mousemove', move)
+                    document.removeEventListener('mouseup', end)
+
+
+                    this.position = - (Math.round((startTransform + event.clientX - startX) / this.width))
+
+                    this.position = Math.max(0, Math.min(this.position, this.children.length - 1))
+
+                    for (let child of this.children) {
+                        child.style.transition = 'ease 0.5s'
+                        child.style.transform = `translate(${ - this.position * this.width}px)`
+                    }
+
+                }
+                document.addEventListener('mousedown', start)
+            }
+
+
+            handleEvent = () => {
+                let startTransform = 0
+                this.container.addEventListener('mousedown', event => event.preventDefault());
+
+                this.container.addEventListener('pan', event => {
+                    for (let child of this.children) {
+                        child.style.transition = 'ease 0s'
+                        child.style.transform = `translate(${startTransform + event.dx}px)`
+                    }
+                })
+
+                this.container.addEventListener('panend', event => {
+                    this.position = - (Math.round((startTransform + event.dx) / this.width))
+
+                    this.position = Math.max(0, Math.min(this.position, this.children.length - 1))
+
+                    for (let child of this.children) {
+                        child.style.transition = 'ease 0.5s'
+                        child.style.transform = `translate(${ - this.position * this.width}px)`
+                    }
+                    startTransform = - this.position * this.width;
+                })
+
+                this.container.addEventListener('flick', event => {
+                    console.log('flick', event.dx)
+                    if (event.dx > 0) {
+                        this.position = this.position - 1
+                    }
+                    if (event.dx < 0) {
+                        this.position = this.position + 1
+                    }
+
+                    this.position = Math.max(0, Math.min(this.position, this.children.length - 1))
+
+                    for (let child of this.children) {
+                        child.style.transition = 'ease 0.5s'
+                        child.style.transform = `translate(${ - this.position * this.width}px)`
+                    }
+                    startTransform = - this.position * this.width;
+                })
+            }
+
+            handlePress() {
+                this.container.addEventListener('pressstart', event => {
+                    console.log('pressstart');
+                })
+
+                this.container.addEventListener('pressend', event => {
+                    console.log('pressend');
+                    alert(`第${this.position}张跳转`)
+                })
+
+                this.container.addEventListener('presscancel', event => {
+                    console.log('presscancel');
+                })
+            }
+
+            render() {
+                console.log('render')
+                this.container.style = `
+                    white-space: nowrap;
+                    overflow: hidden;
+                    width: ${this.width}px;
+                    font-size: 0;
+                    outline: 1px solid blue;
+                `
+                this.container.innerHTML = ''
+
+                for (let i = 0; i < this.list.length; i++ ) {
+                    const children = document.createElement('div')
+                    children.className = 'slide'
+                    children.style = `
+                        display: inline-block;
+                        transition: ease 0.5s;
+                    `
+
+                    const img = document.createElement('img')
+                    img.src = this.list[i].url
+                    img.style = `
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                    `
+
+                    children.appendChild(img)
+                    this.container.appendChild(children)
+                }
+
+                this.children = Array.prototype.slice.call(this.container.children)
+                // setTimeout(() => {
+                //     this.play()
+                // }, 1000)
+
+                // this.handleMouse()
+
+                enableGesture(this.container)
+                this.handleEvent()
+                this.handlePress()
+            }
+        }
+
+        new Carousel(
+            document.getElementById("carousel"),
+            imgList,
+            carouselConfig
+        ).render();
+    </script>
+</body>
+</html>

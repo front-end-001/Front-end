@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style lang="#">
+    #gesture{
+        width:100px;
+        height:100px;
+        background: #000;
+    }
+</style>
+<body>
+   <div id="gesture"></div> 
+</body>
+</html>
+<script>
+    const gesture = document.getElementById('gesture')
+    const context = Object.create(null)
+    let mouseSymbol = Symbol("mouse");
+   const mousedown = event =>{
+       context[mouseSymbol] = Object.create(null)
+       start(event,context[mouseSymbol])
+       console.log(event.clientX,event.clientY)
+   }
+   const mousemove = event =>{
+    move(event,context[mouseSymbol])
+       console.log(event.clientY,event.clientY)
+   }
+   const mouseup = event =>{
+    end(event,context[mouseSymbol])
+       console.log(event.clientY,event.clientY)
+   }
+  
+   document.addEventListener('mouseup',mouseup)
+   document.addEventListener('mousemove',mousemove)
+   document.addEventListener('mousedown',mousedown)
+   
+   const touchstart = event=>{
+       for(item of event.changedTouches)
+       context[item.identifier] = Object.create(null)
+       start(item,context[item.identifier])
+   }
+   const touchmove = event=>{
+       for(item of event.changedTouches){
+           move(item,context[item.identifier])
+        }
+   }
+   const touchend = event=>{
+       
+       for(item of event.changedTouches){
+        end(item,context[item.identifier])
+       }
+       
+    //    console.log(event)
+   }
+   const touchcancel = event=>{
+       for(item of event.changedTouches)
+       console.log(item.clientX,item.clientY)
+    //    console.log(event)
+   }
+   gesture.addEventListener('touchstart',touchstart)
+   gesture.addEventListener('touchmove',touchmove)
+   gesture.addEventListener('touchend',touchend)
+   let x = 0,y=0
+   gesture.addEventListener('pan',(e)=>{
+     console.log('pan',e.dx)
+    gesture.style.transform = `translate(${x+e.dx}px,${y+e.dy}px)`
+    // gesture.style.transform = `translateY(${y+e.dy}px)`
+   })
+   gesture.addEventListener('panend',(e)=>{
+    gesture.style.transform = `translateX(${x+e.dx}px,${y+e.dy}px)`
+    x=x+e.dx
+    y=y+e.dy
+    // gesture.style.transform = `translateY(${y+e.dy}px)`
+   })
+   gesture.addEventListener('pancancel',(e)=>{
+    gesture.style.transform = `translateX(${x}px)`
+    gesture.style.transform = `translateY(${y}px)`
+   })
+
+   start = (point,context) =>{
+       context.startX = point.clientX
+       context.startY = point.clientY
+       context.isTap = true
+       context.isTouch = false
+   }
+   move = (point,context) =>{
+       console.log('move',point.clientX,point.clientY)
+       context.dx = point.clientX-context.startX
+        context.dy = point.clientY-context.startY
+        if(context.dx*context.dx+context.dy*context.dy>100){
+            context.isTap = false
+            if(context.isTouch===false){
+                const e =new Event('panstart')
+                e.dx = context.startX
+                e.dy = context.startY
+                gesture.dispatchEvent(e)
+                context.isTouch = true
+            }
+            if(context.isTouch){
+                const e =new Event('pan')
+                e.dx = context.dx
+                e.dy = context.dy
+                gesture.dispatchEvent(e)
+            }
+        }
+   }
+   end = (point,context) =>{
+       if(context.isTap){
+           const e = new Event('tap')
+           gesture.dispatchEvent(e)
+       }
+       if(context.isTouch){
+        const e =new Event('panend')
+                e.dx = context.dx
+                e.dy = context.dy
+                gesture .dispatchEvent(e)
+       }
+       console.log('end',point.clientX,point.clientY)
+   }
+
+</script>
