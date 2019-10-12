@@ -1,4 +1,12 @@
 .o-scroll {
   height: 100%;
   overflow: scroll;
+  
+  .o-scroll-container {
+    background-image: url('/static/image/bacground.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: -90px; // 顶部部分宽度
+    background-color: #EFEFEF;
+  }
 }

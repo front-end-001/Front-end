@@ -2,10 +2,11 @@ import Component, { PROP_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../componen
 import createComponent from '../createComponent';
 import './index.scss';
 
-export default class Tab extends Component {
+export default class TabView extends Component {
   constructor(attrs) {
     super(attrs);
   }
+
 
   render() {
     const children = this.children;
@@ -13,15 +14,28 @@ export default class Tab extends Component {
     const fuc = (evt) => {
       console.log('click', evt);
     };
+    const setSlot = (evt) => {
+      this.$slot = evt.$el;
+    };
     const tab = <div class="o-tab">
       <div class="o-tab-header">
         {headers.map((header) => (<div on-click={fuc} >{header}</div>))}
       </div>
-      <div class="o-tab-content">
+      <div class="o-tab-content" on-mounted={setSlot}>
         {children}
       </div>
     </div>;
+    console.log(this)
     return tab;
+  }
+  
+
+  validateChild(child) {
+    // 子节点只允许 TabView
+    if (child.name !== 'TabItem') {
+      return false;
+    }
+    return true;
   }
 
   /**

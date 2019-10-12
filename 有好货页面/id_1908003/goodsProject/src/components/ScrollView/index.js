@@ -13,7 +13,9 @@ export default class ScrollView extends Component {
 
   render() {
     const children = this.children;
-    const tabItem = <div class = "o-scroll">{ children }</div>;
+    const tabItem = <div class = "o-scroll">
+      <div class="o-scroll-container">{ children }</div>
+    </div>;
 
     return tabItem;
   }

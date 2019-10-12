@@ -6,6 +6,9 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background-image: url('/static/image/bacground.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 
   .o-tab-header {
     height: 90px;

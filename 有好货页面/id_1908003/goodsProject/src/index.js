@@ -7,6 +7,7 @@ import TabItem from './components/TabItem';
 import ScrollView from './components/ScrollView';
 
 const indexHtml = (<Tab>
+  <div>测试</div>
   <TabItem tab-title="有趣的店">
     <ScrollView>
     我是 TabItem1<br />

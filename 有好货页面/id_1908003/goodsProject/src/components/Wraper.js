@@ -13,6 +13,7 @@ export default class Wraper extends Component {
     this[STATUS_SYMBOL].tagName = tagName;
 
     this[STATUS_SYMBOL].$el = this.render();
+    this[STATUS_SYMBOL].$slots.default = this[STATUS_SYMBOL].$el;
   }
 
   /** 组件名称 */
@@ -47,20 +48,20 @@ export default class Wraper extends Component {
    * 因为具体组件结构
    */
   appendChild(child) {
-    const { $el } = this[STATUS_SYMBOL];
-    if (!$el || !child) return;
+    const slotEl = this.$slot;
+    if (!slotEl || !child) return;
 
     if (typeof child === 'string') {
-      $el.appendChild(document.createTextNode(child));
+      slotEl.appendChild(document.createTextNode(child));
     } else if (child instanceof Element) {
-      $el.appendChild(child);
+      slotEl.appendChild(child);
     } else if (child.$el instanceof Element) {
-      $el.appendChild(child.$el);
+      slotEl.appendChild(child.$el);
 
       // 触发生命周期
       if (typeof child.mounted === 'function') {
         child.mounted();
-        child.triggerEvent('mounted');
+        child.triggerEvent('mounted', this);
       }
     }
   }

@@ -3,6 +3,7 @@
  * - cid 组件 ID
  * - name 组件名称
  * - $el 真实组件根元素
+ * - $slot 插入点元素
  * - children 子组件
  * - events 事件监听集合
  * 
@@ -75,7 +76,7 @@ export default class Component {
     this[STATUS_SYMBOL].cid = getRandomStr();
     this[STATUS_SYMBOL].$el = null;
     this[STATUS_SYMBOL].children = [];
-    this[PROP_SYMBOL].events = [];
+    this[STATUS_SYMBOL].$slots = Object.create(null);
     // 属性类型验证
     this.propTypes = {};
     // 属性变更监听
@@ -97,6 +98,14 @@ export default class Component {
   /** 获取组件真实的 dom 元素 */
   get $el() {
     return this[STATUS_SYMBOL].$el;
+  }
+
+  get $slot() {
+    return this[STATUS_SYMBOL].$slots.default || this.$el;
+  }
+
+  set $slot(ele) {
+    this[STATUS_SYMBOL].$slots.default = ele;
   }
 
   /** 生命周期方法*/
@@ -141,6 +150,16 @@ export default class Component {
       });
     });
 
+    // todo: 如果渲染也要走这里, 这样不行的呀
+    // 绑定 Dom 通用属性
+    // style class id title
+    const commonAttr = ['id', 'class', 'style', 'title'];
+    commonAttr.forEach((attrName) => {
+      if (this[PROP_SYMBOL][attrName]) {
+        newEl.setAttribute(attrName, this[PROP_SYMBOL][attrName]);
+      }
+    });
+
     const currentEl = this[STATUS_SYMBOL].$el;
 
     if (currentEl && currentEl.parentNode) {
@@ -157,6 +176,11 @@ export default class Component {
     return document.createElement(this[STATUS_SYMBOL].tagName);
   }
 
+  /** 自定义验证子节点 */
+  validateChild(child) {
+    return true;
+  }
+
   /**
    * 挂载
    * appendChild 那存在问题, 挂载在具体哪个元素下
@@ -164,7 +188,33 @@ export default class Component {
    */
   appendChild(child) {
     if (!child) return;
+
+    if (!this.validateChild(child)) return;
+
     this[STATUS_SYMBOL].children.push(child);
+
+    // 还未初始化
+    if (!this.$el) {
+      return;
+    }
+
+    this.$render();
+
+    // // 已初始化, 查找是否有默认插入点, 如果没有默认插入点就以根元素作为插入点
+    // const slotEl = this.$slot;
+    // if (typeof child === 'string') {
+    //   slotEl.appendChild(document.createTextNode(child));
+    // } else if (child instanceof Element) {
+    //   slotEl.appendChild(child);
+    // } else if (child.$el instanceof Element) {
+    //   slotEl.appendChild(child.$el);
+
+    //   // 触发生命周期
+    //   if (typeof child.mounted === 'function') {
+    //     child.mounted();
+    //     child.triggerEvent('mounted', this);
+    //   }
+    // }
   }
 
   /** 另一种挂载方法 */
@@ -179,7 +229,7 @@ export default class Component {
 
     if (typeof this.mounted === 'function') {
       this.mounted();
-      this.triggerEvent('mounted');
+      this.triggerEvent('mounted', this);
     }
   }
 
