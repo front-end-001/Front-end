@@ -61,7 +61,7 @@ export default class Wraper extends Component {
       // 触发生命周期
       if (typeof child.mounted === 'function') {
         child.mounted();
-        child.triggerEvent('mounted', this);
+        child.triggerEvent('mounted', child);
       }
     }
   }

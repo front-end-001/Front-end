@@ -11,8 +11,26 @@
   background-repeat: no-repeat;
 
   .o-tab-header {
-    height: 90px;
-    min-height: 90px;
+    color: white;
+
+    .o-tab-header-item {
+      font-size: 14pt;
+      padding: 7pt 12pt;
+      display: inline-block;
+      position: relative;
+
+      &.active:after {
+        content: ' ';
+        width: 20pt;
+        height: 2pt;
+        background-color: white;
+        display: inline-block;
+        position: absolute;
+        bottom: 0;
+        left: calc(50% - 10pt);
+        border-radius: 1px;
+      }
+    }
   }
 
   .o-tab-content {

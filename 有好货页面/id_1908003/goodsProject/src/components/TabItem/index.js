@@ -15,8 +15,21 @@ export default class TabItem extends Component {
     return tabItem;
   }
 
+  get tabName() {
+    return this[ATTR_SYMBOL]['tab-name'];
+  }
+
   get title() {
     return this[ATTR_SYMBOL]['tab-title'];
   }
 
+  setActive() {
+    if (!this.$el) return;
+    this.$el.classList.add('active');
+  }
+
+  setDisactive() {
+    if (!this.$el) return;
+    this.$el.classList.remove('active');
+  }
 };
