@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/有好货页面/id_1908003/goodsProject/testLoader.js"
+      "program": "${workspaceFolder}/有好货页面/id_1908003/goodsProject/test/testLoader.js"
     }
   ]
 }
