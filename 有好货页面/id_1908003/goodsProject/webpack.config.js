@@ -3,7 +3,8 @@ var CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: './my.component',
+  // entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js'
@@ -29,6 +30,12 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.component$/,
+        use: {
+          loader: require.resolve('./component-loader.js'),
+        },
+      }
     ]
   },
   plugins: [
