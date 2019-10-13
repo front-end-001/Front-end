@@ -206,6 +206,7 @@ export default (function () {
         el.addEventListener('touchstart', (event) => {
           event.preventDefault();
         });
+
         el.addEventListener('touchstart', touchstart);
         el.addEventListener('touchmove', touchmove);
         el.addEventListener('touchend', touchend);

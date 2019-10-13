@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   background-image: url('/static/image/bacground.png');
-  background-size: contain;
+  background-size: 100%;
   background-repeat: no-repeat;
 
   .o-tab-header {
@@ -18,6 +18,10 @@
       padding: 7pt 12pt;
       display: inline-block;
       position: relative;
+
+      &.active {
+        font-weight: bolder;
+      }
 
       &.active:after {
         content: ' ';
@@ -37,6 +41,7 @@
     flex: 1;
     overflow: hidden;
     white-space: nowrap;
+    background-color: #EFEFEF;
 
     .o-tab-item {
       height: 100%;
@@ -44,6 +49,14 @@
       width: 100%;
       min-width: 100%;
       display: inline-block;
+      will-change: transform;
+      transition: all .3s;
+    }
+
+    &.on-drag {
+      .o-tab-item {
+        transition: none;
+      }
     }
   }
 }
