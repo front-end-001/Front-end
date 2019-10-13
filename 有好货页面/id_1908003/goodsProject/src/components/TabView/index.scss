@@ -51,6 +51,7 @@
       display: inline-block;
       will-change: transform;
       transition: all .3s;
+      vertical-align: top;
     }
 
     &.on-drag {
