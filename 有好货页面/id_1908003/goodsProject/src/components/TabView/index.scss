@@ -18,10 +18,14 @@
   .o-tab-content {
     flex: 1;
     overflow: hidden;
+    white-space: nowrap;
 
     .o-tab-item {
       height: 100%;
       overflow: hidden;
+      width: 100%;
+      min-width: 100%;
+      display: inline-block;
     }
   }
 }

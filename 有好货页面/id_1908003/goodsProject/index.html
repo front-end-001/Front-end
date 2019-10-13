@@ -44,7 +44,7 @@
       passive: false
     });
   </script>
-  <script>
+  <!-- <script>
     function loadScript(src) {
       return new Promise((resolve) => {
         let scriptElement = document.createElement('script');
@@ -62,13 +62,13 @@
 
     void async function() {
       const [result, evt] = await Promise.all([
-        fetch('/static/data/data.json').then(res => res.json()),
+        fetch('/static/data/commendTab.json').then(res => res.json()),
         happen(document, 'DOMContentLoaded'),
       ]);
       console.log(result);
-      loadScript('./test.js');
+      // loadScript('./test.js');
     }();
-  </script>
+  </script> -->
 </head>
 
 <body>
