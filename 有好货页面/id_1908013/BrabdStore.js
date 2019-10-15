@@ -6,7 +6,7 @@ const EVENT_SYMBOL = Symbol('event')
 const STATE_SYMBOL = Symbol('state')
 import Img from './Img'
 
-export default class CollectionStore {
+export default class ListView {
     constructor (config) {
         this.property = 1
         this[PROPERTY_SYMBOL] = Object.create(null)
@@ -38,29 +38,38 @@ export default class CollectionStore {
 
     }
     render () {
-        let data = this[ATTRIBUTE_SYMBOL]['data'] || {}
-        let items = data.items || []
-        console.log(data)
-        return <div class="collection-store">
-            <header class="header">
-                <div class="flex store-header">
-                    <Img src={data.icon} alt="" class="logo"/>
-                    <div class="flex flex-column space-between">
-                        <h4 class="store-name" style={'font-size:12px'}>极客时间旗舰店</h4>
-                        <div>
-                            <i class="store-type" style={'font-size:10px;'}>天猫</i>
+        let data = []
+        if (this[ATTRIBUTE_SYMBOL]['data']) {
+            data = this[ATTRIBUTE_SYMBOL]['data']
+        }
+        return <div>
+            {data.map(item => {
+                console.log(item)
+                return <div className={'brand-store'}>
+                    <div className={'flex space-between items-center store-head'}>
+                        <Img class={'logo'} src={item.icon}/>
+                        <div className={'tips'}>
+                            <span style={'font-size: 12px'}>该店已被3.9万人关注啦</span>
                         </div>
                     </div>
-                </div>
-            </header>
-            <div class="content flex">
-                {
-                    items.map(item => {
-                    return <div className="image-container">
-                        <Img src={item.image}/>
+                    <div className={'flex space-between items-center store-info'}>
+                        <div>
+                            <h2 style={'font-size: 16px;'}>{item.name}</h2>
+                            <h5 style={'font-size:12px;'}>{item.promotion}</h5>
+                        </div>
+                        <a href={item.url} className={'enter-store'} style={'font-size:12px;'}>进店&gt;</a>
                     </div>
-                })}
-            </div>
+                    <div className={'flex space-between image-container'}>
+                        {item.items.map(element => {
+                            return <div className={'product-image'}>
+                                <a href={element.url}>
+                                    <Img src={element.image}/>
+                                </a>
+                            </div>
+                        })}
+                    </div>
+                </div>
+            })}
         </div>
     }
     appendChild (child) {
@@ -74,14 +83,15 @@ export default class CollectionStore {
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute (name, value) {
-        this[ATTRIBUTE_SYMBOL][name] = value
+        if (name === 'style') {
+            this.root.setAttribute('style', value)
+        }
         if (name === 'data') {
+            this[ATTRIBUTE_SYMBOL][name] = value
+            console.log(this[ATTRIBUTE_SYMBOL])
             this.root.innerHTML = ''
             this.render().appendTo(this.root)
             return value
-        }
-        if (name === 'style') {
-            this.root.style = value
         }
     }
     addEventListener (type, listener) {
