@@ -3,14 +3,15 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Tab {
+export default class Div {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
+        
+
         this[PROPERTY_SYMBOL].children = [];
-        this[PROPERTY_SYMBOL].headers = [];
 
         this.created();
     }
@@ -21,12 +22,37 @@ export default class Tab {
     }
 
     created(){
-        this.root = document.createElement('div');
-        this.contentContainer = document.createElement('div');
-        this.headerContainer = document.createElement('div');
-        this.root.appendChild(this.headerContainer);
-        this.root.appendChild(this.contentContainer);
-        this.headerContainer.classList.add('tab-head');
+        this.root = document.createElement("div");
+        this.root.classList.add('shop-view');
+        let inner = document.createElement('div')
+        inner.classList.add('innner');
+        let top = document.createElement('div');
+        top.classList.add('top-info')
+        let content = document.createElement('div');
+        content.classList.add('image-box');
+        inner.appendChild(top);
+        inner.appendChild(content);
+        // 
+        let logo = document.createElement('img');
+        img.src = this.logo;
+        top.appendChild(logo);
+        
+        let rightInfo = document.createElement('div');
+        rightInfo.classList('right-info');
+        let title = document.createElement('div')
+        title.classList.add('title')
+        rightInfo.appendChild(title);
+        let badage = document.createElement('div');
+        badage.classList.add('badage')
+        rightInfo.appendChild(badage);
+
+        top.appendChild(rightInfo);
+        // 图片列表
+        for(let image of this.images){
+            let img = document.createElement('img')
+            img.src = image;
+            content.appendChild(img);
+        }
     }
     mounted(){
 
@@ -40,27 +66,7 @@ export default class Tab {
 
     appendChild(child){
         this.children.push(child);
-        
-        let title = child.getAttribute('tab-title') || '';
-        this[PROPERTY_SYMBOL].headers.push(title);
-
-        let header = document.createElement('header');
-        header.innerText = title;
-        header.classList.add('tab-head-item')
-
-        this.headerContainer.style.height = '120px';
-        this.headerContainer.appendChild(header);
-
-        child.appendTo(this.contentContainer);
-        for(let i = 0; i < this.contentContainer.children.length; i++){
-            this.contentContainer.children[i].style.width = '100%';
-            this.contentContainer.children[i].style.height = '99%';
-            this.contentContainer.children[i].style.display = 'inline-block';
-            this.contentContainer.children[i].style.whiteSpace = 'normal';
-            this.contentContainer.style.whiteSpace = 'nowrap';
-            this.contentContainer.style.flex = 1;
-            this.contentContainer.style.overflow = 'hidden';
-        }
+        child.appendTo(this.root);
     }
 
 
@@ -76,9 +82,6 @@ export default class Tab {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
-            // this.root.style.whiteSpace = 'nowrap';
-            this.root.style.display = 'flex';
-            this.root.style.flexDirection = 'column';
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
