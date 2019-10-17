@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
@@ -20,6 +21,8 @@
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
-    "classnames": "^2.2.6"
+    "classnames": "^2.2.6",
+    "eventbusjs": "^0.2.0",
+    "humps": "^2.0.1"
   }
 }
