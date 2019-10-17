@@ -38,8 +38,18 @@ export default class TabView {
         this.root.appendChild(this.contentContainer);
 
         enableGesture(this.contentContainer);
-        console.log("panty");
+        // console.log("panty");
         this[STATE_SYMBOL].position = 0;
+        this.root.addEventListener( // 6、避免单指缩放
+          "touchmove",
+          function(e) {
+            if (e.touches.length == 1) {
+              e.cancelBubble = true;;
+              e.stopImmediatePropagation();
+            }
+          },
+          { passive: false }
+        );
 
         this.contentContainer.addEventListener("pan", event => {
           if (event.isVertical) {
@@ -136,7 +146,7 @@ export default class TabView {
 
         this.headerContainer.appendChild(header);
          header.addEventListener("click", event => {
-             console.log(n)
+            //  console.log(n)
              this[STATE_SYMBOL].position = n;
             for(let i = 0;i< this.contentContainer.children.length;i++) {
                 this.contentContainer.children[i].style.width = "100%";

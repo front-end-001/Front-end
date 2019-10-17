@@ -1,9 +1,12 @@
-const PROPERTY_SYMBOL = Symbol('property');
-const ATTRIBUTE_SYMBOL = Symbol('attribute');
+import {create} from "./create.js";
+import Div from "./Div.js";
+
+const PROPERTY_SYMBOL = Symbol("property");
+const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ScrollView {
+export default class ListView {
     constructor(config) {
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -11,42 +14,18 @@ export default class ScrollView {
         this[STATE_SYMBOL] = Object.create(null);
 
 
-        this[PROPERTY_SYMBOL].children = []; //children需要初始化
+        this[PROPERTY_SYMBOL].children = [];//children需要初始化
 
         this.created();// 创建的时候被调用
 
     }
-    appendTo(element) {
+    appendTo(element){
         element.appendChild(this.root);
         this.mounted();
     }
-    created() {
+    created(){
         this.root = document.createElement("div");
-        this.placeHolder = document.createElement("div");
-        // this.placeHolder.innerText = "加载更多...";
-        this.placeHolder.style.backgroundColor = "lightgreen"
-        this.root.appendChild(this.placeHolder)
-
-
-        let triggerd = false;
-        this.root.addEventListener("scroll", event =>{
-            let clientRect = this.root.getBoundingClientRect();
-            let placeHolderRect = this.placeHolder.getBoundingClientRect();
-            if(clientRect.bottom < placeHolderRect.top) {
-                if(!triggerd) {// 老师这里写的是  triggerd 
-                    this.triggerEvent('scrollToBottom');
-                    triggerd = true;
-                }
-               
-            }
-            // console.log(this.root.scrollHeight,clientRect.height,this.root.scrollTop)
-            /*if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
-               this.triggerEvent('scrollToBottom','a')//添加事件判断到底
-                console.log("到底了")
-            }*/
-
-        })
-        this[STATE_SYMBOL].h = 0;
+        this.render().appendTo(this.root);
     }
 
     mounted() {
@@ -58,9 +37,21 @@ export default class ScrollView {
     update() {
 
     }
+    
+    render(){
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        return <div>
+            hello
+            { 
+                data.map(item => (
+                    <div><span class="x">{item.a}</span><span class="x">{item.b}</span></div>
+                ))
+            }
+        </div>
+    }
 
-    get style() {
-        return this.root.style
+    get style(){
+        return this.root.style;
     }
     appendChild(child) {
         this.children.push(child);
@@ -68,8 +59,8 @@ export default class ScrollView {
         this.root.appendChild(this.placeHolder)
     }
 
-    get children() {
-       return this[PROPERTY_SYMBOL].children 
+    get children(){
+        return this[PROPERTY_SYMBOL].children;
     }
     // set children(value) { // children 不能设置
     //     // console.log("property");
@@ -83,14 +74,16 @@ export default class ScrollView {
         return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
-        if(name == "style"){
-            this.root.setAttribute('style',value);
-           
+        if(name == "style") {
+            this.root.setAttribute("style", value);
         }
-        if(name == "placeHolderText"){
-           this.placeHolder.innerText = value
-        }
+        if(name == "data") {
+            this[ATTRIBUTE_SYMBOL][name] = value;
 
+            this.root.innerHTML = "";
+            this.render().appendTo(this.root);
+            return value;
+        }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     
