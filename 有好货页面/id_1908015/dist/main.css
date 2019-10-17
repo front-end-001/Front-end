@@ -1,0 +1,32 @@
+body {
+  background-color: #9e48ff;
+}
+
+.tab {
+  display: flex;
+  text-align: center;
+}
+
+.tab-item {
+  flex: 1;
+  padding: 8px;
+  color: #e8e8e8;
+  /*opacity: 0.8;*/
+}
+
+.tab-item.active {
+  color: #fff;
+  position: relative;
+  /*border-bottom: 2px solid #fff;*/
+}
+
+.tab-item.active:after {
+  content: " ";
+  width: 10px;
+  height: 2px;
+  background: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}

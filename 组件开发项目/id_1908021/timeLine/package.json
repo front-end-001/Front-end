@@ -4,6 +4,7 @@
   "description": "css animation lib",
   "scripts": {
     "build": "webpack --mode=development",
+    "watch": "webpack --mode=development --watch",
     "buildTS": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,6 +26,12 @@
     "typescript": "^3.5.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.6.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-es2015": "^6.24.1",
     "ts-loader": "^6.0.4",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7"
