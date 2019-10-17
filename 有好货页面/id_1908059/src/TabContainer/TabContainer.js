@@ -10,15 +10,10 @@ import Swiper from "./Swiper";
 import "./TabContainer.css";
 
 export default class TabContainer extends Component {
-  constructor(attr) {
-    super({ ...attr, props: { state: { tabIndex: 0 } } });
-  }
-
   render() {
-    const {tabIndex} = this.getProperty("state");
     return (
       <div className="TabContainer">
-        <TabList props={{tabIndex}} />
+        <TabList props={{tabIndex: 0}} />
         <Swiper />
       </div>
     );

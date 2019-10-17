@@ -5,8 +5,11 @@ import {
   DOMElementStyleNumberAnimation,
   ease
 } from "~/lib/animation";
+import ListContainer from "./ListContainer";
+import mockListData from "./mockListData";
 
 import "./Swiper.css";
+import EventBus from "eventbusjs";
 
 export default class Swiper extends Component {
   componentDidMount() {
@@ -24,8 +27,15 @@ export default class Swiper extends Component {
     );
     this.transitMethod = ease;
     this.transitionDuration = 500;
+    for (let index = 0; index < children.length; index++) {
+      children[index].style.transform = "translate(0px)";
+      if (parseInt(index) === children.length - 1 && children.length > 2) {
+        children[index].style.transform = `translate(-${this.elementWidth *
+          (1 + parseInt(index))}px)`;
+      }
+    }
     let positionOf = element => {
-      let position = element.style.transform.match(/\((.*?)\)/g)[0];
+      let [position] = element.style.transform.match(/\((.*?)\)/g) || [];
       if (position.slice(position.length - 2, position.length - 1) === "%") {
         return (
           (parseInt(position.slice(1, position.length - 2)) *
@@ -38,7 +48,7 @@ export default class Swiper extends Component {
         return parseInt(position.slice(1, position.length - 3));
       } else console.log("positionOf error, positoin=", position);
     };
-    let nextFrame = (i = 1) => {
+    let nextFrame = (i = 1, transitionDuration = this.transitionDuration) => {
       let current = children[position];
       let nextPosition = (position + 1) % children.length;
       let next = children[nextPosition];
@@ -61,37 +71,17 @@ export default class Swiper extends Component {
             "transform",
             0,
             currentPo,
-            currentDis * this.transitionDuration,
+            currentDis * transitionDuration,
             -this.elementWidth - this.elementWidth * position,
             this.transitMethod,
             v => `translateX(${v}px)`
           )
         );
       }
-      if (i === 1) {
-        nextNext.style.transform = `translate(${this.elementWidth -
-          this.elementWidth * nextNextPosition}px)`;
-      } else {
-        let nextNextPo = positionOf(nextNext);
-        let nextNextDis =
-          Math.abs(
-            this.elementWidth -
-              this.elementWidth * nextNextPosition -
-              nextNextPo
-          ) / this.elementWidth;
-        tl.addAnimation(
-          new DOMElementStyleNumberAnimation(
-            nextNext,
-            "transform",
-            0,
-            nextNextPo,
-            nextNextDis * this.transitionDuration,
-            this.elementWidth - this.elementWidth * nextNextPosition,
-            this.transitMethod,
-            v => `translateX(${v}px)`
-          )
-        );
-      }
+
+      nextNext.style.transform = `translate(${this.elementWidth -
+        this.elementWidth * nextNextPosition}px)`;
+
       let nextPo = positionOf(next);
       let nextDis =
         Math.abs(-this.elementWidth * nextPosition - nextPo) /
@@ -102,7 +92,7 @@ export default class Swiper extends Component {
           "transform",
           0,
           nextPo,
-          this.transitionDuration * nextDis,
+          transitionDuration * nextDis,
           -this.elementWidth * nextPosition,
           this.transitMethod,
           v => `translateX(${v}px)`
@@ -125,20 +115,18 @@ export default class Swiper extends Component {
       let next = children[nextPosition];
       let previousPosition = position - 1;
       let previous = children[previousPosition];
+
       current.style.transform = `translate(${-position * this.elementWidth +
-        event.dx +
-        offset}px`;
+        event.dx}px`;
       if (next) {
         next.style.transform = `translate(${this.elementWidth -
           this.elementWidth * nextPosition +
-          event.dx +
-          offset}px)`;
+          event.dx}px)`;
       }
       if (previous) {
         previous.style.transform = `translate(${this.elementWidth *
           (-1 - previousPosition) +
-          event.dx +
-          offset}px)`;
+          event.dx}px)`;
       }
     });
 
@@ -155,13 +143,31 @@ export default class Swiper extends Component {
         condition = event.dx < 0 ? 1 : -1;
       } else {
         let x = event.dx;
-        condition =
-          x < -this.elementWidth / 2 ? 1 : x > this.elementWidth / 2 ? -1 : 0;
+        if (Math.abs(x) < this.elementWidth / 2) {
+          condition = 0;
+        } else {
+          condition = this.elementWidth > 0 ? 1 : -1;
+        }
       }
-      position =
-        offset < this.elementWidth
-          ? (position - 1 + children.length + condition) % children.length
-          : (position - 2 + children.length + condition) % children.length;
+      position = (position - 1 + children.length + condition) % children.length;
+      EventBus.dispatch("swiperChange", null, {
+        index: (position + 1 + children.length) % children.length
+      });
+      nextFrame(condition);
+    });
+
+    EventBus.addEventListener("tabChange", (e, { index }) => {
+      let condition = 0;
+      if (index === position) {
+        return;
+      }
+      if (index === (position + 1 + children.length) % children.length) {
+        condition = 1;
+      }
+      if (index === (position - 1 + children.length) % children.length) {
+        condition = -1;
+      }
+      position = (position - 1 + children.length + condition) % children.length;
       nextFrame(condition);
     });
   }
@@ -170,9 +176,9 @@ export default class Swiper extends Component {
     return (
       <div className="Swiper">
         <div className="Swiper-container">
-          <div className="Swiper-item">1</div>
-          <div className="Swiper-item">2</div>
-          <div className="Swiper-item">3</div>
+          <ListContainer data={mockListData} index={1} />
+          <ListContainer index={2} />
+          <ListContainer index={3} />
         </div>
       </div>
     );

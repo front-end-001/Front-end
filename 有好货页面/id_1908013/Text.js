@@ -10,7 +10,8 @@ export default class Text {
         this[ATTRIBUTE_SYMBOL] = Object.create(null)
         this[EVENT_SYMBOL] = Object.create(null)
         this[STATE_SYMBOL] = Object.create(null)
-        this[STATE_SYMBOL].children = []
+
+        this[PROPERTY_SYMBOL].children = []
         this.text = config || ''
         this.created()
     }
@@ -20,8 +21,8 @@ export default class Text {
         this.mounted()
     }
     created () {
-        this.root = document.createElement('span')
-        this.root.innerText = this.text
+        this.root = document.createTextNode(this.text)
+        //this.root.innerText = this.text
     }
     mounted () {
 
@@ -48,6 +49,9 @@ export default class Text {
         if (name === 'width') {
             this.width = value
         }
+        // if (name === 'className') {
+        //     this.root.setAttribute('class', value)
+        // }
         return this[ATTRIBUTE_SYMBOL][name] = value
     }
     addEventListener (type, listener) {

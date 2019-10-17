@@ -1,10 +1,9 @@
-
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Carousel {
+export default class Div {
     constructor(){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -32,7 +31,6 @@ export default class Carousel {
     unmounted(){
 
     }
-
     update(){
 
     }
@@ -49,7 +47,6 @@ export default class Carousel {
     getDOM () {
         return this.root;
     }
-
     getAttribute(name){
         if (name == 'style') {
             return this.root.getAttribute('style')
@@ -68,7 +65,6 @@ export default class Carousel {
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
-
     addEventListener(type, listener){
         if(!this[EVENT_SYMBOL][type])
             this[EVENT_SYMBOL][type] = new Set;
@@ -80,6 +76,8 @@ export default class Carousel {
         this[EVENT_SYMBOL][type].delete(listener);
     }
     triggerEvent(type){
+        if(!this[EVENT_SYMBOL][type])
+            return;
         for(let event of this[EVENT_SYMBOL][type])
             event.call(this);
     }
