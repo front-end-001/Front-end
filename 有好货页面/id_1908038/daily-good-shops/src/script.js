@@ -1,12 +1,20 @@
-import { Carousel } from "./components/component";
+import TabView from "./TabView.js"
+import ScrollView from "./ScrollView.js"
+import ListView from "./ListView.js"
 
-function myCreate(Class, attributes){
-    var object = new Class();
-    for(let name in attributes)
-        object.setAttribute(name, attributes[name]);
-    return object; 
+import Div from "./Div.js"
+import {create} from "./create.js"
+
+import tree from "./my.component";
+
+
+function loadMore(){
+    setTimeout(()=>{
+        this.setAttribute("placeHolderText", "没有更多啦！");
+    }, 5000);
 }
 
-
-var c = <Carousel width="100"></Carousel>
-c.appendTo(document.body);
+window.render = function(data, root){
+    var c = tree;
+    c.appendTo(document.body);
+}
