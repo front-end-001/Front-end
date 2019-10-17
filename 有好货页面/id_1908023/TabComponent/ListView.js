@@ -1,10 +1,13 @@
+import {create} from '../create';
+import Div from './Div';
+
 // 要认真写 symbol 的名字，跟注释差不多的作用
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
-export default class ScrollView {
+export default class ListView {
   // 属性要在 constructor 里面写
   constructor() {
     // 存 attribute 和 property 一定要用纯净的对象
@@ -26,41 +29,39 @@ export default class ScrollView {
   appendChild(child) {
     this.children.push(child);
     child.appendTo(this.root);
-    this.root.appendChild(this.placeHolder);
   }
 
   // 生命周期
   created() {
     this.root = document.createElement('div');
-    this.placeHolder = document.createElement('div');
-    this.placeHolder.style.backgroundColor = 'lightgreen';
-    this.root.appendChild(this.placeHolder);
+    // this.root.innerText = '112312312312'
+    // let element = <Div><Div>text</Div>abc</Div>;
+    // let element = <div><div>text</div>abc<img src='https://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super' /></div>;
+    // element.appendTo(this.root);
+    this.render().appendTo(this.root);
+  }
 
-    let triggered = false;
+  mounted() {}
 
-    this.root.addEventListener('scroll', event => {
-      let clientRect = this.root.getBoundingClientRect();
-      let placeHolderRect = this.placeHolder.getBoundingClientRect();
-      if (clientRect.bottom < placeHolderRect.top) {
-        if (triggered) {
-          this.triggerEvent("scrolToBottom");
-          triggered = true;
+  render() {
+    // return <div><div>text</div>abc<img src='https://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super' /></div>;
+    let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
+    return (
+      <div>
+        {
+          data.map(item => (
+            <div><span>{item.name}</span></div>
+          ))
         }
-      }
-    })
+      </div>
+    )
   }
-
-  get style() {
-    return this.root.style;
-  }
-
-  mounted() { }
-
+  
   get children() {
     return this[PROPERTY_SYMBOL].children;
   }
 
-  getAttribute(name) {
+  getAttriute(name) {
     if (name === 'style') {
       return this.root.getAttribute('style');
     }
@@ -76,12 +77,15 @@ export default class ScrollView {
     if (name === 'class') {
       this.root.setAttribute('class', value);
     }
-    if (name === 'placeHolderText') {
-      this.placeHolder.innerText = value;
+    if (name === 'data') {
+      this[ATTRIBUTE_SYMBOL][name] = value;
+      this.root.innerHTML = '';
+      this.render().appendTo(this.root);
+      return value;
     }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
-
+  
   addEventListener(type, listener) {
     if (!this[EVENT_SYMBOL][type]) {
       this[EVENT_SYMBOL][type] = new Set();
@@ -94,12 +98,9 @@ export default class ScrollView {
     }
     this[EVENT_SYMBOL][type].delete(listener);
   }
-  triggerEvent(type, ...args) {
-    if (!this[EVENT_SYMBOL][type])
-      return;
-
+  triggerEvent(type) {
     for (let event of this[EVENT_SYMBOL][type]) {
-      event.call(this, ...args);
+      event.call(this, type);
     }
   }
 }
