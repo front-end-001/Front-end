@@ -20,15 +20,29 @@ export default class ScrollView {
         element.appendChild(this.root);
         this.mounted();
     }
-
+    get style () {
+        return this.root.style
+    }
     created(){
         this.root = document.createElement("div");
-        this.root.addEventListener("touchmove",function(e){
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {
-            passive:false
-        });
+        this.placeholder = document.createElement('div')
+        this.placeholder.innerText = '加载更多'
+        this.placeholder.style.background = 'lightgreen'
+        this.root.appendChild(this.placeholder)
+
+        this.root.addEventListener('scroll', event => {
+            let clientRect = this.root.getBoundingClientRect()
+            let placeHolderRect = this.placeholder.getBoundingClientRect()
+            console.log(clientRect.bottom , placeHolderRect.top)
+            if (clientRect.bottom < placeHolderRect.top) {
+                this.triggerEvent('scrollToBottom')
+            }
+            // if (this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
+            //     console.log('到底了')
+            //     this.triggerEvent('scrollToBottom')
+            // }
+
+        })
         this[STATE_SYMBOL].h = 0;
     }
     mounted(){
@@ -44,8 +58,8 @@ export default class ScrollView {
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
+        this.root.appendChild(this.placeholder)
     }
-
 
     get children(){
         return this[PROPERTY_SYMBOL].children;
@@ -54,11 +68,17 @@ export default class ScrollView {
         if(name == "style") {
             return this.root.getAttribute("style");
         }
+        if (name === 'className') {
+            return this.root.getAttribute('className')
+        }
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if (name === 'className') {
+            this.root.setAttribute('class', value)
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

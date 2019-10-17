@@ -17,7 +17,7 @@ var path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './index.js',
+  entry: './src/index.js',
   module: {
         rules: [
             {
@@ -30,23 +30,30 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                       presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
+                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
+            },
+            {
+              test: /\.(png|jpg|jpeg|gif|bmp)$/,
+              use: 'url-loader'
             }
         ]
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: path.resolve('./dev'),
+    /* host: '192.168.1.108',
+    port: '8080', */
     hot: true
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'foo.bundle.js'
+    filename: 'main.js'
   },
   optimization: {
     minimize: false
-  }
+  },
+  devtool: 'cheap-module-eval-source-map'
 };
 
 

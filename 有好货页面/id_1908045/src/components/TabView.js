@@ -1,10 +1,14 @@
+import { enableGesture } from './../js/gesture.js'
+
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const PROPERTY_SYMBOL = Symbol('property')
+const STATE_SYMBOL = Symbol('state')
 
 export default class TabView {
     constructor() {
         this[ATTRIBUTE_SYMBOL] = Object.create(null)
         this[PROPERTY_SYMBOL] = Object.create(null)
+        this[STATE_SYMBOL] = Object.create(null)
 
         this[PROPERTY_SYMBOL].children = []
         this[PROPERTY_SYMBOL].headers = []
@@ -27,6 +31,88 @@ export default class TabView {
 
         this.root.appendChild(this.headerContainer)
         this.root.appendChild(this.contentContainer)
+
+        enableGesture(this.listContainer)
+        this[STATE_SYMBOL].position = 0
+
+        this.root.addEventListener('touchmove', event => {
+            event.cancelBubble = true
+            event.stopImmediatePropagation()
+        }, {
+                passive: false
+            })
+
+        this.listContainer.addEventListener("pan", event => {
+            if (event.isVertical) {
+                return
+            }
+            let width = this.contentContainer.getBoundingClientRect().width
+
+            let dx = event.dx
+
+            if (this[STATE_SYMBOL].position === 0 && event.dx > 0) {
+                dx = dx / 2
+            }
+            if (this[STATE_SYMBOL].position === this.listContainer.children.length - 1 && event.dx > 0) {
+                dx = dx / 2
+            }
+            // event.origin.preventDefault()
+            for (let i = 0; i < this.listContainer.children.length; i++) {
+                this.listContainer.children[i].style.transition = 'ease 0s'
+                this.listContainer.children[i].style.transform = `translateX(${dx - width * this[STATE_SYMBOL].position}px)`
+            }
+        });
+        this.listContainer.addEventListener("panend", event => {
+            if (event.isVertical) {
+                return
+            }
+            let position = this[STATE_SYMBOL].position
+            let width = this.listContainer.getBoundingClientRect().width / 3
+            event.preventDefault();
+            let isLeft;
+            if (event.isFlick) {
+                if (event.dx > 0) {
+                    position--;
+                    isLeft = true;
+                }
+
+                if (event.dx < 0) {
+                    position++;
+                    isLeft = false;
+                }
+            } else {
+                if (event.dx > width / 2) {
+                    position--;
+                    isLeft = true;
+                } else if (event.dx < -(width / 2)) {
+                    position++;
+                    isLeft = false;
+                } else if (event.dx > 0) {
+                    isLeft = false;
+                } else {
+                    isLeft = true;
+                }
+            }
+
+
+            // position = (children.length + position) % children.length;
+            if (position < 0) {
+                position = 0
+            }
+            if (position >= this.listContainer.children.length) {
+                position = this.listContainer.children.length - 1
+            }
+            for (let i = 0; i < this.listContainer.children.length; i++) {
+                this.listContainer.children[i].style.transition = 'ease 0s'
+                this.listContainer.children[i].style.transform = `translateX(${-width * (position)}px)`
+            }
+
+            this[STATE_SYMBOL].position = position
+        });
+
+        this.listContainer.addEventListener("pancancel", event => {
+        });
+        //   this.listContainer.addEventListener("mousedown", event => event.preventDefault());
     }
 
     get children() {
@@ -59,7 +145,9 @@ export default class TabView {
     }
 
     appendChild(child) {
+        const n = this.children.length
         this.children.push(child)
+        child.setAttribute('index', n)
         child.appendTo(this.listContainer)
         this.listContainer.style.width = `${this.children.length}00%`
 
@@ -69,7 +157,33 @@ export default class TabView {
         header.innerText = title
         this.headerContainer.appendChild(header)
         this.headerContainer.children[0].classList.add('tab-active')
-        header.addEventListener('click', e => { this.toggleTab(e) })
+
+        header.addEventListener('click', e => {
+            this[STATE_SYMBOL].position = n
+            // 自己
+            // this.toggleTab(e)
+            // 第一种
+            // for(let i=0;i<this.listContainer.children.length;i++){
+            //     this.listContainer.children[i].style.wisth='100%'
+            //     this.listContainer.children[i].style.height='100%'
+            //     this.listContainer.children[i].style.display='none'
+            // }
+            // child.style.display='inline-block'
+
+
+            // 第二种
+            for (let i = 0; i < this.listContainer.children.length; i++) {
+                this.listContainer.children[i].style.wisth = '100%'
+                this.listContainer.children[i].style.height = '100%'
+                this.listContainer.children[i].style.transition = 'ease 0.5s'
+                this.listContainer.children[i].style.transform = `translateX(${-n * (100)}%)`
+            }
+            for (let i = 0; i < this.headerContainer.children.length; i++) {
+                this.headerContainer.children[i].classList.remove('tab-active')
+            }
+            header.classList.add('tab-active')
+
+        })
 
         for (let i = 0; i < this.listContainer.children.length; i++) {
             this.listContainer.children[i].style.width = `${100 / this.children.length}%`

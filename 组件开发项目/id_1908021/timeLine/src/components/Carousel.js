@@ -33,7 +33,7 @@ export default class Carousel {
 
     this[PROPERTY_SYMBOL].children = [];
 
-    this.created(configs);
+    this.created(configs);  
   }
 
   appendTo(element) {
@@ -83,10 +83,9 @@ export default class Carousel {
 
     let current = (this[PROPERTY_SYMBOL].current = children[position]),
       next = children[nextPosition];
-    next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
-
+    // next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
     this.offsetTimeStart = Date.now();
-
+    console.log(nextPosition)
     this.tl.addAnimation(
       new DOMElementStyleNumberAnimation(
         current,

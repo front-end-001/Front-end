@@ -4,7 +4,6 @@ const initGesture = (main) => {
     // 2. 判断何时拖拽结束
     // 3. 实现"拖拽结束"的逻辑
     const start = (e, context) => {
-        console.log('start', e.clientX, e.clientY)
         context.startX = e.clientX
         context.startY = e.clientY
         context.isTap = true
@@ -12,7 +11,6 @@ const initGesture = (main) => {
         context.flickTime = new Date()
     }
     const move = (e, context) => {
-        console.log('move', e.clientX, e.clientY)
         const dx = e.clientX - context.startX
         const dy = e.clientY - context.startY
         if (dx * dx + dy * dy > 100) {
@@ -42,7 +40,6 @@ const initGesture = (main) => {
         }
     }
     const end = (e, context) => {
-        console.log('-----',context.isPan)
         if (context.isTap) {
             main.dispatchEvent(new Event("tap"))
         }
@@ -63,7 +60,6 @@ const initGesture = (main) => {
             panendE.isHorizontal = context.isHorizontal
             panendE.isVertical = context.isVertical
             main.dispatchEvent(panendE)
-            console.log('end pan', context.startX)
         }
     }
     const cancel = (e, context) => {
@@ -90,32 +86,31 @@ const initGesture = (main) => {
     }
     main.addEventListener("mousedown", mousedown)
     const touchStart = e => {
+        e.preventDefault()
         for(const touch of e.changedTouches) {
             contexts[touch.identifier] = Object.create(null)
             start(touch, contexts[touch.identifier])
         }
     }
-    const touchmove = e => {
-        console.log('0000')
+    const touchMove = e => {
         for(const touch of e.changedTouches) {
             move(touch, contexts[touch.identifier])
         }
     }
-    const touchend = e => {
-        console.log('111')
+    const touchEnd = e => {
         for(const touch of e.changedTouches) {
             end(touch, contexts[touch.identifier])
         }
     }
-    const touchcancel = e => {
+    const touchCancel = e => {
         for(const touch of e.changedTouches) {
             cancel(touch, contexts[touch.identifier])
             delete contexts[touch.identifier]
         }
     }
     main.addEventListener("touchstart", touchStart)
-    main.addEventListener("touchmove", touchmove)
-    main.addEventListener("touchend", touchend)
-    main.addEventListener("touchcancel", touchcancel)
+    main.addEventListener("touchmove", touchMove)
+    main.addEventListener("touchend", touchEnd)
+    main.addEventListener("touchcancel", touchCancel)
 }
 export default initGesture

@@ -10,14 +10,11 @@ const imageUrls = [
 
 const carousel = (
   <Carousel imageUrls={imageUrls} width={800} height={480}>
-    <div id="test">
-      <a></a>
-    </div>
+
   </Carousel>
 );
 
 window.carousel = carousel;
-
 carousel.appendTo(document.getElementById('container'));
 console.log(carousel);
 // setTimeout(() => {

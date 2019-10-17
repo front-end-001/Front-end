@@ -10,7 +10,7 @@ export default class Div {
         this[ATTRIBUTE_SYMBOL] = Object.create(null)
         this[EVENT_SYMBOL] = Object.create(null)
         this[STATE_SYMBOL] = Object.create(null)
-        this[STATE_SYMBOL].children = []
+        this[PROPERTY_SYMBOL].children = []
         this.created()
     }
 
@@ -20,7 +20,6 @@ export default class Div {
     }
     created () {
         this.root = document.createElement('div')
-        this.root.style.backgroundColor = 'lightgreen'
     }
     mounted () {
 
@@ -46,6 +45,9 @@ export default class Div {
     setAttribute (name, value) {
         if (name === 'width') {
             this.width = value
+        }
+        if (name === 'className') {
+            this.root.setAttribute('class', value)
         }
         return this[ATTRIBUTE_SYMBOL][name] = value
     }

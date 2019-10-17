@@ -12,7 +12,7 @@ const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state')
 
 export default class Component { //是否可以抽象出来一部分作为基类？
-    constructor(config) { //config的设计
+    constructor(config) { //config的设计bets
         //js 改变
         this[PROPERTY_SYMBOL] = Object.create(null); 
         //html 改变
