@@ -1,3 +1,4 @@
+import '../css/style.less'
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
@@ -32,7 +33,7 @@ export default class TabView {
     this.headerContainer.style.height = "93px";
     // this.headerContainer.style.position = 'fixed';
     // this.headerContainer.style.top = 0;
-    this.headerContainer.style.backgroundColor = "#792afd";
+    // this.headerContainer.style.backgroundColor = "#792afd";
     this.root.appendChild(this.headerContainer);
     this.root.appendChild(this.contentContainer);
     enaleGesture(this.contentContainer)
@@ -122,6 +123,7 @@ export default class TabView {
     this.children.push(child);
 
     let title = child.getAttribute("tab-title") || "";
+    console.log(title)
     this[PROPERTY_SYMBOL].headers.push(title);
 
     let header = document.createElement("div");
@@ -159,6 +161,9 @@ export default class TabView {
     if(name == "style") {
       return this.root.getAttribute("style");
     }
+    if(name == "class") {
+      return this.root.getAttribute("class");
+    }
     return this[ATTRIBUTE_SYMBOL][name]
   }
   setAttribute(name, value){
@@ -167,7 +172,9 @@ export default class TabView {
       this.root.style.display = "flex";
       this.root.style.flexDirection = "column"
     }
-
+    if(name == "class") {
+      this.root.setAttribute("class", value);
+    }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
   addEventListener(type, listener){

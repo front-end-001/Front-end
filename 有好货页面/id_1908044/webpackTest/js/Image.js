@@ -3,7 +3,7 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ScrollView {
+export default class Image {
   constructor(config){
     this[PROPERTY_SYMBOL] = Object.create(null);
     this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -22,25 +22,8 @@ export default class ScrollView {
   }
 
   created(){
-    this.root = document.createElement("div");
-    // this.root.addEventListener("touchmove",function(e){
-      // e.cancelBubble = true;
-      // e.stopImmediatePropagation();
-    // }, {
-    //   passive:false
-    // });
-    this.root.addEventListener('scroll', event => {
-      console.log('scroll')
-      let clientRect = this.root.getBoundingClientRect()
-      console.log(this.root.scrollHeight,clientRect.height,this.root.scrollTop)
-      if (this.root.scrollHeight <= clientRect.height + this.root.scrollTop) {
-        // 到底部了
-        this.triggerEvent('scrollToBottom')
-      }
-      if(this.root.scrollTop<=0){
-        this.triggerEvent('scrollTotop')
-      }
-    })
+    this.root = document.createElement("img");
+    console.log(this.root,'imng')
     this[STATE_SYMBOL].h = 0;
   }
   mounted(){
@@ -50,10 +33,6 @@ export default class ScrollView {
 
   }
   update(){
-
-  }
-  get style(){
-    return this.root.style
 
   }
 
@@ -75,6 +54,9 @@ export default class ScrollView {
   setAttribute(name, value){
     if(name == "style") {
       this.root.setAttribute("style", value);
+    }
+    if(name == "src") {
+      this.root.setAttribute("src", value);
     }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
