@@ -1,43 +1,60 @@
 module.exports = function (source, map) {
     source = source.split("");
-    let stack = [{type: 'document', children: []}]
-    let currentTextNode = null
 
-    function emit(token) {
-        let top = stack[stack.length - 1]
-        if (token.type === 'startTag') {
+
+    let stack = [{type: "document", children:[]}];
+    let currentTextNode = null;
+
+    function emit(token){
+        let top = stack[stack.length - 1];
+
+        if(token.type == "startTag") {
             let element = {
-                type: 'element',
-                children: []
-            }
-            for (let p in token) {
-                if (p !== 'type') {
-                    element[p] = token[p]
-                }
-            }
-            top.children.push(element)
-            if (!token.isSelfClosing) {
-                stack.push(element)
-            }
-            currentTextNode = null
+                type: "element",
+                children: [],
+                attributes: []
+            };
 
-        } else if (token.type === 'endTag') {
-            if (top.tagName !== token.tagName) {
-                throw new Error('Tag start end doesn\'t match!')
+            element.tagName = token.tagName;
+
+            for(let p in token) {
+                if(p != "type" || p != "tagName")
+                    element.attributes.push({
+                        name: p,
+                        value: token[p]
+                    });
+            }
+
+            top.children.push(element);
+
+            if(!token.isSelfClosing)
+                stack.push(element);
+
+            currentTextNode = null;
+
+        } else if(token.type == "endTag") {
+            if(top.tagName != token.tagName) {
+                throw new Error("Tag start end doesn't match!");
             } else {
-                console.log(top)
-                top.children.pop()
+                stack.pop();
             }
-        } else if (token.type === 'text') {
-            if (currentTextNode === null) {
+            currentTextNode = null;
+
+        } else if(token.type == "text") {
+            if(currentTextNode == null) {
                 currentTextNode = {
-                    type: 'text', content: ''
+                    type: "text",
+                    content: ""
                 }
-                top.children.push(token)
+                top.children.push(token);
             }
-            currentTextNode.content += token.content
+            currentTextNode.content += token.content;
         }
     }
+
+
+    ////////////////////////////////////////
+
 
     const EOF = Symbol("EOF");
 
@@ -46,51 +63,50 @@ module.exports = function (source, map) {
     let currentAttribute = null;
 
 
-    function data(c) {
-        if (c == "<") {
+    function data(c){
+        if(c == "<") {
             return tagOpen;
-        } else if (c == "EOF") {
+        } else if( c == EOF) {
             emit({
-                type: 'EOF',
-                content: c
+                type:"EOF"
             });
-            return;
+            return ;
         } else {
             emit({
-                type: "text",
-                content: c
+                type:"text",
+                content:c
             });
             return data;
         }
     }
 
-    function tagOpen(c) {
-        if (c == "/") {
+    function tagOpen(c){
+        if(c == "/") {
             return endTagOpen;
-        } else if (c.match(/^[a-zA-Z]$/)) {
+        } else if(c.match(/^[a-zA-Z]$/)) {
             currentToken = {
                 type: "startTag",
-                tagName: ""
+                tagName : ""
             }
             return tagName(c);
         } else {
             emit({
-                type: 'text',
-                content: c
+                type: "text",
+                content : c
             });
-            return;
+            return ;
         }
     }
 
     function tagName(c) {
-        if (c.match(/^[\t\n\f ]$/)) {
+        if(c.match(/^[\t\n\f ]$/)) {
             return beforeAttributeName;
-        } else if (c == "/") {
+        } else if(c == "/") {
             return selfClosingStartTag;
-        } else if (c.match(/^[A-Z]$/)) {
-            currentToken.tagName += c.toLowerCase();
+        } else if(c.match(/^[A-Z]$/)) {
+            currentToken.tagName += c//.toLowerCase();
             return tagName;
-        } else if (c == ">") {
+        } else if(c == ">") {
             emit(currentToken);
             return data;
         } else {
@@ -98,13 +114,12 @@ module.exports = function (source, map) {
             return tagName;
         }
     }
-
     function beforeAttributeName(c) {
-        if (c.match(/^[\t\n\f ]$/)) {
+        if(c.match(/^[\t\n\f ]$/)) {
             return beforeAttributeName;
-        } else if (c == "/" || c == ">" || c == EOF) {
+        } else if(c == "/" || c == ">" || c == EOF) {
             return afterAttributeName(c);
-        } else if (c == "=") {
+        } else if(c == "=") {
 
         } else {
             currentAttribute = {
@@ -118,13 +133,13 @@ module.exports = function (source, map) {
 
     function attributeName(c) {
         //console.log(currentAttribute);
-        if (c.match(/^[\t\n\f ]$/) || c == "/" || c == ">" || c == EOF) {
+        if(c.match(/^[\t\n\f ]$/) || c == "/" || c == ">" || c == EOF) {
             return afterAttributeName(c);
-        } else if (c == "=") {
+        } else if(c == "=") {
             return beforeAttributeValue;
-        } else if (c == "\u0000") {
+        } else if(c == "\u0000") {
 
-        } else if (c == "\"" || c == "'" || c == "<") {
+        } else if(c == "\"" || c == "'" || c == "<") {
 
         } else {
             currentAttribute.name += c;
@@ -134,13 +149,13 @@ module.exports = function (source, map) {
 
 
     function beforeAttributeValue(c) {
-        if (c.match(/^[\t\n\f ]$/) || c == "/" || c == ">" || c == EOF) {
+        if(c.match(/^[\t\n\f ]$/) || c == "/" || c == ">" || c == EOF) {
             return beforeAttributeValue;
-        } else if (c == "\"") {
+        } else if(c == "\"") {
             return doubleQuotedAttributeValue;
-        } else if (c == "\'") {
+        } else if(c == "\'") {
             return singleQuotedAttributeValue;
-        } else if (c == ">") {
+        } else if(c == ">") {
             //return data;
         } else {
             return UnquotedAttributeValue(c);
@@ -148,12 +163,12 @@ module.exports = function (source, map) {
     }
 
     function doubleQuotedAttributeValue(c) {
-        if (c == "\"") {
+        if(c == "\"") {
             currentToken[currentAttribute.name] = currentAttribute.value;
-            return beforeAttributeName;
-        } else if (c == "\u0000") {
+            return afterQuotedAttributeValue;
+        } else if(c == "\u0000") {
 
-        } else if (c == EOF) {
+        } else if(c == EOF) {
 
         } else {
             currentAttribute.value += c;
@@ -163,12 +178,12 @@ module.exports = function (source, map) {
 
 
     function singleQuotedAttributeValue(c) {
-        if (c == "\'") {
+        if(c == "\'") {
             currentToken[currentAttribute.name] = currentAttribute.value;
-            return AfterQuotedAttributeValue;
-        } else if (c == "\u0000") {
+            return afterQuotedAttributeValue;
+        } else if(c == "\u0000") {
 
-        } else if (c == EOF) {
+        } else if(c == EOF) {
 
         } else {
             currentAttribute.value += c;
@@ -176,16 +191,16 @@ module.exports = function (source, map) {
         }
     }
 
-    function AfterQuotedAttributeValue() {
-        if (c.match(/^[\t\n\f ]$/)) {
+    function afterQuotedAttributeValue (c){
+        if(c.match(/^[\t\n\f ]$/)) {
             return beforeAttributeName;
-        } else if (c == "/") {
+        } else if(c == "/") {
             return selfClosingStartTag;
-        } else if (c == ">") {
+        } else if(c == ">") {
             currentToken[currentAttribute.name] = currentAttribute.value;
             emit(currentToken);
             return data;
-        } else if (c == EOF) {
+        } else if(c == EOF) {
 
         } else {
             currentAttribute.value += c;
@@ -195,21 +210,21 @@ module.exports = function (source, map) {
 
 
     function UnquotedAttributeValue(c) {
-        if (c.match(/^[\t\n\f ]$/)) {
+        if(c.match(/^[\t\n\f ]$/)) {
             currentToken[currentAttribute.name] = currentAttribute.value;
             return beforeAttributeName;
-        } else if (c == "/") {
+        } else if(c == "/") {
             currentToken[currentAttribute.name] = currentAttribute.value;
             return selfClosingStartTag;
-        } else if (c == ">") {
+        } else if(c == ">") {
             currentToken[currentAttribute.name] = currentAttribute.value;
             emit(currentToken);
             return data;
-        } else if (c == "\u0000") {
+        } else if(c == "\u0000") {
 
-        } else if (c == "\"" || c == "'" || c == "<" || c == "=" || c == "`") {
+        } else if(c == "\"" || c == "'" || c == "<" || c == "=" || c == "`") {
 
-        } else if (c == EOF) {
+        } else if(c == EOF) {
 
         } else {
             currentAttribute.value += c;
@@ -217,28 +232,28 @@ module.exports = function (source, map) {
         }
     }
 
-    function selfClosingStartTag(c) {
-        if (c == ">") {
+    function selfClosingStartTag(c){
+        if( c == ">") {
             currentToken.isSelfClosing = true;
             emit(currentToken);
             return data;
-        } else if (c == "EOF") {
+        } else if(c == "EOF") {
 
         } else {
 
         }
     }
 
-    function endTagOpen(c) {
-        if (c.match(/^[a-zA-Z]$/)) {
+    function endTagOpen(c){
+        if(c.match(/^[a-zA-Z]$/)) {
             currentToken = {
                 type: "endTag",
-                tagName: ""
+                tagName : ""
             }
             return tagName(c);
-        } else if (c == ">") {
+        } else if(c == ">") {
 
-        } else if (c == EOF) {
+        } else if(c == EOF) {
 
         } else {
 
@@ -246,46 +261,86 @@ module.exports = function (source, map) {
     }
 
     function afterAttributeName(c) {
-        if (c.match(/^[\t\n\f ]$/)) {
+        if(c.match(/^[\t\n\f ]$/)) {
             return afterAttributeName;
-        } else if (c == "/") {
+        } else if(c == "/") {
             return selfClosingStartTag;
-        } else if (c == "=") {
+        } else if(c == "=") {
             return beforeAttributeValue;
-        } else if (c == ">") {
+        } else if(c == ">") {
             currentToken[currentAttribute.name] = currentAttribute.value;
             emit(currentToken);
             return data;
-        } else if (c == EOF) {
+        } else if(c == EOF) {
 
         } else {
             currentToken[currentAttribute.name] = currentAttribute.value;
             currentAttribute = {
-                name: "",
-                value: ""
+                name : "",
+                value : ""
             };
             return attributeName(c);
         }
     }
 
 
+    /////////////////////////////////////
+
     let state = data;
 
 
-    for (let c of source) {
+    for(let c of source) {
         //console.log(c, state.name)
         state = state(c);
     }
 
     state(EOF);
-    let tree = stack[0]
-    let template = stack[0].children.filter(e => e.tagName === 'template')[0]
-    let rootElement = template.children.filter(e => e.tagName === 'element')[0]
-    let code = []
-    function generateCode (element) {
-        if (node.type === 'element') {
-            code.push(`let element= new ${element.tagName};stack.push(element)`)
+
+    let tree = stack[0];
+
+    let template = stack[0].children.filter(e => e.tagName == "template")[0];
+
+    let rootElement = template.children.filter(e => e.type == "element")[0];
+
+
+    //console.log(rootElement);
+
+    function generateCode(node){
+        console.log(node, '-------node----')
+        if(node.type == "element") {
+            return (
+                `
+element = new ${node.tagName};
+${node.attributes.map(attr => `element.setAttribute(${JSON.stringify(attr.name)}, ${JSON.stringify(attr.value)})\n`).join("")}
+if(stack.length > 0){
+    stack[stack.length - 1].appendChild(element);
+}
+stack.push(element);
+${
+                    node.children ? node.children.map(child => generateCode(child)).join(""):""
+                    }
+root = stack.pop();
+`)
+        }
+        if(node.type == "text") {
+            return (
+                `
+element = new Text(${JSON.stringify(node.content)});
+if(stack.length > 0){
+    stack[stack.length - 1].appendChild(element);
+}
+`)
         }
     }
-    return "123";
+
+    return `
+import TabView from "./TabView.js"
+import ScrollView from "./ScrollView.js"
+import ListView from "./ListView.js"
+import Text from "./Text.js"
+import Wrapper from "./Wrapper.js";
+let root = null;
+let stack = [];
+let element;
+` + generateCode(rootElement) + "export default root;\n";
 }

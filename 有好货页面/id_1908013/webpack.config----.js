@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./my.component",
+    entry: "./index.js",
     module: {
         rules: [
             {
@@ -11,17 +11,11 @@ module.exports = {
                         plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
-            },
-            {
-                test: /\.component$/,
-                use: {
-                    loader: require.resolve('./component-loader')
-                }
             }
         ]
     },
     devServer: {
-        contentBase: './custom-component',
+        contentBase: './dist',
         hot: true,
         host: '0.0.0.0'
     },
