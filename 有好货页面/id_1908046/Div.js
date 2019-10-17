@@ -67,6 +67,7 @@ export default class Div {
         this[EVENT_SYMBOL][type].delete(listener);
     }
     triggerEvent(type){
+        
         if(!this[EVENT_SYMBOL][type])
             return;
         for(let event of this[EVENT_SYMBOL][type])
