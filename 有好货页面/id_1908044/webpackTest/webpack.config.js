@@ -11,11 +11,28 @@ module.exports = {
             plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
           }
         }
+      },
+      {
+        test: /\.less$/,
+        exclude:/(node_modules|bower_components)/,
+        use:['style-loader','css-loader','less-loader']
+      },
+      {
+        test: /\.css$/,
+        exclude:/(node_modules|bower_components)/,
+        use:['style-loader','css-loader']
+      },
+      {
+        test: /\.(png|jpg)$/,
+        loader: 'url-loader?limit=8192&name=img/[hash:8].[name].[ext]',
+        options: {
+          publicPath:'/'
+        }
       }
     ]
   },
   mode: "development",
-  devServer:{
+  devServer: {
     contentBase:'./dist',
     hot:true
   },

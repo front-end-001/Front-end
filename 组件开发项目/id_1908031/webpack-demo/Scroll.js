@@ -54,7 +54,7 @@ export default class ScrollView {
 	// 移除事件
 	removeEventListener(type, listener) {
 		if (!this[EVENT_SYMBOL][type]) {
-			throw new Error('')
+			throw new Error('type error')
 		}
 		// 删除数组小技巧 配合 set 使用 add  delete
 		this[EVENT_SYMBOL][type].delete(listener);
@@ -89,12 +89,14 @@ export default class ScrollView {
 			e.cancelBubble = true;
 			e.stopImmediatePropagation();
 		}, {passive: false});*/
+		let triggered = false;
 		this.root.addEventListener('scroll', event => {
 			let clientRect = this.root.getBoundingClientRect();
 			let placeHolderRect = this.root.getBoundingClientRect();
 			// 判断滚动到底部
 			if(clientRect.bottom < placeHolderRect.top){
 				this.triggerEvent('scrollToBottom');
+				triggered = true;
 			}
 
 			/*if (this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {

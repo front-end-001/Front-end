@@ -76,6 +76,9 @@ export default class ScrollView {
     if (name === 'class') {
       this.root.setAttribute('class', value);
     }
+    if (name === 'placeHolderText') {
+      this.placeHolder.innerText = value;
+    }
     return this[ATTRIBUTE_SYMBOL][name] = value;
   }
 
@@ -91,9 +94,12 @@ export default class ScrollView {
     }
     this[EVENT_SYMBOL][type].delete(listener);
   }
-  triggerEvent(type) {
+  triggerEvent(type, ...args) {
+    if (!this[EVENT_SYMBOL][type])
+      return;
+
     for (let event of this[EVENT_SYMBOL][type]) {
-      event.call(this, type);
+      event.call(this, ...args);
     }
   }
 }

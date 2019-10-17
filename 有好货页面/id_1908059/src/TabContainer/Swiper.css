@@ -1,7 +1,7 @@
 .Swiper {
   width: 100vw;
   height: calc(100vh - 82px);
-  background: red;
+  background: #666666;
   overflow: hidden;
   white-space: nowrap;
 }

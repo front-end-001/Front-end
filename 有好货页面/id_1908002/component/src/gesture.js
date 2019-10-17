@@ -1,154 +1,165 @@
-export function enableGesture(main) {
-    let contexts = Object.create(null);
-
-    let start = (point, context, origin) => {
+export function enableGesture(container) {
+    let start = (point, context) => {
         context.startX = point.clientX;
         context.startY = point.clientY;
+
         context.startTime = Date.now();
+
         context.isTap = true;
         context.isPan = false;
+        context.isPress = false;
         context.pressHandler = setTimeout(() => {
-            var e = new Event("pressstart");
-            e.origin = origin;
-            main.dispatchEvent(e);
             context.isPress = true;
-            context.pressHandler = null;
-        }, 500);
-
-        //console.log("start",[point.clientX, point.clientY])
-    }
-    let move = (point, context, origin) => {
-
-        //console.log(context.isPan);
-        if(Math.abs(point.clientX - context.startX) > 10 || 
-            Math.abs(point.clientY - context.startY) > 10){
             context.isTap = false;
-            if(context.isPan == false){
-                context.isPan = true;
-                if(context.isPress) {
-                    context.isPress = false;
-                    var e = new Event("presscancel");
-                    main.dispatchEvent(e);
-                }
-                if(Math.abs(point.clientX - context.startX) < Math.abs(point.clientY - context.startY)){
-                    context.isVertical = true;
-                } else {
+            let e = new Event("pressstart");
+            container.dispatchEvent(e);
+            context.pressHandler = null;
+        }, 500)
+    }
+
+    let move = (point, context) => {
+        let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
+        if (dx * dx + dy * dy > 100) {
+
+            if (context.pressHandler !== null) {
+                clearTimeout(context.pressHandler);
+                context.pressHandler = null;
+                context.isPress = false;
+            } else if (context.isPress) {
+                context.isPress = false;
+                let e = new Event("presscancel");
+                container.dispatchEvent(e);
+            }
+            
+            context.isTap = false;
+            
+            if (context.isPan == false) {
+                if (Math.abs(dx) > Math.abs(dy)) {
                     context.isVertical = false;
+                    context.isHorizontal = true;
+                } else {
+                    context.isVertical = true;
+                    context.isHorizontal = false;
                 }
-                
-                
-                var e = new Event("panstart");
-                e.origin = origin;
-                e.startX = context.startX;
-                e.startY = context.startY;
-                e.isVertical = context.isVertical;
-
-                main.dispatchEvent(e);
-                
-                if(context.pressHandler)
-                    clearTimeout(context.pressHandler);
+                let e = new Event("panstart");
+                e.dx = dx;
+                e.dy = dy;
+                container.dispatchEvent(e);
+                context.isPan = true;
             }
         }
-
-        if(context.isPan) {
-            var e = new Event("pan");
-            e.x = point.clientX;
-            e.y = point.clientY;
-            e.dx = point.clientX - context.startX;
-            e.dy = point.clientY - context.startY;
-            e.origin = origin;
+        if (context.isPan) {
+            let e = new Event("pan");
+            e.dx = dx;
+            e.dy = dy;
             e.isVertical = context.isVertical;
-            main.dispatchEvent(e);
+            e.isHorizontal = context.isHorizontal;
+            container.dispatchEvent(e);
         }
-
-        //console.log("move",[point.clientX, point.clientY], context)
     }
-    let end = (point, context, origin) => {
-        if(Date.now() - context.startTime < 300 && context.isTap) {
-            var e = new Event("tap");
-            main.dispatchEvent(e);
+
+    let end = (point, context) => {
+        let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
+
+        if (context.pressHandler !== null) {
+            clearTimeout(context.pressHandler);
         }
 
-        if(context.isPan) {
-            let isFlick = false;
-            let t = (Date.now() - context.startTime);
-            let v = (Math.sqrt(Math.pow(point.clientX - context.startX, 2) +
-                Math.pow(point.clientY - context.startY, 2)) / t)
-            if(v > 0.3) {
-                isFlick = true;
-                var e = new Event("flick");
-                e.vx = (point.clientX - context.startX) / t;
-                e.vy = (point.clientY - context.startY) / t;
-                main.dispatchEvent(e);
-            }
-            var e = new Event("panend");
-            e.x = point.clientX;
-            e.y = point.clientY;
-            e.dx = point.clientX - context.startX;
-            e.dy = point.clientY - context.startY;
-            e.vx = (point.clientX - context.startX) / t;
-            e.vy = (point.clientY - context.startY) / t;
-            e.origin = origin;
-            e.isFlick = isFlick;
+        if (context.isPress) {
+            let e = new Event("pressend");
+            container.dispatchEvent(e);
+        }
+        
+        if (context.isTap) {
+            let e = new Event("tap");
+            container.dispatchEvent(e);
+        }
+        let v =  Math.sqrt(dx * dx + dy * dy) / (Date.now() - context.startTime)
+        if (context.isPan && v > 0.3) {
+            context.isFlick = true;
+            let e = new Event("flick");
+            e.dx = dx;
+            e.dy = dy;
+            container.dispatchEvent(e);
+        } else {
+            context.isFlick = false;
+        }
+        if (context.isPan) {
+            let e = new Event("panend");
+            e.dx = dx;
+            e.dy = dy;
+            e.isFlick = context.isFlick;
             e.isVertical = context.isVertical;
-
-            main.dispatchEvent(e);
-        }
-
-        if(context.isPress){
-            var e = new Event("pressend");
-            main.dispatchEvent(e);
+            e.isHorizontal = context.isHorizontal;
+            container.dispatchEvent(e);
         }
     }
-    let cancel = (point, context, origin) => {
-        //console.log("cancel",[point.clientX, point.clientY])
+
+    let cancel = (point, context) => {
+        if (context.isPan) {
+            let e = new Event("pancancel");
+            container.dispatchEvent(e);
+        }
+        if (context.isPress) {
+            let e = new Event("presscancel");
+            container.dispatchEvent(e);
+        }
+        if (context.pressHandler !== null) {
+            let e = new Event("pancancel");
+            container.dispatchEvent(e);
+            clearTimeout(context.pressHandler);
+        }
     }
+
+    let contexts = Object.create(null);
+    let mouseSymbol = Symbol("mouse");      //抹平鼠标和触控的区别
 
     let mousedown = event => {
         document.addEventListener("mousemove", mousemove);
         document.addEventListener("mouseup", mouseup);
-        contexts[""] = {}
-        start(event, contexts[""], event);
+        contexts[mouseSymbol] = Object.create(null);
+        start(event, contexts[mouseSymbol]);
     }
+
     let mousemove = event => {
-        move(event, contexts[""], event);
+        move(event, contexts[mouseSymbol]);
     }
+
     let mouseup = event => {
+        end(event, contexts[mouseSymbol]);
+        delete contexts[mouseSymbol];
         document.removeEventListener("mousemove", mousemove);
         document.removeEventListener("mouseup", mouseup);
-
-        end(event, contexts[""], event);
-        delete contexts[""];
     }
 
+    container.addEventListener("mousedown", mousedown);
 
     let touchstart = event => {
         for(let touch of event.changedTouches) {
-            contexts[touch.identifier] = {};
-            start(touch, contexts[touch.identifier], event);
+            contexts[touch.identifier] = Object.create(null);
+            start(touch, contexts[touch.identifier]);
         }
     }
     let touchmove = event => {
-        //console.log(event.changedTouches);
         for(let touch of event.changedTouches) {
-            move(touch, contexts[touch.identifier], event);
+            move(touch, contexts[touch.identifier]);
         }
     }
     let touchend = event => {
         for(let touch of event.changedTouches) {
-            end(touch, contexts[touch.identifier], event);
+            end(touch, contexts[touch.identifier]);
             delete contexts[touch.identifier];
         }
     }
     let touchcancel = event => {
         for(let touch of event.changedTouches) {
-            cancel(touch, contexts[touch.identifier], event);
+            cancel(touch, contexts[touch.identifier]);
             delete contexts[touch.identifier];
         }
     }
-    main.addEventListener("mousedown", mousedown);
-    main.addEventListener("touchstart", touchstart);
-    main.addEventListener("touchmove", touchmove);
-    main.addEventListener("touchend", touchend);
-    main.addEventListener("touchcancel", touchcancel);
+
+    container.addEventListener("touchstart", touchstart);
+    container.addEventListener("touchmove", touchmove);
+    container.addEventListener("touchend", touchend);
+    container.addEventListener("touchcancel", touchcancel);
 }
