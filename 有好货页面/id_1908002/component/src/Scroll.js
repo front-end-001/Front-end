@@ -7,7 +7,7 @@ const STATE_SYMBOL = Symbol("state");
 export default class ScrollView {
     constructor(config) {
         this[PROPERTY_SYMBOL] = Object.create(null);
-        this[ATTRIBUTE_SYMBOL] = Object.create(null); //存attribute用Object.create(null)，与其他代码没有关系
+        this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null); 
         this[STATE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL].children = [];
@@ -21,12 +21,23 @@ export default class ScrollView {
 
     created() {
         this.root = document.createElement("div");
-        this.root.addEventListener("touchmove", (e) => {
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {
-            passive: false
-        });
+        this.placeHolder = document.createElement("div");
+        this.placeHolder.style.backgroundColor = "lightgreen";
+        this.root.appendChild(this.placeHolder);
+        let triggered = false;
+        this.root.addEventListener("scroll", event => {
+            let clientReact = this.root.getBoundingClientRect();
+            let placeHolderReact = this.placeHolder.getBoundingClientRect();
+            if (clientReact.bottom < placeHolderReact.top) {
+                if (triggered) {
+                    this.triggerEvent("scrollToBottom");
+                    triggered = true;
+                }
+            }
+            // if (this.root.scrollHeight - this.root.scrollTop <= clientReact.height) {
+            //     this.triggerEvent("scrolToBottom");
+            // }
+        })
     }
     mounted() {
         
@@ -37,10 +48,15 @@ export default class ScrollView {
     update() {
 
     }
-
+    
+    get style() {
+        return this.root.style;
+    }
+    
     appendChild(child) {
         this.children.push(child);
         child.appendTo(this.root);
+        this.root.appendChild(this.placeHolder);
     }
 
     
@@ -58,6 +74,9 @@ export default class ScrollView {
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
+        if(name == "placeHolderText") {
+            this.placeHolder.innerText = value;
+        }
 
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
@@ -74,11 +93,11 @@ export default class ScrollView {
         }
         this[EVENT_SYMBOL][type].delete(listener);
     }
-    triggerEvent(type) {
+    triggerEvent(type, ...args) {
         if(!this[EVENT_SYMBOL][type]) 
             return;
         for(let event of this[EVENT_SYMBOL][type]) {
-            event.call(this);
+            event.call(this, ...args);
         }
     }
 }

@@ -22,21 +22,20 @@ export default class ScrollView {
 
   created() {
     this.root = document.createElement("div");
-    this.root.addEventListener(
-      "touchmove",
-      function(e) {
-        e.cancelBubble = true;
-        e.stopImmediatePropagation();
-      },
-      {
-        passive: false
-      }
-    );
+    // this.root.addEventListener(
+    //   "touchmove",
+    //   function(e) {
+    //     e.cancelBubble = true;
+    //     e.stopImmediatePropagation();
+    //   },
+    //   {
+    //     passive: false
+    //   }
+    // );
     this[STATE_SYMBOL].h = 0;
   }
   mounted() {
     // 判断展示哪个content 将展示的translate过来
-    console.log("mounted this.root", this.root);
     // for (let i = 0; i < this.parentElement.children.length; i++) {
     //   if (
     //     this.getAttribute("key") ===

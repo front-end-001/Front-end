@@ -19,6 +19,24 @@ export default class Div{
     }
     created(){
         this.root = document.createElement('div')
+        this.loading = document.createElement('div')
+       
+        this.root.appendChild(this.loading)
+        let triggered = true;
+
+        this.root.addEventListener("scroll", event => {
+            let clientRect = this.root.getBoundingClientRect();
+            let LoadingRect = this.loading.getBoundingClientRect();
+            //console.log(clientRect.bottom, )
+            console.log(clientRect.bottom,LoadingRect.top)
+            if(clientRect.bottom < LoadingRect.top) {
+                if(triggered) {
+                    console.log('22222223')
+                    this.triggerEvent("scrolToBottom");
+                    triggered = false;
+                }
+            }
+        })
     }
     mounted(){
        
@@ -49,7 +67,9 @@ export default class Div{
         switch(name){
             case 'style':
             this.root.setAttribute('style',value)
-            
+            break
+            case 'loadingText':
+            this.loading.innerText = value
             break
             default:
             break

@@ -124,13 +124,13 @@
         ));
         tl.restart();
         position = nextPosition;
-        this._handler = setTimeout(() => {
-          nextFrame();
-        }, this._duration);
+        // this._handler = setTimeout(() => {
+        //   nextFrame();
+        // }, this._duration);
       }
-      this._handler = setTimeout(() => {
-        nextFrame();
-      }, this._duration);
+      // this._handler = setTimeout(() => {
+      //   nextFrame();
+      // }, this._duration);
       let offset = 0;
       let currentTime = 0;
       enableGesture(this._container);

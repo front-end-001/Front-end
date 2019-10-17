@@ -41,7 +41,7 @@ class Tab extends BaseComponent {
 
   addTabHeader(title: string | undefined): void {
     const headText = title ? title : '';
-    const headChild = createSpanElem(headText);
+    const headChild = createSpanElem(headText) as HTMLSpanElement;
     headChild.classList.add('tab-header-item');
     this.header.appendChild(headChild);
     headChild.addEventListener('click', event => {
