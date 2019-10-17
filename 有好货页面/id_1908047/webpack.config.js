@@ -1,6 +1,5 @@
-module.exports =  { 
-    devtool: 'source-map',
-    entry: "./src/js/script.js",
+module.exports = {
+    entry: "./script.js",
     module: {
         rules: [
             {
@@ -8,20 +7,25 @@ module.exports =  {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                      presets: ['@babel/preset-env'],
-                      plugins: [["@babel/plugin-transform-react-jsx", {pragma: 'myCreate'}],'@babel/plugin-proposal-object-rest-spread']
+                        presets: ['@babel/preset-env'],
+                        plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
+                }
+            },
+            {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader.js')
                 }
             }
         ]
     },
     mode: "development",
+    devServer: {
+        contentBase: "./dist",
+        hot: true
+    },
     optimization: {
         minimize: false
-    },
-    devServer:{
-        contentBase: './dist',
-        hot: true,
-        host: '0.0.0.0',
     }
 }
