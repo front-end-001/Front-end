@@ -9,7 +9,7 @@ export default class Div {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        
+
 
         this[PROPERTY_SYMBOL].children = [];
 
@@ -67,10 +67,9 @@ export default class Div {
         this[EVENT_SYMBOL][type].delete(listener);
     }
     triggerEvent(type){
-        
         if(!this[EVENT_SYMBOL][type])
             return;
         for(let event of this[EVENT_SYMBOL][type])
             event.call(this);
     }
-}
+} 
