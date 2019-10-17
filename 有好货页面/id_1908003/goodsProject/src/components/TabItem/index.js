@@ -2,13 +2,12 @@ import Component, { PROP_SYMBOL, ATTR_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from
 import createComponent from '../createComponent';
 
 export default class TabItem extends Component {
-  constructor(attrs, children) {
-    super(attrs, children);
+  constructor(attrs) {
+    super(attrs);
   }
 
-  create() {
+  render() {
     const children = this.children;
-
     const tabItem = <div class="o-tab-item">
       {children}
     </div>;
@@ -16,9 +15,21 @@ export default class TabItem extends Component {
     return tabItem;
   }
 
-  attrInterceptor(name, value) {
-    if (name === 'style') {
-      this.$root.style = value;
-    }
+  get tabName() {
+    return this[ATTR_SYMBOL]['tab-name'];
+  }
+
+  get title() {
+    return this[ATTR_SYMBOL]['tab-title'];
+  }
+
+  setActive() {
+    if (!this.$el) return;
+    this.$el.classList.add('active');
+  }
+
+  setDisactive() {
+    if (!this.$el) return;
+    this.$el.classList.remove('active');
   }
 };

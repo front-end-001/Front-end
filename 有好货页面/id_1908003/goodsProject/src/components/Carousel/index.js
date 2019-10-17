@@ -2,9 +2,67 @@ import gesture from '../../assets/gesture';
 import anime from '../../assets/animation';
 import Component, { PROP_SYMBOL, ATTR_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../component';
 import { getTransformXVal } from '../../assets/utils';
-import './index.css';
+import './index.scss';
 
-export default (function () {
+  /** 默认 props */
+  const DEFAULT_PROP = {
+    /** 轮播图切换速度, 单位 ms */
+    speed: 500,
+    /** 动画类型 */
+    easing: 'line',
+    /** @type {object|false} 自动播放配置 */
+    autoplay: false,
+    // autoplay: {
+    //   /** 自动轮播时间间隔, 单位 ms */
+    //   delay: 1000,
+    // },
+    /** 是否启用手势支持 */
+    enableTouch: false,
+    /** 轮播方向 1: 正向 -: 反向 */
+    deriction: 1,
+  };
+
+export default class Carousel extends Component {
+  constructor(attrs) {
+    super(attrs);
+      // 初始化状态
+      this[STATUS_SYMBOL].timer = null;
+      this[STATUS_SYMBOL].timeLine = null;
+      this[STATUS_SYMBOL].data = data;
+      this[STATUS_SYMBOL].current = 0;
+      /** @type {Element[]} */
+      this[STATUS_SYMBOL].slideEle = [];
+      // 初始化属性
+      for (let propName in DEFAULT_PROP) {
+        this[PROP_SYMBOL][propName] = DEFAULT_PROP[propName];
+      }
+  }
+
+  render() {
+    const imgList = this[PROP_SYMBOL].
+    const carousel = <div class="carousel-container">
+      <div class="carousel-wrapper">
+        <div class="carousel-slide"><img class="slide-img" title="title" style="object-fit: contain;" /></div>
+        <div class="carousel-slide"><img class="slide-img" title="title" style="object-fit: contain;" /></div>
+        <div class="carousel-slide"><img class="slide-img" title="title" style="object-fit: contain;" /></div>
+      </div>
+      <div class="carousel-pagination"></div>
+      <div class="carousel-button-prev"></div>
+      <div class="carousel-button-next"></div>
+    </div>;
+
+    return carousel;
+  }
+
+  mounted() {
+    this.$el.addEventListener('touchmove', function (e) {
+      e.cancelBubble = true;
+      e.stopImmediatePropagation();
+    }, { passive: false});
+  }
+}
+
+(function () {
 
   /** 默认 props */
   const DEFAULT_PROP = {
@@ -501,20 +559,4 @@ export default (function () {
 
 
 // <!-- Slider main container -->
-// <div class="carousel-container">
-//     <!-- Additional required wrapper -->
-//     <div class="carousel-wrapper">
-//         <!-- Slides -->
-//         <div class="carousel-slide"><img class="slide-img" title="title" style="object-fit: contain;"></div>
-//         <div class="carousel-slide">"><img class="slide-img" title="title" style="object-fit: contain;"></div>
-//         <div class="carousel-slide">"><img class="slide-img" title="title" style="object-fit: contain;"></div>
-//         ...
-//     </div>
-//     <!-- If we need pagination -->
-//     <div class="carousel-pagination"></div>
 
-//     <!-- If we need navigation buttons -->
-//     <div class="carousel-button-prev"></div>
-//     <div class="carousel-button-next"></div>
-
-// </div>
