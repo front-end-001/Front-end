@@ -1,6 +1,7 @@
 module.exports =  { 
     devtool: 'source-map',
-    entry: "./src/js/script.js",
+    // entry: "./src/js/script.js",
+    entry: "./script.js",
     module: {
         rules: [
             {
@@ -11,6 +12,13 @@ module.exports =  {
                       presets: ['@babel/preset-env'],
                       plugins: [["@babel/plugin-transform-react-jsx", {pragma: 'create'}],'@babel/plugin-proposal-object-rest-spread']
                     }
+                }
+            },
+            {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader.js'),
+                    
                 }
             }
         ]
