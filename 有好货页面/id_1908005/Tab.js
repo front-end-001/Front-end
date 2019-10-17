@@ -199,7 +199,6 @@ export default class Tab {
           prev =
             keys[key] - 1 >= 0 ? keys[key] - 1 : contents.children.length - 1;
           now = keys[key];
-          console.log("panend dx", dx);
           if (Math.abs(dx) < 50) {
             contents.children[now].style.transform = `translateX(${-keys[
               contents.children[now].getAttribute("key")

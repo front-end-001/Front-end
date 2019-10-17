@@ -6,7 +6,8 @@ module.exports = {
   entry: './index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: '[name].bundle.js',
+    // filename: '[name].bundle.js',
+    filename: 'main.js',
   },
   mode: 'development',
   module: {
@@ -36,7 +37,7 @@ module.exports = {
             plugins: [
               '@babel/plugin-proposal-object-rest-spread', 
               "@babel/plugin-syntax-jsx", 
-              ["@babel/plugin-transform-react-jsx", {pragma: 'myCreate'}],
+              ["@babel/plugin-transform-react-jsx", {pragma: 'create'}],
             ],
           }
         }
@@ -48,8 +49,8 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      template: './index.html'
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: './index.html'
+    // }),
   ]
 }

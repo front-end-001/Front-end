@@ -6,6 +6,7 @@ export default class Component {
   constructor(attr = {}) {
     this[PROPERTY_SYMBOL] = Object.create(null);
     this[ATTRIBUTE_SYMBOL] = Object.create(null);
+    this[EVENT_SYMBOL] = Object.create(null)
     this[ATTRIBUTE_SYMBOL].children = attr.children || [];
     this[ATTRIBUTE_SYMBOL].tagName = attr.tagName;
     for (let propName of Object.getOwnPropertyNames(attr)) {
@@ -20,17 +21,31 @@ export default class Component {
     this.created();
   }
 
+  get isDomComponent() {
+    return Boolean(this[ATTRIBUTE_SYMBOL].tagName);
+  }
+
   getAttribute(name) {
-    if (["style", "class", "src"].includes(name)) {
+    if (this.isDomComponent) {
       return this.root.getAttribute(name);
     }
     return this[ATTRIBUTE_SYMBOL][name];
   }
+
   setAttribute(name, value) {
-    if (["style", "class", "src"].includes(name)) {
+    if (this.isDomComponent) {
       this.root.setAttribute(name, value);
     }
     return (this[ATTRIBUTE_SYMBOL][name] = value);
+  }
+
+  setEvent(name, eventHandler) {
+    this.root.addEventListener(name, eventHandler);
+    return this[EVENT_SYMBOL][name] = eventHandler;
+  }
+
+  getEvent(name) {
+    return this[EVENT_SYMBOL][name];
   }
 
   setProperty(name, value) {

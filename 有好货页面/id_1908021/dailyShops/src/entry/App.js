@@ -1,5 +1,5 @@
-import { Tab, ScrollView, Carousel } from '../components/index';
-import createElement from '../babel/babelTransformToJSX';
+import { Tab, ScrollView, Carousel, ListView, Title } from '../components/index';
+import { createElement } from '../babel/babelTransformToJSX';
 
 const imageUrls = [
   'https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg',
@@ -13,6 +13,16 @@ function loadMore() {
     this.setAttribute('placeHolderText', '没有更多啦 *_* ！');
   }, 1000);
 }
+
+const data2 = [
+  { title: '酒鬼一家0', content: '老碳头和他的猫猫狗狗0' },
+  { title: '酒鬼一家1', content: '老碳头和他的猫猫狗狗1' },
+  { title: '酒鬼一家2', content: '老碳头和他的猫猫狗狗2' },
+  { title: '酒鬼一家3', content: '老碳头和他的猫猫狗狗3' },
+  { title: '酒鬼一家4', content: '老碳头和他的猫猫狗狗4' },
+  { title: '酒鬼一家5', content: '老碳头和他的猫猫狗狗5' }
+
+];
 
 const App = (
   <Tab className="tab-root">
@@ -30,15 +40,14 @@ const App = (
           imageUrls={imageUrls}
           style="border-radius:20px;margin-top:20px"
         ></Carousel>
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
-        qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq qqqqqqqqqqqqqqqqqqqqq
+        <Title level="3">超多人收藏的店！</Title>
+
+        <ListView
+          // renderItem={item => {
+          //   return <div>{item.title}</div>;
+          // }}
+          data={data2}
+        ></ListView>
       </ScrollView>
     </Tab.TabPane>
     <Tab.TabPane title={'有趣的店'}>2222</Tab.TabPane>
