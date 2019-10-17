@@ -12,12 +12,18 @@ module.exports = function (source, map) {
     if (token.type == "startTag") {
       let element = {
         type: "element",
-        children: []
+        children: [],
+        attributes: []
       };
 
+      element.tagName = token.tagName;
+
       for (let p in token) {
-        if (p != "type")
-          element[p] = token[p];
+        if (p != "type" && p != "tagName")
+          element.attributes.push({
+            name: p,
+            value: token[p]
+          });
       }
 
       top.children.push(element);
@@ -99,7 +105,7 @@ module.exports = function (source, map) {
     } else if (c == "/") {
       return selfClosingStartTag;
     } else if (c.match(/^[A-Z]$/)) {
-      currentToken.tagName += c.toLowerCase();
+      currentToken.tagName += c //.toLowerCase();
       return tagName;
     } else if (c == ">") {
       emit(currentToken);
@@ -161,7 +167,7 @@ module.exports = function (source, map) {
   function doubleQuotedAttributeValue(c) {
     if (c == "\"") {
       currentToken[currentAttribute.name] = currentAttribute.value;
-      return beforeAttributeName;
+      return afterQuotedAttributeValue;
     } else if (c == "\u0000") {
 
     } else if (c == EOF) {
@@ -176,7 +182,7 @@ module.exports = function (source, map) {
   function singleQuotedAttributeValue(c) {
     if (c == "\'") {
       currentToken[currentAttribute.name] = currentAttribute.value;
-      return AfterQuotedAttributeValue;
+      return afterQuotedAttributeValue;
     } else if (c == "\u0000") {
 
     } else if (c == EOF) {
@@ -187,7 +193,7 @@ module.exports = function (source, map) {
     }
   }
 
-  function AfterQuotedAttributeValue(c) {
+  function afterQuotedAttributeValue(c) {
     if (c.match(/^[\t\n\f ]$/)) {
       return beforeAttributeName;
     } else if (c == "/") {
@@ -292,7 +298,47 @@ module.exports = function (source, map) {
 
   state(EOF);
 
-  console.log(JSON.stringify(stack[0]));
+  let tree = stack[0];
 
-  return "123";
+  let template = stack[0].children.filter(e => e.tagName == "template")[0];
+
+  let rootElement = template.children.filter(e => e.type == "element")[0];
+
+
+  //console.log(rootElement);
+
+  function generateCode(node) {
+    if (node.type == "element") {
+      return (
+        `
+element = new ${node.tagName};
+${node.attributes.map(attr => `element.setAttribute(${JSON.stringify(attr.name)}, ${JSON.stringify(attr.value)})\n`).join("")}
+if(stack.length > 0){
+  stack[stack.length - 1].appendChild(element);
 }
+stack.push(element);
+${
+  node.children ? node.children.map(child => generateCode(child)).join(""):""
+}
+root = stack.pop();
+`)
+    }
+    if (node.type == "text") {
+      return (
+        `
+element = new Text(${JSON.stringify(node.content)});
+if(stack.length > 0){
+  stack[stack.length - 1].appendChild(element);
+}
+`)
+    }
+  }
+
+  return `
+
+let root = null;
+let stack = [];
+let element;
+` + generateCode(rootElement) + "export default root;\n";
+}
+
