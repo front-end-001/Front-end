@@ -3,29 +3,10 @@ import ScrollView from "./component/ScrollView.js"
 
 import Div from "./component/Div.js"
 import Text from "./component/Text.js"
-function myCreate(Class, attributes, ...children){
-    console.log(children);
-    
-    var object = new Class();
-    for(let name in attributes){
-        if(name.match(/^on-([\s\S]+)$/)){
-            // console.log(name);
-            object.addEventListener(RegExp.$1, attributes[name]);
-        }else{
-            object.setAttribute(name, attributes[name]);
-        }
-    }
-    for(let child of children) {
-        if(typeof child === "string") {
-            object.appendChild(new Text(child));
-        } else {
-            object.appendChild(child);
-        }
-            
-    }
-        
-    return object; 
-}
+
+import { create } from './create.js';
+import ListView from './component/ListView'
+
 
 function loadMore(){
     console.log("load more");
@@ -35,8 +16,13 @@ function loadMore(){
     }, 500);
 }
 
+// var c = myCreate( TabView, {style: "width:100%;height:100%;"}, myCreate(ScrollView, {"tab-title":"推荐"}) )
+
+window.render = function(data){
+
 var c = <TabView style="width:100%;height:100%;">
     <ScrollView tab-title="推荐" placeHolderText="加载更多" on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
+    <ListView data={data} ></ListView>
      abc abc abc  abc abc abc
      abc abc abc abc abc abc
      abc abc abc  abc abc abc
@@ -187,3 +173,5 @@ var c = <TabView style="width:100%;height:100%;">
     <ScrollView tab-title="品牌新店" style="background-color:pink;"></ScrollView>
 </TabView>
 c.appendTo(document.body);
+
+}

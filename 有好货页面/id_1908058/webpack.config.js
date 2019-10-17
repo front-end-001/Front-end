@@ -9,7 +9,7 @@ module.exports =  {
                     loader: 'babel-loader',
                     options: {
                       presets: ['@babel/preset-env'],
-                      plugins: [["@babel/plugin-transform-react-jsx", {pragma: 'myCreate'}],'@babel/plugin-proposal-object-rest-spread']
+                      plugins: [["@babel/plugin-transform-react-jsx", {pragma: 'create'}],'@babel/plugin-proposal-object-rest-spread']
                     }
                 }
             }
