@@ -12,7 +12,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                       presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
+                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
             }
@@ -21,7 +21,7 @@ module.exports = {
     mode: "development",
     devServer: {
         contentBase: './dist',
-        host: '0.0.0.0',
+        // host: '0.0.0.0',
         // port: 9000,
         hot: true
     },

@@ -1,0 +1,40 @@
+#app {
+  width: 100%;
+  height: 100%;
+}
+.m-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  .m-tab_header {
+    flex-basis: 96px;
+    padding: 0 20px;
+    .m-tab_header_item {
+      display: inline-block;
+      padding: 0 20px;
+      line-height: 96px;
+      text-align: center;
+      font-size: 36px;
+    }
+  }
+
+  .m-tab_content {
+    flex: 1;
+    overflow: hidden;
+    .m-tab_content_item {
+      width: 100%;
+      height: 100%;
+      vertical-align: top;
+      display: inline-block;
+      white-space: normal;
+      font-size: 50px;
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
+    }
+    .m-tab_content_item--hidden {
+      display: none;
+    }
+  }
+}

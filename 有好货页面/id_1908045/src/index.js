@@ -13,14 +13,18 @@ function loadMore(loadDone) {
 }
 
 function refresh(cb) {
-    setTimeout(() => {
+    fetch('./list.json').then(r=>{
+        return r.json()
+    }).then(data=>{
+        console.log(data)
         cb()
-    }, 1000)
+    })
+    
 }
 
 window.render = function (data) {
     let c = <TabView style="width: 100%; height: 100%">
-        <ScrollView tab-title="推荐" on-scrollToBottom={loadMore} placeHolderText='加载中，请稍后' on-refresh={refresh} style="background: lightpink">
+        <ScrollView tab-title="推荐" on-scrollToBottom={loadMore} placeHolderText='加载中，请稍后' on-refresh={refresh}>
             <ListView data={data}></ListView>
         </ScrollView>
         <ScrollView tab-title="有趣的店" style="background: lightgreen"></ScrollView>

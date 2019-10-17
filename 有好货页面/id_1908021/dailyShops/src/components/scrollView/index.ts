@@ -16,7 +16,7 @@ export default class ScrollView extends BaseComponent {
 
     this.placeHolder = document.createElement('div');
     this.placeHolder.classList.add('placeHolder');
-    this.root.appendChild(this.placeHolder);
+    // this.root.appendChild(this.placeHolder);
   }
 
   appendChild(child: any): any {
@@ -30,9 +30,6 @@ export default class ScrollView extends BaseComponent {
       this.root.appendChild(child);
     }
 
-    if (this.placeHolder) {
-      this.root.appendChild(this.placeHolder);
-    }
     return child;
   }
 
@@ -56,6 +53,9 @@ export default class ScrollView extends BaseComponent {
 
   scrollToBottomHandler(): void {
     if (this.root && this.placeHolder) {
+      // debugger
+      this.root.appendChild(this.placeHolder);
+
       let triggered = false;
       let clientRect = this.root.getBoundingClientRect();
       let placeHolderRect = this.placeHolder.getBoundingClientRect();
