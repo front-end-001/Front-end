@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = { 
   entry: "./index.js",
+  // entry: "./my.component",
   mode: "development",
   devServer: {
     contentBase: "./dist",
@@ -31,6 +32,12 @@ module.exports = {
               ['@babel/plugin-transform-react-jsx', {pragma:"create"}]
             ]
           }
+        }
+      },
+      {
+        test: /\.component$/,
+        use: {
+          loader: require.resolve('./component-loader.js')
         }
       }
     ]
