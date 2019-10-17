@@ -1,10 +1,13 @@
+import {create} from './create.js';
+import Div from './Div.js';
+
 // 使用symbol私有唯一化
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
-export default class ScrollView {
+export default class ListView {
 	constructor() {
 		this[ATTRIBUTE_SYMBOL] = Object.create(null); // 使用此方法创建空对象不会向上寻找原型链，比较干净
 		this[PROPERTY_SYMBOL] = Object.create(null);
@@ -28,6 +31,17 @@ export default class ScrollView {
 		this.root.appendChild(this.placeHolder);
 	}
 
+	render() {
+		let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
+		return <div>
+			{
+				data.map(item => {
+					<div><span>{item.a}</span><span>{item.v}</span></div>
+				})
+			}
+		</div>;
+	}
+
 	// attribute 方式
 	getAttribute(name) {
 		if (name === 'style') {
@@ -39,6 +53,13 @@ export default class ScrollView {
 	setAttribute(name, value) {
 		if (name === 'style') {
 			this.root.setAttribute('style', value);
+		}
+		if (name === 'data') {
+			this[ATTRIBUTE_SYMBOL][name] = value;
+			this.root.innerHTML = '';
+			this.render().appendTo(this.root);
+
+			return value;
 		}
 		return this[ATTRIBUTE_SYMBOL][name] = value;
 	}
@@ -78,32 +99,10 @@ export default class ScrollView {
 	// 生命周期
 	created() {
 		this.root = document.createElement('div');
-		this.placeHolder = document.createElement('div');
-		this.placeHolder.innerText = '加载更多';
-		this.placeHolder.style.backgroundColor = 'lightgreen';
-		// todo 技巧 -- 永远向最底部添加元素
-		this.root.appendChild(this.placeHolder);
+		// jsx 的组件定义
+		// 添加到DOM树中
+		this.render().appendTo(this.root);
 
-		/*// 底层能滑，外层不能滑
-		this.root.addEventListener('touchmove',function(e){
-			e.cancelBubble = true;
-			e.stopImmediatePropagation();
-		}, {passive: false});*/
-		let triggered = false;
-		this.root.addEventListener('scroll', event => {
-			let clientRect = this.root.getBoundingClientRect();
-			let placeHolderRect = this.root.getBoundingClientRect();
-			// 判断滚动到底部
-			if(clientRect.bottom < placeHolderRect.top){
-				this.triggerEvent('scrollToBottom');
-				triggered = true;
-			}
-
-			/*if (this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
-				this.triggerEvent('scrollToBottom');
-			}*/
-		});
-		this[STATE_SYMBOL].h = 0;
 	}
 
 	mounted() {

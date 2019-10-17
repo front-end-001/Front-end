@@ -26,11 +26,9 @@ export default class TabView {
 		this.children.push(child);
 		// 选择title
 		let title = child.getAttribute('tab-title') || '';
-		let active = child.getAttribute('active') || false;
 		this[PROPERTY_SYMBOL].header.push(title);
 		// 创建一个header元素，并添加到container中
 		let header = document.createElement('div');
-		let activeSign = document.createElement('div');
 		header.innerText = title;
 		header.style.display = 'inline-block';
 		header.style.height = '93px';
@@ -47,17 +45,7 @@ export default class TabView {
 			}
 		});
 
-		activeSign.style.width = '20px';
-		activeSign.style.height = '5px';
-		activeSign.style.margin = '0 auto';
-		activeSign.style.borderRadius = '4px';
-		if (active) {
-			activeSign.style.backgroundColor = '#aaa';
-		} else {
-			activeSign.style.backgroundColor = '#fff';
-		}
 		this.headerContainer.appendChild(header);
-		header.appendChild(activeSign);
 
 		child.appendTo(this.contentContainer);
 		// 强制给每个children添加样式
