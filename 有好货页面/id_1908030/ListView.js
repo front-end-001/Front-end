@@ -13,7 +13,7 @@ export default class ListView {
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL].children = [];
-        this[PROPERTY_SYMBOL].headers = [];
+
         this.created();
     }
     appendTo(element) {
@@ -22,8 +22,7 @@ export default class ListView {
     }
     created() {
         this.root = document.createElement("div");
-        let element = <Div>aaaaa</Div>;
-        element.appendTo(this.root);
+        this.render().appendTo(this.root);
     }
     mounted() {
 
@@ -33,6 +32,20 @@ export default class ListView {
     }
     update() {
 
+    }
+    render(){
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        return <div>
+            hello
+            { 
+                data.map(item => (
+                    <div><span class="x">{item.a}</span><span class="x">{item.b}</span></div>
+                ))
+            }
+        </div>
+    }
+    get style(){
+        return this.root.style;
     }
     log() {
         console.log("width", this.width);
@@ -52,8 +65,16 @@ export default class ListView {
         return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
-        if (name = "style") {
+        if (name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if(name == "data") {
+            this[ATTRIBUTE_SYMBOL][name] = value;
+
+            this.root.innerHTML = "";
+            this.render().appendTo(this.root);
+
+            return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
