@@ -1,0 +1,35 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.tab-head {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    background-color: rgb(114,39,253);
+}
+
+.tab-head-item {
+    margin: 0 36px;
+    font-size: 46px;
+    color: rgba(255, 255, 255, 1);
+    position: relative;
+}
+
+.tab-head-item.curr {
+    font-weight: bolder;
+}
+
+.tab-head-item.curr:after {
+    content: '';
+    display: block;
+    position: absolute;
+    margin-left: -30px;
+    left: 50%;
+    top: 72px;
+    width: 60px;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 3px;
+}

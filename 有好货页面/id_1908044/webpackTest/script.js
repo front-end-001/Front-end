@@ -1,8 +1,12 @@
-import TabView from "./TabView.js"
-import ScrollView from "./ScrollView.js"
+import TabView from "./js/TabView.js"
+import ScrollView from "./js/scrollView.js"
+import Carousel from "./js/Carousel.js"
+import List from "./js/List.js"
+import ListContent from "./js/List-content.js"
 
-import Div from "./Div.js"
-import Text from "./Text.js"
+import Div from "./js/Div.js"
+import Image from "./js/Image.js"
+import Text from "./js/Text.js"
 function myCreate(Class, attributes, ...children){
   console.log(children);
 
@@ -28,155 +32,22 @@ function loadMore() {
 function loadRefresh() {
   console.log('开始刷新...')
 }
-var c = <TabView style="width:100%;height:2000px">
-  <ScrollView tab-title="推荐" on-scrollTotop={loadRefresh}  on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
-    abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc     abc abc abc  abc abc abc
-    abc abc abc abc abc abc
+var c = <TabView style="width:100%;height:2000px" class="back-icon">
+  <ScrollView tab-title="推荐" on-scrollTotop={loadRefresh}  on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px">
+    <Carousel class="swiper-div">
+      <Image src="http://192.168.1.102:8080/img/banner1.png"></Image>
+      <Image src="http://192.168.1.102:8080/img/banner2.png"></Image>
+      <Image src="http://192.168.1.102:8080/img/banner3.png"></Image>
+    </Carousel>
+    <List class="list-content">
+      <ListContent tab-title="极客时间旗舰店" isTmall="http://192.168.1.102:8080/img/icon-tmall.png" src="http://192.168.1.102:8080/img/icon InfoQ@3x.png"></ListContent>
+    </List>
+    <List class="list-content">
+      <ListContent tab-title="极客时间旗舰店" isTmall="http://192.168.1.102:8080/img/icon-tmall.png" src="http://192.168.1.102:8080/img/icon InfoQ@3x.png"></ListContent>
+    </List>
+
   </ScrollView>
-  <ScrollView tab-title="有趣的店"  style="background-color:lightgreen;"></ScrollView>
-  <ScrollView tab-title="品牌新店" style="background-color:pink;height:600px"></ScrollView>
+  <ScrollView tab-title="有趣的店"  style=""></ScrollView>
+  <ScrollView tab-title="品牌新店" style="height:600px"></ScrollView>
 </TabView>
 c.appendTo(document.body);
