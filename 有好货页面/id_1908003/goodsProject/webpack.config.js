@@ -1,4 +1,5 @@
 var path = require('path');
+var CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -14,8 +15,28 @@ module.exports = {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              // Prefer `dart-sass`
+              implementation: require('sass'),
+            },
+          },
+        ],
+      },
     ]
   },
+  plugins: [
+    new CopyPlugin([
+      { from: './static/', to: 'static/', force: true },
+      { from: './index.html', to: 'index.html', force: true },
+    ]),
+  ],
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',

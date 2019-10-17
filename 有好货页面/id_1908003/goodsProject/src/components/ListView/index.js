@@ -6,15 +6,15 @@ import Component, {
 import createComponent from '../createComponent';
 import './index.scss';
 
-export default class ScrollView extends Component {
+export default class ListView extends Component {
   constructor(attrs) {
     super(attrs);
   }
 
   render() {
     const children = this.children;
-    const tabItem = <div class = "o-scroll">
-      <div class="o-scroll-container">{ children }</div>
+    const tabItem = <div class="o-list">
+      <div class="o-list-item">{ children }</div>
     </div>;
 
     return tabItem;
