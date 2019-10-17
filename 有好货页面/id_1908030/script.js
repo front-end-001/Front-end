@@ -15,6 +15,7 @@ window.render = () => {
     var c = <TabView stle="width: 100%; height: 100%">
         <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
         <ListView></ListView>
+        <Div>gggg</Div>
             {/* dsfdsfsfd
             gdgfd
             fgdshgfhgjhgj

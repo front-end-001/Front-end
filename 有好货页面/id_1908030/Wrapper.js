@@ -18,6 +18,7 @@ export default class Wrapper {
 
     appendTo(element){
         element.appendChild(this.root);
+        this[STATE_SYMBOL].h = 0;
     }
 
     appendChild(child){

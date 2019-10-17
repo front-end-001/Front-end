@@ -22,7 +22,7 @@ export default class ListView {
     }
     created() {
         this.root = document.createElement("div");
-        let element = <div>aaaaa</div>;
+        let element = <Div>aaaaa</Div>;
         element.appendTo(this.root);
     }
     mounted() {
