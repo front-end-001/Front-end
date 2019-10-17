@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="020-1组-吴玮琦">
+  <title>Carousel</title>
+  <style>
+    #container {
+      width: 300px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .wrapper {
+      display: flex;
+    }
+
+    img {
+      width: 300px;
+      flex: 0 0 auto;
+    }
+
+    .left-btn {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 100%;
+      border: 1px solid #333;
+      cursor: pointer;
+    }
+
+    .right-btn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 100%;
+      border: 1px solid #333;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+
+  <script src="gesture.js"></script>
+  <script src="component-copy.js"></script>
+  <script>
+    const carousel = new Carousel({
+      el: '#container',
+      data: [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/88/f1/8807661ef5b82fcb75e8b8f2dbd71ef1.jpg"
+      ],
+      speed:300,
+      arrow:true
+    })
+  </script>
+</body>
+
+</html>
