@@ -1,7 +1,7 @@
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const PROPERTY_SYMBOL = Symbol('property')
 
-export class Text {
+export default class Text {
     constructor(config) {
         this[ATTRIBUTE_SYMBOL] = Object.create(null)
         this[PROPERTY_SYMBOL] = Object.create(null)
@@ -40,4 +40,4 @@ export class Text {
         this.children.push(child)
         this.appendTo(child)
     }
-}
+} 
