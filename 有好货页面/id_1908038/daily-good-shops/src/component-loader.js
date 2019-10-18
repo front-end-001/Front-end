@@ -1,4 +1,4 @@
-module.exports = function (source, map) {
+module.exports = function (source, map) {
     source = source.split("");
 
 
@@ -31,7 +31,7 @@ module.exports = function (source, map) {
                 stack.push(element);
 
             currentTextNode = null;
-            
+
         } else if(token.type == "endTag") {
             if(top.tagName != token.tagName) {
                 throw new Error("Tag start end doesn't match!");
@@ -138,9 +138,9 @@ module.exports = function (source, map) {
         } else if(c == "=") {
             return beforeAttributeValue;
         } else if(c == "\u0000") {
-        
+
         } else if(c == "\"" || c == "'" || c == "<") {
-        
+
         } else {
             currentAttribute.name += c;
             return attributeName;
@@ -169,7 +169,7 @@ module.exports = function (source, map) {
         } else if(c == "\u0000") {
 
         } else if(c == EOF) {
-            
+
         } else {
             currentAttribute.value += c;
             return doubleQuotedAttributeValue
@@ -184,7 +184,7 @@ module.exports = function (source, map) {
         } else if(c == "\u0000") {
 
         } else if(c == EOF) {
-            
+
         } else {
             currentAttribute.value += c;
             return doubleQuotedAttributeValue
@@ -201,7 +201,7 @@ module.exports = function (source, map) {
             emit(currentToken);
             return data;
         } else if(c == EOF) {
-            
+
         } else {
             currentAttribute.value += c;
             return doubleQuotedAttributeValue
@@ -225,7 +225,7 @@ module.exports = function (source, map) {
         } else if(c == "\"" || c == "'" || c == "<" || c == "=" || c == "`") {
 
         } else if(c == EOF) {
-            
+
         } else {
             currentAttribute.value += c;
             return doubleQuotedAttributeValue
@@ -240,7 +240,7 @@ module.exports = function (source, map) {
         } else if(c == "EOF") {
 
         } else {
-            
+
         }
     }
 
@@ -254,7 +254,7 @@ module.exports = function (source, map) {
         } else if(c == ">") {
 
         } else if(c == EOF) {
-            
+
         } else {
 
         }
@@ -272,7 +272,7 @@ module.exports = function (source, map) {
             emit(currentToken);
             return data;
         } else if(c == EOF) {
-            
+
         } else {
             currentToken[currentAttribute.name] = currentAttribute.value;
             currentAttribute = {
@@ -303,43 +303,43 @@ module.exports = function (source, map) {
     let rootElement = template.children.filter(e => e.type == "element")[0];
 
 
-    //console.log(rootElement);
+    // console.log(rootElement);
 
     function generateCode(node){
         if(node.type == "element") {
             return (
-`
-element = new ${node.tagName};
-${node.attributes.map(attr => `element.setAttribute(${JSON.stringify(attr.name)}, ${JSON.stringify(attr.value)})\n`).join("")}
-if(stack.length > 0){
-    stack[stack.length - 1].appendChild(element);
-}
-stack.push(element);
-${
-    node.children ? node.children.map(child => generateCode(child)).join(""):""
-}
-root = stack.pop();
-`)
+                `
+                element = new ${node.tagName};
+                ${node.attributes.map(attr => `element.setAttribute(${JSON.stringify(attr.name)}, ${JSON.stringify(attr.value)})\n`).join("")}
+                if(stack.length > 0){
+                    stack[stack.length - 1].appendChild(element);
+                }
+                stack.push(element);
+                ${
+                    node.children ? node.children.map(child => generateCode(child)).join(""):""
+                }
+                root = stack.pop();
+            `)
         }
         if(node.type == "text") {
             return (
-`
-element = new Text(${JSON.stringify(node.content)});
-if(stack.length > 0){
-    stack[stack.length - 1].appendChild(element);
-}
-`)
+                `
+                element = new Text(${JSON.stringify(node.content)});
+                if(stack.length > 0){
+                    stack[stack.length - 1].appendChild(element);
+                }
+            `)
         }
     }
 
     return `
-import TabView from "./TabView.js"
-import ScrollView from "./ScrollView.js"
-import ListView from "./ListView.js"
-import Text from "./Text.js"
-import Wrapper from "./Wrapper.js";
-let root = null;
-let stack = [];
-let element;
-` + generateCode(rootElement) + "export default root;\n";
+        import TabView from "./components/TabView.js"
+        import ScrollView from "./components/ScrollView.js"
+        import ListView from "./components/ListView.js"
+        import Text from "./components/Text.js"
+        import Wrapper from "./components/Wrapper.js";
+        let root = null;
+        let stack = [];
+        let element;
+        ` + generateCode(rootElement) + "export default root;\n";
 }

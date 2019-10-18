@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
-    // entry: './src/index.js',
-    entry: './src/my.component',
+    entry: './src/index.js',//jsx
+    // entry: './src/script.js',//自定义组件component
     output: {
       filename: 'bundle.js',
       path: path.resolve(__dirname, 'dist')
@@ -10,7 +10,6 @@ module.exports = {
         rules: [
             {
                 test: /\.m?js$/,
-                exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -22,7 +21,7 @@ module.exports = {
             {
                 test: /\.component$/,
                 use: {
-                    loader: require.resolve('./component-loader.js')
+                    loader: require.resolve('./src/component-loader.js')
                 }
             }
         ]

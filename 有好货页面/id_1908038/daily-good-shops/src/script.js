@@ -1,11 +1,11 @@
-import TabView from "./TabView.js"
-import ScrollView from "./ScrollView.js"
-import ListView from "./ListView.js"
+// import TabView from "./components/TabView"
+// import ScrollView from "./components/ScrollView"
+// import ListView from "./components/ListView"
+// import Div from "./components/Div"
 
-import Div from "./Div.js"
 import {create} from "./create.js"
 
-import tree from "./my.component";
+import tree from "./my.component"
 
 
 function loadMore(){
@@ -14,7 +14,7 @@ function loadMore(){
     }, 5000);
 }
 
-window.render = function(data, root){
+window.render = function(obj, root){
     var c = tree;
     c.appendTo(document.body);
 }

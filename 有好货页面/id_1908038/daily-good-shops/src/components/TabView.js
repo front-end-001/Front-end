@@ -11,7 +11,7 @@ export default class TabView {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        
+
 
         this[PROPERTY_SYMBOL].children = [];
         this[PROPERTY_SYMBOL].headers = [];
@@ -35,13 +35,13 @@ export default class TabView {
         this.headerContainer.style.height = "93px";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
-        //出发手势库
+        //触发手势库
         enableGesture(this.contentContainer);
 
         this[STATE_SYMBOL].position = 0;
 
         //防止父容器滚动
-        this.root.addEventListener("touchmove",function(e){ 
+        this.root.addEventListener("touchmove",function(e){
             e.cancelBubble = true;
             e.stopImmediatePropagation();
         }, {
@@ -55,7 +55,7 @@ export default class TabView {
             event.origin.preventDefault();
             //获取元素宽度
             let width = this.contentContainer.getBoundingClientRect().width;
-            
+
             let dx = event.dx;
 
             if (this[STATE_SYMBOL].position == 0 && event.dx > 0) {
@@ -70,7 +70,7 @@ export default class TabView {
                 this.contentContainer.children[i].style.transform = `translateX(${ dx -width * this[STATE_SYMBOL].position }px)`;
                 this.contentContainer.children[i].style.transition = `transform ease .5s`;
             }
-            
+
         });
         this.contentContainer.addEventListener("panend", event => {
             if (event.isVertical) {
@@ -94,7 +94,7 @@ export default class TabView {
 
             } else {
                 if (event.dx > width / 2) {
-                    this[STATE_SYMBOL].position--
+                    this[STATE_SYMBOL].position--;
                     isLeft = true;
                 } else if (event.dx < - width / 2) {
                     this[STATE_SYMBOL].position++
@@ -148,7 +148,7 @@ export default class TabView {
         header.style.fontSize = "46px";
         header.style.margin = "20px 35px 0 35px";
         this.headerContainer.appendChild(header);
-        
+
         header.addEventListener('click', event => {
             this[STATE_SYMBOL].position = n;
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
@@ -163,7 +163,7 @@ export default class TabView {
             // child.setAttribute('style','display:inline-block;');
             child.style.display = 'inline-block';
         });
-        
+
         child.appendTo(this.contentContainer);
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.width = "100%";
@@ -174,7 +174,7 @@ export default class TabView {
 
     }
 
-    
+
 
     get children(){
         return this[PROPERTY_SYMBOL].children;

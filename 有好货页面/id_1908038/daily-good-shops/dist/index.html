@@ -7,7 +7,7 @@
 <meta content="telephone=no,email=no" name="format-detection"/>
 -->
 <!--TODO:添加一个网页标题-->
-<title>A sample of HTML5 game</title>
+<title>每日好店</title>
 
 <!--TODO:改成你想要的缩放比例
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
@@ -40,12 +40,12 @@
         ]);
 
         window.render(obj, document.body);
-        
+
     }();
     //es6
 /*     fetch('./data.json').then(response => response.json()).then(obj => {
         console.log(obj);
-        
+
     }) */
 
 /*     const contentLoaded = () =>
@@ -57,27 +57,27 @@
 
 /*     happen(document, 'DOMContentLoaded').then(() => {
         console.log(document.body);
-        
+
     });
     Promise.all({
         happen(document, 'DOMContentLoaded'),
         fetch('./data.json').then(response => response.json())
     }).then(results => {
         console.log(results);
-        
+
     }) */
     //es5
 /*     function check() {
-        if (!data) 
+        if (!data)
             return;
-        if (!domReady) 
+        if (!domReady)
             return;
         render();
     }
     function render() {
         console.log(document.body);
         console.log(data);
-        
+
     }
     let data = null;
     let domReady = false;
@@ -101,7 +101,7 @@
             data = request.responseText;
             check();
         }
-        
+
     }); */
 </script>
 <style type="text/css">
@@ -127,20 +127,20 @@ html,body {
     //避免鼠标变成文本选择形状
     //document.addEventListener("mousedown",function(e){ e.preventDefault(); });
     //避免上下滚屏
-    /*document.addEventListener("touchmove",function(e){ 
-        if(e.touches.length == 2) 
-            e.preventDefault(); 
+    /*document.addEventListener("touchmove",function(e){
+        if(e.touches.length == 2)
+            e.preventDefault();
     }, {passive:false});
-    document.addEventListener("touchmove",function(e){ 
-        if(e.touches.length == 1) 
-            e.preventDefault(); 
+    document.addEventListener("touchmove",function(e){
+        if(e.touches.length == 1)
+            e.preventDefault();
     }, {passive:false});
-    document.addEventListener("touchstart",function(e){ 
-        e.preventDefault(); 
+    document.addEventListener("touchstart",function(e){
+        e.preventDefault();
     }, {passive:false});*/
-    document.addEventListener("touchmove",function(e){ 
-        if(e.touches.length == 1) 
-            e.preventDefault(); 
+    document.addEventListener("touchmove",function(e){
+        if(e.touches.length == 1)
+            e.preventDefault();
     }, {
         passive:false
     })
