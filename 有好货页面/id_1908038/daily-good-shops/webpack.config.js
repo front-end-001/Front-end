@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
-    entry: './src/index.js',//jsx
-    // entry: './src/script.js',//自定义组件component
+    // entry: './src/index.js',//jsx
+    entry: './src/script.js',//自定义组件component
     output: {
       filename: 'bundle.js',
       path: path.resolve(__dirname, 'dist')
@@ -22,6 +22,12 @@ module.exports = {
                 test: /\.component$/,
                 use: {
                     loader: require.resolve('./src/component-loader.js')
+                }
+            },
+            {
+                test: /\.css$/,
+                use: {
+                    loader: require.resolve('./src/component-css-loader.js')
                 }
             }
         ]

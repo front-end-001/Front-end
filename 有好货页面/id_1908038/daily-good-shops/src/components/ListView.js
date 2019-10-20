@@ -1,12 +1,16 @@
 import {create} from "../create.js";
 import Div from "./Div";
+import css from "../styles/listView.css"
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-
+/* vue scoped */
+let styleElement = document.createElement("style");
+styleElement.innerHTML = css;
+document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 export default class ListView {
     constructor(config) {
@@ -28,6 +32,7 @@ export default class ListView {
 
     created() {
         this.root = document.createElement("div");
+        this.root.classList.add("list-view");
         this.render().appendTo(this.root);
     }
     mounted() {
@@ -46,7 +51,10 @@ export default class ListView {
         return <div>
             hello
             {
-                data.map(item => ( <div><span class = "x" > {item.a} </span><span class="x">{item.b}</span></div>))
+                data.map(item => ( 
+                    // <div><span class="x" > {item.a} </span><span class="x">{item.b}</span></div>
+                    <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
+                ))
             }
             </div>
     }
