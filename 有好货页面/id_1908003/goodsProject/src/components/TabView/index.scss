@@ -14,19 +14,22 @@
     color: white;
 
     .o-tab-header-item {
-      font-size: 14pt;
-      padding: 7pt 12pt;
+      font-size: 16px;
+      font-family: PingFangSC-Light;
+      padding: 0 12pt;
+      line-height: 35px;
       display: inline-block;
       position: relative;
-
+      height: 35px;
       &.active {
-        font-weight: bolder;
+        font-family: PingFangSC-Medium;
+        font-weight: bold;
       }
 
       &.active:after {
         content: ' ';
-        width: 20pt;
-        height: 2pt;
+        width: 21px;
+    height: 2px;
         background-color: white;
         display: inline-block;
         position: absolute;
