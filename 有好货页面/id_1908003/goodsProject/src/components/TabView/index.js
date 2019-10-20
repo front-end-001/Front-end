@@ -8,10 +8,10 @@ import gesture from '../../assets/gesture';
 const contexts = Object.create(null);
 
 console.log(testcss);
-const styleEle = document.createElement('style');
-styleEle.innerHTML = testcss;
-const head = document.getElementsByTagName('head');
-head[0].appendChild(styleEle);
+// const styleEle = document.createElement('style');
+// styleEle.innerHTML = testcss;
+// const head = document.getElementsByTagName('head');
+// head[0].appendChild(styleEle);
 
 export default class TabView extends Component {
   constructor(attrs) {

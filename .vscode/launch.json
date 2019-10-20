@@ -7,7 +7,13 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "test css loader",
+      "program": "${workspaceFolder}/有好货页面/id_1908003/goodsProject/test/cssLoader.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "test components loader",
       "program": "${workspaceFolder}/有好货页面/id_1908003/goodsProject/test/testLoader.js"
     }
   ]

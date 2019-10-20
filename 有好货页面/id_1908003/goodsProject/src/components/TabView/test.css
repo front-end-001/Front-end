@@ -1,4 +1,7 @@
-body {
+body[data-v-123] {
   background-color: aliceblue;
-    a123: 1;
 }
+#app.active {
+  display: block;
+}
+/* 123 */

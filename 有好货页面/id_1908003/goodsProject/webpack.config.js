@@ -14,7 +14,8 @@ module.exports = {
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
       {
         test: /\.css$/i,
-        use: ['to-string-loader', 'css-loader'],
+        use: [require.resolve('./component-css-loader.js')],
+        // use: ['to-string-loader', 'css-loader'],
         // use: ['style-loader', 'css-loader'],
       },
       {
