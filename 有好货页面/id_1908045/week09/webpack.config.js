@@ -22,6 +22,12 @@ module.exports = {
         }
       },
       {
+        test: /\.css$/,
+        use: [{
+          loader: require.resolve('./src/component-css-loader.js')
+        }]
+      },
+      {
         test: /\.less$/,
         use: [
             'style-loader',

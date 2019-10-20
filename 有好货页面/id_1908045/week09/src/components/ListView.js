@@ -5,6 +5,15 @@ const PROPERTY_SYMBOL = Symbol('property')
 const EVENT_SYMBOL = Symbol('event')
 const STATE_SYMBOL = Symbol('state')
 
+import css from './ListView.css'
+
+
+
+// let styleElement=document.createElement("style")
+// styleElement.innerHTML=css
+// document.getElementsByTagName("head")[0].appendChild(styleElement)
+
+
 export default class ListView {
   constructor(config = {}) {
     this[ATTRIBUTE_SYMBOL] = Object.create(null)
@@ -25,7 +34,7 @@ export default class ListView {
   created() {
     this.root = document.createElement('div')
     this.root.classList.add('list-view')
-
+    console.log(css.a)
     this.render().appendTo(this.root)
   }
 
@@ -40,7 +49,15 @@ export default class ListView {
   render() {
     let data = this[ATTRIBUTE_SYMBOL]['data'] || []
 
-    console.log(data, 'data')
+    if(1){
+      return <div>
+      {
+        data.map(item =>
+          <div style={css.a}>123</div>
+        )
+      }
+      </div>
+    }
 
     return <div>
       {

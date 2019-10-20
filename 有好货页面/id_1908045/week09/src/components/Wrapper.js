@@ -33,6 +33,14 @@ export default class Div {
   }
 
   setAttribute(name, value) {
+    if (name == 'style'&& typeof value == 'object'){
+      for(let p in value){
+        console.log(p,value[p])
+        this.root.style[p]=value[p]
+      }
+    }
+    
+    console.log(this.root.style)
     this.root.setAttribute(name, value)
   }
 
