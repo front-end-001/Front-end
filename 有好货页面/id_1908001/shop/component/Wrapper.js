@@ -19,6 +19,11 @@ export default class Wrapper {
         return this[PROPERTY_SYMBOL].children || []
     }
     setAttribute (name, value) {
+        if(name === 'style') {
+            for(const p in value)
+                this.container.style[p] = value[p]
+            return
+        }
         this.container.setAttribute(name, value)
     }
     getAttribute (name) {

@@ -263,11 +263,11 @@ module.exports = function(source, map) {
     }
     // --- end
     const template = stack[0].children.filter(e => e.tagName === 'template')[0]
-    const rootElement = template.children.filter(e => e.type === 'element')[0]
+    // const rootElement = template.children.filter(e => e.type === 'element')[0]
     function generateCode (node) {
         if (node.type === 'element') {
             console.log(node)
         }
     }
-    return generateCode(rootElement)
+    return ''
 }

@@ -1,0 +1,8 @@
+.main {
+    background-image: url('static/background.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: -113pt;
+    background-color: #EFEFEF;
+    min-height: 100%;
+}
