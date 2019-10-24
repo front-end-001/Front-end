@@ -6,6 +6,13 @@ const EVENT_SYMBOL = Symbol('event')
 const STATE_SYMBOL = Symbol('state')
 import CollectionStore from './CollectionStore'
 import Img from './Img'
+import css from './ListView.css'
+
+let styleElement = document.createElement('style')
+styleElement.innerHTML = css
+styleElement.setAttribute('scoped', '')
+document.getElementsByTagName('head')[0].appendChild(styleElement)
+
 
 export default class ListView {
     constructor (config) {
@@ -24,7 +31,7 @@ export default class ListView {
     }
     created () {
         this.root = document.createElement('div')
-
+        this.root.classList.add('list-view')
         this.render().appendTo(this.root)
     }
     mounted () {
@@ -47,7 +54,7 @@ export default class ListView {
         }
         return <div>
             <div class={'title'} style={'font-size:16px;'}>超多人收藏的店！</div>
-            <div class="flex collection-store-group space-between">
+            <div class="flex collection-store-group space-between" style={css.class}>
                 {mostFavourateShops.map(item => {
                     return <CollectionStore data={item}/>
                 })}

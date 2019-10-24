@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./index.js",
+    entry: "./my.component",
     module: {
         rules: [
             {
@@ -13,13 +13,15 @@ module.exports = {
                 }
             },
             {
-                test: /\.css$/i,
-                use: [require.resolve('./component-css-loader.js')]
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader')
+                }
             }
         ]
     },
     devServer: {
-        contentBase: './dist',
+        contentBase: './custom-component',
         hot: true,
         host: '0.0.0.0'
     },
