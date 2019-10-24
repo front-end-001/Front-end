@@ -24,5 +24,5 @@ module.exports = function (source, map) {
   console.log(parseResult);
   const result = css.stringify(parseResult);
   console.log(result);
-  return 'export default {}';
-};
+  return 'export default ' + JSON.stringify(result);
+}

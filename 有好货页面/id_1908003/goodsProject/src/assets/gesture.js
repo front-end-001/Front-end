@@ -33,7 +33,6 @@ export default (function () {
   };
 
   const move = (point, context) => {
-    debugger
     context.dx = point.clientX - context.startX;
     context.dy = point.clientY - context.startY;
     if (context.isPan) {
@@ -135,6 +134,7 @@ export default (function () {
     }
 
     contexts[touch.identifier] = {};
+    touch.currentTarget = event.currentTarget;
     start(touch, contexts[touch.identifier]);
   };
 
@@ -143,8 +143,6 @@ export default (function () {
    * @param {TouchEvent} event 
    */
   const touchmove = (event) => {
-    console.log('touchmove')
-    
     let touch;
 
     if (event.changedTouches.length >= 1) {

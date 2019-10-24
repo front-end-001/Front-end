@@ -32,7 +32,10 @@ export default class TabView extends Component {
     const doAlert = () => {
       alert('click');
     };
-    const tab = <div class="o-tab">
+    const styleObj = {
+      'background-color': 'red',
+    };
+    const tab = <div class="o-tab" styleObj={styleObj}>
       <div style="text-align: center; position: relative; margin: 5vw 0;">
         <img src="/static/image/header-title.png" alt="每日好店" style="width: 25vw;"></img>
         <div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; align-items: center;">
@@ -68,8 +71,6 @@ export default class TabView extends Component {
   
 
   mounted() {
-    
-
     // 开启拖拽
     gesture.enableGesture(this[STATUS_SYMBOL].contentEle);
 
