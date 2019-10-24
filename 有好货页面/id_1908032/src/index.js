@@ -20,6 +20,19 @@ let imgs = [
     }
 ]
 
+let shops = [
+    { 
+        logo: 'https://img.alicdn.com/tfscom/TB127a5gwDD8KJjy0FdXXcjvXXa.jpg_b.jpg', 
+        name: '乐高官方旗舰店', 
+        images: ['https://g-search1.alicdn.com/img/bao/uploaded/i4/i3/2200595984506/O1CN01vcg0Wh1j9nEttBRLN_!!0-item_pic.jpg_460x460Q90.jpg', 'https://g-search2.alicdn.com/img/bao/uploaded/i4/i1/1865963391/O1CN01aGsEHv1av7cmYKLcg_!!1865963391-0-pixelsss.jpg_460x460Q90.jpg']
+    },
+    { 
+        logo: 'https://img.alicdn.com/tfscom/TB1YNCYiHr1gK0jSZFDXXb9yVXa.jpg_q90.jpg', 
+        name: '索尼', 
+        images: ['https://g-search3.alicdn.com/img/bao/uploaded/i4/i3/782731205/O1CN01FMsUgD1KlvpGues0U_!!0-item_pic.jpg_460x460Q90.jpg', 'https://g-search1.alicdn.com/img/bao/uploaded/i4/i1/782731205/O1CN01qslZxs1Klvp92Wvfe_!!0-item_pic.jpg_460x460Q90.jpg']
+    },
+]
+
 var c = <Tab style="width: 100%;height: 100%;">
     <ScrollView tab-title="推荐" style="-webkit-overflow-scrolling:touch;font-size: 50px; overflow: auto;">
         {/* <Carousel data={imgs}></Carousel> */}
@@ -27,12 +40,13 @@ var c = <Tab style="width: 100%;height: 100%;">
             <Title style="font-size:46px; color: rgba(51, 51, 51, 1); font-weight: bold">超多人收藏的店！</Title>
         </Div>
         <div style="display: flex; margin: 0 34px 35px 34px;">
-            <div style="flex: 1; margin-right: 25px;">
-                <Shop />
-            </div>
-            <div style="flex: 1">
-                <Shop />
-            </div>
+            {
+                shops.map((shop, index) => (
+                    <div style={{flex: 1, marginRight: index === 0 ? '25px' : '' }}>
+                        <Shop data={shop} />
+                    </div>
+                ))
+            }
         </div>
         <ListShop></ListShop>
         <ListView data={[1,2,3]}  />

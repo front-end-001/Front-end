@@ -25,22 +25,35 @@ export default class Div {
 
     created(){
         this.root = document.createElement("div");
+        this.root.innerHTML = '';
+        this.render();
+    }
+
+    render(){
+        if(!this.getAttribute('data')) return;
+
+        let data = this.getAttribute('data') || {}
+        let { logo, name, images } = data;
         this.root.classList.add('shop-view');
         let element = <div class="inner">
             <div class="top-info">
-                <img class="logo" src="https://img3.doubanio.com/view/photo/s_ratio_poster/public/p672363704.webp" alt="" />
+                <img class="logo" src={logo} alt="" />
                 <div class="right-info">
-                    <h3 class="title">极客时间旗舰店</h3>
+                    <h3 class="title">{name}</h3>
                     <i class="badage"></i>
                 </div>
             </div>
             <div class="image-box-list">
-                <img class="image" src="https://img30.360buyimg.com/pop/s1180x940_jfs/t1/92474/18/367/73678/5dad0899E948bda74/8dc001c19582c512.jpg" alt=""/>
-                <img class="image" src="https://imgcps.jd.com/ling/8052643/6IKJ5bmy6IKJ6ISv5oqY5omj54ug/54m55oOg54m55Y2W/p-5bd8253082acdd181d02f9e8/30609fb0/590x470.jpg" alt=""/>
+                {
+                    Array.isArray(images) && images.map(image => (
+                        <img class='image' src={image} alt=""/>
+                    ))
+                }
             </div>
         </div>
         element.appendTo(this.root);
     }
+
     mounted(){
 
     }
@@ -69,6 +82,10 @@ export default class Div {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if(name == 'data'){
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            this.render();
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
