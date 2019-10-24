@@ -39,6 +39,11 @@ module.exports = {
         use: {
           loader: require.resolve('./component-loader.js')
         }
+      },
+      {
+        test: /\.css$/i,
+        // use: ['to-string-loader', 'css-loader']
+        use: [require.resolve('./component-css-loader.js')]
       }
     ]
   },
