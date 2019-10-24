@@ -18,3 +18,13 @@ export function getTransformXVal(el) {
 export function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
+
+// 返回 n 位的随机字符串
+export const getRandomStr = (n = 6) => {
+  let str = '';
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+  for (let i = 0; i < n; i += 1) {
+    str += chars.charAt(Math.floor(Math.random() * 62));
+  }
+  return str;
+};

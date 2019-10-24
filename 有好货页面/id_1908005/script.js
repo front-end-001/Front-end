@@ -1,59 +1,54 @@
 import Tab from "./Tab.js";
-// import Div from "./Div.js";
+import Div from "./Div.js";
 import ScrollView from "./ScrollView.js";
-import Text from "./Text.js";
-import Card from "./Card.js";
+import Wrapper from "./Wrapper.js";
+import ListView from "./ListView.js";
 
-function myCreate(Class, attributes, ...children) {
-  var object = new Class();
-  for (let name in attributes) object.setAttribute(name, attributes[name]);
-  for (let child of children) {
-      if (typeof child === "string") {
-        object.appendChild(new Text(child));
-      } else {
-        object.appendChild(child);
-      }
-  }
-  return object;
-}
-var c = (
-  <Tab
-    style="width:100%;height:calc(100% - 70px);position: relative;
-    top: 70px;"
-    class="myTab"
-  >
-    <ScrollView
-      tab-title="推荐"
-      class="mytab-content-box"
-      key={"recommend"}
-      active={true}
-      style={"background: #000"}
+import myCreate from "./myCreate";
+
+window.render = function(data, root) {
+  let c = (
+    <Tab
+      style="width:100%;height:calc(100% - 70px);position: relative;
+      top: 70px;"
+      class="myTab"
     >
-      推荐
-      <Card>123123</Card>
-    </ScrollView>
-    <ScrollView
-      tab-title="有趣的店"
-      style=""
-      class="mytab-content-box"
-      key={"interest"}
-      style={"background: pink"}
-    >
-      有趣的店
-      <Card>qqqqqq</Card>
-    </ScrollView>
-    <ScrollView
-      tab-title="品牌新店"
-      style=""
-      class="mytab-content-box"
-      key={"newShops"}
-      style={"background: lightblue"}
-    >
-      品牌新店
-      <Card>wwwww</Card>
-    </ScrollView>
-  </Tab>
-);
-let header = document.getElementById("header");
-console.log("header", header);
-c.appendTo(header);
+      <ScrollView
+        tab-title="推荐"
+        class="mytab-content-box"
+        key={"recommend"}
+        active={true}
+        //style={"background: #000"}
+      >
+        推荐
+        <ListView data={data}>
+          <Div>
+            <img style={"width: 100px, height: 100px"}></img>
+            <h1>00987</h1>
+          </Div>
+        </ListView>
+      </ScrollView>
+      <ScrollView
+        tab-title="有趣的店"
+        style=""
+        class="mytab-content-box"
+        key={"interest"}
+        //style={"background: pink"}
+      >
+        有趣的店
+      </ScrollView>
+      <ScrollView
+        tab-title="品牌新店"
+        style=""
+        class="mytab-content-box"
+        key={"newShops"}
+        //style={"background: lightblue"}
+      >
+        品牌新店
+      </ScrollView>
+    </Tab>
+  );
+  let header = document.getElementById("header");
+  c.appendTo(header);
+};
+

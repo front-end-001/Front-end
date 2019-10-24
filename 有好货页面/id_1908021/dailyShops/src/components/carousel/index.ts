@@ -56,7 +56,6 @@ export default class Carousel extends BaseComponent {
   }
 
   createChildren() {
-    console.log(this.PROPERTY.imageUrls);
     const imageUrls = this.PROPERTY.imageUrls;
     if (imageUrls && this.root) {
       let i = imageUrls.length;
@@ -83,7 +82,6 @@ export default class Carousel extends BaseComponent {
       next = children[nextPosition];
 
     this.PROPERTY.offsetTimeStart = Date.now();
-    console.log(this.PROPERTY.speed)
 
     this.PROPERTY.tl.addAnimation(
       new DOMElementStyleNumberAnimation(
