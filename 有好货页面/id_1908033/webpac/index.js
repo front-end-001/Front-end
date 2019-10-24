@@ -6,6 +6,7 @@
 import {create} from './js/create.js';
 
 import ListView from "./js/ListView.js"
+import tree from "./my.component";
 
 // var t = <Text>abc</Text>
 function loadMore() {
@@ -17,67 +18,6 @@ function loadMore() {
 
 
 window.render = function(data,root) {
-    var c = <TabView style="width:100%;height:100% ">
-
-    <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom = {loadMore} style="-webkit-overflow-scrolling:touch; overflow:scroll; background-color:red;white-space:normal;font-size:36px">
-       <ListView data={data}></ListView>
-    </ScrollView>
-    <ScrollView tab-title="有趣的店" style="background-color:green">
-    youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-    
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-    
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-    
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-    
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youquyouqu youqu youqu
-        youqu youqu youqu
-    </ScrollView>
-    <ScrollView tab-title="品牌新店" style="background-color:yellow"></ScrollView>
-    
-    </TabView>
+    var c = tree;
     c.appendTo(document.body)
 }

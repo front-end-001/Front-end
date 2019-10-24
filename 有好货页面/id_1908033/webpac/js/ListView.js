@@ -41,13 +41,13 @@ export default class ListView {
     render(){
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
         return <div>
-            hello
-            { 
-                data.map(item => (
-                    <div><span class="x">{item.a}</span><span class="x">{item.b}</span></div>
-                ))
-            }
-        </div>
+        hello
+        {
+            data.map(item => (
+                <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
+            ))
+        }
+    </div>
     }
 
     get style(){
