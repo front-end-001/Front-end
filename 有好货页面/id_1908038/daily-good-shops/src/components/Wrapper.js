@@ -3,6 +3,9 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
+/**
+ * 原生dom  转换为jsx
+ */
 export default class Wrapper {
     constructor(type) {
         this[PROPERTY_SYMBOL] = Object.create(null);
@@ -34,7 +37,7 @@ export default class Wrapper {
     }
     setAttribute(name, value) {
         if (name == "style" && typeof value == "object") {
-            for (let p in value) 
+            for (let p in value)
                 this.root.style[p] = value[p];
             return;
         }

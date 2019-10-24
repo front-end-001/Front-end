@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
-    // entry: './src/index.js',//jsx
-    entry: './src/script.js',//自定义组件component
+    entry: './src/index.js',//jsx
+    // entry: './src/script.js',//自定义组件component
     output: {
       filename: 'bundle.js',
       path: path.resolve(__dirname, 'dist')
@@ -33,6 +33,7 @@ module.exports = {
         ]
     },
     mode: "development",
+    devtool: 'inline-source-map',
     devServer: {
         contentBase: './dist',
         host: '127.0.0.1',

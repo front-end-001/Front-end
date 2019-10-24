@@ -4,9 +4,15 @@ import Text from "./components/Text";
 
 import Wrapper from "./components/Wrapper";
 
+/**
+ * JSX解析
+ * @param {*} Class
+ * @param {*} attributes
+ * @param  {...any} children
+ */
 export function create(Class, attributes, ...children) {
 
-    let object
+    let object;
 
     if (typeof Class == "string")
         object = new Wrapper(Class);

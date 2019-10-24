@@ -32,7 +32,8 @@ export default class TabView {
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "hidden";
         this.contentContainer.style.flex = "1";
-        this.headerContainer.style.height = "93px";
+        this.headerContainer.style.height = "113px";
+        this.headerContainer.style.marginTop = "215px";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
         //触发手势库
@@ -147,6 +148,7 @@ export default class TabView {
         header.style.fontFamily = "PingFang SC";
         header.style.fontSize = "46px";
         header.style.margin = "20px 35px 0 35px";
+        header.style.color = "#fff";
         this.headerContainer.appendChild(header);
 
         header.addEventListener('click', event => {
