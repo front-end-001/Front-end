@@ -1,6 +1,6 @@
 
 import {PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL, EVENT_SYMBOL, STATE_SYMBOL} from '../lib/consts'
-import { EventEmitter } from 'events'
+
 
 export default class Component {
     constructor(config) {
@@ -12,7 +12,6 @@ export default class Component {
     }
 
     appendTo(element){
-        console.log(element)
         element.appendChild(this.root);
         this.didMounted();
     }

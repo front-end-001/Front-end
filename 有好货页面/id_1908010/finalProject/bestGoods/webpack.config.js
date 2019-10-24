@@ -8,7 +8,9 @@ const pathResolve = targetPath => path.resolve(__dirname, targetPath)
 
 
 module.exports = {
-    entry: "./index.js",
+    entry: {
+        app:"./index.js",
+    },
     output: {
         path: pathResolve('dist'),
         filename: '[name].js',

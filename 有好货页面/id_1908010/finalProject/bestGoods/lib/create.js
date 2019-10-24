@@ -1,7 +1,14 @@
 import TextView from '../src/TextView'
+import Wrapper from '../src/Wrapper'
 
 export function create(Class, attributes, ...children) {
-    let object = new Class()
+    let object
+    if(typeof Class == "string") {
+        object = new Wrapper(Class)
+    } else {
+        object = new Class()
+    }
+    
     for(let name in attributes){
         if(name.match(/^on-([\s\S]+)$/)) {
             object.addEventListener(RegExp.$1, attributes[name])
