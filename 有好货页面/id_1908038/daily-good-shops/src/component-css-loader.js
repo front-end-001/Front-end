@@ -1,10 +1,10 @@
 var css = require('css');
 
 module.exports = function (source, map) {
-    console.log(this.resourceQuery);
+    // console.log(this.resourceQuery);
     var filename = this.resourcePath.match(/([^\/\\]+)\.css$/)[1];
     var className = filename.replace(/^[A-Z]/, l => l.toLowerCase()).replace(/[A-Z]/, l => "-" + l.toLowerCase())
-    console.log(className);
+    // console.log(className);
 
 
     var jsObj = {};
@@ -19,7 +19,7 @@ module.exports = function (source, map) {
 
         jsObj[p] = {};
 
-        console.log(rule.declarations);
+        // console.log(rule.declarations);
 
         for(var declaration of rule.declarations) {
             jsObj[p][declaration.property] = declaration.value;

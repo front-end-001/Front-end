@@ -32,7 +32,7 @@
     //并行结构
     void async function () {
         let [obj, event] = await Promise.all([
-            (async () => {// fetch 在最前 因为fetch慢
+            (async () => {// fetch 在最前 因为fetch慢 请求页面数据
                 return await (await fetch('./data.json')).json()
             })(),
             happen(document, 'DOMContentLoaded'),
