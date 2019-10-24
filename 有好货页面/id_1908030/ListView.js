@@ -1,10 +1,16 @@
 import { create } from "./create.js"
 import Div from "./Div.js";
+import css from "./ListView.css";
+
 
 const PROPERTY_SYMBOL = Symbol("property"); 
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+
+// let styleElement = document.createAttribute("style");
+// styleElement.innerHTML = css;
+// document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 export default class ListView {
     constructor() {
