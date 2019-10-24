@@ -12,6 +12,9 @@
     background: url(../image/bg2.jpg)no-repeat;
     background-size: 100% auto;
     width: 100%;
+        /* background-attachment: relative;
+    background-size: cover;
+    background-position: center; */
 }
 
 .header div {
@@ -22,4 +25,33 @@
 .active {
     font-weight: bold;
     border-bottom: solid 2px #fff;
+}
+
+.Carousel {
+    margin: 0.6rem 0;
+}
+
+.carousel-content {
+    width: 7rem;
+    height: 4.29rem;
+    margin: 0 auto;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.carousel-content img {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    object-fit: cover;
+    transition: ease 0.6s;
+
+}
+
+.tab1-title {
+    font-size: 0.46rem;
+    font-weight: 500;
+    color: rgba(51, 51, 51, 1);
+    line-height: 0.35rem;
+    margin: 0 0 0.4rem 0.34rem;
 }

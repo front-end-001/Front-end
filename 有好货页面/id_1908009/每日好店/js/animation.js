@@ -174,6 +174,7 @@ class DOMAnimation {
 export default class animation{
     constructor(){
         this._tl = new Timeline()
+        
         // this._dom = dom
         // this._type= type
         // this._startTime = startTime
