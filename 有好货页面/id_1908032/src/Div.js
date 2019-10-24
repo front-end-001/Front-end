@@ -23,8 +23,6 @@ export default class Div {
 
     created(){
         this.root = document.createElement("div");
-        this.root.style.display = 'inline-block';
-        this[STATE_SYMBOL].h = 0;
     }
     mounted(){
 

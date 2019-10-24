@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+body {
+    background-color: rgba(238, 238, 238, 1);
+}
+
 .tab-head {
     height: 120px;
     display: flex;
@@ -35,7 +39,9 @@
 }
 
 .shop-view {
-    width: 100%;
+    padding: 28px 35px 30px 35px;
+    background: #fff;
+    border-radius: 18px;
 }
 
 .shop-view .innner {
@@ -69,18 +75,19 @@
 
 .shop-view .badage {
     padding: 0 10px;
+    width: 75px;
     height: 30px;
     background-color: rgba(238, 5, 7, 1);
     border-radius: 15px;
 }
 
-.shop-view .image-box {
+.shop-view .image-box-list {
     display: flex;
     justify-content: space-between;
 }
 
 .shop-view .image {
-    width: 199px;
-    height: 199px;
+    width: 18vw;
+    height: 18vw;
     border-radius: 3px;
 }
