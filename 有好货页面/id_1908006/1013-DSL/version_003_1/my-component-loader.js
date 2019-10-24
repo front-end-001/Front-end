@@ -7,6 +7,7 @@ module.exports = function (source, map) {
 
     function emit(token){
         let top = stack[stack.length - 1];
+        console.log(token);
 
         if(token.type == "startTag") {
             let element = {
@@ -324,13 +325,15 @@ root = stack.pop();
         if(node.type == "text") {
             return (
 `
-element = new Text(${JSON.stringify(node.content)});
+element = new MyText(${JSON.stringify(node.content)});
 if(stack.length > 0){
     stack[stack.length - 1].appendChild(element);
 }
 `)
         }
     }
+
+
 
     return `
 import {MyTabView} from "./myTabView.js"

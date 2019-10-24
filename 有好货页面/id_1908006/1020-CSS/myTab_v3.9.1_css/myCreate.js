@@ -8,8 +8,8 @@ export function myCreate(Class, attributes, ...children){
          object = new Class();
     }
 
-    for(let name in attributes) {
-        if  (name.match(/^on-([\s\S]+)$/)) {
+    for(let name in attributes) { // 遍历属性
+        if  (name.match(/^on-([\s\S]+$)/)) {
             object.addEventListener(RegExp.$1, attributes[name]);
         }else{
             object.setAttribute(name, attributes[name]);
@@ -18,14 +18,12 @@ export function myCreate(Class, attributes, ...children){
 
     } 
 
-    for(let child of children) {
+    for(let child of children) { // 遍历集合类元素，如array， set等
         if (child instanceof Array) {
             for (let c of child) {
                 if (typeof c === "string") {
-                    console.log(object);
                     object.appendChild(new MyText(c));
                 }else{
-                    console.log(object);
                     object.appendChild(c);
                 }
             }

@@ -1,6 +1,7 @@
 import {MyText} from "./myText.js";
 import {MyWrapper} from "./myWrapper.js";
 export function myCreate(Class, attributes, ...children){
+    console.log("call myCreate", Class);
     let object;
     if (typeof Class === "string") {
         object = new MyWrapper(Class);
