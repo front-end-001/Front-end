@@ -1,36 +1,30 @@
 import Component from './component'
+import Warper from './Wraper';
+
+// todo: 构造基础元素构造函数, 已抹平基础元素和组件元素的差异
 
 export default function myCreate(creater, attrs, ...children) {
   if (!creater) return '';
-  console.log(creater, attrs, children);
-  if (typeof creater === 'string') {
-    const ele = document.createElement(creater);
-    if (attrs) {
-      for (const attrName in attrs) {
-        ele.setAttribute(attrName, attrs[attrName]);
-      }
-    }
-    for (const child of children) {
-      const appendChild = (child) => {
-        if (typeof child === 'string') {
-          ele.appendChild(document.createTextNode(child));
-        } else if (child instanceof Element) {
-          ele.appendChild(child);
-        } else if (child instanceof Component) {
-          // ele.appendChild(child.$root);
-          child.appendTo(ele);
-        }
-      }
 
-      if (Array.isArray(child)) {
-        child.forEach((subChild) => {
-          appendChild(subChild);
-        });
-      } else {
-        appendChild(child);
-      }
-    }
-    return ele;
+  let ele;
+  if (typeof creater === 'string') {
+    ele = new Warper(attrs, creater);
+  } else {
+    ele = new creater(attrs);
   }
-  return new creater(attrs, children);
+  // console.log('构造组件', creater, attrs, children);
+
+  for (let child of children) {
+    if (Array.isArray(child)) {
+      child.forEach((subChild) => {
+        ele.appendChild(subChild);
+      });
+    } else {
+      ele.appendChild(child);
+    }
+  }
+
+  ele.$init();
+
+  return ele;
 }

@@ -67,8 +67,10 @@ export default class BaseComponent {
     if (name === 'className' && this.root) {
       // this.root.setAttribute('class', value);
       this.root.className = value;
+    } else if (name === 'style' && this.root) {
+      this.root.setAttribute('style', value);
     }
-
+    this.PROPERTY[name] = value;
     return (this.ATTRIBUTE[name] = value);
   }
 
