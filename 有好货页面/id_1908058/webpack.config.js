@@ -20,7 +20,10 @@ module.exports =  {
                     loader: require.resolve('./component-loader.js'),
                     
                 }
-            }
+            },{
+                test: /\.css$/i,
+                use: [require.resolve('./component-css-loader.js'),],
+              },
         ]
     },
     mode: "development",
