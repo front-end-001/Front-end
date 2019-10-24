@@ -9,7 +9,17 @@ export default class ScrollView extends Component {
     }
 
     didCreate(){
+        //阻止滑动事件向上传播
+        this.root.addEventListener('touchmove', (event) => {
+            event.cancelBubble = true
+            event.stopImmediatePropagation(); 
+        }, {
+            passive: false
+        })
+    }
 
+    appendChild(child){
+        child.appendTo(this.root)
     }
 
     setAttribute(name, value) {
@@ -25,4 +35,4 @@ export default class ScrollView extends Component {
         } 
         return this.attrs[name]
     }
-}
+} 

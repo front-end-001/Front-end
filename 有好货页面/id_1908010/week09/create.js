@@ -14,6 +14,7 @@ export function create(Class, attributes, ...children){
             object.addEventListener(RegExp.$1, attributes[name])
         } else {
             object.setAttribute(name, attributes[name]);
+            // object[name] = attributes[name]; //property 设置方式
         }
     }
         

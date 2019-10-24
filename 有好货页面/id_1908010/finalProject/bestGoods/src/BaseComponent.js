@@ -12,6 +12,7 @@ export default class Component {
     }
 
     appendTo(element){
+        console.log(element)
         element.appendChild(this.root);
         this.didMounted();
     }

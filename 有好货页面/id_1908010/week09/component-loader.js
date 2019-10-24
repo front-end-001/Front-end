@@ -295,7 +295,7 @@ module.exports = function(source, map) {
 
     let tree = stack[0];
 
-    let template = stack[0].children.filter(e => e.tagName == "template")[0];
+    let template = stack[0].children.filter(e => e.tagName == "Template")[0];
 
     // console.log(template)
 
@@ -317,12 +317,12 @@ module.exports = function(source, map) {
             `)
         }
         if(node.type == "text") {
-            return (
-                `element = new Text(${JSON.stringify(node.content)});
+            return (`
+                element = new Text(${JSON.stringify(node.content)});
                 if(stack.length > 0){
                     stack[stack.length-1].appendChild(element);
                 }
-                `)
+            `)
         }
     }
 
@@ -334,6 +334,7 @@ module.exports = function(source, map) {
         import Wrapper from "./Wrapper.js"
         let root = null;
         let stack = [];
-        let element 
+        let element;
+        console.log("***************************test")
     ` + generateCode(rootElement) + "export default root;\n"
 } 
