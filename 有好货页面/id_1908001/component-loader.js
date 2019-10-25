@@ -262,13 +262,12 @@ module.exports = function(source, map) {
         }
     }
     // --- end
-    const code = []
-    const rootElement = stack[0].children.filter
+    const template = stack[0].children.filter(e => e.tagName === 'template')[0]
+    // const rootElement = template.children.filter(e => e.type === 'element')[0]
     function generateCode (node) {
         if (node.type === 'element') {
-            code.push()
-            const element = new
+            console.log(node)
         }
     }
-    return ""
+    return ''
 }
