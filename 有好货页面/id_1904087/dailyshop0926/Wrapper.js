@@ -39,6 +39,13 @@ export default class Wrapper {
     }
 
     setAttribute(name, value) {
+        //设置CSS样式格式
+        if(name == "style" && typeof value == "object") {
+            for(let p in value) {
+                this.root.style[p] = value[p];
+            }
+            return;
+        }
         this.root.setAttribute(name, value);
     }
 
