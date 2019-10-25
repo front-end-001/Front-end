@@ -3,6 +3,7 @@ reset
 */
 body,h4,h3,h2,h1,p{
   margin:0;
+  padding: 0;
 }
 a{
   text-decoration: none; 
@@ -31,6 +32,9 @@ base
 .mb_1{
   margin-bottom: calc(100vw * 52 / 1080);
 }
+.mb_067{
+  margin-bottom: calc(100vw * 35 / 1080);
+}
 
 .icon{
   font-size: calc(100vw * 52 / 1080);
@@ -45,6 +49,9 @@ base
 }
 .icon_share{
   content: url(../image/icon/share.svg);
+}
+.icon_goodShop{
+  content: url(../image/icon/goodShop.png);
 }
 
 .tag-tianmao {
@@ -109,7 +116,7 @@ nav a:hover::before,nav a.active::before{
 }
 .content{
   background-position-y: calc(100vw * -384 / 1080);
-  padding: 0 calc(100vw * 34 / 1080);
+  padding: 0 calc(100vw * 30 / 1080);
 }
 
 .carousel{
@@ -150,10 +157,14 @@ h4{
   height: calc(100vw * 78 / 1080);
   float: left;
   margin-top: calc(100vw * 27 / 1080);
+  border-radius: 100%;
 }
 .two-shop .shop-header p{
   padding-top: calc(100vw * 28 / 1080);
   padding-left: calc(100vw * 95 / 1080);
+}
+.two-shop .shop-header .tag{
+  padding-top: calc(100vw * 10 / 1080);
 }
 .two-shop .imgs{
   display: flex;
@@ -163,4 +174,82 @@ h4{
   width: calc(100vw * 199 / 1080);
   height:   calc(100vw * 199 / 1080);
   border-radius: calc(100vw * 12 / 1080);
+}
+.shop-list .shop{
+  width:calc(100vw * 1012 / 1080);
+  height:calc(100vw * 1048 / 1080);
+  border-radius: calc(100vw * 36 / 1080);
+  margin-bottom: calc(100vw * 36 / 1080);
+  background-color: #fff;
+  box-sizing: border-box;
+  padding: 0 calc(100vw * 35 / 1080);
+}
+.shop-list .shop-header{
+  box-sizing: border-box;
+  padding-top: calc(100vw * 36 / 1080);
+  height: calc(100vw * 168 / 1080);
+  line-height: 1;
+}
+.shop-list .shop-header img{
+  float: left;
+  width: calc(100vw * 105 / 1080);
+  height: calc(100vw * 105 / 1080);
+  border-radius: 100%;
+}
+.shop-list .shop-header p{
+  padding-left: calc(100vw * 124 / 1080);
+  font-size: calc(100vw * 46 / 1080);
+  font-family: PingFangSC-Medium;
+  line-height: 1;
+}
+.shop-list .shop-header p{
+  padding-left: calc(100vw * 95 / 1080);
+}
+.shop-list .shop-header .btn{
+  width:calc(100vw * 160 / 1080);
+  height:calc(100vw * 72 / 1080);
+  background:linear-gradient(90deg,rgba(255,172,0,1),rgba(254,201,0,1));
+  border-radius:calc(100vw * 36 / 1080);
+  font-size: calc(100vw * 40 / 1080);
+  line-height: calc(100vw * 72 / 1080);
+  text-align: center;
+  color: #fff;
+}
+.shop-list .shop-desc{
+  background-color: #f5f5f5;
+  padding-left: calc(100vw * 26 / 1080);
+  line-height: calc(100vw * 98 / 1080);
+  border-radius: calc(100vw * 16 / 1080);
+  font-size: calc(100vw * 36 / 1080);
+  color: #333;
+}
+.shop-list .shop-desc .icon{
+  vertical-align: middle;
+}
+.shop-list .shop-imgs{
+  display: flex;
+  justify-content: space-between;
+}
+.shop-list .shop-imgs img{
+  border-radius: calc(100vw * 36 / 1080);
+}
+.shop-list .shop-imgs-main{
+  width:calc(100vw * 624 / 1080);
+  height:calc(100vw * 624 / 1080);
+}
+.shop-list .shop-imgs-two{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.shop-list .shop-imgs-two img{
+  width: calc(100vw * 308 / 1080);
+  height: calc(100vw * 308 / 1080); 
+}
+.shop-list .shop .more{
+  float: right;
+  color:#888;
+  font-weight: lighter;
+  padding-top: calc(100vw * 20 / 1080);
+  font-size: calc(100vw * 32 / 1080);
 }
