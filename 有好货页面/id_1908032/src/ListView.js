@@ -1,9 +1,11 @@
+import { create } from './create';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Div {
+export default class ListView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -23,9 +25,22 @@ export default class Div {
 
     created(){
         this.root = document.createElement("div");
+        this.render().appendTo(this.root);
     }
-    mounted(){
 
+    render(){
+        let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
+        return <div>
+            {
+                data.map(item => (
+                    <div>{item}</div> 
+                ))
+            }
+        </div>
+    }
+
+    mounted(){
+        
     }
     unmounted(){
 
@@ -52,6 +67,14 @@ export default class Div {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if(name === 'data'){
+            this[ATTRIBUTE_SYMBOL][name] = value;
+
+            this.root.innerHTML = "";
+            this.render().appendTo(this.root);
+
+            return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

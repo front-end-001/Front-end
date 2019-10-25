@@ -3,7 +3,7 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Div {
+export default class ScrollView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -23,6 +23,12 @@ export default class Div {
 
     created(){
         this.root = document.createElement("div");
+        // this.root.style.overflow = 'scroll';
+        this[STATE_SYMBOL].h = 0;
+        this.root.addEventListener("touchmove", function(e){ 
+            e.cancelBubble = true;
+            e.stopImmediatePropagation();
+        }, {passive:false});
     }
     mounted(){
 

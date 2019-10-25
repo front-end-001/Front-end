@@ -1,3 +1,5 @@
+import { create } from './create';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
@@ -23,7 +25,35 @@ export default class Div {
 
     created(){
         this.root = document.createElement("div");
+        this.root.innerHTML = '';
+        this.render();
     }
+
+    render(){
+        if(!this.getAttribute('data')) return;
+
+        let data = this.getAttribute('data') || {}
+        let { logo, name, images } = data;
+        this.root.classList.add('shop-view');
+        let element = <div class="inner">
+            <div class="top-info">
+                <img class="logo" src={logo} alt="" />
+                <div class="right-info">
+                    <h3 class="title">{name}</h3>
+                    <i class="badage"></i>
+                </div>
+            </div>
+            <div class="image-box-list">
+                {
+                    Array.isArray(images) && images.map(image => (
+                        <img class='image' src={image} alt=""/>
+                    ))
+                }
+            </div>
+        </div>
+        element.appendTo(this.root);
+    }
+
     mounted(){
 
     }
@@ -52,6 +82,10 @@ export default class Div {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if(name == 'data'){
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            this.render();
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
