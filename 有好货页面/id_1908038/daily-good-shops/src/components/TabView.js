@@ -1,4 +1,5 @@
 import { enableGesture } from '../lib/gesture'
+import '../styles/TabView.scss'
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
@@ -26,16 +27,24 @@ export default class TabView {
 
     created(){
         this.root = document.createElement("div");
-        this.root.style.display = "flex";
+        this.defaultTop = document.createElement("div");
         this.headerContainer = document.createElement("div");
         this.contentContainer = document.createElement("div");
+
+        this.root.style.display = "flex";
+
+        this.defaultTop.style = "text-align: center; position: relative; margin: 5vw 0;";
+        this.headerContainer.classList.add('tab-header');
+
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "hidden";
         this.contentContainer.style.flex = "1";
-        this.headerContainer.style.height = "113px";
-        this.headerContainer.style.marginTop = "215px";
+        this.contentContainer.classList.add('tab-content');
+
+        this.root.appendChild(this.defaultTop);
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
+
         //触发手势库
         enableGesture(this.contentContainer);
 
@@ -133,6 +142,7 @@ export default class TabView {
     }
 
     appendChild(child){
+
         //第几个
         let n = this.children.length;
 
@@ -193,7 +203,9 @@ export default class TabView {
             this.root.style.display = "flex";
             this.root.style.flexDirection = "column"
         }
-
+        if (name == "class") {
+            this.root.classList.add(value);
+        }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     addEventListener(type, listener){

@@ -4,7 +4,8 @@ import ScrollView from "./components/ScrollView";
 import ListView from "./components/ListView";
 import Carousel from './lib/carousel'
 
-import Div from "./components/Div";
+import './styles/index.scss'
+
 import {create} from './create'
 
 const imageUrls = [
@@ -23,8 +24,8 @@ function loadMore() {
 
 window.render = function(obj, root) {
     /* on-scrollToBottom={loadMore.bind(this, 'my')} */
-    var c = <div id="root" style="background:url(./static/image/bg_1.png);">
-                <TabView style="width:100%;height:100%;background-color:#eeeeee;">
+    var c = <div id="app" style="background:url(./static/image/bg_1.png);">
+                <TabView class="tab" style="width:100%;height:100%;background-color:#eeeeee;">
                     <ScrollView tab-title="推荐"  style="background-color:lightgreen;">
                         <Carousel speed="3000" style="margin:0 auto;" height={480} width={908} data={imageUrls}></Carousel>
                         <ListView data={obj}></ListView>

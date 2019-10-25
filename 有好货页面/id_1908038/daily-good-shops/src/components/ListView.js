@@ -1,5 +1,4 @@
 import {create} from "../create.js";
-import Div from "./Div";
 import css from "../styles/listView.css"
 
 const PROPERTY_SYMBOL = Symbol("property");
