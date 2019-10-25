@@ -5,8 +5,6 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-
-
 export default class TabView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);

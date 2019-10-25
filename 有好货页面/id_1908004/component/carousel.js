@@ -14,10 +14,6 @@ export class Carousel {
         this.created();
     }
 
-    toHTML(){
-        
-    }
-
     appendTo(element){
         element.appendChild(this.root);
         this.mounted();

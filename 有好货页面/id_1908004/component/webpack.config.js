@@ -7,8 +7,13 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
+<<<<<<< HEAD
                         presets: ['@babel/preset-env'],
                         plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
+=======
+                      presets: ['@babel/preset-env'],
+                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
+>>>>>>> 76f8f1a5d637205ab4509d9c71d49783b2f895d4
                     }
                 }
             },
@@ -17,11 +22,7 @@ module.exports = {
                 use: {
                     loader: require.resolve('./component-loader.js')
                 }
-            },
-            {
-                test: /\.css$/i,
-                use: [require.resolve('./component-css-loader.js')],
-            },
+            }
         ]
     },
     mode: "development",
