@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-10-10 22:17:26
+ * @LastEditTime: 2019-10-10 22:17:26
+ * @LastEditors: your name
+ */
 import Text from "./Text.js"
 import Wrapper from "./Wrapper.js";
 
@@ -20,7 +27,6 @@ export function create(Class, attributes, ...children){
         
     for(let child of children) {
         if(child instanceof Array) {
-            debugger;
             for(let c of child) {
                 if(typeof c === "string") {
                     object.appendChild(new Text(c));
