@@ -15,15 +15,12 @@ export function create(Class, attributes, ...children){
             object.addEventListener(RegExp.$1, attributes[name])
         } else {
             object.setAttribute(name, attributes[name]);
+            //object[name] = attributes[name];
         }
     }
         
     for(let child of children) {
         if(child instanceof Array) {
-<<<<<<< HEAD
-=======
-            debugger;
->>>>>>> 76f8f1a5d637205ab4509d9c71d49783b2f895d4
             for(let c of child) {
                 if(typeof c === "string") {
                     object.appendChild(new Text(c));
