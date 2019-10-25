@@ -1,9 +1,14 @@
+import {create} from "./create.js";
+import Div from "./Div.js";
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ScrollView {
+
+
+export default class ListView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -23,35 +28,7 @@ export default class ScrollView {
 
     created(){
         this.root = document.createElement("div");
-        this.placeHolder = document.createElement("div");
-        //this.placeHolder.innerText = "加载更多";
-        this.placeHolder.style.backgroundColor = "lightgreen";
-        this.root.appendChild(this.placeHolder);
-        /*this.root.addEventListener("touchmove",function(e){ 
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {
-            passive:false
-        });*/
-
-        let triggered = false;
-
-        this.root.addEventListener("scroll", event => {
-            let clientRect = this.root.getBoundingClientRect();
-            let placeHolderRect = this.placeHolder.getBoundingClientRect();
-            //console.log(clientRect.bottom, )
-            if(clientRect.bottom < placeHolderRect.top) {
-                if(triggered) {
-                    this.triggerEvent("scrolToBottom");
-                    triggered = true;
-                }
-            }
-            //console.log(this.root.scrollHeight, clientRect.height, this.root.scrollTop );
-            /*if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
-                this.triggerEvent("scrolToBottom", "b");
-            }*/
-        })
-        this[STATE_SYMBOL].h = 0;
+        this.render().appendTo(this.root);
     }
     mounted(){
 
@@ -61,6 +38,19 @@ export default class ScrollView {
     }
     update(){
 
+    }
+
+
+    render(){
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        return <div>
+            hello
+            { 
+                data.map(item => (
+                    <div><span class="x">{item.a}</span><span class="x">{item.b}</span></div>
+                ))
+            }
+        </div>
     }
 
     get style(){
@@ -81,14 +71,21 @@ export default class ScrollView {
         if(name == "style") {
             return this.root.getAttribute("style");
         }
+
+
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
-        if(name == "placeHolderText") {
-            this.placeHolder.innerText = value;
+        if(name == "data") {
+            this[ATTRIBUTE_SYMBOL][name] = value;
+
+            this.root.innerHTML = "";
+            this.render().appendTo(this.root);
+
+            return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

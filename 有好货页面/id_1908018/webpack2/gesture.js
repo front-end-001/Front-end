@@ -9,8 +9,9 @@ document.getElementById("main").addEventListener("pan", event=> {
     console.log(event.dx)
     document.getElementById("main").style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`
 });
+
 */
-export function enableGesture(main) {
+export function enableGesture(main){
     let contexts = Object.create(null);
 
     let start = (point, context, origin) => {
@@ -32,23 +33,23 @@ export function enableGesture(main) {
     let move = (point, context, origin) => {
 
         //console.log(context.isPan);
-        if (Math.abs(point.clientX - context.startX) > 10 ||
-            Math.abs(point.clientY - context.startY) > 10) {
+        if(Math.abs(point.clientX - context.startX) > 10 || 
+            Math.abs(point.clientY - context.startY) > 10){
             context.isTap = false;
-            if (context.isPan == false) {
+            if(context.isPan == false){
                 context.isPan = true;
-                if (context.isPress) {
+                if(context.isPress) {
                     context.isPress = false;
                     var e = new Event("presscancel");
                     main.dispatchEvent(e);
                 }
-                if (Math.abs(point.clientX - context.startX) < Math.abs(point.clientY - context.startY)) {
+                if(Math.abs(point.clientX - context.startX) < Math.abs(point.clientY - context.startY)){
                     context.isVertical = true;
                 } else {
                     context.isVertical = false;
                 }
-
-
+                
+                
                 var e = new Event("panstart");
                 e.origin = origin;
                 e.startX = context.startX;
@@ -56,16 +57,16 @@ export function enableGesture(main) {
                 e.isVertical = context.isVertical;
 
                 main.dispatchEvent(e);
+                
 
 
 
-
-                if (context.pressHandler)
+                if(context.pressHandler)
                     clearTimeout(context.pressHandler);
             }
         }
 
-        if (context.isPan) {
+        if(context.isPan) {
             var e = new Event("pan");
             e.x = point.clientX;
             e.y = point.clientY;
@@ -79,17 +80,17 @@ export function enableGesture(main) {
         //console.log("move",[point.clientX, point.clientY], context)
     }
     let end = (point, context, origin) => {
-        if (Date.now() - context.startTime < 300 && context.isTap) {
+        if(Date.now() - context.startTime < 300 && context.isTap) {
             var e = new Event("tap");
             main.dispatchEvent(e);
         }
 
-        if (context.isPan) {
+        if(context.isPan) {
             let isFlick = false;
             let t = (Date.now() - context.startTime);
             let v = (Math.sqrt(Math.pow(point.clientX - context.startX, 2) +
                 Math.pow(point.clientY - context.startY, 2)) / t)
-            if (v > 0.3) {
+            if(v > 0.3) {
                 isFlick = true;
                 var e = new Event("flick");
                 e.vx = (point.clientX - context.startX) / t;
@@ -111,7 +112,7 @@ export function enableGesture(main) {
             main.dispatchEvent(e);
         }
 
-        if (context.isPress) {
+        if(context.isPress){
             var e = new Event("pressend");
             main.dispatchEvent(e);
         }
@@ -139,25 +140,25 @@ export function enableGesture(main) {
 
 
     let touchstart = event => {
-        for (let touch of event.changedTouches) {
+        for(let touch of event.changedTouches) {
             contexts[touch.identifier] = {};
             start(touch, contexts[touch.identifier], event);
         }
     }
     let touchmove = event => {
         //console.log(event.changedTouches);
-        for (let touch of event.changedTouches) {
+        for(let touch of event.changedTouches) {
             move(touch, contexts[touch.identifier], event);
         }
     }
     let touchend = event => {
-        for (let touch of event.changedTouches) {
+        for(let touch of event.changedTouches) {
             end(touch, contexts[touch.identifier], event);
             delete contexts[touch.identifier];
         }
     }
     let touchcancel = event => {
-        for (let touch of event.changedTouches) {
+        for(let touch of event.changedTouches) {
             cancel(touch, contexts[touch.identifier], event);
             delete contexts[touch.identifier];
         }
