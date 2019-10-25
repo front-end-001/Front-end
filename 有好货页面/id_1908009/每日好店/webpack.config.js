@@ -16,6 +16,10 @@ module.exports = {
                         plugins: [['babel-plugin-transform-react-jsx', { pragma: "myCreate" }]]
                     }
                 }
+            },
+            {
+                test: /\.css$/i,
+                use: ['to-string-loader','css-loader']
             }
         ]
     },
