@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+body {
+    background-color: rgba(238, 238, 238, 1);
+}
+
 .tab-head {
     height: 120px;
     display: flex;
@@ -31,5 +35,59 @@
     width: 60px;
     height: 6px;
     background-color: rgba(255, 255, 255, 1);
+    border-radius: 3px;
+}
+
+.shop-view {
+    padding: 28px 35px 30px 35px;
+    background: #fff;
+    border-radius: 18px;
+}
+
+.shop-view .innner {
+    padding: 28px 45px 30px 45px;
+}
+
+.shop-view .top-info {
+    margin-bottom: 27px;
+    display: flex;
+    align-items: center;
+}
+
+.shop-view .logo {
+    margin-right: 18px;
+    width: 78px;
+    height: 78px;
+    border-radius: 100%;
+}
+
+.shop-view .right-info {
+    height: 78px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shop-view .title {
+    font-size: 36px;
+    color: rgba(51, 51, 51, 1);
+}
+
+.shop-view .badage {
+    padding: 0 10px;
+    width: 75px;
+    height: 30px;
+    background-color: rgba(238, 5, 7, 1);
+    border-radius: 15px;
+}
+
+.shop-view .image-box-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.shop-view .image {
+    width: 18vw;
+    height: 18vw;
     border-radius: 3px;
 }

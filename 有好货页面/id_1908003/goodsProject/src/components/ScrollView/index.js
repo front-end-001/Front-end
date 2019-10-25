@@ -13,7 +13,7 @@ export default class ScrollView extends Component {
 
   render() {
     const children = this.children;
-    const tabItem = <div class = "o-scroll">
+    const tabItem = <div class="o-scroll">
       <div class="o-scroll-container">{ children }</div>
     </div>;
 
@@ -21,9 +21,9 @@ export default class ScrollView extends Component {
   }
 
   mounted() {
-    this.$el.addEventListener('touchmove', function (e) {
-      e.cancelBubble = true;
-      e.stopImmediatePropagation();
-    }, { passive: false});
+    // this.$el.addEventListener('touchmove', function (e) {
+    //   e.cancelBubble = true;
+    //   e.stopImmediatePropagation();
+    // }, { passive: false});
   }
 }
