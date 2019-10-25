@@ -14,10 +14,9 @@ export default class Scroll {
         this.root = document.createElement("div");
         this.placeholder = document.createElement('div')
         this.placeholder.innerText = '加载更多'
-        this.placeholder.style.background='pink'
+        this.placeholder.style.textAlign='center'
         this.root.appendChild(this.placeholder)
-
-
+        
         let trigged = false
         this.root.addEventListener('scroll',event =>{
             let clientRect = this.root.getBoundingClientRect()

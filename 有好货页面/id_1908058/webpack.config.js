@@ -1,6 +1,7 @@
 module.exports =  { 
     devtool: 'source-map',
-    entry: "./src/js/script.js",
+    // entry: "./src/js/script.js",
+    entry: "./script.js",
     module: {
         rules: [
             {
@@ -12,7 +13,17 @@ module.exports =  {
                       plugins: [["@babel/plugin-transform-react-jsx", {pragma: 'create'}],'@babel/plugin-proposal-object-rest-spread']
                     }
                 }
-            }
+            },
+            {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader.js'),
+                    
+                }
+            },{
+                test: /\.css$/i,
+                use: [require.resolve('./component-css-loader.js'),],
+              },
         ]
     },
     mode: "development",

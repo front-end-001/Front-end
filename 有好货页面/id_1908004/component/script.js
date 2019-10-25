@@ -5,6 +5,8 @@ import ListView from "./ListView.js"
 import Div from "./Div.js"
 import {create} from "./create.js"
 
+import tree from "./my.component";
+
 
 function loadMore(){
     setTimeout(()=>{
@@ -13,43 +15,10 @@ function loadMore(){
 }
 
 window.render = function(data, root){
-    var c = <TabView style="width:100%;height:100%;">
-        <ScrollView tab-title="推荐" placeHolderText="load more" on-scrolToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
-            <ListView data={data}></ListView>
-        </ScrollView>
-        <ScrollView tab-title="有趣的店"  style="background-color:lightgreen;">
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-        def def def def def def def def def def def def def def def def def def 
-
-        </ScrollView>
-        <ScrollView tab-title="品牌新店" style="background-color:pink;"></ScrollView>
-    </TabView>
+    var c = <div>
+        <span class="x">abc</span>
+        <ListView style="abc:1" data={[{a:1, b:2}]}></ListView>
+    </div>
     c.appendTo(document.body);
 }
 

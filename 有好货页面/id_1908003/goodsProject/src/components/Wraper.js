@@ -81,6 +81,13 @@ export default class Wraper extends Component {
       }
       return;
     }
+    if (name === 'styleObj') {
+      for (let name in value) {
+        this.$el.style[(name)] = value[name];
+        // this.$el.style[camelize(name)] = value[name];
+      }
+      return;
+    }
     // 设置属性
     this[PROP_SYMBOL][name] = value;
 
@@ -90,3 +97,10 @@ export default class Wraper extends Component {
   }
 
 };
+
+function camelize(str) {
+  return (str + "").replace(/-\D/g,
+  function(match) {
+      return match.charAt(1).toUpperCase();
+  });
+}
