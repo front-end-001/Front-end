@@ -19,13 +19,17 @@ export default class RecommendItem extends Component {
     render() {
         let data = this.property["data"] || ""
         if (!data) return null;
+        console.log(data)
         let {name, promotion, icon, items} = data;
+        console.log(icon)
         let header = (
-            <div>
-                <div className="itemLogo"><img style={`background: url(${icon})`}></img></div>
-                <div>
-                    <div className="itemName">{name}</div>
-                    <div className="itemType">天猫</div>
+            <div className="itemHeaderContainer">
+                <div className="left">
+                    <div className="itemLogo"></div>
+                    <div>
+                        <div className="itemName">{name}</div>
+                        <div className="itemType">天猫</div>
+                    </div>
                 </div>
                 <div className="itemEntry"><span className="entryName">进店</span><img src={`${arrow_right}`}></img></div>
             </div>
@@ -51,7 +55,7 @@ export default class RecommendItem extends Component {
         );
 
         return (
-            <div>
+            <div className="itemContainer">
                 {header}
                 {title}
                 {content}

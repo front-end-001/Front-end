@@ -1,0 +1,23 @@
+
+.itemContainer {
+    margin-left: 17px;
+    margin-right: 17px;
+    padding: 16px 18px;
+    background: rgba(254,254,254,1);;
+    border-radius: 18px;
+    display: block;
+}
+
+.itemHeaderContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.itemLogo {
+    width: 53px;
+    height: 53px;
+    background: url("https://static001.geekbang.org/univer/classes/js_dev/static/recommendation/shop_logo3.jpg");
+
+}

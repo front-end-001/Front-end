@@ -33,6 +33,7 @@ export default class Wrapper {
     setAttribute(name, value) {
         if (name == 'className') {
             this.root.className = value
+            return;
         }
         this.root.setAttribute(name, value)
     }
