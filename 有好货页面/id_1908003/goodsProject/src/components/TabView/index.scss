@@ -7,22 +7,29 @@
   display: flex;
   flex-direction: column;
   background-image: url('/static/image/bacground.png');
-  background-size: contain;
+  background-size: 100%;
   background-repeat: no-repeat;
 
   .o-tab-header {
     color: white;
 
     .o-tab-header-item {
-      font-size: 14pt;
-      padding: 7pt 12pt;
+      font-size: 16px;
+      font-family: PingFangSC-Light;
+      padding: 0 12pt;
+      line-height: 35px;
       display: inline-block;
       position: relative;
+      height: 35px;
+      &.active {
+        font-family: PingFangSC-Medium;
+        font-weight: bold;
+      }
 
       &.active:after {
         content: ' ';
-        width: 20pt;
-        height: 2pt;
+        width: 21px;
+    height: 2px;
         background-color: white;
         display: inline-block;
         position: absolute;
@@ -37,6 +44,7 @@
     flex: 1;
     overflow: hidden;
     white-space: nowrap;
+    background-color: #EFEFEF;
 
     .o-tab-item {
       height: 100%;
@@ -44,6 +52,15 @@
       width: 100%;
       min-width: 100%;
       display: inline-block;
+      will-change: transform;
+      transition: all .3s;
+      vertical-align: top;
+    }
+
+    &.on-drag {
+      .o-tab-item {
+        transition: none;
+      }
     }
   }
 }

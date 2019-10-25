@@ -22,7 +22,7 @@ module.exports = {
                 presets: ['@babel/preset-env'],
                 plugins: [
                     ["@babel/plugin-syntax-jsx"],
-                    ["babel-plugin-transform-react-jsx", { pragma: "myComponent" }]
+                    ["babel-plugin-transform-react-jsx", { pragma: "create" }]
                   ]
               }
               
