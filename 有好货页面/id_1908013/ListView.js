@@ -5,6 +5,14 @@ const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const EVENT_SYMBOL = Symbol('event')
 const STATE_SYMBOL = Symbol('state')
 import CollectionStore from './CollectionStore'
+import Img from './Img'
+import css from './ListView.css'
+
+let styleElement = document.createElement('style')
+styleElement.innerHTML = css
+styleElement.setAttribute('scoped', '')
+document.getElementsByTagName('head')[0].appendChild(styleElement)
+
 
 export default class ListView {
     constructor (config) {
@@ -23,7 +31,7 @@ export default class ListView {
     }
     created () {
         this.root = document.createElement('div')
-
+        this.root.classList.add('list-view')
         this.render().appendTo(this.root)
     }
     mounted () {
@@ -38,85 +46,55 @@ export default class ListView {
 
     }
     render () {
-        let data = this[ATTRIBUTE_SYMBOL]['data'] || []
+        let mostFavourateShops = []
+        let recommendedShops = []
+        if (this[ATTRIBUTE_SYMBOL]['data']) {
+            mostFavourateShops = this[ATTRIBUTE_SYMBOL]['data']['mostFavourateShops']
+            recommendedShops = this[ATTRIBUTE_SYMBOL]['data']['recommendedShops']
+        }
         return <div>
-            <div class="carousel-container">
-
+            <div class={'title'} style={'font-size:16px;'}>超多人收藏的店！</div>
+            <div class="flex collection-store-group space-between" style={css.class}>
+                {mostFavourateShops.map(item => {
+                    return <CollectionStore data={item}/>
+                })}
             </div>
-            <div>
-                {
-                data.map((item) => (<div></div>))
-                }
-            </div>
-            <div class={'title'}>超多人收藏的店！</div>
-            <div class="flex" style={'margin-bottom: 10px;'}>
-                <CollectionStore style={'flex:1;margin-left:12px;margin-right:6px;'}/>
-                <CollectionStore style={'flex:1;margin-right:12px;margin-left:6px;'}/>
-            </div>
-            <div class="recommend-store">
-                <header class="header">
-                    <div class="flex">
-                        <img src="" alt="" class="logo"/>
-                        <div>
-                            <h4>极客时间旗舰店</h4>
-                            <i class="store-type">天猫</i>
+            {
+                recommendedShops.map(item => {
+                    return <div className="recommend-store">
+                        <header className="header">
+                            <div className="flex">
+                                <Img src={item.icon} alt="" class="logo"/>
+                                <div>
+                                    <h4 style={'font-size:14px;'}>{item.name}</h4>
+                                    <i className="store-type" style={'font-size:10px;'}>天猫</i>
+                                </div>
+                            </div>
+                            <a href="" className="btn-enter" style={'font-size:12px;'}>进入&gt;</a>
+                        </header>
+                        <div className="message flex items-center">
+                            <i></i>
+                            <span style={'font-size:12px;'}>好店君：该店已被{parseInt(item.fans / 10000)}万人关注，快来关注吧！</span>
                         </div>
-                    </div>
-                    <a href="" class="btn-enter">进入&gt;</a>
-                </header>
-                <div class="message">
-                    <i></i>
-                    <span>好店君：该店已被1.3万人关注，快来关注吧！</span>
-                </div>
-                <div class="content">
-                    <div class="flex-2 large-image-container">
-                        <img src="" alt=""/>
-                    </div>
-                    <div class="flex-1 small-image-container">
-                        <div class="flex-1 ">
-                            <img src="" alt=""/>
+                        <div className="content">
+                            <div className=" large-image-container">
+                                <Img src={item.items[0].image} style={'width:100%'}/>
+                            </div>
+                            <div className={'flex flex-column space-between'}>
+                                <div className=" small-image-container">
+                                    <Img src={item.items[1].image} style={'width:100%'}/>
+                                </div>
+                                <div className=" small-image-container">
+                                    <Img src={item.items[2].image} style={'width:100%'}/>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex-1">
-                            <img src="" alt=""/>
-                        </div>
+                        <footer className="footer">
+                            <a href="" style={'font-size:12px'}>相似好店&gt;</a>
+                        </footer>
                     </div>
-                </div>
-                <footer class="footer">
-                    <a href="">相似好店&gt;</a>
-                </footer>
-            </div>
-            <div class="recommend-store">
-                <header class="header">
-                    <div class="flex">
-                        <img src="" alt="" class="logo"/>
-                        <div>
-                            <h4>极客时间旗舰店</h4>
-                            <i class="store-type">天猫</i>
-                        </div>
-                    </div>
-                    <a href="" class="btn-enter">进入&gt;</a>
-                </header>
-                <div class="message">
-                    <i></i>
-                    <span>好店君：该店已被1.3万人关注，快来关注吧！</span>
-                </div>
-                <div class="content">
-                    <div class="flex-2 large-image-container">
-                        <img src="" alt=""/>
-                    </div>
-                    <div class="flex-1 small-image-container">
-                        <div class="flex-1 ">
-                            <img src="" alt=""/>
-                        </div>
-                        <div class="flex-1">
-                            <img src="" alt=""/>
-                        </div>
-                    </div>
-                </div>
-                <footer class="footer">
-                    <a href="">相似好店&gt;</a>
-                </footer>
-            </div>
+                })
+            }
         </div>
     }
     appendChild (child) {
@@ -130,7 +108,6 @@ export default class ListView {
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute (name, value) {
-        console.log(name, value)
         if (name === 'style') {
             this.root.setAttribute('style', value)
         }
