@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <title>轮播图</title>
+    </head>
+    <body>
+        <style>
+            .carousel {
+                width: 635px;
+                height: 355px;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .carousel>img {
+                width: 100%;
+                height: 100%;
+                display: inline-block;
+                transition: ease 0.5s;
+            }
+        </style> 
+
+        <div id="container"></div>
+
+        <script>
+            let data = [
+                "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+                "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+                "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+                "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+            ];
+
+            class Carousel {
+                constructor(container) {
+                    this._container = container;
+                    this._container.classList.add("carousel");
+                    this.data = null;
+                    this._timeHandler = null;
+                }
+
+                render() {
+                    // 挂上所有图片元素
+                    for (let d of this.data) {
+                        let element = document.createElement("img");
+                        element.src = d;
+                        this._container.appendChild(element);
+                    }
+
+                    let children = Array.prototype.slice.call(this._container.children);
+
+                    let currentPosition = 0;
+
+                    let nextFrame = () => {
+                        let nextPosition = currentPosition + 1;
+                        nextPosition = nextPosition % children.length;
+
+                        console.log(nextPosition);
+
+                        let currentEle = children[currentPosition];
+                        let nextEle = children[nextPosition];
+
+                        // 每次进来都会悄悄将下一张需要显示的图片放到 container 100% 的位置
+                        nextEle.style.transition = "ease 0s";
+                        nextEle.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+
+                        setTimeout(() => {
+                            // 下一次延迟执行才会将当前图片和下一张图片左移 -100%
+                            currentEle.style.transition = "";
+                            currentEle.style.transform = `translate(${- 100 - 100 * currentPosition}%)`;
+
+                            nextEle.style.transition = "";
+                            nextEle.style.transform = `translate(${- 100 * nextPosition}%)`;
+                            
+                            currentPosition = nextPosition;
+                        }, 16);
+
+                        this._timeHandler = setTimeout(nextFrame, 3000);
+                    }
+
+                    this._timeHandler = setTimeout(nextFrame, 3000);
+                }
+            }
+
+            let carousel = new Carousel(document.getElementById("container"));
+            carousel.data = data;
+            carousel.render();
+
+        </script>    
+    </body>
+</html>

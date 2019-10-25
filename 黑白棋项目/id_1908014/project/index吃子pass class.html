@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>黑白棋</title>
+</head>
+
+<body>
+    <div id="box">
+    </div>
+    <script>
+        class OthelloPattern {
+            constructor() {
+                this.map = [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [2, 0, 0, 0, 0, 0, 0, 0],
+                    [1, 2, 0, 0, 0, 0, 0, 0]
+                ]
+            }
+
+            move(i, j, color, checkOnly) {
+                console.log(j, i);
+                if (this.map[i][j] > 0)
+                    return;
+                let directions = [{
+                    x: -1,
+                    y: -1
+                }, {
+                    x: -1,
+                    y: 0
+                }, {
+                    x: -1,
+                    y: 1
+                }, {
+                    x: 0,
+                    y: -1
+                }, {
+                    x: 0,
+                    y: 1
+                }, {
+                    x: 1,
+                    y: -1
+                }, {
+                    x: 1,
+                    y: 1
+                }, {
+                    x: 1,
+                    y: 1
+                }];
+                let moveSuccess = false;
+                for (let direction of directions) {
+                    let canmove = false;
+                    let [x, y] = [j, i];
+                    while (true) {
+                        x += direction.x;
+                        y += direction.y;
+                        if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                            canmove = false;
+                            break;
+                        }
+                        if (map[y][x] == 3 - color) {
+                            canmove = true;
+                        } else if (map[y][x] == color) {
+                            break;
+                        } else if (map[y][x] == 0) {
+                            canmove = false; //
+                            break;
+                        }
+                    }
+                    moveSuccess = moveSuccess || canmove;
+
+                    if (canmove && !checkOnly) {
+                        moveSuccess = true;
+                        while (true) {
+                            x -= direction.x;
+                            y -= direction.y;
+                            map[y][x] = color;
+                            if (x == j && y == i) {
+                                break;
+                            } //
+                        }
+                    }
+                }
+                return moveSuccess;
+            }
+            checkPass(color) {
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        if (move(i, j, true)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
+        let color = 1;
+        let container = document.getElementById("box");
+        render();
+
+        function checkPass() {
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    if (move(i, j, true)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+
+
+        function render() {
+            container.innerHTML = "";
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    let cell = document.createElement("div");
+                    container.appendChild(cell);
+                    cell.style = "width:40px; height:40px; display:inline-block; background-color:green; border-right:1px solid #fff;"
+                    cell.addEventListener("click", event => {
+                        if (move(i, j, false)) {
+                            color = 3 - color;
+                            if (checkPass()) {
+                                color = 3 - color;
+                                if (checkPass()) {
+                                    alert("Game Over")
+                                }
+                            }
+                            render();
+                        }
+
+                    })
+                    if (map[i][j] == 2) {
+                        let item = document.createElement("div");
+                        item.style = "width:36px; height:36px; border-radius:50%; background-color:white; margin:2px auto"
+                        cell.appendChild(item);
+                    }
+                    if (map[i][j] == 1) {
+                        let item = document.createElement("div");
+                        item.style = "width:36px; height:36px; border-radius:50%; background-color:black; margin:2px auto"
+                        cell.appendChild(item);
+                    }
+                }
+                container.appendChild(document.createElement("br"))
+            }
+        }
+    </script>
+</body>
+
+</html>

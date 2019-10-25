@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <!--禁止电话号码和邮箱识别
+<meta content="telephone=no,email=no" name="format-detection"/>
+-->
+  <!--TODO:添加一个网页标题-->
+  <title>A sample of HTML5 game</title>
+
+  <!--TODO:改成你想要的缩放比例
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+-->
+
+  <style type="text/css">
+    html,
+    body {
+      margin: 0 0 0 0;
+      padding: 0 0 0 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /*body {
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+}
+* {
+    -webkit-text-size-adjust:none;
+}*/
+  </style>
+  <!-- <script src="gesture.js"></script> -->
+  <script type="text/javascript">
+    //关闭选择
+    //document.addEventListener("selectstart",function(e){ e.preventDefault(); });
+    //避免鼠标变成文本选择形状
+    //document.addEventListener("mousedown",function(e){ e.preventDefault(); });
+    //避免上下滚屏
+    /*document.addEventListener("touchmove",function(e){ 
+        if(e.touches.length == 2) 
+            e.preventDefault(); 
+    }, {passive:false});
+    document.addEventListener("touchmove",function(e){ 
+        if(e.touches.length == 1) 
+            e.preventDefault(); 
+    }, {passive:false});
+    document.addEventListener("touchstart",function(e){ 
+        e.preventDefault(); 
+    }, {passive:false});*/
+    // document.addEventListener("touchmove",function(e){ 
+    //     if(e.touches.length == 1) 
+    //         e.preventDefault(); 
+    // }, {
+    //     passive:false
+    // })
+
+    // function check() {
+    //   if (!data)
+    //     return;
+    //   if (!domReady)
+    //     return;
+    //   render();
+    // }
+
+    // function render() {
+    //   console.log(document.body);
+    //   console.log(data);
+    // }
+
+    // let data = null;
+    // let domReady = false;
+
+    // // html body 加载完了,图片加载之前触发，通常用这个事件
+    // document.addEventListener('DOMContentLoaded', e => {
+    //   console.log('document');
+    //   domReady = true;
+    //   check();
+    // })
+    // // 图片出来之后触发
+    // window.addEventListener('load', e => {
+    //   console.log('window');
+    // })
+
+
+    // const request = new XMLHttpRequest();
+    // request.open('get', './data.json', true);
+    // request.send(null);
+    // request.addEventListener('readystatechange', e => {
+    //   console.log(request);
+    //   if (request.readyState === 4) {
+    //     console.log(request.responseText);
+    //     data = request.responseText;
+    //     check();
+    //   }
+    // })
+
+    // const request = new Request('./data.json');
+    // console.log(request);
+
+    // 常规用法
+    // fetch('./data.json').then(response => {
+    //   // console.log(response);
+    //   // console.log(response.json());
+    //   // console.log(response.text());
+    //   // console.log(response.blob());
+    //   // console.log(response.formData());
+    //   response.json().then(obj => {
+    //     console.log(obj);
+    //   })
+    // })
+
+    // // promise 的链式调用
+    // fetch('./data.json').then(response => response.json()).then(obj => {
+    //   console.log(obj);
+    // })
+
+    // 所有事件都可以用 promise 封装为一个方法
+    function happen(object, type, config) {
+      return new Promise((resolve, reject) => {
+        object.addEventListener(type, resolve, config);
+      })
+    }
+
+    // happen(document, 'DOMContentLoaded').then(() => {
+    //   console.log('object');
+    // })
+
+    // Promise.all([
+    //   happen(document, 'DOMContentLoaded'),
+    //   fetch('./data.json').then(res => res.json())
+    // ]).then(results => {
+    //   console.log(results);
+    // })
+
+    // 用 void 与 (function(){})() 的区别，用括号有时候会造成歧义
+    void async function () {
+      // let object = await (await fetch('./data.json')).json();
+      // await happen(document, "DOMContentLoaded");
+
+      let [obj, event] = await Promise.all([
+        // 强制并行
+        // (async () => {
+        //   return await (await fetch('./data.json')).json()
+        // })()
+        fetch('./data.json').then(res => res.json()),
+        happen(document, "DOMContentLoaded"),
+        loadScript('./main.js')
+      ])
+      // console.log(obj, event);
+      window.render(obj, document.body);
+    }();
+
+
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        let scriptElement = document.createElement('script');
+        scriptElement.src = src;
+        scriptElement.addEventListener('load', resolve);
+        document.documentElement.appendChild(scriptElement);
+      })
+    }
+
+
+
+  </script>
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+
+</html>

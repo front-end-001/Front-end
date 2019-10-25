@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .carousel{
+            width:500px;
+            height:300px;
+            overflow:hidden;
+            white-space: nowrap;
+        }
+        .carousel>img{
+            width:100%;
+            height:100%;
+            display:inline-block;
+            transition:ease 0.5s;
+        }
+        </style>
+</head>
+<body>
+    <!-- P0：
+1. 轮播需求
+	1.1 展示一个序列的图片
+  1.2 每隔？秒通过动画，切换到下一张图片
+  	1.2.1 P2：选择合适的时间和动画形式
+  1.3 P1：循环播放
+  1.4 P1：展示指示器
+  1.5 P1：展示文字标题
+2. 点击需求
+	2.1 点击图片，跳转到链接
+  2.2 P1：点击文字标题
+P1：
+3. 手势/鼠标操作轮播
+	3.1 拖拽图片，跟随手指/鼠标移动
+  3.2 停止拖拽，播放动画弹到最近的一张图
+  	3.2.1 注意边界
+4. 鼠标悬停展示左右操作按钮
+	4.1 鼠标悬停，展示向左翻页和向右翻页按钮
+  	4.1.1 P2：第一张图没有向左按钮，最后一张图没有向右按钮
+  4.2 点击向左按钮向前播放，点击向右按钮向后播放 -->
+
+<div id="container">
+
+</div>
+<script>
+let data = [
+"https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+"https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+"https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+"https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+];
+
+class Carousel {
+    constructor(container){
+        this._container = container;
+        this._container.classList.add("carousel");
+        this._handler = null;
+        this.data = null;
+    }
+    render(){
+        for(let d of this.data) {
+            let e = document.createElement("img");
+            e.src = d;
+            this._container.appendChild(e);
+        }
+        let children = Array.prototype.slice.call(container.children);
+        let position = 0;
+        let nextFrame = ()=>{
+            let nextPosition = position + 1;
+            
+            nextPosition = nextPosition % children.length;
+
+            let current = children[position],
+                next = children[nextPosition];
+            //把next摆到正确的位置
+            next.style.transition = "ease 0s";
+            next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+            setTimeout(()=>{
+                //把current挪出视口
+                current.style.transition = ""; //transition置空，css中的属性就会生效
+                current.style.transform = `translate(${- 100 - 100 * position}%)`
+                //把next挪进视口
+                next.style.transition = "";
+                next.style.transform = `translate(${- 100 * nextPosition}%)`
+                position = nextPosition;
+            }, 16);
+
+            setTimeout(nextFrame, 3000);
+        }
+        setTimeout(nextFrame,3000);
+
+    }
+}
+let carousel = new Carousel(document.getElementById("container"));
+carousel.data = data;
+carousel.render();
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+.header {
+    font-size: 0.36rem;
+    overflow: hidden;
+    color: #fff;
+    background: url(../image/bg1.jpg)no-repeat;
+    background-size: 100% auto;
+    width: 100%;
+    padding-top: 2rem;
+}
+
+.bg2 {
+    background: url(../image/bg2.jpg)no-repeat;
+    background-size: 100% auto;
+    width: 100%;
+}
+
+.header div {
+    float: left;
+    margin: 0.2rem;
+}
+
+.active {
+    font-weight: bold;
+    border-bottom: solid 2px #fff;
+}

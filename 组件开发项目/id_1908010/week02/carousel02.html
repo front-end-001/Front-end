@@ -1,0 +1,85 @@
+<!--
+ * @Description: 轮播组件 自动播放版本
+ * @Author: 大亮
+ * @Date: 2019-08-14 21:10:54
+ * @LastEditTime: 2019-08-14 21:16:11
+ -->
+
+<style>
+    .carousel {
+        width: 500px;
+        height: 300px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .carousel>img {
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        transition: ease 0.5s;
+    }
+</style>
+
+<div id="carousel"></div>
+<script>
+    let data = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+        "https://static001.geekbang.org/resource/image/82/af/823ef28a64096b4ffce19bca16a573af.jpg",
+        "https://static001.geekbang.org/resource/image/ee/70/ee7627bac9defb7621c2489fbacb3a70.jpg"
+    ];
+
+    class Carousel {
+        constructor(container) {
+            this._container = container;
+            this._container.classList.add("carousel");
+            this.data = null;
+            this._handler = null; //保存handler 是为了未来随时可以停掉
+        }
+
+        render() {
+            for (let d of this.data) {
+                let img = document.createElement("img");
+                img.src = d;
+                this._container.appendChild(img);
+            }
+            let children = Array.prototype.slice.call(this._container.children);
+            let position = 0;
+
+           
+            let nextFrame = () => {
+                let nextPosition = position + 1;
+                nextPosition = nextPosition % children.length;
+
+                let current = children[position], 
+                    next    = children[nextPosition];
+            
+                next.style.transition = "ease 0s";
+                // 将下一个要呈现的视图提前放到要呈现的位置
+                next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+                console.log("before nextPos:", nextPosition);
+
+                setTimeout(() => {
+                    // 移除当前视图
+                    current.style.transition = "";
+                    current.style.transform = `translate(${-100 - 100 * position}%)`;
+                    // 将下一个要呈现的视图放回原来位置，用以呈现滑动轮播效果
+                    next.style.transition = "";
+                    next.style.transform = `translate(${- 100 * nextPosition}%)`;
+
+                    position = nextPosition;
+                }, 16);
+
+                setTimeout(nextFrame, 3000);
+            }
+            setTimeout(nextFrame, 3000);
+        }
+    }
+
+    let carousel = new Carousel(document.getElementById("carousel"));
+    carousel.data = data;
+    carousel.render();
+
+</script>

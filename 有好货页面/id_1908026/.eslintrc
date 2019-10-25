@@ -1,0 +1,28 @@
+{
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "sourceType": "module"
+  },
+  "extends": ["airbnb-base"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "plugins": ["html", "vue"],
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/prefer-default-export": 0,
+    "no-underscore-dangle": 0,
+    "no-restricted-syntax": 0,
+    "no-plusplus": 0,
+    "no-param-reassign": 0,
+    "no-new": 0,
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "linebreak-style": [0, "error", "windows"]
+  },
+  "globals": {
+    "document": false
+  }
+}
