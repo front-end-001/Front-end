@@ -5,8 +5,6 @@ const webpack = require('webpack')
 const path = require('path')
 const pathResolve = targetPath => path.resolve(__dirname, targetPath)
 
-
-
 module.exports = {
     entry: {
         app:"./index.js",
@@ -60,7 +58,7 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         hot: true,
-        host: '192.168.1.135',
+        host: '192.168.1.147',
         port: 8080,
     },
     optimization: {

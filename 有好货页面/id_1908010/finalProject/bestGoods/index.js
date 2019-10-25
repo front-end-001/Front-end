@@ -10,30 +10,32 @@ import "./src/Config.js"
 // import "./apis/XHRApi.js"
 import "./apis/FetchApi.js"
 import './apis/LoadScript.js'
+import ApiPath from './apis/ApiPath.js'
 
 void async function(){ 
+    let rPageData = ApiPath.recommendedPageData;
     // let obj = await ((await fetch('./data.json')).json())
     // await happen(document, "DOMContentLoaded")
 
     // 所有的并行都逃避不开Promise.all
     let [obj, event] = await Promise.all([
         (async function(){ //async 标签返回的一定是promise
-            return (await fetch('./data.json')).json()
+            return (await fetch(rPageData)).json()
         })(),
         //fetch("./data.json").then(res => res.json()), //这里写await是为了先得到response
         happen(document, "DOMContentLoaded"),
         loadScript('./app.js')
     ]);
     window.render(obj, document.body);
-    // console.log(obj, event)
+    console.log(obj, event)
 }();
 
 
-window.render = function(){
+window.render = function(data){ //
     let test = (
         <TabView className={"tabContainer"}>
             <ScrollView title="推荐" className={"scroll"} active={true}>
-                <ListView></ListView>
+                <ListView data={data}></ListView>
             </ScrollView>
             <ScrollView title="有趣的店" className={"scroll"}></ScrollView>
             <ScrollView title="品牌新店" className={"scroll"}></ScrollView>
