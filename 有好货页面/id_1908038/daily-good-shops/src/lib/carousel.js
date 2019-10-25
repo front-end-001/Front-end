@@ -1,17 +1,20 @@
+import {
+    TimeLine,
+    DOMElementStyleNumberAnimation
+} from './animation.js'
+
 //存储私有变量
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-const CONFIG_SYMBOL = Symbol("config");
 
-class Carousel {
+export default class Carousel {
     constructor(config) {
         this[PROPERTY_SYMBOL] = Object.create(null); //比{} 纯净，不带原型prototype，与其他无关
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        this[CONFIG_SYMBOL] = config || Object.create(null);
 
         this.created();
     }
@@ -23,7 +26,7 @@ class Carousel {
     animation() {
         let children = Array.prototype.slice.call(this.root.children);
         let position = 0;
-        
+
         let nextPic = () => {
             let nextPosition = position + 1;
 
@@ -54,26 +57,47 @@ class Carousel {
             this.tl.restart();
 
             position = nextPosition;
-            this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
+            // this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
         }
         this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
     }
     createContainer() {
         this.root = document.createElement("div");
         this.root.id = "container";
-        this.root.className = "carousel";
-        this.root.style.width = this[CONFIG_SYMBOL].width || "100%";
-        this.root.style.height = this[CONFIG_SYMBOL].height || "auto";
-        let i = this[CONFIG_SYMBOL].data.length;
-        for (let d of this[CONFIG_SYMBOL].data) {
+        // this.root.className = "carousel";
+        this.root.classList.add("carousel");
+
+        this.root.style = this[ATTRIBUTE_SYMBOL].style;
+        this.root.style.width = this[ATTRIBUTE_SYMBOL].width + 'px' || "100%";
+        this.root.style.height = this[ATTRIBUTE_SYMBOL].height + 'px' || "auto";
+        this.root.style.overflow = "hidden";
+
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        let i = data.length;
+        for (let d of data) {
             let e = document.createElement("img");
             e.src = d;
             this.root.appendChild(e);
             e.style.zIndex = i++;
+            e.style.width = "100%";
             e.onclick = event =>
                 console.log(d);
         }
     }
+
+    render() {
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        return <div>
+            hello
+            {
+                data.map(item => (
+                    // <div><span class="x" > {item.a} </span><span class="x">{item.b}</span></div>
+                    <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
+                ))
+            }
+            </div>
+    }
+
     handleCarousel() {
         let startTransform;
 
@@ -199,6 +223,8 @@ class Carousel {
         return this[PROPERTY_SYMBOL].width;
     }
     set width(value) {
+        console.log('width:',value);
+
         return this[PROPERTY_SYMBOL].width = value;
     }
     get speed() {
@@ -209,13 +235,27 @@ class Carousel {
     }
     //attribute
     getAttribute(name) {
+        if (name == "style") {
+            return this.root.getAttribute("style");
+        }
         return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
+        if (name == "style") {
+            this.root.setAttribute("style", value);
+        }
         if (name == "width") {
             this.width = value; //HTML单向同步
-            this.triggerEvent("widthchange");
+            // this.triggerEvent("widthchange");
         }
+        if (name == "data") {
+            this[ATTRIBUTE_SYMBOL][name] = value;
+
+            this.createContainer()
+
+            return value;
+        }
+
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     //event

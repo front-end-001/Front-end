@@ -1,37 +1,48 @@
+//JSX
 
 import Text from "./components/Text";
 
 import Wrapper from "./components/Wrapper";
 
-export function create(Class, attributes, ...children){
+/**
+ * JSX解析
+ * @param {*} Class
+ * @param {*} attributes
+ * @param  {...any} children
+ */
+export function create(Class, attributes, ...children) {
+
     let object;
 
-    if (typeof Class == 'string') 
+    if (typeof Class == "string")
         object = new Wrapper(Class);
     else
         object = new Class();
-    //遍历普通对象，
-    for(let name in attributes) {
-        //处理事件
+
+    for (let name in attributes) {
         if (name.match(/^on-([\s\S]+)$/)) {
-            object.addEventListener(RegExp.$1, attributes[name]);
+            object.addEventListener(RegExp.$1, attributes[name])
+        } else {
+            object.setAttribute(name, attributes[name]);
         }
-        object.setAttribute(name, attributes[name]);
     }
-    for(let child of children)//遍历孩子，集合，数组
-        if(child instanceof Array) {
+
+    for (let child of children) {
+        if (child instanceof Array) {
             for (let c of child) {
-                if (typeof c === 'string') {
+                if (typeof c === "string") {
                     object.appendChild(new Text(c));
                 } else {
                     object.appendChild(c);
                 }
             }
-        }
-        else if (typeof child === 'object') {
+        } else if (typeof child === "object") {
             object.appendChild(child);
-        }else {
+
+        } else {
             object.appendChild(new Text(child.toString()));
         }
-    return object; 
+    }
+
+    return object;
 }
