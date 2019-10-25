@@ -1,6 +1,28 @@
 import { Component, PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL } from './Component.js';
 import { create } from '../lib/create.js';
 
+import RecommendListViewCss from './RecommendListView.css';
+
+// debugger;
+// import只会被加载一次，单例的，所以不用加标志位防止重复加载
+// 保证只加载一次，style也只加载一起
+// if (!window.LIST_VIEW_STYLE_ELEMENT) {
+  // 不能用link标签，不支持src属性
+  // 用webpack的loader来解决
+  // 方案一：scoped style
+  let styleElement = document.createElement('style');
+  // 不能用link标签，不支持src属性
+  // 用webpack的loader来解决
+  styleElement.innerHTML = RecommendListViewCss;
+
+  // this[PROPERTY_SYMBOL].styleElement.scoped = true;
+  // styleElement.setAttribute('scoped', '');
+  // 这里也可以加个防御，head有可能取不到
+  document.getElementsByTagName('head')[0].appendChild(styleElement);
+  // 标志位
+  // window.LIST_VIEW_STYLE_ELEMENT = true;
+// }
+
 export default class ListView extends Component {
   constructor(config) {
     super();
@@ -9,8 +31,29 @@ export default class ListView extends Component {
   created() {
     this[PROPERTY_SYMBOL].root = document.createElement('div');
 
+    // 添加list-view class
+    this[PROPERTY_SYMBOL].root.classList.add('recommend-listView');
+
     // <div></div>  jsx会传string给create
     this.render().appendTo(this[PROPERTY_SYMBOL].root);
+
+    // 方案一：scoped style
+    // this[PROPERTY_SYMBOL].styleElement = document.createElement('style');
+    // render之后再添加样式文件，最终会添加到该组件结束标签之前
+    // this.addStyle();
+    // console.log(RecommendListViewCss);
+  }
+  addStyle() {
+    // 不能用link标签，不支持src属性
+    // 用webpack的loader来解决
+    // 方案一：scoped style
+    this[PROPERTY_SYMBOL].styleElement = document.createElement('style');
+    // 不能用link标签，不支持src属性
+    // 用webpack的loader来解决
+    this[PROPERTY_SYMBOL].styleElement.innerHTML = RecommendListViewCss;
+    // this[PROPERTY_SYMBOL].styleElement.scoped = true;
+    this[PROPERTY_SYMBOL].styleElement.setAttribute('scoped', true);
+    this[PROPERTY_SYMBOL].root.appendChild(this[PROPERTY_SYMBOL].styleElement);
   }
   render() {
     let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
@@ -19,12 +62,7 @@ export default class ListView extends Component {
       <div style="padding: 0 11px;">
         {data.map(item => {
           return (
-            <div style="width: 100%;
-              margin-bottom:12px;
-              padding: 12px;
-              box-sizing: border-box;
-              border-radius:6px;
-              background:#fff;">
+            <div  class="list">
               <div style="display: flex;
                 align-items: center;
                 position: relative;
@@ -42,7 +80,7 @@ export default class ListView extends Component {
                   </div>
                   <div style="position:absolute;right:10px;padding:6px 11px;border-radius:12px;font-size:13px;background:#FEC900;color:#fff;">进店&nbsp;></div>
                 </div>
-                <div style="margin-bottom:10px;
+                <div class="x" style="margin-bottom:10px;
                   padding:8px;
                   border-radius:5px;
                   font-size:12px;
