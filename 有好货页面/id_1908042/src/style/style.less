@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    position: relative;
+    height: 100%;
+    background: #f7f7f7;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+body::before {
+    position: absolute;
+    top: -200px;
+    left: 0;
+    content: ' ';
+    width: 100%;
+    height: 432px;
+    background: rgba(127, 44, 253, 1);
+    border-radius: 10%;
+    z-index: -1;
+}
+
+.tab-header {
+    height: 42px;
+
+    span {
+        font-size: 1rem;
+        margin: 0 1.5rem;
+        padding: .375rem 0;
+        color: palevioletred;
+    }
+}
+
+.tab-content {
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+
+    .tab-content-list {
+        height: 100%;
+        display: flex;
+        transition: all 0.5s ease;
+    }
+}
+
+.tab-active {
+    font-weight: bold;
+    border-bottom: 2px solid palevioletred;
+}
+
+.load-refresh {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+.btn {
+    text-decoration: none;
+    ;
+    border-radius: 30px;
+    padding: 5px 12px;
+}
+
+.btn-primary {
+    color: #fff;
+    background: linear-gradient(90deg, rgba(255, 172, 0, 1), rgba(254, 201, 0, 1));
+}
+
+.list-view {
+    padding: 0 15px;
+}
+
+.item-block {
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .header-logo {
+            width: 36px;
+            height: 36px;
+            margin-right: 10px;
+        }
+
+        .header-content {
+            flex: 1;
+
+            .shop-title {
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 4px;
+            }
+
+            .label-tianmao {
+                display: inline-block;
+                background: brown;
+                color: #fff;
+                padding: 0 10px;
+                border-radius: 50px;
+            }
+        }
+
+        .header-right {
+            margin-left: 10px;
+        }
+    }
+
+    .item-body {
+        padding: 10px 0;
+
+        .item-tip {
+            background: #f5f5f5;
+            border-radius: 5px;
+            padding: 5px 5px;
+            margin-bottom: 10px;
+            ;
+        }
+    }
+
+    .item-goods {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .item-goods-double {
+        margin-left: 5px;
+        ;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .goods-item {
+        width: 105px;
+        height: 105px;
+
+        &.big {
+            width: 215px;
+            height: 215px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
