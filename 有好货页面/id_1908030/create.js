@@ -16,10 +16,19 @@ export function create(Class, attributes, ...children){
         }
     }
     for (let child of children) {
-        if (typeof child == "string") {
-            object.appendChild(new Text(children));
+        if(child instanceof Array) {
+            for(let c of child) {
+                if(typeof c === "string") {
+                    object.appendChild(new Text(c));
+                } else {
+                    object.appendChild(c);
+                }
+            }
+        } else if(typeof child === "object" ) {
+            object.appendChild(child);
+            
         } else {
-            object.appendChild(child);    
+            object.appendChild(new Text(child.toString()));
         }
     }
     return object; 

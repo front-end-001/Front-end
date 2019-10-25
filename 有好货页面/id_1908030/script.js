@@ -11,10 +11,11 @@ function loadMore() {
     }, 5000)
 }
 
-window.render = () => {
-    var c = <TabView stle="width: 100%; height: 100%">
+window.render = (data, root) => {
+    var c = <TabView>
         <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
-        <ListView></ListView>
+        <ListView data={data}></ListView>
+        <Div>gggg</Div>
             {/* dsfdsfsfd
             gdgfd
             fgdshgfhgjhgj
