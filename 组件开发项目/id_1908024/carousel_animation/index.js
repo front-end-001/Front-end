@@ -13,19 +13,6 @@ class Carousel {
         this.tl = new Timeline()
     }
 
-    render() {
-        for (let d of this.data) {
-            let e = document.createElement('img')
-            e.src = d
-            this._container.appendChild(e)
-        }
-        this.children = Array.prototype.slice.call(this._container.children)
-
-        this.autoPlay()
-
-        this.bindEvent()
-    }
-
     autoPlay() {
         this._handle = setTimeout(() => this.nextPic(), 3000)
     }
@@ -48,46 +35,99 @@ class Carousel {
             event.preventDefault()
         })
 
-        let startTransform
+        // let offset = 0
+        // this._container.addEventListener('mousedown', event => {
+        //     //startTransform = - position * 500;
+        //     tl.pause()
+
+        //     let currentTime = Date.now()
+        //     if (currentTime - offsetTimeStart < 1000) {
+        //         offset = 500 - ease((currentTime - offsetTimeStart) / 1000) * 500
+        //         console.log(offset)
+        //     } else {
+        //         offset = 0
+        //     }
+
+        //     clearTimeout(nextPicTimer)
+        // })
 
         this._container.addEventListener('panstart', event => {
             clearTimeout(this._handle)
             this._handle = null
         })
 
-        this._container.addEventListener('pan', event => {
-            startTransform = -500 * this.position
+        let offset = 0
 
-            for (let child of this.children) {
-                child.style.transition = 'ease 0s'
-                child.style.transform = `translate(${startTransform + event.dx}px)`
-            }
+        this._container.addEventListener('pan', event => {
+            event.preventDefault()
+            log('event', event)
+            let current = this.children[this.position]
+
+            let nextPosition = (this.position + 1) % this.children.length
+            let next = this.children[nextPosition]
+            let lastPosition = (this.children.length + this.position - 1) % this.children.length
+            let last = this.children[lastPosition]
+            last.style.transition = 'ease 0s'
+            last.style.transform = `translate(${-500 - 500 * lastPosition + event.dx + offset}px)`
+
+            next.style.transition = 'ease 0s'
+            next.style.transform = `translate(${500 - 500 * nextPosition + event.dx + offset}px)`
+
+            current.style.transition = 'ease 0s'
+            current.style.transform = `translate(${-500 * this.position + event.dx + offset}px)`
         })
 
         // 结束滑动事件
         this._container.addEventListener('panend', event => {
-            if (event.isVertical) return
-
-            if (event.isFlick && Math.abs(event.dx) > Math.abs(event.dy)) {
-                if (event.dx > 0) {
-                    this.position = this.position - 1
+            event.preventDefault()
+            let isLeft
+            if (event.isFlick) {
+                if (event.vx > 0) {
+                    this.position--
+                    isLeft = true
                 }
-                if (event.dx < 0) {
-                    this.position = this.position + 1
+
+                if (event.vx < 0) {
+                    this.position++
+                    isLeft = false
                 }
             } else {
-                this.position = -Math.round((startTransform + event.dx) / 500)
+                if (event.dx > 250) {
+                    this.position--
+                    isLeft = true
+                } else if (event.dx < -250) {
+                    this.position++
+                    isLeft = false
+                } else if (event.dx > 0) {
+                    isLeft = false
+                } else {
+                    isLeft = true
+                }
             }
+            this.position = (this.children.length + this.position) % this.children.length
 
-            // 给position设置边界
-            this.position = Math.max(0, Math.min(this.position, this.children.length - 1))
+            let current = this.children[this.position]
+            let nextPosition = (this.position + 1) % this.children.length
+            let next = this.children[nextPosition]
+            let lastPosition = (this.children.length + this.position - 1) % this.children.length
+            let last = this.children[lastPosition]
 
-            for (let child of this.children) {
-                child.style.transition = ''
-                child.style.transform = `translate(${-500 * this.position}px)`
+            if (!isLeft) {
+                last.style.transition = ''
+            } else {
+                last.style.transition = 'ease 0s'
             }
+            last.style.transform = `translate(${-500 - 500 * lastPosition}px)`
 
-            this.autoPlay()
+            if (isLeft) {
+                next.style.transition = ''
+            } else {
+                next.style.transition = 'ease 0s'
+            }
+            next.style.transform = `translate(${500 - 500 * nextPosition}px)`
+
+            current.style.transition = ''
+            current.style.transform = `translate(${-500 * this.position}px)`
         })
     }
 
@@ -103,19 +143,7 @@ class Carousel {
 
         this.offsetTimeStart = Date.now()
 
-        // setTimeout(() => {
-        //     // 下一帧开始移动
-        //     // 拿出当前图, 转移出去
-        //     current.style.transition = "";
-        //     current.style.transform = `translate(${-100 -
-        //         100 * this.position}%)`;
-        //     //  拿到下一张图， 转移进入
-        //     // log("nextImage", nextImage, nextPosition);
-        //     nextImage.style.transition = "";
-        //     nextImage.style.transform = `translate(${-100 * nextPosition}%)`;
-
-        //     this.position = nextPosition;
-        // }, 16);
+        this.tl.clear()
         this.tl.addAnimation(
             new DOMElementStyleNumberAnimation({
                 element: current,
@@ -142,6 +170,19 @@ class Carousel {
         this.position = nextPosition
 
         this._handle = setTimeout(() => this.nextPic(), 3000)
+    }
+
+    render() {
+        for (let d of this.data) {
+            let e = document.createElement('img')
+            e.src = d
+            this._container.appendChild(e)
+        }
+        this.children = Array.prototype.slice.call(this._container.children)
+
+        this.autoPlay()
+
+        this.bindEvent()
     }
 }
 

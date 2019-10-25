@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    html,body {
+        margin: 0;
+        padding: 0;
+    }
+    #ball {
+        position: absolute;
+        /* left: 0;
+        top: 0; */
+        width: 50px;
+        height: 50px;
+        background-color: navy;
+        border-radius: 50%;
+    }
+</style>
+<body>
+    <div id="ball"></div>
+</body>
+</html>
+
+<script>
+    class TimeLine {
+        constructor() {
+            this._animation = [];
+        }
+        start() {
+            let startTime = Date.now();
+            // let timer = setInterval(() => {
+            //     for (let animation of this._animation) {
+            //         if (!animation.finisned) {
+            //             animation.tick(Date.now() - startTime);
+            //         } 
+            //     }
+            //     console.log(Date.now())
+            // }, 16);
+        }
+        // 暂停
+        pause() {}
+        // 恢复
+        resume() {}
+        get rate() {}
+        set rate(value) {}
+        // 添加动画
+        addAnimation(animation) {
+            this._animation.push(animation);
+        }
+
+    }
+
+    class DomElementStyleAnimation {
+        constructor(element, property, startTime, startValue, endTime, endValue, converter) {
+            this.element = element;
+            this.property = property;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.startValue = startValue;
+            this.endValue = endValue;
+            this.converter = converter;
+            this.finisned = false;
+        }
+        tick(t) {
+            // console.log(t)
+            if (t > this.endTime) {
+                t = this.endTime;
+                this.finisned = true;
+            }
+            if (t < this.startTime) return ;
+            
+            let progress = (t - this.startTime) / (this.endTime - this.startTime);
+            let displacement = Math.sin(progress * Math.PI/2) * (this.endValue - this.startValue);
+            let currentValue = this.startValue + displacement;
+            this.element.style[this.property] = this.converter(currentValue);
+        }
+    }
+
+    let tl = new TimeLine();
+    tl.addAnimation(new DomElementStyleAnimation(
+        document.getElementById('ball'),
+        'left',
+        0, 0,
+        500, 100,
+        (v) => `${v}px`
+    ));
+    tl.addAnimation(new DomElementStyleAnimation(
+        document.getElementById('ball'),
+        'top',
+        500, 0,
+        1000, 100,
+        (v) => `${v}px`
+    ));
+    tl.addAnimation(new DomElementStyleAnimation(
+        document.getElementById('ball'),
+        'left',
+        1000, 100,
+        1500, 0,
+        (v) => `${v}px`
+    ));
+    tl.addAnimation(new DomElementStyleAnimation(
+        document.getElementById('ball'),
+        'top',
+        1500, 100,
+        2000, 0,
+        (v) => `${v}px`
+    ));
+    tl.start();
+</script>

@@ -1,0 +1,14 @@
+{
+  "name": "my-loader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "build": "webpack"
+  },
+  "dependencies": {
+    "webpack": "^4.41.2",
+    "webpack-dev-server": "^3.8.2"
+  }
+}

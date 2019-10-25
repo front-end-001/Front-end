@@ -2,9 +2,16 @@ import Component, { PROP_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../componen
 import { getTransformXVal } from '../../assets/utils';
 import createComponent from '../createComponent';
 import './index.scss';
+import testcss from './test.css';
 import gesture from '../../assets/gesture';
 
 const contexts = Object.create(null);
+
+console.log(testcss);
+// const styleEle = document.createElement('style');
+// styleEle.innerHTML = testcss;
+// const head = document.getElementsByTagName('head');
+// head[0].appendChild(styleEle);
 
 export default class TabView extends Component {
   constructor(attrs) {
@@ -25,13 +32,16 @@ export default class TabView extends Component {
     const doAlert = () => {
       alert('click');
     };
-    const tab = <div class="o-tab">
-      <div style="text-align: center; position: relative; margin: 50pt 0 10pt;">
-        <img src="/static/image/header-title.png" alt="每日好店" style="width: 72pt;"></img>
+    const styleObj = {
+      'background-color': 'red',
+    };
+    const tab = <div class="o-tab" styleObj={styleObj}>
+      <div style="text-align: center; position: relative; margin: 5vw 0;">
+        <img src="/static/image/header-title.png" alt="每日好店" style="width: 25vw;"></img>
         <div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; align-items: center;">
-          <img src="/static/image/header-back.png" alt="返回" style="width: 8pt; padding: 0 14pt;" on-click={doAlert}></img>
-          <img src="/static/image/header-share.png" alt="分享" style="width: 18pt; margin-left: auto; padding: 0 10pt;" on-click={doAlert}></img>
-          <img src="/static/image/header-more.png" alt="更多操作" style="width: 16pt;  padding: 0 13pt;" on-click={doAlert}></img>
+          <img src="/static/image/header-back.png" alt="返回" style="width: 10px; padding: 0 15px;" on-click={doAlert}></img>
+          <img src="/static/image/header-share.png" alt="分享" style="width: 24px; margin-left: auto; padding: 0 15px;" on-click={doAlert}></img>
+          <img src="/static/image/header-more.png" alt="更多操作" style="width: 20px;  padding: 0 15px;" on-click={doAlert}></img>
         </div>
       </div>
       <div class="o-tab-header">
