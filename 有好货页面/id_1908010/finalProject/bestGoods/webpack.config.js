@@ -41,24 +41,37 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|jpeg|svg|gif)$/,
+                // exclude: [
+                //     path.resolve(__dirname, '../res'),
+                // ],
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 8192,
+                            limit: 100000,
                             name: '[name].[hash:7].[ext]',
                             outputPath: 'img',
                         }
                     }
                 ]
-            }
+            },
+            // {
+            //     test: /\.svg$/,
+            //     include: [
+            //         path.resolve(__dirname, "../res"),
+            //     ],
+            //     loader: 'svg-sprite?' + JSON.stringify({
+            //       name: '[name]',
+            //       prefixize: true,
+            //     }),
+            // }
         ]
     },
     mode: 'development',
     devServer: {
         contentBase: './dist',
         hot: true,
-        host: '192.168.1.147',
+        host: '192.168.1.139',
         port: 8080,
     },
     optimization: {

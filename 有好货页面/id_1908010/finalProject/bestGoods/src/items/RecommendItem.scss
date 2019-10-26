@@ -1,9 +1,9 @@
 
 .itemContainer {
-    margin-left: 17px;
-    margin-right: 17px;
+    margin-left: 8px;
+    margin-right: 8px;
     padding: 16px 18px;
-    background: rgba(254,254,254,1);;
+    background: rgba(254,254,254,1);
     border-radius: 18px;
     display: block;
 }
@@ -15,9 +15,89 @@
     align-items: center;
 }
 
+.left {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .itemLogo {
     width: 53px;
     height: 53px;
-    background: url("https://static001.geekbang.org/univer/classes/js_dev/static/recommendation/shop_logo3.jpg");
+    display: inline-block;
+}
 
+.itemTitle {
+    margin-left: 8px;
+    flex-shrink: initial;
+
+    .itemName {
+        font-size:23px;
+        font-family:PingFang SC;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        line-height:18px;
+    }
+
+    .itemType {
+        background:rgba(238,5,7,1);
+        border-radius:15px;
+        font-size: 13px;
+        color: white;
+        padding: 2px 6px;
+        align-self: flex-start;
+    }
+}
+
+.icon {
+    border-radius: 50%;
+}
+
+.itemEntry {
+    padding: 4px 12px 4px 16px;
+    background: linear-gradient(-90deg,rgba(255,172,0,1),rgba(254,201,0,1));
+    border-radius:18px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.entryName {
+    font-size:20px;
+    font-family:PingFang SC;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:12px;
+    
+}
+
+.arrow_right path{
+    fill: rgba(255,255,255,1);
+}
+
+.titleContainer {
+    margin-top: 13px;
+    padding: 12px 13px;
+    background:rgba(245,245,245,1);
+    border-radius:8px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.shop {
+    background:linear-gradient(90deg,rgba(255,172,0,1),rgba(254,201,0,1));
+    border-radius:50%;
+    height: 28px;
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.itemPromotion {
+    font-size:13px;
+    font-family:PingFang SC;
+    font-weight:300;
+    color:rgba(51,51,51,1);
+    line-height:10px;
+    margin-left: 9px;
 }

@@ -1,6 +1,5 @@
 import Component from '../BaseComponent.js'
 import "./RecommendItem.scss"
-import {arrow_right, shop} from "../../lib/icons"
 import {create} from '../../lib/create'
 
 export default class RecommendItem extends Component {
@@ -15,30 +14,34 @@ export default class RecommendItem extends Component {
         if (!content) return;
         content.appendTo(this.root)
     } 
-
+    
     render() {
         let data = this.property["data"] || ""
         if (!data) return null;
         console.log(data)
         let {name, promotion, icon, items} = data;
-        console.log(icon)
         let header = (
             <div className="itemHeaderContainer">
                 <div className="left">
-                    <div className="itemLogo"></div>
-                    <div>
+                    <div className="itemLogo">
+                        <img src={icon} width="53" height="53" className="icon"></img>    
+                    </div>
+                    <div className="itemTitle">
                         <div className="itemName">{name}</div>
-                        <div className="itemType">天猫</div>
+                        <div style="margin-top:8px;"><span className="itemType">天猫</span></div>
                     </div>
                 </div>
-                <div className="itemEntry"><span className="entryName">进店</span><img src={`${arrow_right}`}></img></div>
+                <div className="itemEntry">
+                    <span className="entryName">进店</span>
+                    <img src='../res/arrow_right.svg' width="14" height="28" className="arrow_right"></img>
+                </div>
             </div>
         );
 
         let title = (
-            <div>
-                <div><img src={`${shop}`}></img></div>
-                <span className="itemPromotion">好店君：该店已被1.3万人关注，快来关注吧!</span>
+            <div className="titleContainer">
+                <div className="shop"><img src="../res/shop.svg" width="14" height="14"></img></div>
+                <div className="itemPromotion">好店君：该店已被1.3万人关注，快来关注吧!</div>
             </div>
         )
 
@@ -51,7 +54,7 @@ export default class RecommendItem extends Component {
         );
 
         let footer = (
-            <div className="itemFooter"><span>相似好店<img src={`${arrow_right}`}></img></span></div>
+            <div className="itemFooter"><span>相似好店<img src=""></img></span></div>
         );
 
         return (

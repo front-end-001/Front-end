@@ -7,10 +7,10 @@ import Div from './src/Div.js'
 import {loadScript, happen} from './apis/FetchApi'
 import "./src/Config.scss"
 import "./src/Config.js"
-// import "./apis/XHRApi.js"
 import "./apis/FetchApi.js"
 import './apis/LoadScript.js'
 import ApiPath from './apis/ApiPath.js'
+
 
 void async function(){ 
     let rPageData = ApiPath.recommendedPageData;
@@ -27,7 +27,7 @@ void async function(){
         loadScript('./app.js')
     ]);
     window.render(obj, document.body);
-    console.log(obj, event)
+
 }();
 
 
@@ -35,7 +35,7 @@ window.render = function(data){ //
     let test = (
         <TabView className={"tabContainer"}>
             <ScrollView title="推荐" className={"scroll"} active={true}>
-                <ListView data={data}></ListView>
+                <ListView data={data} style="background: rgba(238, 238, 238, 1.00);"></ListView>
             </ScrollView>
             <ScrollView title="有趣的店" className={"scroll"}></ScrollView>
             <ScrollView title="品牌新店" className={"scroll"}></ScrollView>
