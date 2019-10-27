@@ -1,9 +1,10 @@
 /*
- * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-09-26 19:18:15
- * @LastEditTime: 2019-09-26 19:18:15
+ * @Date: 2019-10-27 17:21:38
+ * @LastEditTime: 2019-10-27 17:21:38
  * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /Front-end/有好货页面/id_1908028/TabView.js
  */
 import { enableGesture } from "./gesture.js";
 

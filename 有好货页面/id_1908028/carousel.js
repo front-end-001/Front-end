@@ -1,9 +1,10 @@
 /*
- * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-09-15 20:22:57
- * @LastEditTime: 2019-09-15 20:22:57
- * @LastEditors: Please set LastEditors
+ * @Date: 2019-10-27 17:20:53
+ * @LastEditTime: 2019-10-27 17:20:53
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /Front-end/有好货页面/id_1908028/carousel.js
  */
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
@@ -19,6 +20,8 @@ export class Carousel {
 
     this.created();
   }
+
+  toHTML() {}
 
   appendTo(element) {
     element.appendChild(this.root);

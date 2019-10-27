@@ -1,46 +1,44 @@
 /*
- * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-10-10 22:17:26
- * @LastEditTime: 2019-10-10 22:17:26
+ * @Date: 2019-10-27 17:19:48
+ * @LastEditTime: 2019-10-27 17:19:49
  * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /Front-end/有好货页面/id_1908028/create.js
  */
-import Text from "./Text.js"
+import Text from "./Text.js";
 import Wrapper from "./Wrapper.js";
 
-export function create(Class, attributes, ...children){ 
+export function create(Class, attributes, ...children) {
+  let object;
 
-    let object
-    
-    if(typeof Class == "string")
-        object = new Wrapper(Class);
-    else
-        object = new Class();
+  if (typeof Class == "string") object = new Wrapper(Class);
+  else object = new Class();
 
-    for(let name in attributes) {
-        if(name.match(/^on-([\s\S]+)$/)){
-            object.addEventListener(RegExp.$1, attributes[name])
-        } else {
-            object.setAttribute(name, attributes[name]);
-        }
+  for (let name in attributes) {
+    if (name.match(/^on-([\s\S]+)$/)) {
+      object.addEventListener(RegExp.$1, attributes[name]);
+    } else {
+      object.setAttribute(name, attributes[name]);
+      //object[name] = attributes[name];
     }
-        
-    for(let child of children) {
-        if(child instanceof Array) {
-            for(let c of child) {
-                if(typeof c === "string") {
-                    object.appendChild(new Text(c));
-                } else {
-                    object.appendChild(c);
-                }
-            }
-        } else if(typeof child === "object" ) {
-            object.appendChild(child);
-            
+  }
+
+  for (let child of children) {
+    if (child instanceof Array) {
+      for (let c of child) {
+        if (typeof c === "string") {
+          object.appendChild(new Text(c));
         } else {
-            object.appendChild(new Text(child.toString()));
+          object.appendChild(c);
         }
+      }
+    } else if (typeof child === "object") {
+      object.appendChild(child);
+    } else {
+      object.appendChild(new Text(child.toString()));
     }
-    
-    return object; 
+  }
+
+  return object;
 }
