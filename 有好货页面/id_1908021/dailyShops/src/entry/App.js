@@ -1,12 +1,6 @@
-import { Tab, ScrollView, Carousel, ListView, Title } from '../components/index';
+import { Tab, ScrollView, Carousel, ListView, Title, Shop } from '../components/index';
 import { createElement } from '../babel/babelTransformToJSX';
-
-const imageUrls = [
-  '../imgs/carousel1.jpg',
-  '../imgs/carousel2.jpg',
-  '../imgs/carousel3.jpg',
-  '../imgs/carousel4.jpg'
-];
+import { responseData } from '../data';
 
 function loadMore() {
   setTimeout(() => {
@@ -14,43 +8,9 @@ function loadMore() {
   }, 1000);
 }
 
-const data2 = [
-  {
-    title: '酒鬼一家0',
-    icon: '../imgs/dailyShops/mipmap-hdpi/icon 极客时间.png',
-    content: '老碳头和他的猫猫狗狗0'
-  },
-  {
-    title: '酒鬼一家1',
-    icon: '../imgs/dailyShops/mipmap-hdpi/icon 极客时间.png',
-    content: '老碳头和他的猫猫狗狗1'
-  },
-  {
-    title: '酒鬼一家2',
-    icon: '../imgs/dailyShops/mipmap-hdpi/icon 极客时间.png',
-    content: '老碳头和他的猫猫狗狗2'
-  },
-  {
-    title: '酒鬼一家3',
-    icon: '../imgs/dailyShops/mipmap-hdpi/icon 极客时间.png',
-    content: '老碳头和他的猫猫狗狗3'
-  },
-  {
-    title: '酒鬼一家4',
-    icon: '../imgs/dailyShops/mipmap-hdpi/icon 极客时间.png',
-    content: '老碳头和他的猫猫狗狗4'
-  },
-  {
-    title: '酒鬼一家5',
-    icon: '../imgs/dailyShops/mipmap-hdpi/icon 极客时间.png',
-    content: '老碳头和他的猫猫狗狗5'
-  },
-  {
-    title: '酒鬼一家6',
-    icon: '../imgs/dailyShops/mipmap-hdpi/icon 极客时间.png',
-    content: '老碳头和他的猫猫狗狗6'
-  }
-];
+const data = responseData;
+
+const imageUrls = responseData.focusData.map(value => value.image);
 
 const App = (
   <Tab className="tab-root">
@@ -71,16 +31,23 @@ const App = (
           imageUrls={imageUrls}
           style="border-radius:20px;margin:0.2rem 0.333rem 0 0.333rem"
         ></Carousel>
-        <Title level="3" style="margin:1em 0">
+        <Title level="3" style="margin:1em 1em">
           超多人收藏的店！
         </Title>
-
         <ListView
-          // renderItem={item => {
-          //   return <div>{item.title}</div>;
-          // }}
-          style="margin:0 4vw"
-          data={data2}
+          direction="row"
+          renderItem={shopConifg => {
+            return <Shop style={'width:calc(50vw - 11vw)'} config={shopConifg}></Shop>;
+          }}
+          style="margin:0 2vw"
+          data={responseData.mostFavourateShops}
+        ></ListView>
+        <ListView
+          renderItem={shopConifg => {
+            return <Shop isRecommend={true} config={shopConifg}></Shop>;
+          }}
+          style="margin:0 2vw"
+          data={responseData.recommendedShops}
         ></ListView>
       </ScrollView>
     </Tab.TabPane>

@@ -1,6 +1,6 @@
 import BaseComponent from '../components/Base/BaseComponent';
 
-const myComponents = ['Tab', 'TabPane', 'ScrollView', 'Carousel', 'ListView', 'Title'];
+const myComponents = ['Tab', 'TabPane', 'ScrollView', 'Shop', 'Carousel', 'ListView', 'Title'];
 
 function createElement(NodeClass, attributes, ...children) {
   console.log(arguments);
@@ -43,6 +43,12 @@ function createElement(NodeClass, attributes, ...children) {
         // <div> <Title></<Title> </div>
         else if (childElem instanceof BaseComponent) {
           childElem.appendTo(elem);
+        } else if (childElem instanceof Array) {
+          for (const child of childElem) {
+            if (child instanceof Element) {
+              elem.appendChild(child);
+            }
+          }
         } else {
           if (typeof childElem === 'string' && childElem.startsWith('//')) continue;
           childElem = document.createTextNode(childElem.toString());
@@ -51,7 +57,7 @@ function createElement(NodeClass, attributes, ...children) {
       }
     } catch (e) {
       elem = undefined;
-      console.error(`Not supported HTML tag: ${NodeClass}!`);
+      console.error(`Not supported HTML tag: ${NodeClass}!, detail: `, e);
     }
     return elem;
   }
