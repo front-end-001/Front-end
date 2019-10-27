@@ -178,8 +178,8 @@ export default class Swiper extends Component {
         <div className="SwiperHeader" />
         <div className="Swiper-container">
           <ListContainer data={mockListData} index={1} />
-          {/*<ListContainer data={mockListData[1]} index={2} />*/}
-          {/*<ListContainer data={mockListData[2]} index={3} />*/}
+          <ListContainer data={mockListData} index={2} />
+          <ListContainer data={mockListData} index={3} />
         </div>
       </div>
     );

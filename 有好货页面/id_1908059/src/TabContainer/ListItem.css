@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+.ListItem + .ListItem {
+  margin-top: 12px;
+}
+
 .ListItem-titleLine {
   display: flex;
   height: 40px;
