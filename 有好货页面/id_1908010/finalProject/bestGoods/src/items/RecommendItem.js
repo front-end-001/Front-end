@@ -60,7 +60,7 @@ export default class RecommendItem extends Component {
         let footer = (
             <div className="itemFooter">
                 <span className="footerName">相似好店</span>
-                <img src="../res/icons/arrow_right.svg" width="14" height="26"></img>
+                <img src="../res/icons/arrow_right_gray.svg" width="14" height="26"></img>
             </div>
         );
 
