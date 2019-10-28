@@ -25,7 +25,7 @@ export default class ListView extends Component {
         console.log(data["mostFavourateShops"])
         console.log(data["recommendedShops"])
         return (
-            <div>zui
+            <div>
                 {data["recommendedShops"].map(item => (
                     <RecmmendItem data={item}/>  
                 ))}

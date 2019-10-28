@@ -1,13 +1,14 @@
-// import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
+//__dirname 是项目根目录
 const pathResolve = targetPath => path.resolve(__dirname, targetPath)
 
 module.exports = {
     entry: {
-        app:"./index.js",
+        app:["babel-polyfill", "./index.js"]
     },
     output: {
         path: pathResolve('dist'),
@@ -41,37 +42,30 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|jpeg|svg|gif)$/,
-                // exclude: [
-                //     path.resolve(__dirname, '../res'),
-                // ],
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 100000,
+                            limit: 20 * 1024,
                             name: '[name].[hash:7].[ext]',
-                            outputPath: 'img',
+                            outputPath: '/img/',
                         }
                     }
-                ]
+                ],
+                exclude: path.resolve(__dirname, './res/icons')
             },
-            // {
-            //     test: /\.svg$/,
-            //     include: [
-            //         path.resolve(__dirname, "../res"),
-            //     ],
-            //     loader: 'svg-sprite?' + JSON.stringify({
-            //       name: '[name]',
-            //       prefixize: true,
-            //     }),
-            // }
+            {
+                test: /\.svg$/,
+                loader: 'svg-sprite-loader',
+                include: path.resolve(__dirname, './res/icons')
+            }
         ]
     },
     mode: 'development',
     devServer: {
         contentBase: './dist',
         hot: true,
-        host: '192.168.1.139',
+        host: '192.168.1.149',
         port: 8080,
     },
     optimization: {
@@ -91,10 +85,13 @@ module.exports = {
             }
 
         }),
-        new webpack.HotModuleReplacementPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),
         new MiniCssExtractPlugin({
             filename: 'css/[name].[contenthash].css',
-        })
+        }),
+        new CopyPlugin([
+            {from: './res/icons', to: './res/icons', force: true}
+        ])
     ]
 }

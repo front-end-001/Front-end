@@ -1,4 +1,4 @@
-import "babel-polyfill"
+
 import {create} from './lib/create'
 import TabView from './src/TabView.js'
 import ScrollView from './src/ScrollView.js';
@@ -10,6 +10,7 @@ import "./src/Config.js"
 import "./apis/FetchApi.js"
 import './apis/LoadScript.js'
 import ApiPath from './apis/ApiPath.js'
+import icons from './res/icons/index.js'
 
 
 void async function(){ 

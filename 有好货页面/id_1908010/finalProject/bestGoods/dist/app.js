@@ -1,708 +1,4 @@
 /******/ (function(modules) { // webpackBootstrap
-/******/ 	function hotDisposeChunk(chunkId) {
-/******/ 		delete installedChunks[chunkId];
-/******/ 	}
-/******/ 	var parentHotUpdateCallback = window["webpackHotUpdate"];
-/******/ 	window["webpackHotUpdate"] = // eslint-disable-next-line no-unused-vars
-/******/ 	function webpackHotUpdateCallback(chunkId, moreModules) {
-/******/ 		hotAddUpdateChunk(chunkId, moreModules);
-/******/ 		if (parentHotUpdateCallback) parentHotUpdateCallback(chunkId, moreModules);
-/******/ 	} ;
-/******/
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	function hotDownloadUpdateChunk(chunkId) {
-/******/ 		var script = document.createElement("script");
-/******/ 		script.charset = "utf-8";
-/******/ 		script.src = __webpack_require__.p + "" + chunkId + "." + hotCurrentHash + ".hot-update.js";
-/******/ 		if (null) script.crossOrigin = null;
-/******/ 		document.head.appendChild(script);
-/******/ 	}
-/******/
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	function hotDownloadManifest(requestTimeout) {
-/******/ 		requestTimeout = requestTimeout || 10000;
-/******/ 		return new Promise(function(resolve, reject) {
-/******/ 			if (typeof XMLHttpRequest === "undefined") {
-/******/ 				return reject(new Error("No browser support"));
-/******/ 			}
-/******/ 			try {
-/******/ 				var request = new XMLHttpRequest();
-/******/ 				var requestPath = __webpack_require__.p + "" + hotCurrentHash + ".hot-update.json";
-/******/ 				request.open("GET", requestPath, true);
-/******/ 				request.timeout = requestTimeout;
-/******/ 				request.send(null);
-/******/ 			} catch (err) {
-/******/ 				return reject(err);
-/******/ 			}
-/******/ 			request.onreadystatechange = function() {
-/******/ 				if (request.readyState !== 4) return;
-/******/ 				if (request.status === 0) {
-/******/ 					// timeout
-/******/ 					reject(
-/******/ 						new Error("Manifest request to " + requestPath + " timed out.")
-/******/ 					);
-/******/ 				} else if (request.status === 404) {
-/******/ 					// no update available
-/******/ 					resolve();
-/******/ 				} else if (request.status !== 200 && request.status !== 304) {
-/******/ 					// other failure
-/******/ 					reject(new Error("Manifest request to " + requestPath + " failed."));
-/******/ 				} else {
-/******/ 					// success
-/******/ 					try {
-/******/ 						var update = JSON.parse(request.responseText);
-/******/ 					} catch (e) {
-/******/ 						reject(e);
-/******/ 						return;
-/******/ 					}
-/******/ 					resolve(update);
-/******/ 				}
-/******/ 			};
-/******/ 		});
-/******/ 	}
-/******/
-/******/ 	var hotApplyOnUpdate = true;
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "7820b739f50fdfbcb034";
-/******/ 	var hotRequestTimeout = 10000;
-/******/ 	var hotCurrentModuleData = {};
-/******/ 	var hotCurrentChildModule;
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentParents = [];
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentParentsTemp = [];
-/******/
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	function hotCreateRequire(moduleId) {
-/******/ 		var me = installedModules[moduleId];
-/******/ 		if (!me) return __webpack_require__;
-/******/ 		var fn = function(request) {
-/******/ 			if (me.hot.active) {
-/******/ 				if (installedModules[request]) {
-/******/ 					if (installedModules[request].parents.indexOf(moduleId) === -1) {
-/******/ 						installedModules[request].parents.push(moduleId);
-/******/ 					}
-/******/ 				} else {
-/******/ 					hotCurrentParents = [moduleId];
-/******/ 					hotCurrentChildModule = request;
-/******/ 				}
-/******/ 				if (me.children.indexOf(request) === -1) {
-/******/ 					me.children.push(request);
-/******/ 				}
-/******/ 			} else {
-/******/ 				console.warn(
-/******/ 					"[HMR] unexpected require(" +
-/******/ 						request +
-/******/ 						") from disposed module " +
-/******/ 						moduleId
-/******/ 				);
-/******/ 				hotCurrentParents = [];
-/******/ 			}
-/******/ 			return __webpack_require__(request);
-/******/ 		};
-/******/ 		var ObjectFactory = function ObjectFactory(name) {
-/******/ 			return {
-/******/ 				configurable: true,
-/******/ 				enumerable: true,
-/******/ 				get: function() {
-/******/ 					return __webpack_require__[name];
-/******/ 				},
-/******/ 				set: function(value) {
-/******/ 					__webpack_require__[name] = value;
-/******/ 				}
-/******/ 			};
-/******/ 		};
-/******/ 		for (var name in __webpack_require__) {
-/******/ 			if (
-/******/ 				Object.prototype.hasOwnProperty.call(__webpack_require__, name) &&
-/******/ 				name !== "e" &&
-/******/ 				name !== "t"
-/******/ 			) {
-/******/ 				Object.defineProperty(fn, name, ObjectFactory(name));
-/******/ 			}
-/******/ 		}
-/******/ 		fn.e = function(chunkId) {
-/******/ 			if (hotStatus === "ready") hotSetStatus("prepare");
-/******/ 			hotChunksLoading++;
-/******/ 			return __webpack_require__.e(chunkId).then(finishChunkLoading, function(err) {
-/******/ 				finishChunkLoading();
-/******/ 				throw err;
-/******/ 			});
-/******/
-/******/ 			function finishChunkLoading() {
-/******/ 				hotChunksLoading--;
-/******/ 				if (hotStatus === "prepare") {
-/******/ 					if (!hotWaitingFilesMap[chunkId]) {
-/******/ 						hotEnsureUpdateChunk(chunkId);
-/******/ 					}
-/******/ 					if (hotChunksLoading === 0 && hotWaitingFiles === 0) {
-/******/ 						hotUpdateDownloaded();
-/******/ 					}
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 		fn.t = function(value, mode) {
-/******/ 			if (mode & 1) value = fn(value);
-/******/ 			return __webpack_require__.t(value, mode & ~1);
-/******/ 		};
-/******/ 		return fn;
-/******/ 	}
-/******/
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	function hotCreateModule(moduleId) {
-/******/ 		var hot = {
-/******/ 			// private stuff
-/******/ 			_acceptedDependencies: {},
-/******/ 			_declinedDependencies: {},
-/******/ 			_selfAccepted: false,
-/******/ 			_selfDeclined: false,
-/******/ 			_disposeHandlers: [],
-/******/ 			_main: hotCurrentChildModule !== moduleId,
-/******/
-/******/ 			// Module API
-/******/ 			active: true,
-/******/ 			accept: function(dep, callback) {
-/******/ 				if (dep === undefined) hot._selfAccepted = true;
-/******/ 				else if (typeof dep === "function") hot._selfAccepted = dep;
-/******/ 				else if (typeof dep === "object")
-/******/ 					for (var i = 0; i < dep.length; i++)
-/******/ 						hot._acceptedDependencies[dep[i]] = callback || function() {};
-/******/ 				else hot._acceptedDependencies[dep] = callback || function() {};
-/******/ 			},
-/******/ 			decline: function(dep) {
-/******/ 				if (dep === undefined) hot._selfDeclined = true;
-/******/ 				else if (typeof dep === "object")
-/******/ 					for (var i = 0; i < dep.length; i++)
-/******/ 						hot._declinedDependencies[dep[i]] = true;
-/******/ 				else hot._declinedDependencies[dep] = true;
-/******/ 			},
-/******/ 			dispose: function(callback) {
-/******/ 				hot._disposeHandlers.push(callback);
-/******/ 			},
-/******/ 			addDisposeHandler: function(callback) {
-/******/ 				hot._disposeHandlers.push(callback);
-/******/ 			},
-/******/ 			removeDisposeHandler: function(callback) {
-/******/ 				var idx = hot._disposeHandlers.indexOf(callback);
-/******/ 				if (idx >= 0) hot._disposeHandlers.splice(idx, 1);
-/******/ 			},
-/******/
-/******/ 			// Management API
-/******/ 			check: hotCheck,
-/******/ 			apply: hotApply,
-/******/ 			status: function(l) {
-/******/ 				if (!l) return hotStatus;
-/******/ 				hotStatusHandlers.push(l);
-/******/ 			},
-/******/ 			addStatusHandler: function(l) {
-/******/ 				hotStatusHandlers.push(l);
-/******/ 			},
-/******/ 			removeStatusHandler: function(l) {
-/******/ 				var idx = hotStatusHandlers.indexOf(l);
-/******/ 				if (idx >= 0) hotStatusHandlers.splice(idx, 1);
-/******/ 			},
-/******/
-/******/ 			//inherit from previous dispose call
-/******/ 			data: hotCurrentModuleData[moduleId]
-/******/ 		};
-/******/ 		hotCurrentChildModule = undefined;
-/******/ 		return hot;
-/******/ 	}
-/******/
-/******/ 	var hotStatusHandlers = [];
-/******/ 	var hotStatus = "idle";
-/******/
-/******/ 	function hotSetStatus(newStatus) {
-/******/ 		hotStatus = newStatus;
-/******/ 		for (var i = 0; i < hotStatusHandlers.length; i++)
-/******/ 			hotStatusHandlers[i].call(null, newStatus);
-/******/ 	}
-/******/
-/******/ 	// while downloading
-/******/ 	var hotWaitingFiles = 0;
-/******/ 	var hotChunksLoading = 0;
-/******/ 	var hotWaitingFilesMap = {};
-/******/ 	var hotRequestedFilesMap = {};
-/******/ 	var hotAvailableFilesMap = {};
-/******/ 	var hotDeferred;
-/******/
-/******/ 	// The update info
-/******/ 	var hotUpdate, hotUpdateNewHash;
-/******/
-/******/ 	function toModuleId(id) {
-/******/ 		var isNumber = +id + "" === id;
-/******/ 		return isNumber ? +id : id;
-/******/ 	}
-/******/
-/******/ 	function hotCheck(apply) {
-/******/ 		if (hotStatus !== "idle") {
-/******/ 			throw new Error("check() is only allowed in idle status");
-/******/ 		}
-/******/ 		hotApplyOnUpdate = apply;
-/******/ 		hotSetStatus("check");
-/******/ 		return hotDownloadManifest(hotRequestTimeout).then(function(update) {
-/******/ 			if (!update) {
-/******/ 				hotSetStatus("idle");
-/******/ 				return null;
-/******/ 			}
-/******/ 			hotRequestedFilesMap = {};
-/******/ 			hotWaitingFilesMap = {};
-/******/ 			hotAvailableFilesMap = update.c;
-/******/ 			hotUpdateNewHash = update.h;
-/******/
-/******/ 			hotSetStatus("prepare");
-/******/ 			var promise = new Promise(function(resolve, reject) {
-/******/ 				hotDeferred = {
-/******/ 					resolve: resolve,
-/******/ 					reject: reject
-/******/ 				};
-/******/ 			});
-/******/ 			hotUpdate = {};
-/******/ 			var chunkId = "app";
-/******/ 			// eslint-disable-next-line no-lone-blocks
-/******/ 			{
-/******/ 				/*globals chunkId */
-/******/ 				hotEnsureUpdateChunk(chunkId);
-/******/ 			}
-/******/ 			if (
-/******/ 				hotStatus === "prepare" &&
-/******/ 				hotChunksLoading === 0 &&
-/******/ 				hotWaitingFiles === 0
-/******/ 			) {
-/******/ 				hotUpdateDownloaded();
-/******/ 			}
-/******/ 			return promise;
-/******/ 		});
-/******/ 	}
-/******/
-/******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	function hotAddUpdateChunk(chunkId, moreModules) {
-/******/ 		if (!hotAvailableFilesMap[chunkId] || !hotRequestedFilesMap[chunkId])
-/******/ 			return;
-/******/ 		hotRequestedFilesMap[chunkId] = false;
-/******/ 		for (var moduleId in moreModules) {
-/******/ 			if (Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				hotUpdate[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if (--hotWaitingFiles === 0 && hotChunksLoading === 0) {
-/******/ 			hotUpdateDownloaded();
-/******/ 		}
-/******/ 	}
-/******/
-/******/ 	function hotEnsureUpdateChunk(chunkId) {
-/******/ 		if (!hotAvailableFilesMap[chunkId]) {
-/******/ 			hotWaitingFilesMap[chunkId] = true;
-/******/ 		} else {
-/******/ 			hotRequestedFilesMap[chunkId] = true;
-/******/ 			hotWaitingFiles++;
-/******/ 			hotDownloadUpdateChunk(chunkId);
-/******/ 		}
-/******/ 	}
-/******/
-/******/ 	function hotUpdateDownloaded() {
-/******/ 		hotSetStatus("ready");
-/******/ 		var deferred = hotDeferred;
-/******/ 		hotDeferred = null;
-/******/ 		if (!deferred) return;
-/******/ 		if (hotApplyOnUpdate) {
-/******/ 			// Wrap deferred object in Promise to mark it as a well-handled Promise to
-/******/ 			// avoid triggering uncaught exception warning in Chrome.
-/******/ 			// See https://bugs.chromium.org/p/chromium/issues/detail?id=465666
-/******/ 			Promise.resolve()
-/******/ 				.then(function() {
-/******/ 					return hotApply(hotApplyOnUpdate);
-/******/ 				})
-/******/ 				.then(
-/******/ 					function(result) {
-/******/ 						deferred.resolve(result);
-/******/ 					},
-/******/ 					function(err) {
-/******/ 						deferred.reject(err);
-/******/ 					}
-/******/ 				);
-/******/ 		} else {
-/******/ 			var outdatedModules = [];
-/******/ 			for (var id in hotUpdate) {
-/******/ 				if (Object.prototype.hasOwnProperty.call(hotUpdate, id)) {
-/******/ 					outdatedModules.push(toModuleId(id));
-/******/ 				}
-/******/ 			}
-/******/ 			deferred.resolve(outdatedModules);
-/******/ 		}
-/******/ 	}
-/******/
-/******/ 	function hotApply(options) {
-/******/ 		if (hotStatus !== "ready")
-/******/ 			throw new Error("apply() is only allowed in ready status");
-/******/ 		options = options || {};
-/******/
-/******/ 		var cb;
-/******/ 		var i;
-/******/ 		var j;
-/******/ 		var module;
-/******/ 		var moduleId;
-/******/
-/******/ 		function getAffectedStuff(updateModuleId) {
-/******/ 			var outdatedModules = [updateModuleId];
-/******/ 			var outdatedDependencies = {};
-/******/
-/******/ 			var queue = outdatedModules.map(function(id) {
-/******/ 				return {
-/******/ 					chain: [id],
-/******/ 					id: id
-/******/ 				};
-/******/ 			});
-/******/ 			while (queue.length > 0) {
-/******/ 				var queueItem = queue.pop();
-/******/ 				var moduleId = queueItem.id;
-/******/ 				var chain = queueItem.chain;
-/******/ 				module = installedModules[moduleId];
-/******/ 				if (!module || module.hot._selfAccepted) continue;
-/******/ 				if (module.hot._selfDeclined) {
-/******/ 					return {
-/******/ 						type: "self-declined",
-/******/ 						chain: chain,
-/******/ 						moduleId: moduleId
-/******/ 					};
-/******/ 				}
-/******/ 				if (module.hot._main) {
-/******/ 					return {
-/******/ 						type: "unaccepted",
-/******/ 						chain: chain,
-/******/ 						moduleId: moduleId
-/******/ 					};
-/******/ 				}
-/******/ 				for (var i = 0; i < module.parents.length; i++) {
-/******/ 					var parentId = module.parents[i];
-/******/ 					var parent = installedModules[parentId];
-/******/ 					if (!parent) continue;
-/******/ 					if (parent.hot._declinedDependencies[moduleId]) {
-/******/ 						return {
-/******/ 							type: "declined",
-/******/ 							chain: chain.concat([parentId]),
-/******/ 							moduleId: moduleId,
-/******/ 							parentId: parentId
-/******/ 						};
-/******/ 					}
-/******/ 					if (outdatedModules.indexOf(parentId) !== -1) continue;
-/******/ 					if (parent.hot._acceptedDependencies[moduleId]) {
-/******/ 						if (!outdatedDependencies[parentId])
-/******/ 							outdatedDependencies[parentId] = [];
-/******/ 						addAllToSet(outdatedDependencies[parentId], [moduleId]);
-/******/ 						continue;
-/******/ 					}
-/******/ 					delete outdatedDependencies[parentId];
-/******/ 					outdatedModules.push(parentId);
-/******/ 					queue.push({
-/******/ 						chain: chain.concat([parentId]),
-/******/ 						id: parentId
-/******/ 					});
-/******/ 				}
-/******/ 			}
-/******/
-/******/ 			return {
-/******/ 				type: "accepted",
-/******/ 				moduleId: updateModuleId,
-/******/ 				outdatedModules: outdatedModules,
-/******/ 				outdatedDependencies: outdatedDependencies
-/******/ 			};
-/******/ 		}
-/******/
-/******/ 		function addAllToSet(a, b) {
-/******/ 			for (var i = 0; i < b.length; i++) {
-/******/ 				var item = b[i];
-/******/ 				if (a.indexOf(item) === -1) a.push(item);
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// at begin all updates modules are outdated
-/******/ 		// the "outdated" status can propagate to parents if they don't accept the children
-/******/ 		var outdatedDependencies = {};
-/******/ 		var outdatedModules = [];
-/******/ 		var appliedUpdate = {};
-/******/
-/******/ 		var warnUnexpectedRequire = function warnUnexpectedRequire() {
-/******/ 			console.warn(
-/******/ 				"[HMR] unexpected require(" + result.moduleId + ") to disposed module"
-/******/ 			);
-/******/ 		};
-/******/
-/******/ 		for (var id in hotUpdate) {
-/******/ 			if (Object.prototype.hasOwnProperty.call(hotUpdate, id)) {
-/******/ 				moduleId = toModuleId(id);
-/******/ 				/** @type {TODO} */
-/******/ 				var result;
-/******/ 				if (hotUpdate[id]) {
-/******/ 					result = getAffectedStuff(moduleId);
-/******/ 				} else {
-/******/ 					result = {
-/******/ 						type: "disposed",
-/******/ 						moduleId: id
-/******/ 					};
-/******/ 				}
-/******/ 				/** @type {Error|false} */
-/******/ 				var abortError = false;
-/******/ 				var doApply = false;
-/******/ 				var doDispose = false;
-/******/ 				var chainInfo = "";
-/******/ 				if (result.chain) {
-/******/ 					chainInfo = "\nUpdate propagation: " + result.chain.join(" -> ");
-/******/ 				}
-/******/ 				switch (result.type) {
-/******/ 					case "self-declined":
-/******/ 						if (options.onDeclined) options.onDeclined(result);
-/******/ 						if (!options.ignoreDeclined)
-/******/ 							abortError = new Error(
-/******/ 								"Aborted because of self decline: " +
-/******/ 									result.moduleId +
-/******/ 									chainInfo
-/******/ 							);
-/******/ 						break;
-/******/ 					case "declined":
-/******/ 						if (options.onDeclined) options.onDeclined(result);
-/******/ 						if (!options.ignoreDeclined)
-/******/ 							abortError = new Error(
-/******/ 								"Aborted because of declined dependency: " +
-/******/ 									result.moduleId +
-/******/ 									" in " +
-/******/ 									result.parentId +
-/******/ 									chainInfo
-/******/ 							);
-/******/ 						break;
-/******/ 					case "unaccepted":
-/******/ 						if (options.onUnaccepted) options.onUnaccepted(result);
-/******/ 						if (!options.ignoreUnaccepted)
-/******/ 							abortError = new Error(
-/******/ 								"Aborted because " + moduleId + " is not accepted" + chainInfo
-/******/ 							);
-/******/ 						break;
-/******/ 					case "accepted":
-/******/ 						if (options.onAccepted) options.onAccepted(result);
-/******/ 						doApply = true;
-/******/ 						break;
-/******/ 					case "disposed":
-/******/ 						if (options.onDisposed) options.onDisposed(result);
-/******/ 						doDispose = true;
-/******/ 						break;
-/******/ 					default:
-/******/ 						throw new Error("Unexception type " + result.type);
-/******/ 				}
-/******/ 				if (abortError) {
-/******/ 					hotSetStatus("abort");
-/******/ 					return Promise.reject(abortError);
-/******/ 				}
-/******/ 				if (doApply) {
-/******/ 					appliedUpdate[moduleId] = hotUpdate[moduleId];
-/******/ 					addAllToSet(outdatedModules, result.outdatedModules);
-/******/ 					for (moduleId in result.outdatedDependencies) {
-/******/ 						if (
-/******/ 							Object.prototype.hasOwnProperty.call(
-/******/ 								result.outdatedDependencies,
-/******/ 								moduleId
-/******/ 							)
-/******/ 						) {
-/******/ 							if (!outdatedDependencies[moduleId])
-/******/ 								outdatedDependencies[moduleId] = [];
-/******/ 							addAllToSet(
-/******/ 								outdatedDependencies[moduleId],
-/******/ 								result.outdatedDependencies[moduleId]
-/******/ 							);
-/******/ 						}
-/******/ 					}
-/******/ 				}
-/******/ 				if (doDispose) {
-/******/ 					addAllToSet(outdatedModules, [result.moduleId]);
-/******/ 					appliedUpdate[moduleId] = warnUnexpectedRequire;
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// Store self accepted outdated modules to require them later by the module system
-/******/ 		var outdatedSelfAcceptedModules = [];
-/******/ 		for (i = 0; i < outdatedModules.length; i++) {
-/******/ 			moduleId = outdatedModules[i];
-/******/ 			if (
-/******/ 				installedModules[moduleId] &&
-/******/ 				installedModules[moduleId].hot._selfAccepted &&
-/******/ 				// removed self-accepted modules should not be required
-/******/ 				appliedUpdate[moduleId] !== warnUnexpectedRequire
-/******/ 			) {
-/******/ 				outdatedSelfAcceptedModules.push({
-/******/ 					module: moduleId,
-/******/ 					errorHandler: installedModules[moduleId].hot._selfAccepted
-/******/ 				});
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// Now in "dispose" phase
-/******/ 		hotSetStatus("dispose");
-/******/ 		Object.keys(hotAvailableFilesMap).forEach(function(chunkId) {
-/******/ 			if (hotAvailableFilesMap[chunkId] === false) {
-/******/ 				hotDisposeChunk(chunkId);
-/******/ 			}
-/******/ 		});
-/******/
-/******/ 		var idx;
-/******/ 		var queue = outdatedModules.slice();
-/******/ 		while (queue.length > 0) {
-/******/ 			moduleId = queue.pop();
-/******/ 			module = installedModules[moduleId];
-/******/ 			if (!module) continue;
-/******/
-/******/ 			var data = {};
-/******/
-/******/ 			// Call dispose handlers
-/******/ 			var disposeHandlers = module.hot._disposeHandlers;
-/******/ 			for (j = 0; j < disposeHandlers.length; j++) {
-/******/ 				cb = disposeHandlers[j];
-/******/ 				cb(data);
-/******/ 			}
-/******/ 			hotCurrentModuleData[moduleId] = data;
-/******/
-/******/ 			// disable module (this disables requires from this module)
-/******/ 			module.hot.active = false;
-/******/
-/******/ 			// remove module from cache
-/******/ 			delete installedModules[moduleId];
-/******/
-/******/ 			// when disposing there is no need to call dispose handler
-/******/ 			delete outdatedDependencies[moduleId];
-/******/
-/******/ 			// remove "parents" references from all children
-/******/ 			for (j = 0; j < module.children.length; j++) {
-/******/ 				var child = installedModules[module.children[j]];
-/******/ 				if (!child) continue;
-/******/ 				idx = child.parents.indexOf(moduleId);
-/******/ 				if (idx >= 0) {
-/******/ 					child.parents.splice(idx, 1);
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// remove outdated dependency from module children
-/******/ 		var dependency;
-/******/ 		var moduleOutdatedDependencies;
-/******/ 		for (moduleId in outdatedDependencies) {
-/******/ 			if (
-/******/ 				Object.prototype.hasOwnProperty.call(outdatedDependencies, moduleId)
-/******/ 			) {
-/******/ 				module = installedModules[moduleId];
-/******/ 				if (module) {
-/******/ 					moduleOutdatedDependencies = outdatedDependencies[moduleId];
-/******/ 					for (j = 0; j < moduleOutdatedDependencies.length; j++) {
-/******/ 						dependency = moduleOutdatedDependencies[j];
-/******/ 						idx = module.children.indexOf(dependency);
-/******/ 						if (idx >= 0) module.children.splice(idx, 1);
-/******/ 					}
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// Now in "apply" phase
-/******/ 		hotSetStatus("apply");
-/******/
-/******/ 		hotCurrentHash = hotUpdateNewHash;
-/******/
-/******/ 		// insert new code
-/******/ 		for (moduleId in appliedUpdate) {
-/******/ 			if (Object.prototype.hasOwnProperty.call(appliedUpdate, moduleId)) {
-/******/ 				modules[moduleId] = appliedUpdate[moduleId];
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// call accept handlers
-/******/ 		var error = null;
-/******/ 		for (moduleId in outdatedDependencies) {
-/******/ 			if (
-/******/ 				Object.prototype.hasOwnProperty.call(outdatedDependencies, moduleId)
-/******/ 			) {
-/******/ 				module = installedModules[moduleId];
-/******/ 				if (module) {
-/******/ 					moduleOutdatedDependencies = outdatedDependencies[moduleId];
-/******/ 					var callbacks = [];
-/******/ 					for (i = 0; i < moduleOutdatedDependencies.length; i++) {
-/******/ 						dependency = moduleOutdatedDependencies[i];
-/******/ 						cb = module.hot._acceptedDependencies[dependency];
-/******/ 						if (cb) {
-/******/ 							if (callbacks.indexOf(cb) !== -1) continue;
-/******/ 							callbacks.push(cb);
-/******/ 						}
-/******/ 					}
-/******/ 					for (i = 0; i < callbacks.length; i++) {
-/******/ 						cb = callbacks[i];
-/******/ 						try {
-/******/ 							cb(moduleOutdatedDependencies);
-/******/ 						} catch (err) {
-/******/ 							if (options.onErrored) {
-/******/ 								options.onErrored({
-/******/ 									type: "accept-errored",
-/******/ 									moduleId: moduleId,
-/******/ 									dependencyId: moduleOutdatedDependencies[i],
-/******/ 									error: err
-/******/ 								});
-/******/ 							}
-/******/ 							if (!options.ignoreErrored) {
-/******/ 								if (!error) error = err;
-/******/ 							}
-/******/ 						}
-/******/ 					}
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// Load self accepted modules
-/******/ 		for (i = 0; i < outdatedSelfAcceptedModules.length; i++) {
-/******/ 			var item = outdatedSelfAcceptedModules[i];
-/******/ 			moduleId = item.module;
-/******/ 			hotCurrentParents = [moduleId];
-/******/ 			try {
-/******/ 				__webpack_require__(moduleId);
-/******/ 			} catch (err) {
-/******/ 				if (typeof item.errorHandler === "function") {
-/******/ 					try {
-/******/ 						item.errorHandler(err);
-/******/ 					} catch (err2) {
-/******/ 						if (options.onErrored) {
-/******/ 							options.onErrored({
-/******/ 								type: "self-accept-error-handler-errored",
-/******/ 								moduleId: moduleId,
-/******/ 								error: err2,
-/******/ 								originalError: err
-/******/ 							});
-/******/ 						}
-/******/ 						if (!options.ignoreErrored) {
-/******/ 							if (!error) error = err2;
-/******/ 						}
-/******/ 						if (!error) error = err;
-/******/ 					}
-/******/ 				} else {
-/******/ 					if (options.onErrored) {
-/******/ 						options.onErrored({
-/******/ 							type: "self-accept-errored",
-/******/ 							moduleId: moduleId,
-/******/ 							error: err
-/******/ 						});
-/******/ 					}
-/******/ 					if (!options.ignoreErrored) {
-/******/ 						if (!error) error = err;
-/******/ 					}
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		// handle errors in accept handlers and self accepted module load
-/******/ 		if (error) {
-/******/ 			hotSetStatus("fail");
-/******/ 			return Promise.reject(error);
-/******/ 		}
-/******/
-/******/ 		hotSetStatus("idle");
-/******/ 		return new Promise(function(resolve) {
-/******/ 			resolve(outdatedModules);
-/******/ 		});
-/******/ 	}
-/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -717,14 +13,11 @@
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
-/******/ 			exports: {},
-/******/ 			hot: hotCreateModule(moduleId),
-/******/ 			parents: (hotCurrentParentsTemp = hotCurrentParents, hotCurrentParents = [], hotCurrentParentsTemp),
-/******/ 			children: []
+/******/ 			exports: {}
 /******/ 		};
 /******/
 /******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, hotCreateRequire(moduleId));
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
@@ -786,12 +79,9 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
-/******/ 	// __webpack_hash__
-/******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
-/******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire("./index.js")(__webpack_require__.s = "./index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -839,7 +129,7 @@ eval("\n\n//# sourceURL=webpack:///./apis/LoadScript.js?");
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var babel_polyfill__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! babel-polyfill */ \"./node_modules/babel-polyfill/lib/index.js\");\n/* harmony import */ var babel_polyfill__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(babel_polyfill__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _lib_create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib/create */ \"./lib/create.js\");\n/* harmony import */ var _src_TabView_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/TabView.js */ \"./src/TabView.js\");\n/* harmony import */ var _src_ScrollView_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/ScrollView.js */ \"./src/ScrollView.js\");\n/* harmony import */ var _src_ListView_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/ListView.js */ \"./src/ListView.js\");\n/* harmony import */ var _src_Div_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./src/Div.js */ \"./src/Div.js\");\n/* harmony import */ var _apis_FetchApi__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./apis/FetchApi */ \"./apis/FetchApi.js\");\n/* harmony import */ var _src_Config_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./src/Config.scss */ \"./src/Config.scss\");\n/* harmony import */ var _src_Config_scss__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_src_Config_scss__WEBPACK_IMPORTED_MODULE_7__);\n/* harmony import */ var _src_Config_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./src/Config.js */ \"./src/Config.js\");\n/* harmony import */ var _src_Config_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_src_Config_js__WEBPACK_IMPORTED_MODULE_8__);\n/* harmony import */ var _apis_LoadScript_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./apis/LoadScript.js */ \"./apis/LoadScript.js\");\n/* harmony import */ var _apis_LoadScript_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_apis_LoadScript_js__WEBPACK_IMPORTED_MODULE_9__);\n/* harmony import */ var _apis_ApiPath_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./apis/ApiPath.js */ \"./apis/ApiPath.js\");\n/* harmony import */ var _res_index_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./res/index.js */ \"./res/index.js\");\nfunction _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance\"); }\n\nfunction _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === \"[object Arguments]\")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nfunction asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }\n\nfunction _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"next\", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"throw\", err); } _next(undefined); }); }; }\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nvoid _asyncToGenerator(\n/*#__PURE__*/\nregeneratorRuntime.mark(function _callee2() {\n  var rPageData, _ref2, _ref3, obj, event;\n\n  return regeneratorRuntime.wrap(function _callee2$(_context2) {\n    while (1) {\n      switch (_context2.prev = _context2.next) {\n        case 0:\n          rPageData = _apis_ApiPath_js__WEBPACK_IMPORTED_MODULE_10__[\"default\"].recommendedPageData; // let obj = await ((await fetch('./data.json')).json())\n          // await happen(document, \"DOMContentLoaded\")\n          // 所有的并行都逃避不开Promise.all\n\n          _context2.next = 3;\n          return Promise.all([_asyncToGenerator(\n          /*#__PURE__*/\n          regeneratorRuntime.mark(function _callee() {\n            return regeneratorRuntime.wrap(function _callee$(_context) {\n              while (1) {\n                switch (_context.prev = _context.next) {\n                  case 0:\n                    _context.next = 2;\n                    return fetch(rPageData);\n\n                  case 2:\n                    return _context.abrupt(\"return\", _context.sent.json());\n\n                  case 3:\n                  case \"end\":\n                    return _context.stop();\n                }\n              }\n            }, _callee);\n          }))(), //fetch(\"./data.json\").then(res => res.json()), //这里写await是为了先得到response\n          Object(_apis_FetchApi__WEBPACK_IMPORTED_MODULE_6__[\"happen\"])(document, \"DOMContentLoaded\"), Object(_apis_FetchApi__WEBPACK_IMPORTED_MODULE_6__[\"loadScript\"])('./app.js')]);\n\n        case 3:\n          _ref2 = _context2.sent;\n          _ref3 = _slicedToArray(_ref2, 2);\n          obj = _ref3[0];\n          event = _ref3[1];\n          window.render(obj, document.body);\n          console.log(obj, event);\n\n        case 9:\n        case \"end\":\n          return _context2.stop();\n      }\n    }\n  }, _callee2);\n}))();\n\nwindow.render = function (data) {\n  //\n  var test = Object(_lib_create__WEBPACK_IMPORTED_MODULE_1__[\"create\"])(_src_TabView_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n    className: \"tabContainer\"\n  }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_1__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n    title: \"推荐\",\n    className: \"scroll\",\n    active: true\n  }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_1__[\"create\"])(_src_ListView_js__WEBPACK_IMPORTED_MODULE_4__[\"default\"], {\n    data: data\n  })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_1__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n    title: \"有趣的店\",\n    className: \"scroll\"\n  }), Object(_lib_create__WEBPACK_IMPORTED_MODULE_1__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n    title: \"品牌新店\",\n    className: \"scroll\"\n  }), Object(_lib_create__WEBPACK_IMPORTED_MODULE_1__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n    title: \"发现\",\n    className: \"scroll\"\n  }));\n  test.appendTo(document.body);\n};\n\n//# sourceURL=webpack:///./index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _lib_create__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/create */ \"./lib/create.js\");\n/* harmony import */ var _src_TabView_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/TabView.js */ \"./src/TabView.js\");\n/* harmony import */ var _src_ScrollView_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/ScrollView.js */ \"./src/ScrollView.js\");\n/* harmony import */ var _src_ListView_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/ListView.js */ \"./src/ListView.js\");\n/* harmony import */ var _src_Div_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/Div.js */ \"./src/Div.js\");\n/* harmony import */ var _apis_FetchApi__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./apis/FetchApi */ \"./apis/FetchApi.js\");\n/* harmony import */ var _src_Config_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./src/Config.scss */ \"./src/Config.scss\");\n/* harmony import */ var _src_Config_scss__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_src_Config_scss__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var _src_Config_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./src/Config.js */ \"./src/Config.js\");\n/* harmony import */ var _src_Config_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_src_Config_js__WEBPACK_IMPORTED_MODULE_7__);\n/* harmony import */ var _apis_LoadScript_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./apis/LoadScript.js */ \"./apis/LoadScript.js\");\n/* harmony import */ var _apis_LoadScript_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_apis_LoadScript_js__WEBPACK_IMPORTED_MODULE_8__);\n/* harmony import */ var _apis_ApiPath_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./apis/ApiPath.js */ \"./apis/ApiPath.js\");\n/* harmony import */ var _res_icons_index_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./res/icons/index.js */ \"./res/icons/index.js\");\nfunction _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance\"); }\n\nfunction _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === \"[object Arguments]\")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nfunction asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }\n\nfunction _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"next\", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"throw\", err); } _next(undefined); }); }; }\n\n\n\n\n\n\n\n\n\n\n\n\n\nvoid _asyncToGenerator(\n/*#__PURE__*/\nregeneratorRuntime.mark(function _callee2() {\n  var rPageData, _ref2, _ref3, obj, event;\n\n  return regeneratorRuntime.wrap(function _callee2$(_context2) {\n    while (1) {\n      switch (_context2.prev = _context2.next) {\n        case 0:\n          rPageData = _apis_ApiPath_js__WEBPACK_IMPORTED_MODULE_9__[\"default\"].recommendedPageData; // let obj = await ((await fetch('./data.json')).json())\n          // await happen(document, \"DOMContentLoaded\")\n          // 所有的并行都逃避不开Promise.all\n\n          _context2.next = 3;\n          return Promise.all([_asyncToGenerator(\n          /*#__PURE__*/\n          regeneratorRuntime.mark(function _callee() {\n            return regeneratorRuntime.wrap(function _callee$(_context) {\n              while (1) {\n                switch (_context.prev = _context.next) {\n                  case 0:\n                    _context.next = 2;\n                    return fetch(rPageData);\n\n                  case 2:\n                    return _context.abrupt(\"return\", _context.sent.json());\n\n                  case 3:\n                  case \"end\":\n                    return _context.stop();\n                }\n              }\n            }, _callee);\n          }))(), //fetch(\"./data.json\").then(res => res.json()), //这里写await是为了先得到response\n          Object(_apis_FetchApi__WEBPACK_IMPORTED_MODULE_5__[\"happen\"])(document, \"DOMContentLoaded\"), Object(_apis_FetchApi__WEBPACK_IMPORTED_MODULE_5__[\"loadScript\"])('./app.js')]);\n\n        case 3:\n          _ref2 = _context2.sent;\n          _ref3 = _slicedToArray(_ref2, 2);\n          obj = _ref3[0];\n          event = _ref3[1];\n          window.render(obj, document.body);\n\n        case 8:\n        case \"end\":\n          return _context2.stop();\n      }\n    }\n  }, _callee2);\n}))();\n\nwindow.render = function (data) {\n  //\n  var test = Object(_lib_create__WEBPACK_IMPORTED_MODULE_0__[\"create\"])(_src_TabView_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n    className: \"tabContainer\"\n  }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_0__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n    title: \"推荐\",\n    className: \"scroll\",\n    active: true\n  }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_0__[\"create\"])(_src_ListView_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n    data: data,\n    style: \"background: rgba(238, 238, 238, 1.00);\"\n  })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_0__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n    title: \"有趣的店\",\n    className: \"scroll\"\n  }), Object(_lib_create__WEBPACK_IMPORTED_MODULE_0__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n    title: \"品牌新店\",\n    className: \"scroll\"\n  }), Object(_lib_create__WEBPACK_IMPORTED_MODULE_0__[\"create\"])(_src_ScrollView_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n    title: \"发现\",\n    className: \"scroll\"\n  }));\n  test.appendTo(document.body);\n};\n\n//# sourceURL=webpack:///./index.js?");
 
 /***/ }),
 
@@ -4620,6 +3910,28 @@ eval("__webpack_require__(/*! ./modules/es6.symbol */ \"./node_modules/core-js/m
 
 /***/ }),
 
+/***/ "./node_modules/svg-baker-runtime/browser-symbol.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/svg-baker-runtime/browser-symbol.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("/* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\n(function (global, factory) {\n  ( false ? undefined : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() :  true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?\n\t\t\t\t(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :\n\t\t\t\t__WEBPACK_AMD_DEFINE_FACTORY__),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;\n})(this, function () {\n  'use strict';\n\n  var SpriteSymbol = function SpriteSymbol(ref) {\n    var id = ref.id;\n    var viewBox = ref.viewBox;\n    var content = ref.content;\n    this.id = id;\n    this.viewBox = viewBox;\n    this.content = content;\n  };\n  /**\n   * @return {string}\n   */\n\n\n  SpriteSymbol.prototype.stringify = function stringify() {\n    return this.content;\n  };\n  /**\n   * @return {string}\n   */\n\n\n  SpriteSymbol.prototype.toString = function toString() {\n    return this.stringify();\n  };\n\n  SpriteSymbol.prototype.destroy = function destroy() {\n    var this$1 = this;\n    ['id', 'viewBox', 'content'].forEach(function (prop) {\n      return delete this$1[prop];\n    });\n  };\n  /**\n   * @param {string} content\n   * @return {Element}\n   */\n\n\n  var parse = function parse(content) {\n    var hasImportNode = !!document.importNode;\n    var doc = new DOMParser().parseFromString(content, 'image/svg+xml').documentElement;\n    /**\n     * Fix for browser which are throwing WrongDocumentError\n     * if you insert an element which is not part of the document\n     * @see http://stackoverflow.com/a/7986519/4624403\n     */\n\n    if (hasImportNode) {\n      return document.importNode(doc, true);\n    }\n\n    return doc;\n  };\n\n  var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};\n\n  function createCommonjsModule(fn, module) {\n    return module = {\n      exports: {}\n    }, fn(module, module.exports), module.exports;\n  }\n\n  var deepmerge = createCommonjsModule(function (module, exports) {\n    (function (root, factory) {\n      if (false) {} else {\n        module.exports = factory();\n      }\n    })(commonjsGlobal, function () {\n      function isMergeableObject(val) {\n        var nonNullObject = val && _typeof(val) === 'object';\n        return nonNullObject && Object.prototype.toString.call(val) !== '[object RegExp]' && Object.prototype.toString.call(val) !== '[object Date]';\n      }\n\n      function emptyTarget(val) {\n        return Array.isArray(val) ? [] : {};\n      }\n\n      function cloneIfNecessary(value, optionsArgument) {\n        var clone = optionsArgument && optionsArgument.clone === true;\n        return clone && isMergeableObject(value) ? deepmerge(emptyTarget(value), value, optionsArgument) : value;\n      }\n\n      function defaultArrayMerge(target, source, optionsArgument) {\n        var destination = target.slice();\n        source.forEach(function (e, i) {\n          if (typeof destination[i] === 'undefined') {\n            destination[i] = cloneIfNecessary(e, optionsArgument);\n          } else if (isMergeableObject(e)) {\n            destination[i] = deepmerge(target[i], e, optionsArgument);\n          } else if (target.indexOf(e) === -1) {\n            destination.push(cloneIfNecessary(e, optionsArgument));\n          }\n        });\n        return destination;\n      }\n\n      function mergeObject(target, source, optionsArgument) {\n        var destination = {};\n\n        if (isMergeableObject(target)) {\n          Object.keys(target).forEach(function (key) {\n            destination[key] = cloneIfNecessary(target[key], optionsArgument);\n          });\n        }\n\n        Object.keys(source).forEach(function (key) {\n          if (!isMergeableObject(source[key]) || !target[key]) {\n            destination[key] = cloneIfNecessary(source[key], optionsArgument);\n          } else {\n            destination[key] = deepmerge(target[key], source[key], optionsArgument);\n          }\n        });\n        return destination;\n      }\n\n      function deepmerge(target, source, optionsArgument) {\n        var array = Array.isArray(source);\n        var options = optionsArgument || {\n          arrayMerge: defaultArrayMerge\n        };\n        var arrayMerge = options.arrayMerge || defaultArrayMerge;\n\n        if (array) {\n          return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument);\n        } else {\n          return mergeObject(target, source, optionsArgument);\n        }\n      }\n\n      deepmerge.all = function deepmergeAll(array, optionsArgument) {\n        if (!Array.isArray(array) || array.length < 2) {\n          throw new Error('first argument should be an array with at least two elements');\n        } // we are sure there are at least 2 values, so it is safe to have no initial value\n\n\n        return array.reduce(function (prev, next) {\n          return deepmerge(prev, next, optionsArgument);\n        });\n      };\n\n      return deepmerge;\n    });\n  });\n  var namespaces_1 = createCommonjsModule(function (module, exports) {\n    var namespaces = {\n      svg: {\n        name: 'xmlns',\n        uri: 'http://www.w3.org/2000/svg'\n      },\n      xlink: {\n        name: 'xmlns:xlink',\n        uri: 'http://www.w3.org/1999/xlink'\n      }\n    };\n    exports[\"default\"] = namespaces;\n    module.exports = exports[\"default\"];\n  });\n  /**\n   * @param {Object} attrs\n   * @return {string}\n   */\n\n  var objectToAttrsString = function objectToAttrsString(attrs) {\n    return Object.keys(attrs).map(function (attr) {\n      var value = attrs[attr].toString().replace(/\"/g, '&quot;');\n      return attr + \"=\\\"\" + value + \"\\\"\";\n    }).join(' ');\n  };\n\n  var svg = namespaces_1.svg;\n  var xlink = namespaces_1.xlink;\n  var defaultAttrs = {};\n  defaultAttrs[svg.name] = svg.uri;\n  defaultAttrs[xlink.name] = xlink.uri;\n  /**\n   * @param {string} [content]\n   * @param {Object} [attributes]\n   * @return {string}\n   */\n\n  var wrapInSvgString = function wrapInSvgString(content, attributes) {\n    if (content === void 0) content = '';\n    var attrs = deepmerge(defaultAttrs, attributes || {});\n    var attrsRendered = objectToAttrsString(attrs);\n    return \"<svg \" + attrsRendered + \">\" + content + \"</svg>\";\n  };\n\n  var BrowserSpriteSymbol = function (SpriteSymbol$$1) {\n    function BrowserSpriteSymbol() {\n      SpriteSymbol$$1.apply(this, arguments);\n    }\n\n    if (SpriteSymbol$$1) BrowserSpriteSymbol.__proto__ = SpriteSymbol$$1;\n    BrowserSpriteSymbol.prototype = Object.create(SpriteSymbol$$1 && SpriteSymbol$$1.prototype);\n    BrowserSpriteSymbol.prototype.constructor = BrowserSpriteSymbol;\n    var prototypeAccessors = {\n      isMounted: {}\n    };\n\n    prototypeAccessors.isMounted.get = function () {\n      return !!this.node;\n    };\n    /**\n     * @param {Element} node\n     * @return {BrowserSpriteSymbol}\n     */\n\n\n    BrowserSpriteSymbol.createFromExistingNode = function createFromExistingNode(node) {\n      return new BrowserSpriteSymbol({\n        id: node.getAttribute('id'),\n        viewBox: node.getAttribute('viewBox'),\n        content: node.outerHTML\n      });\n    };\n\n    BrowserSpriteSymbol.prototype.destroy = function destroy() {\n      if (this.isMounted) {\n        this.unmount();\n      }\n\n      SpriteSymbol$$1.prototype.destroy.call(this);\n    };\n    /**\n     * @param {Element|string} target\n     * @return {Element}\n     */\n\n\n    BrowserSpriteSymbol.prototype.mount = function mount(target) {\n      if (this.isMounted) {\n        return this.node;\n      }\n\n      var mountTarget = typeof target === 'string' ? document.querySelector(target) : target;\n      var node = this.render();\n      this.node = node;\n      mountTarget.appendChild(node);\n      return node;\n    };\n    /**\n     * @return {Element}\n     */\n\n\n    BrowserSpriteSymbol.prototype.render = function render() {\n      var content = this.stringify();\n      return parse(wrapInSvgString(content)).childNodes[0];\n    };\n\n    BrowserSpriteSymbol.prototype.unmount = function unmount() {\n      this.node.parentNode.removeChild(this.node);\n    };\n\n    Object.defineProperties(BrowserSpriteSymbol.prototype, prototypeAccessors);\n    return BrowserSpriteSymbol;\n  }(SpriteSymbol);\n\n  return BrowserSpriteSymbol;\n});\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ \"./node_modules/webpack/buildin/global.js\")))\n\n//# sourceURL=webpack:///./node_modules/svg-baker-runtime/browser-symbol.js?");
+
+/***/ }),
+
+/***/ "./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("/* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\n(function (global, factory) {\n  ( false ? undefined : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() :  true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?\n\t\t\t\t(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :\n\t\t\t\t__WEBPACK_AMD_DEFINE_FACTORY__),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;\n})(this, function () {\n  'use strict';\n\n  var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};\n\n  function createCommonjsModule(fn, module) {\n    return module = {\n      exports: {}\n    }, fn(module, module.exports), module.exports;\n  }\n\n  var deepmerge = createCommonjsModule(function (module, exports) {\n    (function (root, factory) {\n      if (false) {} else {\n        module.exports = factory();\n      }\n    })(commonjsGlobal, function () {\n      function isMergeableObject(val) {\n        var nonNullObject = val && _typeof(val) === 'object';\n        return nonNullObject && Object.prototype.toString.call(val) !== '[object RegExp]' && Object.prototype.toString.call(val) !== '[object Date]';\n      }\n\n      function emptyTarget(val) {\n        return Array.isArray(val) ? [] : {};\n      }\n\n      function cloneIfNecessary(value, optionsArgument) {\n        var clone = optionsArgument && optionsArgument.clone === true;\n        return clone && isMergeableObject(value) ? deepmerge(emptyTarget(value), value, optionsArgument) : value;\n      }\n\n      function defaultArrayMerge(target, source, optionsArgument) {\n        var destination = target.slice();\n        source.forEach(function (e, i) {\n          if (typeof destination[i] === 'undefined') {\n            destination[i] = cloneIfNecessary(e, optionsArgument);\n          } else if (isMergeableObject(e)) {\n            destination[i] = deepmerge(target[i], e, optionsArgument);\n          } else if (target.indexOf(e) === -1) {\n            destination.push(cloneIfNecessary(e, optionsArgument));\n          }\n        });\n        return destination;\n      }\n\n      function mergeObject(target, source, optionsArgument) {\n        var destination = {};\n\n        if (isMergeableObject(target)) {\n          Object.keys(target).forEach(function (key) {\n            destination[key] = cloneIfNecessary(target[key], optionsArgument);\n          });\n        }\n\n        Object.keys(source).forEach(function (key) {\n          if (!isMergeableObject(source[key]) || !target[key]) {\n            destination[key] = cloneIfNecessary(source[key], optionsArgument);\n          } else {\n            destination[key] = deepmerge(target[key], source[key], optionsArgument);\n          }\n        });\n        return destination;\n      }\n\n      function deepmerge(target, source, optionsArgument) {\n        var array = Array.isArray(source);\n        var options = optionsArgument || {\n          arrayMerge: defaultArrayMerge\n        };\n        var arrayMerge = options.arrayMerge || defaultArrayMerge;\n\n        if (array) {\n          return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument);\n        } else {\n          return mergeObject(target, source, optionsArgument);\n        }\n      }\n\n      deepmerge.all = function deepmergeAll(array, optionsArgument) {\n        if (!Array.isArray(array) || array.length < 2) {\n          throw new Error('first argument should be an array with at least two elements');\n        } // we are sure there are at least 2 values, so it is safe to have no initial value\n\n\n        return array.reduce(function (prev, next) {\n          return deepmerge(prev, next, optionsArgument);\n        });\n      };\n\n      return deepmerge;\n    });\n  }); //      \n  // An event handler can take an optional event argument\n  // and should not return a value\n  // An array of all currently registered event handlers for a type\n  // A map of event types and their corresponding event handlers.\n\n  /** Mitt: Tiny (~200b) functional event emitter / pubsub.\n   *  @name mitt\n   *  @returns {Mitt}\n   */\n\n  function mitt(all) {\n    all = all || Object.create(null);\n    return {\n      /**\n       * Register an event handler for the given type.\n       *\n       * @param  {String} type\tType of event to listen for, or `\"*\"` for all events\n       * @param  {Function} handler Function to call in response to given event\n       * @memberOf mitt\n       */\n      on: function on(type, handler) {\n        (all[type] || (all[type] = [])).push(handler);\n      },\n\n      /**\n       * Remove an event handler for the given type.\n       *\n       * @param  {String} type\tType of event to unregister `handler` from, or `\"*\"`\n       * @param  {Function} handler Handler function to remove\n       * @memberOf mitt\n       */\n      off: function off(type, handler) {\n        if (all[type]) {\n          all[type].splice(all[type].indexOf(handler) >>> 0, 1);\n        }\n      },\n\n      /**\n       * Invoke all handlers for the given type.\n       * If present, `\"*\"` handlers are invoked after type-matched handlers.\n       *\n       * @param {String} type  The event type to invoke\n       * @param {Any} [evt]  Any value (object is recommended and powerful), passed to each handler\n       * @memberof mitt\n       */\n      emit: function emit(type, evt) {\n        (all[type] || []).map(function (handler) {\n          handler(evt);\n        });\n        (all['*'] || []).map(function (handler) {\n          handler(type, evt);\n        });\n      }\n    };\n  }\n\n  var namespaces_1 = createCommonjsModule(function (module, exports) {\n    var namespaces = {\n      svg: {\n        name: 'xmlns',\n        uri: 'http://www.w3.org/2000/svg'\n      },\n      xlink: {\n        name: 'xmlns:xlink',\n        uri: 'http://www.w3.org/1999/xlink'\n      }\n    };\n    exports[\"default\"] = namespaces;\n    module.exports = exports[\"default\"];\n  });\n  /**\n   * @param {Object} attrs\n   * @return {string}\n   */\n\n  var objectToAttrsString = function objectToAttrsString(attrs) {\n    return Object.keys(attrs).map(function (attr) {\n      var value = attrs[attr].toString().replace(/\"/g, '&quot;');\n      return attr + \"=\\\"\" + value + \"\\\"\";\n    }).join(' ');\n  };\n\n  var svg = namespaces_1.svg;\n  var xlink = namespaces_1.xlink;\n  var defaultAttrs = {};\n  defaultAttrs[svg.name] = svg.uri;\n  defaultAttrs[xlink.name] = xlink.uri;\n  /**\n   * @param {string} [content]\n   * @param {Object} [attributes]\n   * @return {string}\n   */\n\n  var wrapInSvgString = function wrapInSvgString(content, attributes) {\n    if (content === void 0) content = '';\n    var attrs = deepmerge(defaultAttrs, attributes || {});\n    var attrsRendered = objectToAttrsString(attrs);\n    return \"<svg \" + attrsRendered + \">\" + content + \"</svg>\";\n  };\n\n  var svg$1 = namespaces_1.svg;\n  var xlink$1 = namespaces_1.xlink;\n  var defaultConfig = {\n    attrs: (obj = {\n      style: ['position: absolute', 'width: 0', 'height: 0'].join('; ')\n    }, obj[svg$1.name] = svg$1.uri, obj[xlink$1.name] = xlink$1.uri, obj)\n  };\n  var obj;\n\n  var Sprite = function Sprite(config) {\n    this.config = deepmerge(defaultConfig, config || {});\n    this.symbols = [];\n  };\n  /**\n   * Add new symbol. If symbol with the same id exists it will be replaced.\n   * @param {SpriteSymbol} symbol\n   * @return {boolean} `true` - symbol was added, `false` - replaced\n   */\n\n\n  Sprite.prototype.add = function add(symbol) {\n    var ref = this;\n    var symbols = ref.symbols;\n    var existing = this.find(symbol.id);\n\n    if (existing) {\n      symbols[symbols.indexOf(existing)] = symbol;\n      return false;\n    }\n\n    symbols.push(symbol);\n    return true;\n  };\n  /**\n   * Remove symbol & destroy it\n   * @param {string} id\n   * @return {boolean} `true` - symbol was found & successfully destroyed, `false` - otherwise\n   */\n\n\n  Sprite.prototype.remove = function remove(id) {\n    var ref = this;\n    var symbols = ref.symbols;\n    var symbol = this.find(id);\n\n    if (symbol) {\n      symbols.splice(symbols.indexOf(symbol), 1);\n      symbol.destroy();\n      return true;\n    }\n\n    return false;\n  };\n  /**\n   * @param {string} id\n   * @return {SpriteSymbol|null}\n   */\n\n\n  Sprite.prototype.find = function find(id) {\n    return this.symbols.filter(function (s) {\n      return s.id === id;\n    })[0] || null;\n  };\n  /**\n   * @param {string} id\n   * @return {boolean}\n   */\n\n\n  Sprite.prototype.has = function has(id) {\n    return this.find(id) !== null;\n  };\n  /**\n   * @return {string}\n   */\n\n\n  Sprite.prototype.stringify = function stringify() {\n    var ref = this.config;\n    var attrs = ref.attrs;\n    var stringifiedSymbols = this.symbols.map(function (s) {\n      return s.stringify();\n    }).join('');\n    return wrapInSvgString(stringifiedSymbols, attrs);\n  };\n  /**\n   * @return {string}\n   */\n\n\n  Sprite.prototype.toString = function toString() {\n    return this.stringify();\n  };\n\n  Sprite.prototype.destroy = function destroy() {\n    this.symbols.forEach(function (s) {\n      return s.destroy();\n    });\n  };\n\n  var SpriteSymbol = function SpriteSymbol(ref) {\n    var id = ref.id;\n    var viewBox = ref.viewBox;\n    var content = ref.content;\n    this.id = id;\n    this.viewBox = viewBox;\n    this.content = content;\n  };\n  /**\n   * @return {string}\n   */\n\n\n  SpriteSymbol.prototype.stringify = function stringify() {\n    return this.content;\n  };\n  /**\n   * @return {string}\n   */\n\n\n  SpriteSymbol.prototype.toString = function toString() {\n    return this.stringify();\n  };\n\n  SpriteSymbol.prototype.destroy = function destroy() {\n    var this$1 = this;\n    ['id', 'viewBox', 'content'].forEach(function (prop) {\n      return delete this$1[prop];\n    });\n  };\n  /**\n   * @param {string} content\n   * @return {Element}\n   */\n\n\n  var parse = function parse(content) {\n    var hasImportNode = !!document.importNode;\n    var doc = new DOMParser().parseFromString(content, 'image/svg+xml').documentElement;\n    /**\n     * Fix for browser which are throwing WrongDocumentError\n     * if you insert an element which is not part of the document\n     * @see http://stackoverflow.com/a/7986519/4624403\n     */\n\n    if (hasImportNode) {\n      return document.importNode(doc, true);\n    }\n\n    return doc;\n  };\n\n  var BrowserSpriteSymbol = function (SpriteSymbol$$1) {\n    function BrowserSpriteSymbol() {\n      SpriteSymbol$$1.apply(this, arguments);\n    }\n\n    if (SpriteSymbol$$1) BrowserSpriteSymbol.__proto__ = SpriteSymbol$$1;\n    BrowserSpriteSymbol.prototype = Object.create(SpriteSymbol$$1 && SpriteSymbol$$1.prototype);\n    BrowserSpriteSymbol.prototype.constructor = BrowserSpriteSymbol;\n    var prototypeAccessors = {\n      isMounted: {}\n    };\n\n    prototypeAccessors.isMounted.get = function () {\n      return !!this.node;\n    };\n    /**\n     * @param {Element} node\n     * @return {BrowserSpriteSymbol}\n     */\n\n\n    BrowserSpriteSymbol.createFromExistingNode = function createFromExistingNode(node) {\n      return new BrowserSpriteSymbol({\n        id: node.getAttribute('id'),\n        viewBox: node.getAttribute('viewBox'),\n        content: node.outerHTML\n      });\n    };\n\n    BrowserSpriteSymbol.prototype.destroy = function destroy() {\n      if (this.isMounted) {\n        this.unmount();\n      }\n\n      SpriteSymbol$$1.prototype.destroy.call(this);\n    };\n    /**\n     * @param {Element|string} target\n     * @return {Element}\n     */\n\n\n    BrowserSpriteSymbol.prototype.mount = function mount(target) {\n      if (this.isMounted) {\n        return this.node;\n      }\n\n      var mountTarget = typeof target === 'string' ? document.querySelector(target) : target;\n      var node = this.render();\n      this.node = node;\n      mountTarget.appendChild(node);\n      return node;\n    };\n    /**\n     * @return {Element}\n     */\n\n\n    BrowserSpriteSymbol.prototype.render = function render() {\n      var content = this.stringify();\n      return parse(wrapInSvgString(content)).childNodes[0];\n    };\n\n    BrowserSpriteSymbol.prototype.unmount = function unmount() {\n      this.node.parentNode.removeChild(this.node);\n    };\n\n    Object.defineProperties(BrowserSpriteSymbol.prototype, prototypeAccessors);\n    return BrowserSpriteSymbol;\n  }(SpriteSymbol);\n\n  var defaultConfig$1 = {\n    /**\n     * Should following options be automatically configured:\n     * - `syncUrlsWithBaseTag`\n     * - `locationChangeAngularEmitter`\n     * - `moveGradientsOutsideSymbol`\n     * @type {boolean}\n     */\n    autoConfigure: true,\n\n    /**\n     * Default mounting selector\n     * @type {string}\n     */\n    mountTo: 'body',\n\n    /**\n     * Fix disappearing SVG elements when <base href> exists.\n     * Executes when sprite mounted.\n     * @see http://stackoverflow.com/a/18265336/796152\n     * @see https://github.com/everdimension/angular-svg-base-fix\n     * @see https://github.com/angular/angular.js/issues/8934#issuecomment-56568466\n     * @type {boolean}\n     */\n    syncUrlsWithBaseTag: false,\n\n    /**\n     * Should sprite listen custom location change event\n     * @type {boolean}\n     */\n    listenLocationChangeEvent: true,\n\n    /**\n     * Custom window event name which should be emitted to update sprite urls\n     * @type {string}\n     */\n    locationChangeEvent: 'locationChange',\n\n    /**\n     * Emit location change event in Angular automatically\n     * @type {boolean}\n     */\n    locationChangeAngularEmitter: false,\n\n    /**\n     * Selector to find symbols usages when updating sprite urls\n     * @type {string}\n     */\n    usagesToUpdate: 'use[*|href]',\n\n    /**\n     * Fix Firefox bug when gradients and patterns don't work if they are within a symbol.\n     * Executes when sprite is rendered, but not mounted.\n     * @see https://bugzilla.mozilla.org/show_bug.cgi?id=306674\n     * @see https://bugzilla.mozilla.org/show_bug.cgi?id=353575\n     * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1235364\n     * @type {boolean}\n     */\n    moveGradientsOutsideSymbol: false\n  };\n  /**\n   * @param {*} arrayLike\n   * @return {Array}\n   */\n\n  var arrayFrom = function arrayFrom(arrayLike) {\n    return Array.prototype.slice.call(arrayLike, 0);\n  };\n\n  var browser = {\n    isChrome: function isChrome() {\n      return /chrome/i.test(navigator.userAgent);\n    },\n    isFirefox: function isFirefox() {\n      return /firefox/i.test(navigator.userAgent);\n    },\n    // https://msdn.microsoft.com/en-us/library/ms537503(v=vs.85).aspx\n    isIE: function isIE() {\n      return /msie/i.test(navigator.userAgent) || /trident/i.test(navigator.userAgent);\n    },\n    isEdge: function isEdge() {\n      return /edge/i.test(navigator.userAgent);\n    }\n  };\n  /**\n   * @param {string} name\n   * @param {*} data\n   */\n\n  var dispatchEvent = function dispatchEvent(name, data) {\n    var event = document.createEvent('CustomEvent');\n    event.initCustomEvent(name, false, false, data);\n    window.dispatchEvent(event);\n  };\n  /**\n   * IE doesn't evaluate <style> tags in SVGs that are dynamically added to the page.\n   * This trick will trigger IE to read and use any existing SVG <style> tags.\n   * @see https://github.com/iconic/SVGInjector/issues/23\n   * @see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10898469/\n   *\n   * @param {Element} node DOM Element to search <style> tags in\n   * @return {Array<HTMLStyleElement>}\n   */\n\n\n  var evalStylesIEWorkaround = function evalStylesIEWorkaround(node) {\n    var updatedNodes = [];\n    arrayFrom(node.querySelectorAll('style')).forEach(function (style) {\n      style.textContent += '';\n      updatedNodes.push(style);\n    });\n    return updatedNodes;\n  };\n  /**\n   * @param {string} [url] If not provided - current URL will be used\n   * @return {string}\n   */\n\n\n  var getUrlWithoutFragment = function getUrlWithoutFragment(url) {\n    return (url || window.location.href).split('#')[0];\n  };\n  /* global angular */\n\n  /**\n   * @param {string} eventName\n   */\n\n\n  var locationChangeAngularEmitter = function locationChangeAngularEmitter(eventName) {\n    angular.module('ng').run(['$rootScope', function ($rootScope) {\n      $rootScope.$on('$locationChangeSuccess', function (e, newUrl, oldUrl) {\n        dispatchEvent(eventName, {\n          oldUrl: oldUrl,\n          newUrl: newUrl\n        });\n      });\n    }]);\n  };\n\n  var defaultSelector = 'linearGradient, radialGradient, pattern';\n  /**\n   * @param {Element} svg\n   * @param {string} [selector]\n   * @return {Element}\n   */\n\n  var moveGradientsOutsideSymbol = function moveGradientsOutsideSymbol(svg, selector) {\n    if (selector === void 0) selector = defaultSelector;\n    arrayFrom(svg.querySelectorAll('symbol')).forEach(function (symbol) {\n      arrayFrom(symbol.querySelectorAll(selector)).forEach(function (node) {\n        symbol.parentNode.insertBefore(node, symbol);\n      });\n    });\n    return svg;\n  };\n  /**\n   * @param {NodeList} nodes\n   * @param {Function} [matcher]\n   * @return {Attr[]}\n   */\n\n\n  function selectAttributes(nodes, matcher) {\n    var attrs = arrayFrom(nodes).reduce(function (acc, node) {\n      if (!node.attributes) {\n        return acc;\n      }\n\n      var arrayfied = arrayFrom(node.attributes);\n      var matched = matcher ? arrayfied.filter(matcher) : arrayfied;\n      return acc.concat(matched);\n    }, []);\n    return attrs;\n  }\n  /**\n   * @param {NodeList|Node} nodes\n   * @param {boolean} [clone=true]\n   * @return {string}\n   */\n\n\n  var xLinkNS = namespaces_1.xlink.uri;\n  var xLinkAttrName = 'xlink:href'; // eslint-disable-next-line no-useless-escape\n\n  var specialUrlCharsPattern = /[{}|\\\\\\^\\[\\]`\"<>]/g;\n\n  function encoder(url) {\n    return url.replace(specialUrlCharsPattern, function (match) {\n      return \"%\" + match[0].charCodeAt(0).toString(16).toUpperCase();\n    });\n  }\n\n  function escapeRegExp(str) {\n    return str.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\"); // $& means the whole matched string\n  }\n  /**\n   * @param {NodeList} nodes\n   * @param {string} startsWith\n   * @param {string} replaceWith\n   * @return {NodeList}\n   */\n\n\n  function updateReferences(nodes, startsWith, replaceWith) {\n    arrayFrom(nodes).forEach(function (node) {\n      var href = node.getAttribute(xLinkAttrName);\n\n      if (href && href.indexOf(startsWith) === 0) {\n        var newUrl = href.replace(startsWith, replaceWith);\n        node.setAttributeNS(xLinkNS, xLinkAttrName, newUrl);\n      }\n    });\n    return nodes;\n  }\n  /**\n   * List of SVG attributes to update url() target in them\n   */\n\n\n  var attList = ['clipPath', 'colorProfile', 'src', 'cursor', 'fill', 'filter', 'marker', 'markerStart', 'markerMid', 'markerEnd', 'mask', 'stroke', 'style'];\n  var attSelector = attList.map(function (attr) {\n    return \"[\" + attr + \"]\";\n  }).join(',');\n  /**\n   * Update URLs in svg image (like `fill=\"url(...)\"`) and update referencing elements\n   * @param {Element} svg\n   * @param {NodeList} references\n   * @param {string|RegExp} startsWith\n   * @param {string} replaceWith\n   * @return {void}\n   *\n   * @example\n   * const sprite = document.querySelector('svg.sprite');\n   * const usages = document.querySelectorAll('use');\n   * updateUrls(sprite, usages, '#', 'prefix#');\n   */\n\n  var updateUrls = function updateUrls(svg, references, startsWith, replaceWith) {\n    var startsWithEncoded = encoder(startsWith);\n    var replaceWithEncoded = encoder(replaceWith);\n    var nodes = svg.querySelectorAll(attSelector);\n    var attrs = selectAttributes(nodes, function (ref) {\n      var localName = ref.localName;\n      var value = ref.value;\n      return attList.indexOf(localName) !== -1 && value.indexOf(\"url(\" + startsWithEncoded) !== -1;\n    });\n    attrs.forEach(function (attr) {\n      return attr.value = attr.value.replace(new RegExp(escapeRegExp(startsWithEncoded), 'g'), replaceWithEncoded);\n    });\n    updateReferences(references, startsWithEncoded, replaceWithEncoded);\n  };\n  /**\n   * Internal emitter events\n   * @enum\n   * @private\n   */\n\n\n  var Events = {\n    MOUNT: 'mount',\n    SYMBOL_MOUNT: 'symbol_mount'\n  };\n\n  var BrowserSprite = function (Sprite$$1) {\n    function BrowserSprite(cfg) {\n      var this$1 = this;\n      if (cfg === void 0) cfg = {};\n      Sprite$$1.call(this, deepmerge(defaultConfig$1, cfg));\n      var emitter = mitt();\n      this._emitter = emitter;\n      this.node = null;\n      var ref = this;\n      var config = ref.config;\n\n      if (config.autoConfigure) {\n        this._autoConfigure(cfg);\n      }\n\n      if (config.syncUrlsWithBaseTag) {\n        var baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');\n        emitter.on(Events.MOUNT, function () {\n          return this$1.updateUrls('#', baseUrl);\n        });\n      }\n\n      var handleLocationChange = this._handleLocationChange.bind(this);\n\n      this._handleLocationChange = handleLocationChange; // Provide way to update sprite urls externally via dispatching custom window event\n\n      if (config.listenLocationChangeEvent) {\n        window.addEventListener(config.locationChangeEvent, handleLocationChange);\n      } // Emit location change event in Angular automatically\n\n\n      if (config.locationChangeAngularEmitter) {\n        locationChangeAngularEmitter(config.locationChangeEvent);\n      } // After sprite mounted\n\n\n      emitter.on(Events.MOUNT, function (spriteNode) {\n        if (config.moveGradientsOutsideSymbol) {\n          moveGradientsOutsideSymbol(spriteNode);\n        }\n      }); // After symbol mounted into sprite\n\n      emitter.on(Events.SYMBOL_MOUNT, function (symbolNode) {\n        if (config.moveGradientsOutsideSymbol) {\n          moveGradientsOutsideSymbol(symbolNode.parentNode);\n        }\n\n        if (browser.isIE() || browser.isEdge()) {\n          evalStylesIEWorkaround(symbolNode);\n        }\n      });\n    }\n\n    if (Sprite$$1) BrowserSprite.__proto__ = Sprite$$1;\n    BrowserSprite.prototype = Object.create(Sprite$$1 && Sprite$$1.prototype);\n    BrowserSprite.prototype.constructor = BrowserSprite;\n    var prototypeAccessors = {\n      isMounted: {}\n    };\n    /**\n     * @return {boolean}\n     */\n\n    prototypeAccessors.isMounted.get = function () {\n      return !!this.node;\n    };\n    /**\n     * Automatically configure following options\n     * - `syncUrlsWithBaseTag`\n     * - `locationChangeAngularEmitter`\n     * - `moveGradientsOutsideSymbol`\n     * @param {Object} cfg\n     * @private\n     */\n\n\n    BrowserSprite.prototype._autoConfigure = function _autoConfigure(cfg) {\n      var ref = this;\n      var config = ref.config;\n\n      if (typeof cfg.syncUrlsWithBaseTag === 'undefined') {\n        config.syncUrlsWithBaseTag = typeof document.getElementsByTagName('base')[0] !== 'undefined';\n      }\n\n      if (typeof cfg.locationChangeAngularEmitter === 'undefined') {\n        config.locationChangeAngularEmitter = 'angular' in window;\n      }\n\n      if (typeof cfg.moveGradientsOutsideSymbol === 'undefined') {\n        config.moveGradientsOutsideSymbol = browser.isFirefox();\n      }\n    };\n    /**\n     * @param {Event} event\n     * @param {Object} event.detail\n     * @param {string} event.detail.oldUrl\n     * @param {string} event.detail.newUrl\n     * @private\n     */\n\n\n    BrowserSprite.prototype._handleLocationChange = function _handleLocationChange(event) {\n      var ref = event.detail;\n      var oldUrl = ref.oldUrl;\n      var newUrl = ref.newUrl;\n      this.updateUrls(oldUrl, newUrl);\n    };\n    /**\n     * Add new symbol. If symbol with the same id exists it will be replaced.\n     * If sprite already mounted - `symbol.mount(sprite.node)` will be called.\n     * @fires Events#SYMBOL_MOUNT\n     * @param {BrowserSpriteSymbol} symbol\n     * @return {boolean} `true` - symbol was added, `false` - replaced\n     */\n\n\n    BrowserSprite.prototype.add = function add(symbol) {\n      var sprite = this;\n      var isNewSymbol = Sprite$$1.prototype.add.call(this, symbol);\n\n      if (this.isMounted && isNewSymbol) {\n        symbol.mount(sprite.node);\n\n        this._emitter.emit(Events.SYMBOL_MOUNT, symbol.node);\n      }\n\n      return isNewSymbol;\n    };\n    /**\n     * Attach to existing DOM node\n     * @param {string|Element} target\n     * @return {Element|null} attached DOM Element. null if node to attach not found.\n     */\n\n\n    BrowserSprite.prototype.attach = function attach(target) {\n      var this$1 = this;\n      var sprite = this;\n\n      if (sprite.isMounted) {\n        return sprite.node;\n      }\n      /** @type Element */\n\n\n      var node = typeof target === 'string' ? document.querySelector(target) : target;\n      sprite.node = node; // Already added symbols needs to be mounted\n\n      this.symbols.forEach(function (symbol) {\n        symbol.mount(sprite.node);\n\n        this$1._emitter.emit(Events.SYMBOL_MOUNT, symbol.node);\n      }); // Create symbols from existing DOM nodes, add and mount them\n\n      arrayFrom(node.querySelectorAll('symbol')).forEach(function (symbolNode) {\n        var symbol = BrowserSpriteSymbol.createFromExistingNode(symbolNode);\n        symbol.node = symbolNode; // hack to prevent symbol mounting to sprite when adding\n\n        sprite.add(symbol);\n      });\n\n      this._emitter.emit(Events.MOUNT, node);\n\n      return node;\n    };\n\n    BrowserSprite.prototype.destroy = function destroy() {\n      var ref = this;\n      var config = ref.config;\n      var symbols = ref.symbols;\n      var _emitter = ref._emitter;\n      symbols.forEach(function (s) {\n        return s.destroy();\n      });\n\n      _emitter.off('*');\n\n      window.removeEventListener(config.locationChangeEvent, this._handleLocationChange);\n\n      if (this.isMounted) {\n        this.unmount();\n      }\n    };\n    /**\n     * @fires Events#MOUNT\n     * @param {string|Element} [target]\n     * @param {boolean} [prepend=false]\n     * @return {Element|null} rendered sprite node. null if mount node not found.\n     */\n\n\n    BrowserSprite.prototype.mount = function mount(target, prepend) {\n      if (target === void 0) target = this.config.mountTo;\n      if (prepend === void 0) prepend = false;\n      var sprite = this;\n\n      if (sprite.isMounted) {\n        return sprite.node;\n      }\n\n      var mountNode = typeof target === 'string' ? document.querySelector(target) : target;\n      var node = sprite.render();\n      this.node = node;\n\n      if (prepend && mountNode.childNodes[0]) {\n        mountNode.insertBefore(node, mountNode.childNodes[0]);\n      } else {\n        mountNode.appendChild(node);\n      }\n\n      this._emitter.emit(Events.MOUNT, node);\n\n      return node;\n    };\n    /**\n     * @return {Element}\n     */\n\n\n    BrowserSprite.prototype.render = function render() {\n      return parse(this.stringify());\n    };\n    /**\n     * Detach sprite from the DOM\n     */\n\n\n    BrowserSprite.prototype.unmount = function unmount() {\n      this.node.parentNode.removeChild(this.node);\n    };\n    /**\n     * Update URLs in sprite and usage elements\n     * @param {string} oldUrl\n     * @param {string} newUrl\n     * @return {boolean} `true` - URLs was updated, `false` - sprite is not mounted\n     */\n\n\n    BrowserSprite.prototype.updateUrls = function updateUrls$1(oldUrl, newUrl) {\n      if (!this.isMounted) {\n        return false;\n      }\n\n      var usages = document.querySelectorAll(this.config.usagesToUpdate);\n      updateUrls(this.node, usages, getUrlWithoutFragment(oldUrl) + \"#\", getUrlWithoutFragment(newUrl) + \"#\");\n      return true;\n    };\n\n    Object.defineProperties(BrowserSprite.prototype, prototypeAccessors);\n    return BrowserSprite;\n  }(Sprite);\n\n  var ready$1 = createCommonjsModule(function (module) {\n    /*!\n      * domready (c) Dustin Diaz 2014 - License MIT\n      */\n    !function (name, definition) {\n      {\n        module.exports = definition();\n      }\n    }('domready', function () {\n      var fns = [],\n          _listener,\n          doc = document,\n          hack = doc.documentElement.doScroll,\n          domContentLoaded = 'DOMContentLoaded',\n          loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState);\n\n      if (!loaded) {\n        doc.addEventListener(domContentLoaded, _listener = function listener() {\n          doc.removeEventListener(domContentLoaded, _listener);\n          loaded = 1;\n\n          while (_listener = fns.shift()) {\n            _listener();\n          }\n        });\n      }\n\n      return function (fn) {\n        loaded ? setTimeout(fn, 0) : fns.push(fn);\n      };\n    });\n  });\n  var spriteNodeId = '__SVG_SPRITE_NODE__';\n  var spriteGlobalVarName = '__SVG_SPRITE__';\n  var isSpriteExists = !!window[spriteGlobalVarName]; // eslint-disable-next-line import/no-mutable-exports\n\n  var sprite;\n\n  if (isSpriteExists) {\n    sprite = window[spriteGlobalVarName];\n  } else {\n    sprite = new BrowserSprite({\n      attrs: {\n        id: spriteNodeId\n      }\n    });\n    window[spriteGlobalVarName] = sprite;\n  }\n\n  var loadSprite = function loadSprite() {\n    /**\n     * Check for page already contains sprite node\n     * If found - attach to and reuse it's content\n     * If not - render and mount the new sprite\n     */\n    var existing = document.getElementById(spriteNodeId);\n\n    if (existing) {\n      sprite.attach(existing);\n    } else {\n      sprite.mount(document.body, true);\n    }\n  };\n\n  if (document.body) {\n    loadSprite();\n  } else {\n    ready$1(loadSprite);\n  }\n\n  var sprite$1 = sprite;\n  return sprite$1;\n});\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ \"./node_modules/webpack/buildin/global.js\")))\n\n//# sourceURL=webpack:///./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js?");
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -4642,92 +3954,99 @@ eval("module.exports = function (module) {\n  if (!module.webpackPolyfill) {\n  
 
 /***/ }),
 
-/***/ "./res/arrow_left.svg":
-/*!****************************!*\
-  !*** ./res/arrow_left.svg ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = \"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTcyMDA4MTU1MjQ2IiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjEyMzMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNNzM3LjkgODg4LjJMMzYxLjcgNTEybDM3Ni4yLTM3Ni4yYzE2LjQtMTYuNCAxNi40LTQzLjEgMC01OS41cy00My4xLTE2LjQtNTkuNSAwTDI5NS44IDQ1OC45Yy0xNC4yIDE0LjItMjIgMzMtMjIgNTMuMXM3LjggMzguOSAyMiA1My4xbDM4Mi42IDM4Mi42YzE2LjQgMTYuNCA0My4xIDE2LjQgNTkuNSAwIDE2LjQtMTYuNSAxNi40LTQzLjEgMC01OS41eiIgcC1pZD0iMTIzNCI+PC9wYXRoPjwvc3ZnPg==\"\n\n//# sourceURL=webpack:///./res/arrow_left.svg?");
-
-/***/ }),
-
-/***/ "./res/arrow_right.svg":
-/*!*****************************!*\
-  !*** ./res/arrow_right.svg ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = \"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTcyMDA4MTMzMTMyIiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjExMTUiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNMjg2LjEgMTM1LjhMNjYyLjMgNTEyIDI4Ni4xIDg4OC4yYy0xNi40IDE2LjQtMTYuNCA0My4xIDAgNTkuNXM0My4xIDE2LjQgNTkuNSAwbDM4Mi42LTM4Mi42YzE0LjItMTQuMiAyMi0zMyAyMi01My4xcy03LjgtMzguOS0yMi01My4xTDM0NS42IDc2LjNjLTE2LjQtMTYuNC00My4xLTE2LjQtNTkuNSAwLTE2LjQgMTYuNS0xNi40IDQzLjEgMCA1OS41eiIgcC1pZD0iMTExNiI+PC9wYXRoPjwvc3ZnPg==\"\n\n//# sourceURL=webpack:///./res/arrow_right.svg?");
-
-/***/ }),
-
-/***/ "./res/follow.svg":
-/*!************************!*\
-  !*** ./res/follow.svg ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = \"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyBjbGFzcz0iaWNvbiIgd2lkdGg9IjIwMHB4IiBoZWlnaHQ9IjIwMC4wMHB4IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTgyMy43NzgzNzQgNjM0LjA1OTk2M2MwIDAtODQuMTg0MzMxLTExLjk1NjMxLTk1Ljc1NzkyNC0xMy42MjYzNDUtMC44MTU1NzUtMC4xMjY4OS0xLjM1MDc2NC0wLjIwMzYzOC0xLjM3NzM3LTAuMjAzNjM4LTYuMTk1MDk2LTEuMzg4NjI3LTExLjMwNjUxLTUuMjkwNDkzLTE0LjM1Mjg5My0xMC41MTY1MTgtMC4xMDIzMzEtMC4yNDE1LTIuNjUxMzg2LTUuMjM4MzA0LTYuMzc0MTc0LTEyLjYwNjEwOS0xMS43NjQ5NTEtMjMuMzUyODcxLTM1LjgwNjUwNy03MS4wNzg4NDktMzUuODA2NTA3LTcxLjA3ODg0OS0yLjk2OTYzNS02LjUyNjY0Ny05LjYyNDE5NS0xMS4wODk1NjktMTcuMzQ5MTMzLTExLjA4OTU2OS03LjgwMDY2MyAwLTE0LjQ2ODUyNiA0LjU2MjkyMi0xNy4zODY5OTYgMTEuMDg5NTY5IDAgMC0zLjM1MjM1MSA2LjU5MDA5Mi04LjA1NjQ5IDE1LjkzMzkwMS0xMi4wMTk3NTUgMjMuNzYxMTctMzMuMjgyMDExIDY1LjgxMzkzOC0zMy4zNTk3ODIgNjUuOTgwNzM3LTIuODY4MzI3IDYuMTgxNzkzLTguNTUyNzkzIDEwLjgyMjQ4Ni0xNS41MTMzMjIgMTIuMjYyMjc4LTAuMjY4MTA2IDAuMDUxMTY1LTk3LjMzNzkwOSAxMy43Nzk4NDEtOTcuMzM3OTA5IDEzLjc3OTg0MS04LjM1MDE3OSAxLjk3NjAwNC0xNC41NDQyNTEgOS4yNjgwODQtMTQuNTQ0MjUxIDE4LjAzNzgxOCAwIDUuMDA5MDg0IDIuMDI2MTQ2IDkuNTQ3NDQ3IDUuMzUzOTM4IDEyLjg4NzUxOCAwIDAgNjguNzcxMjkzIDY1LjU3MTQxNSA2OS4wMTM4MTcgNjUuODAxNjU4IDMuODM2Mzc1IDMuOTAwODQzIDYuMjE5NjU1IDkuMTY0NzMgNi4yMTk2NTUgMTQuOTg5Mzg5IDAgMS4yNzUwNC0wLjE5MTM1OCAyLjUzNjc3Ni0wLjM5NDk5NiAzLjc5OTUzNi0wLjA1MTE2NSAwLjE3ODA1NS03LjQ3MDEzNSA0Mi40ODc2NzMtMTIuMjEyMTM2IDY5LjMxODc2Mi0yLjE2NzM2MyAxMi40MTY3OTctMy43NzM5NTMgMjEuNTE3MDU5LTMuNzczOTUzIDIxLjUxNzA1OXMtMC4zOTQ5OTYgMi41NTAwNzktMC4zOTQ5OTYgMy43OTk1MzZjMCAxMC4yNzM5OTQgOC41MDI2NTEgMTguNTg1Mjg3IDE5LjAwNTg2NiAxOC41ODUyODcgMi41NDkwNTYgMCA0Ljk0NTYzOS0wLjUwOTYwNiA3LjE2NDE2Ny0xLjQwMjk1MyAwIDAgNjQuMTA2MDQtMzMuMDM5NDg3IDgyLjcxNjkxLTQyLjQ5ODkzIDIuOTk1MjE3LTEuNTI4ODE5IDQuOTA3Nzc3LTIuNDk3ODkgNS4xMTE0MTQtMi41NzQ2MzggMi41NDkwNTYtMS4wMDY5MzMgNS4zMjgzNTUtMS41OTMyODggOC4yNDc4NDgtMS41OTMyODggMi44NjgzMjcgMCA1LjU0NTI5NiAwLjU3NDA3NSA4LjA0MzE4NyAxLjUxNjU0IDAuMjI5MjIxIDAuMDc1NzI1IDIuMTkyOTQ1IDEuMDcwMzc4IDUuMjUxNjA3IDIuNjUwMzYzIDE4Ljc2NDM2NiA5LjUzNTE2NyA4Mi4xODI3NDQgNDIuMzg1MzQzIDgyLjY3OTA0OCA0Mi41NjMzOTggMi4yMzE4MzEgMC45MDU2MjYgNC42OTA4MzYgMS40NDA4MTUgNy4yNDA5MTUgMS40NDA4MTUgMTAuNTA0MjM4IDAgMTkuMDQzNzI4LTguMzExMjkzIDE5LjA0MzcyOC0xOC41ODUyODcgMC0wLjMzMTU1MS0xLjg2MDM3MS0xMS4yMTg1MDYtNC4zMzM3MDItMjUuNDE4OTI2LTQuOTIxMDgtMjguMjM1MDY1LTEyLjIxMjEzNi02OS45NDQwMDItMTIuMjg4ODg0LTcwLjYzMTY2NC0wLjA3NTcyNS0wLjc3NzcxMy0wLjIyOTIyMS0xLjU0MzE0Ni0wLjIyOTIyMS0yLjMzMjExNSAwLTUuNzI0Mzc1IDIuMzE5ODM1LTEwLjkxMjUzNyA2LjA1NDkwMy0xNC43ODY3NzUgMC4xNDAxOTMtMC4xMjY4OSA3Ljc0OTQ5OC03LjM5NDQxMSAxNy44MDc1NzQtMTYuOTY2NDE3IDIwLjQyMTA5OC0xOS40NTIwMjggNTEuMTAyODg4LTQ4LjY1NjE2MyA1MS4xMDI4ODgtNDguNjU2MTYzbDAuMjQxNS0wLjIzMDI0NGMzLjM1MjM1MS0zLjM2NTY1NCA1LjQ4MTg1MS03LjkyODU3NiA1LjQ4MTg1MS0xMy4wMTU0MzJDODM4LjcxNzYyMSA2NDMuMzAyNDY1IDgzMi4zNDQ0NyA2MzUuODgzNDk1IDgyMy43NzgzNzQgNjM0LjA1OTk2M0w4MjMuNzc4Mzc0IDYzNC4wNTk5NjN6TTgyMy43NzgzNzQgNjM0LjA1OTk2MyIgZmlsbD0iI0FDMDAwMCIgLz48cGF0aCBkPSJNNDQ5LjMyNzEgNjg2LjUyODk2NWMtOS4yOTI2NDQtOS4yNTQ3ODEtMTQuMzkxNzc4LTIxLjUzMDM2Mi0xNC4zOTE3NzgtMzQuNTIwMjExIDAtMjIuOTE3OTY2IDE1LjkzMzkwMS00Mi42NjQ3MDUgMzguNzUxNTgyLTQ4LjA1NjUwNiAwLjk0MzQ4OC0wLjIyOTIyMSAxLjkxMjU1OS0wLjQwNzI3NiAyLjg4MDYwNy0wLjU0ODQ5MiAyNC44MDU5NjYtMy41MDU4NDcgNTcuNzU3NDQ4LTguMTgzMzggNzguMjE2NDA5LTExLjA3NjI2NmwzNC4wODczNTMtNjcuMTY1NzI2YzMuOTEzMTIzLTIuMDUxNzI5IDcuNDU2ODMyLTQuNjc3NTMzIDExLjIxNzQ4My02Ljk1OTUwNSAzMC4wNTc1NzMtMTguMzY5MzcgNTUuMjQ2MjU1LTQzLjc3Mzk2OSA3Mi44Mzc5MTItNzQuNDE4OTIgMTcuNTQwNDkyLTMwLjU0MjYyIDI3Ljg3NzkzMS02NS43MjQ5MTEgMjcuODc3OTMxLTEwMy40MTgzOTQgMC0xMTQuOTgwNzMxLTkzLjM3MzYyMS0yMDguNTIwMTI3LTIwOC4xMTE4MjgtMjA4LjUyMDEyNy0xMTQuNzYzNzkgMC0yMDguMTI0MTA4IDkzLjUzOTM5Ni0yMDguMTI0MTA4IDIwOC41MjAxMjcgMCAzNy42OTM0ODQgMTAuMzUwNzQyIDcyLjg3NTc3NCAyNy44OTAyMSAxMDMuNDE4Mzk0IDE5LjgwOTE2MSAzNC41MTkxODggNDguOTI0MjY5IDYyLjk5Njc3NiA4NC4yMzQ0NzMgODEuNDgwNzU2LTEuOTg4Mjg0IDAuNDA3Mjc2LTQuMDQxMDM2IDAuNTA5NjA2LTUuOTkxNDU4IDEuMDIwMjM2LTEzLjMzMzY4IDMuMzY1NjU0LTI1Ljg1MTc4NCA4LjY1NTEyNC0zNy44NDY5OCAxNS4xNjk0OTEtMTEuODkyODY1IDYuNDYyMTc5LTIyLjY1MTkwNiAxNC40MTczNjEtMzIuOTUxNDgzIDIyLjk3MDE1NC0xNS43ODA0MDUgMTAuNzcxMzIxLTMwLjg5ODczMSAyMi42NjQxODYtNDQuNjkxODc1IDM2LjQ5NTE5Mi01Mi43MjI3ODIgNTIuNzg3MjUtODMuNzc1MDA5IDEwOS44ODE1OTYtODkuMTU0NTI5IDE4My41ODYyNDktMC4xMjc5MTMgMS44MzQ3ODgtOC41NzgzNzYgMjYuMDI5ODQgMjYuMTA2NTg4IDI2LjEwNjU4OGwyODcuMTY5Mzk1IDBjNy43MjQ5MzgtNDMuODc2MyAxNC4wNzM1My01NC4wMjM0MDQgMTUuNDM2NTc0LTYxLjY3MjYxOC0xNC42OTY3MjQtMTQuMDA4MDM5LTY0LjkyMDU5Mi02MS44OTk3OTItNjQuOTIwNTkyLTYxLjg5OTc5Mi0wLjE3ODA1NS0wLjE3ODA1NS0wLjM1NzEzNC0wLjM1NzEzNC0wLjUzNTE4OS0wLjUwOTYwNkw0NDkuMzI3MSA2ODYuNTI5OTg5ek00NDkuMzI3MSA2ODYuNTI4OTY1IiBmaWxsPSIjQUMwMDAwIiAvPjwvc3ZnPg==\"\n\n//# sourceURL=webpack:///./res/follow.svg?");
-
-/***/ }),
-
-/***/ "./res/index.js":
-/*!**********************!*\
-  !*** ./res/index.js ***!
-  \**********************/
+/***/ "./res/icons/arrow_left.svg":
+/*!**********************************!*\
+  !*** ./res/icons/arrow_left.svg ***!
+  \**********************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _arrow_left_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrow_left.svg */ \"./res/arrow_left.svg\");\n/* harmony import */ var _arrow_left_svg__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_arrow_left_svg__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _arrow_right_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./arrow_right.svg */ \"./res/arrow_right.svg\");\n/* harmony import */ var _arrow_right_svg__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_arrow_right_svg__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _follow_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./follow.svg */ \"./res/follow.svg\");\n/* harmony import */ var _follow_svg__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_follow_svg__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _more_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./more.svg */ \"./res/more.svg\");\n/* harmony import */ var _more_svg__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_more_svg__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _share_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./share.svg */ \"./res/share.svg\");\n/* harmony import */ var _share_svg__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_share_svg__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _top_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./top.svg */ \"./res/top.svg\");\n/* harmony import */ var _top_svg__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_top_svg__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _shop_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./shop.svg */ \"./res/shop.svg\");\n/* harmony import */ var _shop_svg__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_shop_svg__WEBPACK_IMPORTED_MODULE_6__);\n\n\n\n\n\n\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  arrow_left: _arrow_left_svg__WEBPACK_IMPORTED_MODULE_0___default.a,\n  arrow_right: _arrow_right_svg__WEBPACK_IMPORTED_MODULE_1___default.a,\n  follow: _follow_svg__WEBPACK_IMPORTED_MODULE_2___default.a,\n  more: _more_svg__WEBPACK_IMPORTED_MODULE_3___default.a,\n  share: _share_svg__WEBPACK_IMPORTED_MODULE_4___default.a,\n  top: _top_svg__WEBPACK_IMPORTED_MODULE_5___default.a,\n  shop: _shop_svg__WEBPACK_IMPORTED_MODULE_6___default.a\n});\n\n//# sourceURL=webpack:///./res/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/svg-baker-runtime/browser-symbol.js */ \"./node_modules/svg-baker-runtime/browser-symbol.js\");\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/svg-sprite-loader/runtime/browser-sprite.build.js */ \"./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js\");\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\nvar symbol = new _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default.a({\n  \"id\": \"arrow_left\",\n  \"use\": \"arrow_left-usage\",\n  \"viewBox\": \"0 0 1024 1024\",\n  \"content\": \"<symbol class=\\\"icon\\\" viewBox=\\\"0 0 1024 1024\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" xmlns:xlink=\\\"http://www.w3.org/1999/xlink\\\" id=\\\"arrow_left\\\">\\n    <defs>\\n        <style type=\\\"text/css\\\"></style>\\n    </defs>\\n    <path d=\\\"M737.9 888.2L361.7 512l376.2-376.2c16.4-16.4 16.4-43.1 0-59.5s-43.1-16.4-59.5 0L295.8 458.9c-14.2 14.2-22 33-22 53.1s7.8 38.9 22 53.1l382.6 382.6c16.4 16.4 43.1 16.4 59.5 0 16.4-16.5 16.4-43.1 0-59.5z\\\" p-id=\\\"1234\\\" />\\n</symbol>\"\n});\nvar result = _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default.a.add(symbol);\n/* harmony default export */ __webpack_exports__[\"default\"] = (symbol);\n\n//# sourceURL=webpack:///./res/icons/arrow_left.svg?");
 
 /***/ }),
 
-/***/ "./res/more.svg":
-/*!**********************!*\
-  !*** ./res/more.svg ***!
-  \**********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ "./res/icons/arrow_right.svg":
+/*!***********************************!*\
+  !*** ./res/icons/arrow_right.svg ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("module.exports = \"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyBjbGFzcz0iaWNvbiIgd2lkdGg9IjIwMHB4IiBoZWlnaHQ9IjIwMC4wMHB4IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgNTEyYzAgNTIuNyA0My42IDk1LjMgOTcuMyA5NS4zIDUzLjcgMCA5Ny4zLTQyLjcgOTcuMy05NS4zIDAtNTIuNy00My42LTk1LjMtOTcuMy05NS4zQzQzLjYgNDE2LjYgMCA0NTkuMyAwIDUxMnpNNDE0LjcgNTEyYzAgNTIuNyA0My42IDk1LjMgOTcuMyA5NS4zIDUzLjcgMCA5Ny4zLTQyLjcgOTcuMy05NS4zIDAtNTIuNy00My42LTk1LjMtOTcuMy05NS4zLTUzLjctMC4xLTk3LjMgNDIuNi05Ny4zIDk1LjN6TTgyOS40IDUxMmMwIDUyLjcgNDMuNiA5NS4zIDk3LjMgOTUuMyA1My43IDAgOTcuMy00Mi43IDk3LjMtOTUuMyAwLTUyLjctNDMuNi05NS4zLTk3LjMtOTUuMy01My43LTAuMS05Ny4zIDQyLjYtOTcuMyA5NS4zeiIgZmlsbD0iIzE5MTkxOSIgLz48L3N2Zz4=\"\n\n//# sourceURL=webpack:///./res/more.svg?");
-
-/***/ }),
-
-/***/ "./res/share.svg":
-/*!***********************!*\
-  !*** ./res/share.svg ***!
-  \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = \"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyBjbGFzcz0iaWNvbiIgd2lkdGg9IjIwMHB4IiBoZWlnaHQ9IjIwMC4wMHB4IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTg2OC4xNzM5MTMgNzE4LjcwODA3NWMtNDQuNTIxNzM5IDAtODkuMDQzNDc4IDE5LjA4MDc0NS0xMTQuNDg0NDcyIDU3LjI0MjIzNkwzMDIuMTExODAxIDU0Ni45ODEzNjZjMC0xMi43MjA0OTcgNi4zNjAyNDgtMjUuNDQwOTk0IDYuMzYwMjQ4LTM4LjE2MTQ5MSAwLTEyLjcyMDQ5NyAwLTI1LjQ0MDk5NC02LjM2MDI0OC0zOC4xNjE0OTFsNDUxLjU3NzY0LTIyOC45Njg5NDRjMjUuNDQwOTk0IDM4LjE2MTQ5MSA2OS45NjI3MzMgNTcuMjQyMjM2IDExNC40ODQ0NzIgNTcuMjQyMjM2IDgyLjY4MzIzIDAgMTUyLjY0NTk2My02OS45NjI3MzMgMTUyLjY0NTk2My0xNTIuNjQ1OTYzQzEwMjAuODE5ODc2IDY5Ljk2MjczMyA5NTAuODU3MTQzIDAgODY4LjE3MzkxMyAwcy0xNTIuNjQ1OTYzIDY5Ljk2MjczMy0xNTIuNjQ1OTYzIDE1Mi42NDU5NjNjMCAxMi43MjA0OTcgMCAyNS40NDA5OTQgNi4zNjAyNDggMzguMTYxNDkxTDI3MC4zMTA1NTkgNDEzLjQxNjE0OUMyNDQuODY5NTY1IDM4MS42MTQ5MDcgMjAwLjM0NzgyNiAzNTYuMTczOTEzIDE1NS44MjYwODcgMzU2LjE3MzkxMyA3My4xNDI4NTcgMzU2LjE3MzkxMyAzLjE4MDEyNCA0MjYuMTM2NjQ2IDMuMTgwMTI0IDUwOC44MTk4NzZzNjkuOTYyNzMzIDE1Mi42NDU5NjMgMTUyLjY0NTk2MyAxNTIuNjQ1OTYzYzQ0LjUyMTczOSAwIDg5LjA0MzQ3OC0xOS4wODA3NDUgMTE0LjQ4NDQ3Mi01Ny4yNDIyMzZsNDUxLjU3NzY0IDIyOC45Njg5NDRjMCAxMi43MjA0OTctNi4zNjAyNDggMjUuNDQwOTk0LTYuMzYwMjQ4IDM4LjE2MTQ5MSAwIDgyLjY4MzIzIDY5Ljk2MjczMyAxNTIuNjQ1OTYzIDE1Mi42NDU5NjMgMTUyLjY0NTk2M3MxNTIuNjQ1OTYzLTY5Ljk2MjczMyAxNTIuNjQ1OTYzLTE1Mi42NDU5NjNDMTAyMC44MTk4NzYgNzgyLjMxMDU1OSA5NTAuODU3MTQzIDcxOC43MDgwNzUgODY4LjE3MzkxMyA3MTguNzA4MDc1ek04NjguMTczOTEzIDYzLjYwMjQ4NEM5MTkuMDU1OTAxIDYzLjYwMjQ4NCA5NTcuMjE3MzkxIDEwMS43NjM5NzUgOTU3LjIxNzM5MSAxNTIuNjQ1OTYzcy0zOC4xNjE0OTEgODkuMDQzNDc4LTg5LjA0MzQ3OCA4OS4wNDM0NzhjLTMxLjgwMTI0MiAwLTYzLjYwMjQ4NC0xOS4wODA3NDUtNzYuMzIyOTgxLTUwLjg4MTk4OCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMC02LjM2MDI0OC0xMi43MjA0OTctNi4zNjAyNDgtMjUuNDQwOTk0LTYuMzYwMjQ4LTM4LjE2MTQ5MUM3ODUuNDkwNjgzIDEwMS43NjM5NzUgODIzLjY1MjE3NCA2My42MDI0ODQgODY4LjE3MzkxMyA2My42MDI0ODR6TTE1NS44MjYwODcgNTk3Ljg2MzM1NEMxMDQuOTQ0MDk5IDU5Ny44NjMzNTQgNjYuNzgyNjA5IDU1OS43MDE4NjMgNjYuNzgyNjA5IDUwOC44MTk4NzZjMC01MC44ODE5ODggMzguMTYxNDkxLTg5LjA0MzQ3OCA4OS4wNDM0NzgtODkuMDQzNDc4IDMxLjgwMTI0MiAwIDYzLjYwMjQ4NCAxOS4wODA3NDUgNzYuMzIyOTgxIDUwLjg4MTk4OCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMEMyMzguNTA5MzE3IDQ4My4zNzg4ODIgMjQ0Ljg2OTU2NSA0OTYuMDk5Mzc5IDI0NC44Njk1NjUgNTA4LjgxOTg3NmMwIDEyLjcyMDQ5NyAwIDI1LjQ0MDk5NC02LjM2MDI0OCAzOC4xNjE0OTEgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDBDMjE5LjQyODU3MSA1NzguNzgyNjA5IDE4Ny42MjczMjkgNTk3Ljg2MzM1NCAxNTUuODI2MDg3IDU5Ny44NjMzNTR6TTg2OC4xNzM5MTMgOTU0LjAzNzI2N2MtNTAuODgxOTg4IDAtODkuMDQzNDc4LTM4LjE2MTQ5MS04OS4wNDM0NzgtODkuMDQzNDc4IDAtMTIuNzIwNDk3IDAtMjUuNDQwOTk0IDYuMzYwMjQ4LTM4LjE2MTQ5MSAxMi43MjA0OTctMzEuODAxMjQyIDQ0LjUyMTczOS01MC44ODE5ODggNzYuMzIyOTgxLTUwLjg4MTk4OCA1MC44ODE5ODggMCA4OS4wNDM0NzggMzguMTYxNDkxIDg5LjA0MzQ3OCA4OS4wNDM0NzhDOTU3LjIxNzM5MSA5MTUuODc1Nzc2IDkxOS4wNTU5MDEgOTU0LjAzNzI2NyA4NjguMTczOTEzIDk1NC4wMzcyNjd6IiAvPjwvc3ZnPg==\"\n\n//# sourceURL=webpack:///./res/share.svg?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/svg-baker-runtime/browser-symbol.js */ \"./node_modules/svg-baker-runtime/browser-symbol.js\");\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/svg-sprite-loader/runtime/browser-sprite.build.js */ \"./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js\");\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\nvar symbol = new _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default.a({\n  \"id\": \"arrow_right\",\n  \"use\": \"arrow_right-usage\",\n  \"viewBox\": \"0 0 1024 1024\",\n  \"content\": \"<symbol class=\\\"icon\\\" viewBox=\\\"0 0 1024 1024\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" xmlns:xlink=\\\"http://www.w3.org/1999/xlink\\\" id=\\\"arrow_right\\\">\\n    <defs>\\n        <style type=\\\"text/css\\\"></style>\\n    </defs>\\n    <path d=\\\"M286.1 135.8L662.3 512 286.1 888.2c-16.4 16.4-16.4 43.1 0 59.5s43.1 16.4 59.5 0l382.6-382.6c14.2-14.2 22-33 22-53.1s-7.8-38.9-22-53.1L345.6 76.3c-16.4-16.4-43.1-16.4-59.5 0-16.4 16.5-16.4 43.1 0 59.5z\\\" p-id=\\\"1116\\\" />\\n</symbol>\"\n});\nvar result = _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default.a.add(symbol);\n/* harmony default export */ __webpack_exports__[\"default\"] = (symbol);\n\n//# sourceURL=webpack:///./res/icons/arrow_right.svg?");
 
 /***/ }),
 
-/***/ "./res/shop.svg":
-/*!**********************!*\
-  !*** ./res/shop.svg ***!
-  \**********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ "./res/icons/follow.svg":
+/*!******************************!*\
+  !*** ./res/icons/follow.svg ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("module.exports = \"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTcyMDA4ODM3MzgwIiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjIxMDAiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNMTYwIDE0NGw3MDQgMGMyNi41MTIgMCA0OC0yMS40ODggNDgtNDhzLTIxLjQ4OC00OC00OC00OEwxNjAgNDhDMTMzLjQ4OCA0OCAxMTIgNjkuNDg4IDExMiA5NlMxMzMuNDg4IDE0NCAxNjAgMTQ0ek05MzQgMTkyIDkwIDE5MiAwIDQzMmMwIDcwLjY4OCA1Ny4zMTIgMTI4IDEyOCAxMjhzMTI4LTU3LjMxMiAxMjgtMTI4YzAgNzAuNjg4IDU3LjMxMiAxMjggMTI4IDEyOHMxMjgtNTcuMzEyIDEyOC0xMjhjMCA3MC42ODggNTcuMzEyIDEyOCAxMjggMTI4czEyOC01Ny4zMTIgMTI4LTEyOGMwIDcwLjY4OCA1Ny4zMTIgMTI4IDEyOCAxMjhzMTI4LTU3LjMxMiAxMjgtMTI4TDkzNCAxOTJ6TTg4MCA2MDcuMjMyIDg4MCA2MDcuMmMtNC41OTItMC40MTYtOS4xMi0xLjEwNC0xMy42LTEuODcyLTAuOTc2LTAuMTYtMS45NjgtMC4yNC0yLjkyOC0wLjQxNi0yLjA4LTAuMzY4LTQuMDk2LTAuOTc2LTYuMTQ0LTEuNDRDODQ4LjY3MiA2MDEuNDg4IDg0MC4xNiA1OTkuMDI0IDgzMiA1OTUuODRMODMyIDgzMiAxOTIgODMyIDE5MiA1OTUuODI0Yy04LjE2IDMuMi0xNi42NzIgNS42NjQtMjUuMzc2IDcuNjQ4LTIuMDQ4IDAuNDY0LTQuMDQ4IDEuMDQtNi4xMTIgMS40NC0wLjk2IDAuMTkyLTEuOTUyIDAuMjcyLTIuOTI4IDAuNDMyQzE1My4xMDQgNjA2LjA4IDE0OC41OTIgNjA2Ljc4NCAxNDQgNjA3LjJsMCAwLjAzMkMxMzguNzM2IDYwNy43MTIgMTMzLjQwOCA2MDggMTI4IDYwOGMtMTAuOTQ0IDAtMjEuNjE2LTEuMTItMzItMy4wMjRMOTYgOTI4YzAgMjYuNTEyIDIxLjQ4OCA0OCA0OCA0OGw3MzYgMGMyNi41MTIgMCA0OC0yMS40ODggNDgtNDhMOTI4IDYwNC45NzZDOTE3LjYzMiA2MDYuODggOTA2Ljk0NCA2MDggODk2IDYwOCA4OTAuNjA4IDYwOCA4ODUuMjY0IDYwNy43MTIgODgwIDYwNy4yMzJ6IiBwLWlkPSIyMTAxIj48L3BhdGg+PC9zdmc+\"\n\n//# sourceURL=webpack:///./res/shop.svg?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/svg-baker-runtime/browser-symbol.js */ \"./node_modules/svg-baker-runtime/browser-symbol.js\");\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/svg-sprite-loader/runtime/browser-sprite.build.js */ \"./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js\");\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\nvar symbol = new _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default.a({\n  \"id\": \"follow\",\n  \"use\": \"follow-usage\",\n  \"viewBox\": \"0 0 1024 1024\",\n  \"content\": \"<symbol class=\\\"icon\\\" viewBox=\\\"0 0 1024 1024\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" id=\\\"follow\\\">\\n    <path d=\\\"M823.778374 634.059963c0 0-84.184331-11.95631-95.757924-13.626345-0.815575-0.12689-1.350764-0.203638-1.37737-0.203638-6.195096-1.388627-11.30651-5.290493-14.352893-10.516518-0.102331-0.2415-2.651386-5.238304-6.374174-12.606109-11.764951-23.352871-35.806507-71.078849-35.806507-71.078849-2.969635-6.526647-9.624195-11.089569-17.349133-11.089569-7.800663 0-14.468526 4.562922-17.386996 11.089569 0 0-3.352351 6.590092-8.05649 15.933901-12.019755 23.76117-33.282011 65.813938-33.359782 65.980737-2.868327 6.181793-8.552793 10.822486-15.513322 12.262278-0.268106 0.051165-97.337909 13.779841-97.337909 13.779841-8.350179 1.976004-14.544251 9.268084-14.544251 18.037818 0 5.009084 2.026146 9.547447 5.353938 12.887518 0 0 68.771293 65.571415 69.013817 65.801658 3.836375 3.900843 6.219655 9.16473 6.219655 14.989389 0 1.27504-0.191358 2.536776-0.394996 3.799536-0.051165 0.178055-7.470135 42.487673-12.212136 69.318762-2.167363 12.416797-3.773953 21.517059-3.773953 21.517059s-0.394996 2.550079-0.394996 3.799536c0 10.273994 8.502651 18.585287 19.005866 18.585287 2.549056 0 4.945639-0.509606 7.164167-1.402953 0 0 64.10604-33.039487 82.71691-42.49893 2.995217-1.528819 4.907777-2.49789 5.111414-2.574638 2.549056-1.006933 5.328355-1.593288 8.247848-1.593288 2.868327 0 5.545296 0.574075 8.043187 1.51654 0.229221 0.075725 2.192945 1.070378 5.251607 2.650363 18.764366 9.535167 82.182744 42.385343 82.679048 42.563398 2.231831 0.905626 4.690836 1.440815 7.240915 1.440815 10.504238 0 19.043728-8.311293 19.043728-18.585287 0-0.331551-1.860371-11.218506-4.333702-25.418926-4.92108-28.235065-12.212136-69.944002-12.288884-70.631664-0.075725-0.777713-0.229221-1.543146-0.229221-2.332115 0-5.724375 2.319835-10.912537 6.054903-14.786775 0.140193-0.12689 7.749498-7.394411 17.807574-16.966417 20.421098-19.452028 51.102888-48.656163 51.102888-48.656163l0.2415-0.230244c3.352351-3.365654 5.481851-7.928576 5.481851-13.015432C838.717621 643.302465 832.34447 635.883495 823.778374 634.059963L823.778374 634.059963zM823.778374 634.059963\\\" fill=\\\"#AC0000\\\" />\\n    <path d=\\\"M449.3271 686.528965c-9.292644-9.254781-14.391778-21.530362-14.391778-34.520211 0-22.917966 15.933901-42.664705 38.751582-48.056506 0.943488-0.229221 1.912559-0.407276 2.880607-0.548492 24.805966-3.505847 57.757448-8.18338 78.216409-11.076266l34.087353-67.165726c3.913123-2.051729 7.456832-4.677533 11.217483-6.959505 30.057573-18.36937 55.246255-43.773969 72.837912-74.41892 17.540492-30.54262 27.877931-65.724911 27.877931-103.418394 0-114.980731-93.373621-208.520127-208.111828-208.520127-114.76379 0-208.124108 93.539396-208.124108 208.520127 0 37.693484 10.350742 72.875774 27.89021 103.418394 19.809161 34.519188 48.924269 62.996776 84.234473 81.480756-1.988284 0.407276-4.041036 0.509606-5.991458 1.020236-13.33368 3.365654-25.851784 8.655124-37.84698 15.169491-11.892865 6.462179-22.651906 14.417361-32.951483 22.970154-15.780405 10.771321-30.898731 22.664186-44.691875 36.495192-52.722782 52.78725-83.775009 109.881596-89.154529 183.586249-0.127913 1.834788-8.578376 26.02984 26.106588 26.106588l287.169395 0c7.724938-43.8763 14.07353-54.023404 15.436574-61.672618-14.696724-14.008039-64.920592-61.899792-64.920592-61.899792-0.178055-0.178055-0.357134-0.357134-0.535189-0.509606L449.3271 686.529989zM449.3271 686.528965\\\" fill=\\\"#AC0000\\\" />\\n</symbol>\"\n});\nvar result = _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default.a.add(symbol);\n/* harmony default export */ __webpack_exports__[\"default\"] = (symbol);\n\n//# sourceURL=webpack:///./res/icons/follow.svg?");
 
 /***/ }),
 
-/***/ "./res/top.svg":
-/*!*********************!*\
-  !*** ./res/top.svg ***!
-  \*********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ "./res/icons/index.js":
+/*!****************************!*\
+  !*** ./res/icons/index.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("module.exports = \"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyBjbGFzcz0iaWNvbiIgd2lkdGg9IjIwMHB4IiBoZWlnaHQ9IjIwMC4wMHB4IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTgyNS41NjggNTU1LjMyOGwtMjg3LjM5Mi0yODkuMjhDNTMxLjgwOCAyNTkuNjQ4IDUyMy40ODggMjU2LjU3NiA1MTUuMiAyNTYuNjQgNTE0LjA4IDI1Ni41NDQgNTEzLjEyIDI1NiA1MTIgMjU2Yy00LjY3MiAwLTkuMDI0IDEuMDg4LTEzLjAyNCAyLjg4LTQuMDMyIDEuNTM2LTcuODcyIDMuODcyLTExLjEzNiA3LjEzNmwtMjU5LjMyOCAyNTguODhjLTEyLjUxMiAxMi40OC0xMi41NDQgMzIuNzM2LTAuMDMyIDQ1LjI0OCA2LjI0IDYuMjcyIDE0LjQzMiA5LjQwOCAyMi42NTYgOS40MDggOC4xOTIgMCAxNi4zNTItMy4xMzYgMjIuNjI0LTkuMzQ0TDQ4MCAzNjQuMjg4IDQ4MCA5MjhjMCAxNy42OTYgMTQuMzM2IDMyIDMyIDMyczMyLTE0LjMwNCAzMi0zMkw1NDQgMzYyLjcybDIzNi4xOTIgMjM3LjcyOGM2LjI0IDYuMjcyIDE0LjQ5NiA5LjQ0IDIyLjY4OCA5LjQ0czE2LjMyLTMuMTA0IDIyLjU2LTkuMzEyQzgzOC4wMTYgNTg4LjEyOCA4MzguMDQ4IDU2Ny44NCA4MjUuNTY4IDU1NS4zMjh6TTg2NCAxOTIgMTYwIDE5MkMxNDIuMzM2IDE5MiAxMjggMTc3LjY2NCAxMjggMTYwczE0LjMzNi0zMiAzMi0zMmw3MDQgMGMxNy42OTYgMCAzMiAxNC4zMzYgMzIgMzJTODgxLjY5NiAxOTIgODY0IDE5MnoiIC8+PC9zdmc+\"\n\n//# sourceURL=webpack:///./res/top.svg?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _arrow_left_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrow_left.svg */ \"./res/icons/arrow_left.svg\");\n/* harmony import */ var _arrow_right_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./arrow_right.svg */ \"./res/icons/arrow_right.svg\");\n/* harmony import */ var _follow_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./follow.svg */ \"./res/icons/follow.svg\");\n/* harmony import */ var _more_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./more.svg */ \"./res/icons/more.svg\");\n/* harmony import */ var _share_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./share.svg */ \"./res/icons/share.svg\");\n/* harmony import */ var _top_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./top.svg */ \"./res/icons/top.svg\");\n/* harmony import */ var _shop_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./shop.svg */ \"./res/icons/shop.svg\");\n\n\n\n\n\n\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  arrow_left: _arrow_left_svg__WEBPACK_IMPORTED_MODULE_0__[\"default\"],\n  arrow_right: _arrow_right_svg__WEBPACK_IMPORTED_MODULE_1__[\"default\"],\n  follow: _follow_svg__WEBPACK_IMPORTED_MODULE_2__[\"default\"],\n  more: _more_svg__WEBPACK_IMPORTED_MODULE_3__[\"default\"],\n  share: _share_svg__WEBPACK_IMPORTED_MODULE_4__[\"default\"],\n  top: _top_svg__WEBPACK_IMPORTED_MODULE_5__[\"default\"],\n  shop: _shop_svg__WEBPACK_IMPORTED_MODULE_6__[\"default\"]\n});\n\n//# sourceURL=webpack:///./res/icons/index.js?");
+
+/***/ }),
+
+/***/ "./res/icons/more.svg":
+/*!****************************!*\
+  !*** ./res/icons/more.svg ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/svg-baker-runtime/browser-symbol.js */ \"./node_modules/svg-baker-runtime/browser-symbol.js\");\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/svg-sprite-loader/runtime/browser-sprite.build.js */ \"./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js\");\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\nvar symbol = new _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default.a({\n  \"id\": \"more\",\n  \"use\": \"more-usage\",\n  \"viewBox\": \"0 0 1024 1024\",\n  \"content\": \"<symbol class=\\\"icon\\\" viewBox=\\\"0 0 1024 1024\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" id=\\\"more\\\"><path d=\\\"M0 512c0 52.7 43.6 95.3 97.3 95.3 53.7 0 97.3-42.7 97.3-95.3 0-52.7-43.6-95.3-97.3-95.3C43.6 416.6 0 459.3 0 512zM414.7 512c0 52.7 43.6 95.3 97.3 95.3 53.7 0 97.3-42.7 97.3-95.3 0-52.7-43.6-95.3-97.3-95.3-53.7-0.1-97.3 42.6-97.3 95.3zM829.4 512c0 52.7 43.6 95.3 97.3 95.3 53.7 0 97.3-42.7 97.3-95.3 0-52.7-43.6-95.3-97.3-95.3-53.7-0.1-97.3 42.6-97.3 95.3z\\\" fill=\\\"#191919\\\" /></symbol>\"\n});\nvar result = _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default.a.add(symbol);\n/* harmony default export */ __webpack_exports__[\"default\"] = (symbol);\n\n//# sourceURL=webpack:///./res/icons/more.svg?");
+
+/***/ }),
+
+/***/ "./res/icons/share.svg":
+/*!*****************************!*\
+  !*** ./res/icons/share.svg ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/svg-baker-runtime/browser-symbol.js */ \"./node_modules/svg-baker-runtime/browser-symbol.js\");\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/svg-sprite-loader/runtime/browser-sprite.build.js */ \"./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js\");\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\nvar symbol = new _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default.a({\n  \"id\": \"share\",\n  \"use\": \"share-usage\",\n  \"viewBox\": \"0 0 1024 1024\",\n  \"content\": \"<symbol class=\\\"icon\\\" viewBox=\\\"0 0 1024 1024\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" id=\\\"share\\\"><path d=\\\"M868.173913 718.708075c-44.521739 0-89.043478 19.080745-114.484472 57.242236L302.111801 546.981366c0-12.720497 6.360248-25.440994 6.360248-38.161491 0-12.720497 0-25.440994-6.360248-38.161491l451.57764-228.968944c25.440994 38.161491 69.962733 57.242236 114.484472 57.242236 82.68323 0 152.645963-69.962733 152.645963-152.645963C1020.819876 69.962733 950.857143 0 868.173913 0s-152.645963 69.962733-152.645963 152.645963c0 12.720497 0 25.440994 6.360248 38.161491L270.310559 413.416149C244.869565 381.614907 200.347826 356.173913 155.826087 356.173913 73.142857 356.173913 3.180124 426.136646 3.180124 508.819876s69.962733 152.645963 152.645963 152.645963c44.521739 0 89.043478-19.080745 114.484472-57.242236l451.57764 228.968944c0 12.720497-6.360248 25.440994-6.360248 38.161491 0 82.68323 69.962733 152.645963 152.645963 152.645963s152.645963-69.962733 152.645963-152.645963C1020.819876 782.310559 950.857143 718.708075 868.173913 718.708075zM868.173913 63.602484C919.055901 63.602484 957.217391 101.763975 957.217391 152.645963s-38.161491 89.043478-89.043478 89.043478c-31.801242 0-63.602484-19.080745-76.322981-50.881988 0 0 0 0 0 0 0 0 0 0 0 0-6.360248-12.720497-6.360248-25.440994-6.360248-38.161491C785.490683 101.763975 823.652174 63.602484 868.173913 63.602484zM155.826087 597.863354C104.944099 597.863354 66.782609 559.701863 66.782609 508.819876c0-50.881988 38.161491-89.043478 89.043478-89.043478 31.801242 0 63.602484 19.080745 76.322981 50.881988 0 0 0 0 0 0 0 0 0 0 0 0C238.509317 483.378882 244.869565 496.099379 244.869565 508.819876c0 12.720497 0 25.440994-6.360248 38.161491 0 0 0 0 0 0 0 0 0 0 0 0C219.428571 578.782609 187.627329 597.863354 155.826087 597.863354zM868.173913 954.037267c-50.881988 0-89.043478-38.161491-89.043478-89.043478 0-12.720497 0-25.440994 6.360248-38.161491 12.720497-31.801242 44.521739-50.881988 76.322981-50.881988 50.881988 0 89.043478 38.161491 89.043478 89.043478C957.217391 915.875776 919.055901 954.037267 868.173913 954.037267z\\\" /></symbol>\"\n});\nvar result = _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default.a.add(symbol);\n/* harmony default export */ __webpack_exports__[\"default\"] = (symbol);\n\n//# sourceURL=webpack:///./res/icons/share.svg?");
+
+/***/ }),
+
+/***/ "./res/icons/shop.svg":
+/*!****************************!*\
+  !*** ./res/icons/shop.svg ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/svg-baker-runtime/browser-symbol.js */ \"./node_modules/svg-baker-runtime/browser-symbol.js\");\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/svg-sprite-loader/runtime/browser-sprite.build.js */ \"./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js\");\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\nvar symbol = new _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default.a({\n  \"id\": \"shop\",\n  \"use\": \"shop-usage\",\n  \"viewBox\": \"0 0 1024 1024\",\n  \"content\": \"<symbol class=\\\"icon\\\" viewBox=\\\"0 0 1024 1024\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" xmlns:xlink=\\\"http://www.w3.org/1999/xlink\\\" id=\\\"shop\\\"><defs><style type=\\\"text/css\\\"></style></defs><path d=\\\"M160 144l704 0c26.512 0 48-21.488 48-48s-21.488-48-48-48L160 48C133.488 48 112 69.488 112 96S133.488 144 160 144zM934 192 90 192 0 432c0 70.688 57.312 128 128 128s128-57.312 128-128c0 70.688 57.312 128 128 128s128-57.312 128-128c0 70.688 57.312 128 128 128s128-57.312 128-128c0 70.688 57.312 128 128 128s128-57.312 128-128L934 192zM880 607.232 880 607.2c-4.592-0.416-9.12-1.104-13.6-1.872-0.976-0.16-1.968-0.24-2.928-0.416-2.08-0.368-4.096-0.976-6.144-1.44C848.672 601.488 840.16 599.024 832 595.84L832 832 192 832 192 595.824c-8.16 3.2-16.672 5.664-25.376 7.648-2.048 0.464-4.048 1.04-6.112 1.44-0.96 0.192-1.952 0.272-2.928 0.432C153.104 606.08 148.592 606.784 144 607.2l0 0.032C138.736 607.712 133.408 608 128 608c-10.944 0-21.616-1.12-32-3.024L96 928c0 26.512 21.488 48 48 48l736 0c26.512 0 48-21.488 48-48L928 604.976C917.632 606.88 906.944 608 896 608 890.608 608 885.264 607.712 880 607.232z\\\" p-id=\\\"2101\\\" /></symbol>\"\n});\nvar result = _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default.a.add(symbol);\n/* harmony default export */ __webpack_exports__[\"default\"] = (symbol);\n\n//# sourceURL=webpack:///./res/icons/shop.svg?");
+
+/***/ }),
+
+/***/ "./res/icons/top.svg":
+/*!***************************!*\
+  !*** ./res/icons/top.svg ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/svg-baker-runtime/browser-symbol.js */ \"./node_modules/svg-baker-runtime/browser-symbol.js\");\n/* harmony import */ var _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/svg-sprite-loader/runtime/browser-sprite.build.js */ \"./node_modules/svg-sprite-loader/runtime/browser-sprite.build.js\");\n/* harmony import */ var _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\nvar symbol = new _node_modules_svg_baker_runtime_browser_symbol_js__WEBPACK_IMPORTED_MODULE_0___default.a({\n  \"id\": \"top\",\n  \"use\": \"top-usage\",\n  \"viewBox\": \"0 0 1024 1024\",\n  \"content\": \"<symbol class=\\\"icon\\\" viewBox=\\\"0 0 1024 1024\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\" id=\\\"top\\\"><path d=\\\"M825.568 555.328l-287.392-289.28C531.808 259.648 523.488 256.576 515.2 256.64 514.08 256.544 513.12 256 512 256c-4.672 0-9.024 1.088-13.024 2.88-4.032 1.536-7.872 3.872-11.136 7.136l-259.328 258.88c-12.512 12.48-12.544 32.736-0.032 45.248 6.24 6.272 14.432 9.408 22.656 9.408 8.192 0 16.352-3.136 22.624-9.344L480 364.288 480 928c0 17.696 14.336 32 32 32s32-14.304 32-32L544 362.72l236.192 237.728c6.24 6.272 14.496 9.44 22.688 9.44s16.32-3.104 22.56-9.312C838.016 588.128 838.048 567.84 825.568 555.328zM864 192 160 192C142.336 192 128 177.664 128 160s14.336-32 32-32l704 0c17.696 0 32 14.336 32 32S881.696 192 864 192z\\\" /></symbol>\"\n});\nvar result = _node_modules_svg_sprite_loader_runtime_browser_sprite_build_js__WEBPACK_IMPORTED_MODULE_1___default.a.add(symbol);\n/* harmony default export */ __webpack_exports__[\"default\"] = (symbol);\n\n//# sourceURL=webpack:///./res/icons/top.svg?");
 
 /***/ }),
 
@@ -4900,7 +4219,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return RecommendItem; });\n/* harmony import */ var _BaseComponent_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../BaseComponent.js */ \"./src/BaseComponent.js\");\n/* harmony import */ var _RecommendItem_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RecommendItem.scss */ \"./src/items/RecommendItem.scss\");\n/* harmony import */ var _RecommendItem_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_RecommendItem_scss__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _lib_create__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/create */ \"./lib/create.js\");\n/* harmony import */ var _res__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../res */ \"./res/index.js\");\nfunction _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\n\n\n\n\n\nvar RecommendItem =\n/*#__PURE__*/\nfunction (_Component) {\n  _inherits(RecommendItem, _Component);\n\n  function RecommendItem(config) {\n    var _this;\n\n    _classCallCheck(this, RecommendItem);\n\n    _this = _possibleConstructorReturn(this, _getPrototypeOf(RecommendItem).call(this, config));\n\n    _this.didCreate();\n\n    return _this;\n  }\n\n  _createClass(RecommendItem, [{\n    key: \"didCreate\",\n    value: function didCreate() {\n      var content = this.render();\n      if (!content) return;\n      content.appendTo(this.root);\n    }\n  }, {\n    key: \"render\",\n    value: function render() {\n      var data = this.property[\"data\"] || \"\";\n      if (!data) return null;\n      console.log(data);\n      var name = data.name,\n          promotion = data.promotion,\n          icon = data.icon,\n          items = data.items;\n      var header = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemHeaderContainer\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"left\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemLogo\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: icon,\n        width: \"53\",\n        height: \"53\",\n        className: \"icon\"\n      })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemTitle\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemName\"\n      }, name), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        style: \"margin-top:8px;\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"span\", {\n        className: \"itemType\"\n      }, \"\\u5929\\u732B\")))), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemEntry\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"span\", {\n        className: \"entryName\"\n      }, \"\\u8FDB\\u5E97\"), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: '../../res/arrow_right.svg',\n        width: \"7\",\n        height: \"14\"\n      })));\n      var title = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", null, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", null, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: \"\"\n      })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"span\", {\n        className: \"itemPromotion\"\n      }, \"\\u597D\\u5E97\\u541B\\uFF1A\\u8BE5\\u5E97\\u5DF2\\u88AB1.3\\u4E07\\u4EBA\\u5173\\u6CE8\\uFF0C\\u5FEB\\u6765\\u5173\\u6CE8\\u5427!\"));\n      var content = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemContent\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"cImg cFirst\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: items[0].image\n      })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"cImg\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: items[1].image\n      })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"cImg\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: items[1].image\n      })));\n      var footer = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemFooter\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"span\", null, \"\\u76F8\\u4F3C\\u597D\\u5E97\", Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: \"\"\n      })));\n      return Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemContainer\"\n      }, header, title, content, footer);\n    }\n  }, {\n    key: \"setAttribute\",\n    value: function setAttribute(name, value) {\n      if (name == \"style\") {\n        this.root.setAttribute('style', value);\n      }\n\n      if (name == \"data\") {\n        this.property[name] = value;\n        this.root.innerHTML = \"\";\n        this.render().appendTo(this.root);\n      }\n\n      return this.property[name] = value;\n    }\n  }, {\n    key: \"getAttribute\",\n    value: function getAttribute(name) {\n      if (name == 'style') {\n        return this.root.getAttribute(name);\n      }\n\n      return this.property[name];\n    }\n  }]);\n\n  return RecommendItem;\n}(_BaseComponent_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"]);\n\n\n\n//# sourceURL=webpack:///./src/items/RecommendItem.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return RecommendItem; });\n/* harmony import */ var _BaseComponent_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../BaseComponent.js */ \"./src/BaseComponent.js\");\n/* harmony import */ var _RecommendItem_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RecommendItem.scss */ \"./src/items/RecommendItem.scss\");\n/* harmony import */ var _RecommendItem_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_RecommendItem_scss__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _lib_create__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/create */ \"./lib/create.js\");\nfunction _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\n\n\n\n\nvar RecommendItem =\n/*#__PURE__*/\nfunction (_Component) {\n  _inherits(RecommendItem, _Component);\n\n  function RecommendItem(config) {\n    var _this;\n\n    _classCallCheck(this, RecommendItem);\n\n    _this = _possibleConstructorReturn(this, _getPrototypeOf(RecommendItem).call(this, config));\n\n    _this.didCreate();\n\n    return _this;\n  }\n\n  _createClass(RecommendItem, [{\n    key: \"didCreate\",\n    value: function didCreate() {\n      var content = this.render();\n      if (!content) return;\n      content.appendTo(this.root);\n    }\n  }, {\n    key: \"render\",\n    value: function render() {\n      var data = this.property[\"data\"] || \"\";\n      if (!data) return null;\n      var name = data.name,\n          promotion = data.promotion,\n          icon = data.icon,\n          items = data.items;\n      console.log(data);\n      var header = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemHeaderContainer\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"left\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemLogo\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: icon,\n        width: \"52\",\n        height: \"52\",\n        className: \"icon\"\n      })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemTitle\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemName\"\n      }, name), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        style: \"margin-top:8px;\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"span\", {\n        className: \"itemType\"\n      }, \"\\u5929\\u732B\")))), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemEntry\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"span\", {\n        className: \"entryName\"\n      }, \"\\u8FDB\\u5E97\"), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: '../res/arrow_right.svg',\n        width: \"14\",\n        height: \"28\",\n        className: \"arrow_right\"\n      })));\n      var title = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"titleContainer\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"shop\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: \"../res/shop.svg\",\n        width: \"14\",\n        height: \"14\"\n      })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemPromotion\"\n      }, \"\\u597D\\u5E97\\u541B\\uFF1A\\u8BE5\\u5E97\\u5DF2\\u88AB1.3\\u4E07\\u4EBA\\u5173\\u6CE8\\uFF0C\\u5FEB\\u6765\\u5173\\u6CE8\\u5427!\"));\n      var content = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemContent\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"left\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        className: \"cImg\",\n        src: items[0].image,\n        width: \"100%\",\n        height: \"100%\"\n      })), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"right\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        className: \"cImg rightTop\",\n        src: items[1].image,\n        width: \"100%\",\n        height: \"48%\"\n      }), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        className: \"cImg\",\n        src: items[2].image,\n        width: \"100%\",\n        height: \"48%\"\n      })));\n      var footer = Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemFooter\"\n      }, Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"span\", {\n        className: \"footerName\"\n      }, \"\\u76F8\\u4F3C\\u597D\\u5E97\"), Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"img\", {\n        src: \"../res/arrow_right.svg\",\n        width: \"14\",\n        height: \"26\"\n      }));\n      return Object(_lib_create__WEBPACK_IMPORTED_MODULE_2__[\"create\"])(\"div\", {\n        className: \"itemContainer\"\n      }, header, title, content, footer);\n    }\n  }, {\n    key: \"setAttribute\",\n    value: function setAttribute(name, value) {\n      if (name == \"style\") {\n        this.root.setAttribute('style', value);\n      }\n\n      if (name == \"data\") {\n        this.property[name] = value;\n        this.root.innerHTML = \"\";\n        this.render().appendTo(this.root);\n      }\n\n      return this.property[name] = value;\n    }\n  }, {\n    key: \"getAttribute\",\n    value: function getAttribute(name) {\n      if (name == 'style') {\n        return this.root.getAttribute(name);\n      }\n\n      return this.property[name];\n    }\n  }]);\n\n  return RecommendItem;\n}(_BaseComponent_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"]);\n\n\n\n//# sourceURL=webpack:///./src/items/RecommendItem.js?");
 
 /***/ }),
 
@@ -4912,6 +4231,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack:///./src/items/RecommendItem.scss?");
+
+/***/ }),
+
+/***/ 0:
+/*!***************************************!*\
+  !*** multi babel-polyfill ./index.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("__webpack_require__(/*! babel-polyfill */\"./node_modules/babel-polyfill/lib/index.js\");\nmodule.exports = __webpack_require__(/*! ./index.js */\"./index.js\");\n\n\n//# sourceURL=webpack:///multi_babel-polyfill_./index.js?");
 
 /***/ })
 
