@@ -1,6 +1,7 @@
 import Component from '../BaseComponent.js'
 import "./RecommendItem.scss"
 import {create} from '../../lib/create'
+import Fragment from '../Fragment.js'
 
 export default class RecommendItem extends Component {
     constructor(config){
@@ -65,18 +66,21 @@ export default class RecommendItem extends Component {
         );
 
         return (
-            <div className="itemContainer">
+            <Fragment>
                 {header}
                 {title}
                 {content}
                 {footer}
-            </div>
+            </Fragment>
         )
     }
 
     setAttribute(name, value) {
         if (name == "style") {
-            this.root.setAttribute('style', value)
+            return this.root.setAttribute('style', value)
+        }
+        if (name == 'className') {
+            return this.root.className = value;
         }
         if (name == "data") {
             this.property[name] = value;
@@ -89,6 +93,9 @@ export default class RecommendItem extends Component {
     getAttribute(name) {
         if (name == 'style') {
             return this.root.getAttribute(name)
+        }
+        if (name == 'className') {
+            return this.root.className;
         }
         return this.property[name];
     }

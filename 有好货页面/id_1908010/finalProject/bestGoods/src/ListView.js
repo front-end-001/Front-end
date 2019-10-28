@@ -3,6 +3,8 @@ import "./ListView.scss"
 import {create} from '../lib/create'
 import Div from './Div.js'
 import RecmmendItem from './items/RecommendItem'
+import Fragment from './Fragment.js'
+import Divider from './widgets/Divider.js'
 
 export default class ListView extends Component {
     constructor(config) {
@@ -25,11 +27,16 @@ export default class ListView extends Component {
         console.log(data["mostFavourateShops"])
         console.log(data["recommendedShops"])
         return (
-            <div>
-                {data["recommendedShops"].map(item => (
-                    <RecmmendItem data={item}/>  
-                ))}
-            </div>
+            <Fragment>
+                {data["recommendedShops"].map(item => {
+                    return (
+                        <Fragment>
+                            <RecmmendItem data={item} className="itemContainer"/>  
+                            <Divider ></Divider>
+                        </Fragment>
+                    )}
+                )}
+            </Fragment>
         )
     }
 

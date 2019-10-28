@@ -1,7 +1,7 @@
 import Component from './BaseComponent'
 import './TabView.scss'
 import {enableGesture} from '../lib/gesture.js'
-import { STATE_SYMBOL } from '../lib/consts';
+
 
 export default class TabView extends Component {
     constructor(config){
