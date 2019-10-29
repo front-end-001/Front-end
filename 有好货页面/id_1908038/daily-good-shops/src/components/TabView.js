@@ -159,9 +159,19 @@ export default class TabView {
         header.style.fontSize = "46px";
         header.style.margin = "20px 35px 0 35px";
         header.style.color = "#fff";
+        header.classList.add('tab-header-item');
         this.headerContainer.appendChild(header);
 
         header.addEventListener('click', event => {
+            let array = document.getElementsByClassName('tab-header-item')
+            console.log(array);
+
+            for (let i = 0; i < array.length; i++) {
+                const element = array[i];
+                element.classList.remove('active');
+            }
+
+
             this[STATE_SYMBOL].position = n;
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
                 //2
@@ -174,6 +184,7 @@ export default class TabView {
             }
             // child.setAttribute('style','display:inline-block;');
             child.style.display = 'inline-block';
+            event.target.classList.add('active');
         });
 
         child.appendTo(this.contentContainer);
