@@ -5,6 +5,7 @@ import Div from './Div.js'
 import RecmmendItem from './items/RecommendItem'
 import Fragment from './Fragment.js'
 import Divider from './widgets/Divider.js'
+import FavoriteItem from './items/FavoriteItem.js'
 
 export default class ListView extends Component {
     constructor(config) {
@@ -26,8 +27,17 @@ export default class ListView extends Component {
         console.log(data["focusData"])
         console.log(data["mostFavourateShops"])
         console.log(data["recommendedShops"])
+
         return (
-            <Fragment>
+            <Fragment >
+                <div className="favSection">
+                    <span className="favTitle">超多人收藏的店！</span>
+                    <div className="favContainer">
+                        {data["mostFavourateShops"].map(item => (
+                            <FavoriteItem data={item} className="favItem"></FavoriteItem>
+                        ))}
+                    </div>
+                </div>
                 {data["recommendedShops"].map(item => {
                     return (
                         <Fragment>

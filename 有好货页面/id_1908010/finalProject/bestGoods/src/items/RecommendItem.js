@@ -49,11 +49,11 @@ export default class RecommendItem extends Component {
         let content = (
             <div className="itemContent">
                 <div className="left">
-                    <img className="cImg" src={items[0].image} width="100%" height="100%"></img>
+                    <img className="rounded" src={items[0].image} width="100%" height="100%"></img>
                 </div>
                 <div className="right">
-                    <img className="cImg rightTop" src={items[1].image}  width="100%" height="48%"></img>
-                    <img className="cImg" src={items[2].image}  width="100%" height="48%"></img>
+                    <img className="rounded rightTop" src={items[1].image}  width="100%" height="48%"></img>
+                    <img className="rounded" src={items[2].image}  width="100%" height="48%"></img>
                 </div>
         </div>
         );
@@ -86,6 +86,7 @@ export default class RecommendItem extends Component {
             this.property[name] = value;
             this.root.innerHTML = "";
             this.render().appendTo(this.root)
+            return;
         }
         return this.property[name] = value;
     }
