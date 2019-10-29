@@ -1,4 +1,4 @@
-import {create} from "../create.js";
+import {create} from "../create.js";//使用jsx
 import css from "../styles/listView.css"
 
 const PROPERTY_SYMBOL = Symbol("property");
@@ -77,14 +77,13 @@ export default class ListView {
             return this.root.getAttribute("style");
         }
 
-
-        return this[ATTRIBUTE_SYMBOL][name]
+        return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
         if (name == "style") {
             this.root.setAttribute("style", value);
         }
-        if (name == "data") {
+        if (name == "data") {//获取data之后，调用render
             this[ATTRIBUTE_SYMBOL][name] = value;
 
             this.root.innerHTML = "";

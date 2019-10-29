@@ -31,8 +31,6 @@ export default class TabView {
         this.headerContainer = document.createElement("div");
         this.contentContainer = document.createElement("div");
 
-        this.root.style.display = "flex";
-
         this.defaultTop.style = "text-align: center; position: relative; margin: 5vw 0;";
         this.headerContainer.classList.add('tab-header');
 
@@ -44,6 +42,7 @@ export default class TabView {
         this.root.appendChild(this.defaultTop);
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
+
 
         //触发手势库
         enableGesture(this.contentContainer);
@@ -142,7 +141,6 @@ export default class TabView {
     }
 
     appendChild(child){
-
         //第几个
         let n = this.children.length;
 
@@ -153,46 +151,36 @@ export default class TabView {
 
         let header = document.createElement("div");
         header.innerText = title;
-        header.style.display = "inline-block";
-        header.style.height = "93px";
-        header.style.fontFamily = "PingFang SC";
-        header.style.fontSize = "46px";
-        header.style.margin = "20px 35px 0 35px";
-        header.style.color = "#fff";
         header.classList.add('tab-header-item');
+        if (title == '推荐') {
+            header.classList.add('active');
+        }
         this.headerContainer.appendChild(header);
 
         header.addEventListener('click', event => {
-            let array = document.getElementsByClassName('tab-header-item')
-            console.log(array);
-
+            let array = document.getElementsByClassName('tab-header-item');
             for (let i = 0; i < array.length; i++) {
                 const element = array[i];
                 element.classList.remove('active');
             }
 
-
             this[STATE_SYMBOL].position = n;
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
-                //2
                 this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`;
                 this.contentContainer.children[i].style.transition = `ease .5s`;
-                //1
-                // this.contentContainer.children[i].style.width = "100%";
-                // this.contentContainer.children[i].style.height = "100%";
-                // this.contentContainer.children[i].style.display = "none";
             }
-            // child.setAttribute('style','display:inline-block;');
             child.style.display = 'inline-block';
             event.target.classList.add('active');
         });
 
         child.appendTo(this.contentContainer);
+
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.width = "100%";
             this.contentContainer.children[i].style.height = "100%";
             this.contentContainer.children[i].style.verticalAlign = "top";
             this.contentContainer.children[i].style.display = "inline-block";
+            this.contentContainer.children[i].classList.add('scroll');
         }
 
     }
