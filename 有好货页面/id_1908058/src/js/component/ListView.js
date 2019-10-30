@@ -2,12 +2,19 @@ const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+import css from "./ListView.ccss";
+
 import { enableGesture } from './gesture.js';
 import { create } from '../create';
 
 import Div from './Div';
 
 import { DOMElementStyleVectorAnimation, DOMElementStyleAnimation, Timeline } from './animation';
+
+let styleElement = document.createElement("style");
+styleElement.innerHTML = css;
+document.getElementsByTagName("head")[0].appendChild(styleElement);
+
 
 export default class ListView {
     constructor(config){

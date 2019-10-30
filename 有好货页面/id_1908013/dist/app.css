@@ -10,7 +10,6 @@ body {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-touch-callout: none;
     background-color: #ededed;
-
 }
 
 * {
@@ -37,10 +36,9 @@ body {
     transition: ease 0.5s;
 }
 .title {
-    font-size: 0.427rem;
-    padding: 0.48rem;
     color: #333333;
     font-weight: bold;
+    padding: 6.296vw 3.148vw 3.704vw;
 }
 
 .flex {
@@ -62,18 +60,33 @@ body {
     display: flex;
     justify-content: space-between;
 }
+.items-center {
+    display: flex;
+    align-items: center;
+}
 /* 收藏店铺 */
 .collection-store .image-container {
     display: flex;
-    width: 1.867rem;
-    height: 1.867rem;
+    width: 18.519vw;
+    height: 18.519vw;
     background-color: #f3f3f3;
-    border-radius: 0.267rem;
+    border-radius: 1.852vw;
+    overflow: hidden;
+}
+.collection-store-group {
+    padding: 0 3.241vw 3.241vw;
+}
+.image-container img {
+    width: 100%;
 }
 .collection-store {
+    width: 39.352vw;
     background-color: white;
-    border-radius: 0.267rem;
-    padding: 0 0.32rem 0.32rem;
+    border-radius: 1.852vw;
+    padding: 0 3.241vw 3.241vw;
+}
+.collection-store .store-header {
+    margin: 2.407vw 0;
 }
 .collection-store .content {
     display: flex;
@@ -84,10 +97,10 @@ body {
 }
 .collection-store .logo {
     display: inline-block;
-    width: 0.747rem;
-    height: 0.747rem;
+    width: 7.222vw;
+    height: 7.222vw;
     background-color: #f3f3f3;
-    border-radius: 1.467rem;
+    border-radius: 7.222vw;
     margin-right: 0.187rem;
 }
 .collection-store .store-name {
@@ -95,14 +108,14 @@ body {
 }
 /* 推荐的店 */
 .recommend-store {
-    padding: 0 0.4rem 0.4rem;
+    padding: 0 3.241vw 3.241vw;
     background-color: white;
-    border-radius: 0.267rem;
-    margin: 0 0.32rem 0.32rem;
+    border-radius: 1.852vw;
+    margin: 0 3.241vw 3.241vw;
 }
 
 .recommend-store .header {
-    padding: 0.4rem 0;
+    padding: 3.889vw 0 2.407vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -110,28 +123,28 @@ body {
 
 .recommend-store .message {
     display: flex;
-    padding: 10px;
     background-color: #f5f5f5;
-    font-size: 12px;
-    border-radius: 8px;
+    border-radius: 1.481vw;
+    height: 9.259vw;
 }
 
 .recommend-store .content {
     display: flex;
-    margin-top: 12px;
+    margin-top: 2.778vw;
+    justify-content: space-between;
 }
 
 .recommend-store .footer {
     text-align: right;
     color: silver;
-    padding-top: 15px;
+    padding-top: 2.778vw;
 }
 
 .recommend-store .logo {
     display: inline-block;
-    width: 38px;
-    height: 38px;
-    border-radius: 38px;
+    width: 9.815vw;
+    height: 9.815vw;
+    border-radius: 9.815vw;
     overflow: hidden;
     background: #f3f3f3;
     margin-right: 7px;
@@ -140,47 +153,94 @@ body {
     display: inline-block;
     background-color: #ee0507;
     color: white;
-    font-size: 12px;
     text-align: center;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 18px;
+    padding: 0 0.926vw;
+    border-radius: 100px;
 }
 
 .recommend-store .btn-enter {
     text-align: center;
-    line-height: 32px;
+    line-height: 6.667vw;
     display: inline-block;
-    width: 70px;
-    height: 32px;
-    border-radius: 32px;
+    width: 14.815vw;
+    height: 6.667vw;
+    border-radius: 6.667vw;
     color: white;
     background-image: linear-gradient(to right, #fec900, #ffad00);
 }
 
 .recommend-store .large-image-container {
-    margin-right: 5px;
     background: #f3f3f3;
-    display: flex;
-    flex: 2;
-    border-radius: 10px;
-    height: 210px;
+    border-radius: 1.852vw;
+    height: 57.963vw;
+    width: 57.963vw;
+    overflow: hidden;
 }
 
 .recommend-store .small-image-container {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: space-between
+    height: 28.426vw;
+    width: 28.426vw;
+    background-color: #f3f3f3;
+    border-radius: 1.852vw;
+    overflow: hidden;
 }
+/* 品牌新店 */
+.brand-store {
+    width: 93.611vw;
+    height: 69.444vw;
+    margin: 0 auto 3.148vw;
+    border-radius: 1.852vw;
+    background-color: white;
+    padding: 3.241vw 0;
+    background: url("./images/pp_bg.jpeg") center center no-repeat;
 
-.recommend-store .small-image-container > div:nth-child(odd) {
-    background: #f5f5f5;
-    border-radius: 8px;
-    margin-bottom: 3px;
 }
-.recommend-store .small-image-container > div:nth-child(even) {
-    background: #f5f5f5;
-    border-radius: 8px;
-    margin-top: 3px;
+.brand-store .logo {
+    width: 10.741vw;
+    height: 10.741vw;
+    background: silver;
+    -webkit-border-radius: 10.741vw;
+    -moz-border-radius: 10.741vw;
+    border-radius: 10.741vw;
+}
+.brand-store .tips {
+    height: 6.296vw;
+    padding: 0 3.241vw;
+    background-color: #3e362d;
+    border-top-left-radius: 6.296vw;
+    border-bottom-left-radius: 6.296vw;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+.brand-store .product-image {
+    height: 42.222vw;
+    width: 42.222vw;
+    border-radius: 1.852vw;
+    background-color: #f3f3f3;
+    overflow: hidden;
+}
+.brand-store .product-image img {
+    width: 100%;
+}
+.brand-store .image-container {
+    padding: 0 3.241vw;
+}
+.brand-store .store-info {
+    margin-top: 2.778vw;
+    margin-bottom: 2.222vw;
+    padding: 0 3.241vw;
+    color: white;
+}
+.brand-store .store-head {
+    margin-left: 2.778vw;
+}
+.brand-store .enter-store {
+    height: 6.759vw;
+    width: 14.815vw;
+    background-color: #776d60;
+    border-radius: 6.759vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

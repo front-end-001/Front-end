@@ -134,6 +134,7 @@ export default (function () {
     }
 
     contexts[touch.identifier] = {};
+    touch.currentTarget = event.currentTarget;
     start(touch, contexts[touch.identifier]);
   };
 
@@ -202,14 +203,22 @@ export default (function () {
         useTouch = false;
       }
 
+      // if (window.PointerEvent) { 
+      //   // Pointer events are supported. 
+      //   alert('支持 pointer 事件');
+      // }
+
       if (useTouch) {
         el.addEventListener('touchstart', (event) => {
           event.preventDefault();
         });
-        el.addEventListener('touchstart', touchstart);
-        el.addEventListener('touchmove', touchmove);
+
+        el.addEventListener('touchstart', touchstart, {passive:false});
+        el.addEventListener('touchmove', touchmove, {passive:false});
+        // el.addEventListener('pointermove', touchmove, {passive:false});
         el.addEventListener('touchend', touchend);
         el.addEventListener('touchcancel', touchcancel);
+        // alert('add mousemove')
       } else {
         el.addEventListener('mousedown', mouseStart);
       }
