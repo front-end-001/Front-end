@@ -6,7 +6,7 @@
 import {create} from './js/create.js';
 
 import ListView from "./js/ListView.js"
-import tree from "./my.component";
+// import tree from "./my.component";
 
 // var t = <Text>abc</Text>
 function loadMore() {
@@ -18,6 +18,10 @@ function loadMore() {
 
 
 window.render = function(data,root) {
-    var c = tree;
+    // var c = tree;
+    var c = <div>
+      <span class="x">sdfsf </span>
+      <ListView data={[{a:1,b:2}]}></ListView>
+      </div>
     c.appendTo(document.body)
 }
