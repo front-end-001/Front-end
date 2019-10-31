@@ -48,6 +48,8 @@ export default class Carousel {
         for (let d of imgs) {
             let e = document.createElement("img");
             e.src = d;
+            e.style.width = "100%";
+            e.style.height = "100%";
             this.root.appendChild(e);
             e.style.zIndex = i++;
         }
@@ -70,15 +72,15 @@ export default class Carousel {
             tl.addAnimation(new DomElementStyleNumberAnimation(
                 current,
                 "transform",
-                0, - 500 * position,
-                1000, - 500 - 500 * position,
+                0, - 1000 * position,
+                2000, - 1000 - 1000 * position,
                 (v) => `translateX(${v}px)`
             ));
             tl.addAnimation(new DomElementStyleNumberAnimation(
                 next,
                 "transform",
-                0, 500 - 500 * nextPosition,
-                1000, - 500 * nextPosition,
+                0, 1000 - 1000 * nextPosition,
+                2000, - 1000 * nextPosition,
                 (v) => `translateX(${v}px)`
             ));
             tl.restart();
@@ -92,12 +94,12 @@ export default class Carousel {
         let offset = 0;
         this.root.addEventListener("mousedown", event => {
             event.preventDefault();
-            //startTransform = - position * 500;
+            //startTransform = - position * 1000;
             tl.pause();
 
             let currentTime = Date.now();
             if(currentTime - offsetTimeStart < 1000) {
-                offset = 500 - ease((currentTime - offsetTimeStart) / 1000) * 500;
+                offset = 1000 - ease((currentTime - offsetTimeStart) / 1000) * 1000;
                 console.log(offset);
             } else {
                 offset = 0;
@@ -115,13 +117,13 @@ export default class Carousel {
             let lastPosition = (children.length + position - 1) % children.length;
             let last = children[lastPosition];
             last.style.transition = "ease 0s";
-            last.style.transform = `translate(${-500 - 500 * lastPosition + event.dx + offset}px)`
+            last.style.transform = `translate(${-1000 - 1000 * lastPosition + event.dx + offset}px)`
 
             next.style.transition = "ease 0s";
-            next.style.transform = `translate(${500 - 500 * nextPosition  + event.dx + offset}px)`
+            next.style.transform = `translate(${1000 - 1000 * nextPosition  + event.dx + offset}px)`
 
             current.style.transition = "ease 0s";
-            current.style.transform = `translate(${- 500 * position + event.dx + offset}px)`
+            current.style.transform = `translate(${- 1000 * position + event.dx + offset}px)`
         });
         this.root.addEventListener("panend", event => {
             // event.origin.preventDefault();
@@ -164,17 +166,17 @@ export default class Carousel {
             } else {
                 last.style.transition = "ease 0s";
             }
-            last.style.transform = `translate(${-500 - 500 * lastPosition}px)`
+            last.style.transform = `translate(${-1000 - 1000 * lastPosition}px)`
 
             if(isLeft){
                 next.style.transition = "";
             } else {
                 next.style.transition = "ease 0s";
             }
-            next.style.transform = `translate(${500 - 500 * nextPosition}px)`
+            next.style.transform = `translate(${1000 - 1000 * nextPosition}px)`
 
             current.style.transition = "";
-            current.style.transform = `translate(${- 500 * position}px)`
+            current.style.transform = `translate(${- 1000 * position}px)`
 
         });
 
@@ -198,7 +200,7 @@ export default class Carousel {
                     position = position + 1;
                 }
             } else {
-                position = - Math.round((x + event.dx) / 500);
+                position = - Math.round((x + event.dx) / 1000);
             }
             
             position = Math.max(0, Math.min(children.length - 1, position));
@@ -206,7 +208,7 @@ export default class Carousel {
                 e.style.transition = "";
                 e.style.transform = `translate(${- 100 * position}%)`
             }
-            x = - 500 * position;
+            x = - 1000 * position;
         });
     }
     log(){
@@ -226,6 +228,9 @@ export default class Carousel {
         if(name == "width") {
             this.width = value;
             console.log("attibute change");
+        }
+        if(name == "style") {
+            this.root.style = value;
         }
         if(name == "imgs") {
             this[ATTRIBUTE_SYMBOL][name] = value;

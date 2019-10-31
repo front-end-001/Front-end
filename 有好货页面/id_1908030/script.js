@@ -19,7 +19,7 @@ let imgs = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eae
 window.render = (data, root) => {
     var c = <TabView style="width: 100%;height: 100%">
         <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
-        <Carousel style="width: 100%;height: 30%" imgs={imgs}></Carousel>
+        <Carousel style="width: 1000px;height: 30%" imgs={imgs}></Carousel>
         <ListView data={data}></ListView>
         <Div>gggg</Div>
         <Div>gggg</Div>
