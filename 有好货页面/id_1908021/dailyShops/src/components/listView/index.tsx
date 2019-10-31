@@ -1,6 +1,5 @@
 import BaseComponent from '../Base/BaseComponent';
 import { createElement } from '../../babel/babelTransformToJSX';
-import { timingSafeEqual } from 'crypto';
 class ListView extends BaseComponent {
   constructor() {
     super();
