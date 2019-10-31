@@ -57,12 +57,21 @@ export default class ListView {
         return <div>
             {
                 data.map(item => (
-                    <div class="shop" style="background-color:white;padding:10px;margin:10px;border:solid;border-radius: 15px;">
+                    <div class="shop" style="background-color:white;padding:10px;margin:10px;border:solid;border-radius: 15px;height: 700px">
                         <div style="display:flex">
                             <div>{item.shop}</div>
-                            <div style="background-color:red;color:white;padding:10px;margin:10px;border:solid;border-radius: 30px;">进店 ></div>
+                            <div style="background-color:red;color:white;padding:10px;margin:10px;border:solid;border-radius: 30px;float: right">进店 ></div>
                         </div>
                         <div>{item.introduce}</div>
+                        <div style="display:flex; height: 80%">
+                            <div>
+                            <img style="width: 66%; height: 100%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                            </div>
+                            <div style="display:inline">
+                            <img style="width: 33%;" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                            <img style="width: 33%;" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                            </div>
+                        </div>
                     </div>
                     // <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
                 ))
