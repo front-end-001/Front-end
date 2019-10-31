@@ -141,3 +141,58 @@
 .mt-21 {
     margin-top: 0.21rem;
 }
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.card-3 {
+    border-radius: 0.35rem;
+    margin-top: 0.35rem;
+    float: left;
+}
+
+.card-3 .img-style-1 img {
+    width: 4.65rem;
+    height: 4.64rem;
+    float: left;
+}
+
+.card-3 .img-style-2 img {
+    width: 2.26rem;
+    height: 2.26rem;
+}
+
+.card-3 .img-style-3 img {
+    width: 2.26rem;
+    height: 2.26rem;
+    margin-top: 0.1rem;
+    margin-left: 0.1rem;
+}
+
+.card-4 {
+    border-radius: 0.35rem;
+    margin-top: 0.35rem;
+    float: left;
+}
+
+.card-4 .img-style-1 img {
+    width: 4.65rem;
+    height: 4.64rem;
+    float: left;
+}
+
+.card-4 .img-style-2 img {
+    width: 2.26rem;
+    height: 2.26rem;
+}
+
+.card-4 .img-style-3 img {
+    width: 2.26rem;
+    height: 2.26rem;
+    margin-top: 0.15rem;
+}

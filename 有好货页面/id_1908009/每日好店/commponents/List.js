@@ -60,7 +60,21 @@ export default class List {
                      </div>
                 )
             }else if(i.type ==3){
-                //resArr.push(<p>{i.b}</p>)
+                let item = <div class='card-3 clearfix'>
+                    <div class='fl img-style-1'><img src='https://miro.medium.com/max/1200/1*ywwgEHXg0M0m1IhFFUpGzw.jpeg' ></img></div>
+                    <div class='fr img-style-2'><img src='https://miro.medium.com/max/1200/1*ywwgEHXg0M0m1IhFFUpGzw.jpeg' ></img></div>
+                    <div class='fr img-style-3'><img src='https://miro.medium.com/max/1200/1*ywwgEHXg0M0m1IhFFUpGzw.jpeg'></img></div>
+                </div>
+                resArr.push(item)
+            }else if(i.type==4){
+                let item = <div class='card-4 clearfix'>
+                    <div class='fr img-style-1'><img src='https://miro.medium.com/max/1200/1*ywwgEHXg0M0m1IhFFUpGzw.jpeg' ></img></div>
+                    <div class='fl img-style-2'><img src='https://miro.medium.com/max/1200/1*ywwgEHXg0M0m1IhFFUpGzw.jpeg' ></img></div>
+                    <div class='fl img-style-3'><img src='https://miro.medium.com/max/1200/1*ywwgEHXg0M0m1IhFFUpGzw.jpeg'></img></div>
+                </div>
+                resArr.push(item)
+            }else if(i.type==5){
+                
             }
         }
         return  <div class='clearfix'>

@@ -12,7 +12,7 @@
     background: url(../image/bg2.jpg)no-repeat;
     background-size: 100% auto;
     width: 100%;
-        /* background-attachment: relative;
+    /* background-attachment: relative;
     background-size: cover;
     background-position: center; */
 }
@@ -54,4 +54,47 @@
     color: rgba(51, 51, 51, 1);
     line-height: 0.35rem;
     margin: 0 0 0.4rem 0.34rem;
+}
+
+.clearfix::after {
+    content: '';
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    display: block;
+    clear: both;
+}
+
+.page2-top .page2-title {
+    color: #FFFFFF;
+    font-size: 0.32rem;
+    font-family: PingFangSC;
+    font-weight: 500;
+    float: left;
+    margin-left: 0.25rem;
+}
+
+.page2-top .page2-selected {
+    float: right;
+    display: flex;
+    margin-right: 0.25rem;
+    background: #fff;
+    border-radius: 0.21rem;
+
+}
+
+.page2-top .page2-selected .item {
+    font-size: 0.24rem;
+    font-family: PingFangSC;
+    font-weight: 400;
+    color: rgba(255, 134, 63, 1);
+    border-radius: 0.21rem;
+    padding: 0.02rem 0.18rem;
+    background: #fff;
+    ;
+}
+
+.page2-top .page2-selected .action {
+    background: linear-gradient(90deg, rgba(253, 147, 1, 1), rgba(250, 129, 1, 1));
+    color: #fff;
 }

@@ -34,9 +34,20 @@ window.render = function(data){
                         <p class='tab1-title'>超多人喜欢的店!</p>
                         <List data={data}></List>
                     </Scroll>
-                    <Scroll tab-title='有趣的店' >
+                    <Scroll tab-title='有趣的店' on-scrolToBottom={loadMore} placeHolderText='...' class='bg2'>
+                        <div class='clearfix page2-top'>
+                            <p class='page2-title'>新奇好店都在这里</p>
+                            <div class='page2-selected'>
+                                <div class='item action'>全部</div>
+                                <div class='item'>小惊喜</div>
+                                <div class='item'>想不到</div>
+                            </div>
+                        </div>
+                        <List data={data}></List>
                     </Scroll>
-                    <Scroll tab-title='品牌新店' ></Scroll>
+                    <Scroll tab-title='品牌新店' class='bg2'>
+                        <List data={data}></List>
+                    </Scroll>
             </Tab>
     //app.appendChild(head)
     tab.appendTo(app)
