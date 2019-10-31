@@ -3,8 +3,9 @@ var css = require('css');
 // 模仿vue处理css的做法
 module.exports = function(source, map) {
   // console.log(this.resourceQuery);
-  var filename = this.resourcePath.match(/([^\/\\]+)\.css$/)[1];
-  let classname = filename.replace(/^[A-Z]/, l => l.toLowerCase()).replace(/[A-Z]/, l => '-' + l.toLowerCase());
+  // var filename = this.resourcePath.match(/([^\/\\]+)\.css$/)[1];
+  // let classname = filename.replace(/^[A-Z]/, l => l.toLowerCase()).replace(/[A-Z]/, l => '-' + l.toLowerCase());
+  let classname = this.resourceQuery.match(/^\?classname=(\S+)/)[1];
 
   var obj = css.parse(source);
 

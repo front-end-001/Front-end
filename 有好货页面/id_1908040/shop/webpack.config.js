@@ -34,12 +34,14 @@ module.exports = {
           }
         }
       },
+      /*
       {
         test: /\.component$/,
         use: {
           loader: require.resolve('./component-loader.js')
         }
       },
+      */
       {
         test: /\.css$/i,
         // use: ['to-string-loader', 'css-loader']

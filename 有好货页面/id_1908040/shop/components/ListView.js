@@ -1,10 +1,8 @@
 import { Component, PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL } from './Component.js';
 
-import img01 from './images/img-01.png';
-import Div from './Div.js';
+// import img01 from './images/img-01.png';
+// import Div from './Div.js';
 import { create } from '../lib/create.js';
-
-console.log(img01);
 
 export default class ListView extends Component {
   constructor(config) {
@@ -15,7 +13,8 @@ export default class ListView extends Component {
     this[PROPERTY_SYMBOL].root = document.createElement('div');
 
     // <div></div>  jsx会传string给create
-    this.render().appendTo(this[PROPERTY_SYMBOL].root);
+    // this.render().appendTo(this[PROPERTY_SYMBOL].root);
+    this.appendTo(this[PROPERTY_SYMBOL].root);
   }
   render() {
     let data = this[ATTRIBUTE_SYMBOL]['data'] || [];

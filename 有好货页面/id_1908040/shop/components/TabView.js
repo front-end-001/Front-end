@@ -9,6 +9,9 @@ import {
 } from './Component.js';
 import enableGesture from '../lib/gesture.js';
 
+// 测试是否只加载一次
+// import RecommendItemView from './RecommendListView.js';
+
 class TabView extends Component {
   constructor() {
     super();
