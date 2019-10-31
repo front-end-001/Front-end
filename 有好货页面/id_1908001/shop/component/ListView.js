@@ -30,11 +30,30 @@ export default class ListView {
     }
     render () {
         const data = this[ATTRIBUTE_SYMBOL].data || []
-        console.log('++++', css)
         return <div>
             {
-                data.map(d => {
-                    return <div style={css.color}>{d.a}</div>
+                data.map(shop => {
+                    const icon = './static/' + shop.icon
+                    return <div style={css.shop}>
+                        <div style={css.shopInfo}>
+                            <img src={icon} style={css.icon} />
+                            <span style={css.shopName}>
+                                <span>{shop.name}</span>
+                                <img src='./static/icon-tmall@2x.png' style={css.tmallImg} />
+                            </span>
+                        </div>
+                        <div style={css.shopDesc}>{shop.desc}</div>
+                        <div style={css.goods}>
+                            {
+                                shop.goods.map((good, index) => {
+                                    const img = './static/' + good.img
+                                    return <div style={index === 0 ? css.goodsFirstDiv : css.goodsSecondDiv}>
+                                        <img src={img} style={css.goodImg} />
+                                    </div>
+                                })
+                            }
+                        </div>
+                    </div>
                 })
             }
         </div>

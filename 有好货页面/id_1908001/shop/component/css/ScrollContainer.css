@@ -1,0 +1,6 @@
+.main {
+    -webkit-overflow-scrolling:touch;
+    overflow:scroll;
+    white-space:normal;
+    background-color: red;
+}
