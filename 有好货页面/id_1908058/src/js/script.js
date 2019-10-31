@@ -22,7 +22,7 @@ window.render = function(data){
 
 var c = <TabView style="width:100%;height:100%;">
     <ScrollView tab-title="推荐" placeHolderText="加载更多" on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
-    <ListView data={data} ></ListView>
+    <ListView className={"x"} cls={"mmmm"} data={data} >ddddddddd</ListView>
      abc abc abc  abc abc abc
      abc abc abc abc abc abc
      abc abc abc  abc abc abc

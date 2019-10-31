@@ -1,7 +1,7 @@
 module.exports =  { 
     devtool: 'source-map',
-    // entry: "./src/js/script.js",
-    entry: "./script.js",
+    entry: "./src/js/script.js",
+    // entry: "./script.js",
     module: {
         rules: [
             {
@@ -14,16 +14,20 @@ module.exports =  {
                     }
                 }
             },
-            {
-                test: /\.component$/,
-                use: {
-                    loader: require.resolve('./component-loader.js'),
+            {  
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ]
+            }
+            // {
+            //     test: /\.component$/,
+            //     use: {
+            //         loader: require.resolve('./component-loader.js'),
                     
-                }
-            },{
-                test: /\.css$/i,
-                use: [require.resolve('./component-css-loader.js'),],
-              },
+            //     }
+            // },{
+            //     test: /\.css$/i,
+            //     use: [require.resolve('./component-css-loader.js'),],
+            //   },
         ]
     },
     mode: "development",
