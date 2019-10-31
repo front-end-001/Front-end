@@ -6,7 +6,7 @@ import ScrollView from './TabComponent/ScrollView';
 // import Text from './Components/Text';
 import ListView from './TabComponent/ListView';
 
-import {create} from './create';
+// import {create} from './create';
 
 // react 也差不多做了相同的事情
 // function myCreate(Component, attributes, ...children) {
