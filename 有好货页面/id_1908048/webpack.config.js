@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/script.js",
+    entry: "./src/my.component",
     module: {
         rules: [
             {
@@ -7,11 +7,23 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                      presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
+                        presets: ['@babel/preset-env'],
+                        plugins: [['babel-plugin-transform-react-jsx', { pragma: "create" }]]
                     }
                 }
-            }
+            },
+            {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader.js')
+                }
+            },
+            {
+                test: /\.css$/,
+                use: {
+                    loader: require.resolve('./component-css-loader.js')
+                },
+            },
         ]
     },
     mode: "development",

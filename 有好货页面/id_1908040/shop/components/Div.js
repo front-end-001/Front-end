@@ -1,5 +1,6 @@
 import {
     Component,
+    PROPERTY_SYMBOL
 } from './Component.js';
 
 export default class Div extends Component {
@@ -8,6 +9,6 @@ export default class Div extends Component {
     this.created();
   }
   created() {
-    this.root = document.createElement('div');
+    this[PROPERTY_SYMBOL].root = document.createElement('div');
   }
 }
