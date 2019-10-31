@@ -63,13 +63,13 @@ export default class ListView {
                             <div style="background-color:red;color:white;padding:10px;margin:10px;border:solid;border-radius: 30px;float: right">进店 ></div>
                         </div>
                         <div>{item.introduce}</div>
-                        <div style="display:flex; height: 80%">
-                            <div>
-                            <img style="width: 66%; height: 100%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                        <div style="display:flex;width: 100%; height: 80%">
+                            <div style="width: 60%; height: 100%">
+                                <img style="width: 100%; height: 100%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
                             </div>
-                            <div style="display:inline">
-                            <img style="width: 33%;" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                            <img style="width: 33%;" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                            <div style="width: 40%; height: 100%">
+                                <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                                <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
                             </div>
                         </div>
                     </div>
