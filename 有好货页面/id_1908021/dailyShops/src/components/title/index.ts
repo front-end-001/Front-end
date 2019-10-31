@@ -33,10 +33,6 @@ class Title extends BaseComponent {
   mounted(): void {
     if (!this.root) return;
   }
-
-  setAttribute(name: string, value: any): any {
-    super.setAttribute(name, value);
-  }
 }
 
 export default Title;

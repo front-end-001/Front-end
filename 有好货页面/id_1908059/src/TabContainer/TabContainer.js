@@ -13,7 +13,6 @@ export default class TabContainer extends Component {
   render() {
     return (
       <div className="TabContainer">
-        <TabList props={{tabIndex: 0}} />
         <Swiper />
       </div>
     );

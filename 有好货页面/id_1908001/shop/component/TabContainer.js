@@ -1,7 +1,7 @@
 const PROPERTY_SYMBOL = Symbol("property")
 const ATTRIBUTE_SYMBOL = Symbol("property")
 const STATE_SYMBOL = Symbol("state")
-import initGesture from './../gesture'
+import initGesture from '../tool/gesture'
 export default class TabContainer {
     constructor() {
         this[PROPERTY_SYMBOL] = Object.create(null)

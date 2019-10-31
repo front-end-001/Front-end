@@ -1,4 +1,5 @@
 import MyCreate, { Component } from "MyCreate";
+import EventBus from "eventbusjs";
 import enableGesture from "~/lib/gesture";
 import {
   Timeline,
@@ -9,7 +10,6 @@ import ListContainer from "./ListContainer";
 import mockListData from "./mockListData";
 
 import "./Swiper.css";
-import EventBus from "eventbusjs";
 
 export default class Swiper extends Component {
   componentDidMount() {
@@ -175,10 +175,11 @@ export default class Swiper extends Component {
   render() {
     return (
       <div className="Swiper">
+        <div className="SwiperHeader" />
         <div className="Swiper-container">
           <ListContainer data={mockListData} index={1} />
-          <ListContainer index={2} />
-          <ListContainer index={3} />
+          {/*<ListContainer data={mockListData[1]} index={2} />*/}
+          {/*<ListContainer data={mockListData[2]} index={3} />*/}
         </div>
       </div>
     );

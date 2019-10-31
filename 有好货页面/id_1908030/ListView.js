@@ -1,10 +1,16 @@
 import { create } from "./create.js"
 import Div from "./Div.js";
+import css from "./ListView.css";
+
 
 const PROPERTY_SYMBOL = Symbol("property"); 
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+
+// let styleElement = document.createAttribute("style");
+// styleElement.innerHTML = css;
+// document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 export default class ListView {
     constructor() {
@@ -13,7 +19,7 @@ export default class ListView {
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL].children = [];
-        this[PROPERTY_SYMBOL].headers = [];
+
         this.created();
     }
     appendTo(element) {
@@ -22,8 +28,7 @@ export default class ListView {
     }
     created() {
         this.root = document.createElement("div");
-        let element = <div>aaaaa</div>;
-        element.appendTo(this.root);
+        this.render().appendTo(this.root);
     }
     mounted() {
 
@@ -33,6 +38,20 @@ export default class ListView {
     }
     update() {
 
+    }
+    render(){
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        return <div>
+            hello
+            { 
+                data.map(item => (
+                    <div><span class="x">{item.a}</span><span class="x">{item.b}</span></div>
+                ))
+            }
+        </div>
+    }
+    get style(){
+        return this.root.style;
     }
     log() {
         console.log("width", this.width);
@@ -52,8 +71,16 @@ export default class ListView {
         return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
-        if (name = "style") {
+        if (name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if(name == "data") {
+            this[ATTRIBUTE_SYMBOL][name] = value;
+
+            this.root.innerHTML = "";
+            this.render().appendTo(this.root);
+
+            return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
