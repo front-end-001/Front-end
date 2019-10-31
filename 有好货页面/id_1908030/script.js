@@ -18,13 +18,9 @@ let imgs = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eae
 
 window.render = (data, root) => {
     var c = <TabView style="width: 100%;height: 100%">
-        <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
+        <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:gray;width:900px;height:900px">
         <Carousel style="width: 1000px;height: 30%" imgs={imgs}></Carousel>
-        <ListView data={data}></ListView>
-        <Div>gggg</Div>
-        <Div>gggg</Div>
-        <Div>gggg</Div>
-        <Div>gggg</Div>
+        <ListView style="font-size: 26px" data={data}></ListView>
         </ScrollView>
         <ScrollView tab-title="有趣的店" style="background-color:blue;">dsfds</ScrollView>
         <ScrollView tab-title="品牌新店" style="background-color:red;">sdfdsfsd</ScrollView>

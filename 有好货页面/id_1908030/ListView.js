@@ -55,10 +55,16 @@ export default class ListView {
     render(){
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
         return <div>
-            hello
             {
                 data.map(item => (
-                    <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
+                    <div class="shop" style="background-color:white;padding:10px;margin:10px;border:solid;border-radius: 15px;">
+                        <div style="display:flex">
+                            <div>{item.shop}</div>
+                            <div style="background-color:red;color:white;padding:10px;margin:10px;border:solid;border-radius: 30px;">进店 ></div>
+                        </div>
+                        <div>{item.introduce}</div>
+                    </div>
+                    // <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
                 ))
             }
         </div>
