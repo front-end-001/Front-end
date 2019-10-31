@@ -2,8 +2,8 @@ import ScrollView from "./ScrollView.js";
 import TabView from "./TabView.js";
 import Div from "./Div.js";
 import ListView from "./ListView.js";
-
-import { create } from "./create.js"
+import Carousel from "./carousel.js";
+import { create } from "./create.js";
 
 function loadMore() {
     setTimeout(() => {
@@ -11,9 +11,15 @@ function loadMore() {
     }, 5000)
 }
 
+let imgs = ["https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+"https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+"https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+"https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"];
+
 window.render = (data, root) => {
-    var c = <TabView s>
+    var c = <TabView style="width: 100%;height: 100%">
         <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
+        <Carousel style="width: 100%;height: 30%" imgs={imgs}></Carousel>
         <ListView data={data}></ListView>
         <Div>gggg</Div>
         <Div>gggg</Div>
