@@ -21,15 +21,13 @@ export default class TabView {
     }
     created() {
         this.root = document.createElement("div");
-        // this.root.style.width = "300px";
-        // this.root.style.height = "300px";
         this.root.style.display = "flex";
+        this.root.style.flexDirection = "column";
         this.headerContainer = document.createElement("div");
         this.contentContainer = document.createElement("div");
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "hidden";
         this.contentContainer.style.flex = "1";
-        this.contentContainer.style.height = "93px";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
 

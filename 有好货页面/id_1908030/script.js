@@ -12,28 +12,13 @@ function loadMore() {
 }
 
 window.render = (data, root) => {
-    var c = <TabView>
+    var c = <TabView s>
         <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
         <ListView data={data}></ListView>
         <Div>gggg</Div>
-            {/* dsfdsfsfd
-            gdgfd
-            fgdshgfhgjhgj
-            hjkhktyuuyuuiiy
-            yiiiiiiiiiiiiii
-            iiiiiiiiiiiiii
-            iiiiiiiiiii
-            tyyyyyyyyyyy
-            yyyyyyyyyy
-            yyyyyyyyy
-            yyyyyyyyyy
-            yyyyy
-            ttttttttrr
-            rrrrrrrrrrrr
-            rrrrrrrrrrrrrrrrrr
-            ytuuuuuuuuuu
-            uuuuuuuuuuuuuu
-            uuuuuuuuu */}
+        <Div>gggg</Div>
+        <Div>gggg</Div>
+        <Div>gggg</Div>
         </ScrollView>
         <ScrollView tab-title="有趣的店" style="background-color:blue;">dsfds</ScrollView>
         <ScrollView tab-title="品牌新店" style="background-color:red;">sdfdsfsd</ScrollView>
