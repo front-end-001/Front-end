@@ -33,6 +33,7 @@ export default class TabView {
 
         this.defaultTop.style = "text-align: center; position: relative; margin: 5vw 0;";
         this.headerContainer.classList.add('tab-header');
+        this.headerContainer.style.marginBottom = '1.562vh';
 
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "hidden";

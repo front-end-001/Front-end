@@ -38,5 +38,4 @@ thumbs.db
 .idea
 node_modules/
 package-lock.json
-/dist/*.js
-/static/
+/dist/

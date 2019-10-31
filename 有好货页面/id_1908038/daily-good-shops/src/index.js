@@ -2,17 +2,13 @@
 import TabView from "./components/TabView";
 import ScrollView from "./components/ScrollView";
 import ListView from "./components/ListView";
+import CollectionShop from './components/CollectionShop';
+import RecommendedShops from './components/RecommendedShops'
 import Carousel from './lib/carousel'
 
 import './styles/index.scss'
 
 import {create} from './create'
-
-const imageUrls = [
-    './static/image/banner1.png',
-    './static/image/banner2.png',
-    './static/image/banner3.png'
-];
 
 function loadMore() {
     console.log("load more");
@@ -22,13 +18,14 @@ function loadMore() {
     }, 1000);
 }
 
-window.render = function(obj, root) {
+window.render = function (RecommendationPageData, interestingPageDataTypeAll, interestingPageDataTypeSurprise, interestingPageDataTypeUnexpect, newPageData, root) {
     /* on-scrollToBottom={loadMore.bind(this, 'my')} */
     var c = <div id="app">
                 <TabView class="tab">
                     <ScrollView tab-title="推荐">
-                        <Carousel speed="3000" style="margin:0 auto;" height={480} width={908} data={imageUrls}></Carousel>
-                        <ListView data={obj}></ListView>
+                        <Carousel speed="1500" style="margin:0 auto;border-radius:3.333vw;" data={RecommendationPageData.focusData}></Carousel>
+                        <CollectionShop data={RecommendationPageData.mostFavourateShops}></CollectionShop>
+                        <RecommendedShops data={RecommendationPageData.recommendedShops}></RecommendedShops>
                     </ScrollView>
                     <ScrollView tab-title="有趣的店" placeHolderText="load more" on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
                         abc abc abc  abc abc abc
@@ -177,7 +174,9 @@ window.render = function(obj, root) {
                         abc abc abc abc abc abc     abc abc abc  abc abc abc
                         abc abc abc abc abc abc
                         </ScrollView>
-                    <ScrollView tab-title="品牌新店" style="background-color:pink;"></ScrollView>
+                    <ScrollView tab-title="品牌新店" style="background-color:pink;">
+                        <ListView></ListView>
+                    </ScrollView>
                 </TabView>
             </div>
     c.appendTo(root);

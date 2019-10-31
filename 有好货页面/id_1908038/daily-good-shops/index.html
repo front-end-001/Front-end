@@ -46,16 +46,27 @@
         }
         //并行结构
         void async function () {
-            let [obj, event] = await Promise.all([
+            let [RecommendationPageData,interestingPageDataTypeAll,interestingPageDataTypeSurprise,interestingPageDataTypeUnexpect,newPageData,event] = await Promise.all([
                 (async () => {// fetch 在最前 因为fetch慢 请求页面数据
-                    return await (await fetch('./data.json')).json()
+                    return await (await fetch('https://static001.geekbang.org/univer/classes/js_dev/data/getRecommendationPageData')).json()
+                })(),
+                (async () => {// fetch 在最前 因为fetch慢 请求页面数据
+                    return await (await fetch('https://static001.geekbang.org/univer/classes/js_dev/data/getInterestingPageDataTypeAll')).json()
+                })(),
+                (async () => {// fetch 在最前 因为fetch慢 请求页面数据
+                    return await (await fetch('https://static001.geekbang.org/univer/classes/js_dev/data/getInterestingPageDataTypeSuprise')).json()
+                })(),
+                (async () => {// fetch 在最前 因为fetch慢 请求页面数据
+                    return await (await fetch('https://static001.geekbang.org/univer/classes/js_dev/data/getInterestingPageDataTypeUnexpect')).json()
+                })(),
+                (async () => {// fetch 在最前 因为fetch慢 请求页面数据
+                    return await (await fetch('https://static001.geekbang.org/univer/classes/js_dev/data/getNewPageData')).json()
                 })(),
                 happen(document, 'DOMContentLoaded'),
                 loadScript('./bundle.js')
             ]);
 
-            window.render(obj, document.body);
-
+            window.render(RecommendationPageData, interestingPageDataTypeAll, interestingPageDataTypeSurprise, interestingPageDataTypeUnexpect, newPageData, document.body);
         }();
     //es6
         /*     fetch('./data.json').then(response => response.json()).then(obj => {

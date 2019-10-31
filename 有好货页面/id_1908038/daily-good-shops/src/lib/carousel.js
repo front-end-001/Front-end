@@ -35,23 +35,27 @@ export default class Carousel {
             let current = children[position],
                 next = children[nextPosition];
             //把next摆到正确的位置
-            //next.style.transition = "ease 0s";
-            next.style.transform = `translate(${100 - 100 * nextPosition}%)`
+            // next.style.transition = "ease 0s";
+            next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
 
             this.offsetTimeStart = Date.now();
 
             this.tl.addAnimation(new DOMElementStyleNumberAnimation(
                 current,
                 "transform",
-                0, -500 * position,
-                1000, -500 - 500 * position,
+                0,
+                 -this.width * position,
+                this[PROPERTY_SYMBOL].speed,
+                 -this.width - this.width * position,
                 (v) => `translateX(${v}px)`
             ));
             this.tl.addAnimation(new DOMElementStyleNumberAnimation(
                 next,
                 "transform",
-                0, 500 - 500 * nextPosition,
-                1000, -500 * nextPosition,
+                0,
+                 this.width - this.width * nextPosition,
+                this[PROPERTY_SYMBOL].speed,
+                 -this.width * nextPosition,
                 (v) => `translateX(${v}px)`
             ));
             this.tl.restart();
@@ -59,6 +63,7 @@ export default class Carousel {
             position = nextPosition;
             // this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
         }
+
         this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
     }
     createContainer() {
@@ -68,15 +73,15 @@ export default class Carousel {
         this.root.classList.add("carousel");
 
         this.root.style = this[ATTRIBUTE_SYMBOL].style;
-        this.root.style.width = this[ATTRIBUTE_SYMBOL].width + 'px' || "100%";
-        this.root.style.height = this[ATTRIBUTE_SYMBOL].height + 'px' || "auto";
+        this.root.style.width = this[ATTRIBUTE_SYMBOL].width || "100%";
+        this.root.style.height = this[ATTRIBUTE_SYMBOL].height || "auto";
         this.root.style.overflow = "hidden";
 
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
         let i = data.length;
         for (let d of data) {
             let e = document.createElement("img");
-            e.src = d;
+            e.src = d.image;
             this.root.appendChild(e);
             e.style.zIndex = i++;
             e.style.width = "100%";
@@ -108,7 +113,7 @@ export default class Carousel {
 
             let currentTime = Date.now();
             if (currentTime - this.offsetTimeStart < 1000) {
-                offset = 500 - ease((currentTime - this.offsetTimeStart) / 1000) * 500;
+                offset = this.width - ease((currentTime - this.offsetTimeStart) / 1000) * this.width;
                 console.log(offset);
             } else {
                 offset = 0;
@@ -125,13 +130,13 @@ export default class Carousel {
             let lastPosition = (children.length + position - 1) % children.length;
             let last = children[lastPosition];
             last.style.transition = "ease 0s";
-            last.style.transform = `translate(${-500 - 500 * lastPosition + event.dx + offset}px)`
+            last.style.transform = `translate(${-this.width - this.width * lastPosition + event.dx + offset}px)`
 
             next.style.transition = "ease 0s";
-            next.style.transform = `translate(${500 - 500 * nextPosition  + event.dx + offset}px)`
+            next.style.transform = `translate(${this.width - this.width * nextPosition  + event.dx + offset}px)`
 
             current.style.transition = "ease 0s";
-            current.style.transform = `translate(${- 500 * position + event.dx + offset}px)`
+            current.style.transform = `translate(${- this.width * position + event.dx + offset}px)`
         });
         this.root.addEventListener("panend", event => {
             // event.origin.preventDefault();
@@ -148,10 +153,10 @@ export default class Carousel {
                 }
 
             } else {
-                if (event.dx > 250) {
+                if (event.dx > this.width/2) {
                     position--
                     isLeft = true;
-                } else if (event.dx < -250) {
+                } else if (event.dx < -this.width/2) {
                     position++
                     isLeft = false;
                 } else if (event.dx > 0) {
@@ -175,17 +180,17 @@ export default class Carousel {
             } else {
                 last.style.transition = "ease 0s";
             }
-            last.style.transform = `translate(${-500 - 500 * lastPosition}px)`
+            last.style.transform = `translate(${-this.width - this.width * lastPosition}px)`
 
             if (isLeft) {
                 next.style.transition = "";
             } else {
                 next.style.transition = "ease 0s";
             }
-            next.style.transform = `translate(${500 - 500 * nextPosition}px)`
+            next.style.transform = `translate(${this.width - this.width * nextPosition}px)`
 
             current.style.transition = "";
-            current.style.transform = `translate(${- 500 * position}px)`
+            current.style.transform = `translate(${- this.width * position}px)`
 
             /*
                         for(let child of children) {
@@ -223,8 +228,6 @@ export default class Carousel {
         return this[PROPERTY_SYMBOL].width;
     }
     set width(value) {
-        console.log('width:',value);
-
         return this[PROPERTY_SYMBOL].width = value;
     }
     get speed() {
@@ -247,6 +250,9 @@ export default class Carousel {
         if (name == "width") {
             this.width = value; //HTML单向同步
             // this.triggerEvent("widthchange");
+        }
+        if (name == "speed") {
+            this.speed = value;
         }
         if (name == "data") {
             this[ATTRIBUTE_SYMBOL][name] = value;
