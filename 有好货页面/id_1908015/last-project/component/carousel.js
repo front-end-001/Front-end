@@ -1,4 +1,4 @@
-import enableGesture from './gesture'
+import enableGesture from '../lib/gesture'
 
 // 设置 property，外部不可访问，使用 SYMBOL
 const PROPERTY_SYMBOL = Symbol("property");

@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './index_tab.js',
+    entry: './index.js', // 入口文件
     module: {
         rules: [
             {
@@ -15,6 +15,7 @@ module.exports = {
             }
         ]
     },
+    // webpack-dev-server 配置
     mode: "development",
     devServer: {
       contentBase: './dist',
@@ -24,4 +25,4 @@ module.exports = {
     optimization: {
         minimize: false
     }
-  };
+};
