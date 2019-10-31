@@ -6,6 +6,7 @@ import RecmmendItem from './items/RecommendItem'
 import Fragment from './Fragment.js'
 import Divider from './widgets/Divider.js'
 import FavoriteItem from './items/FavoriteItem.js'
+import CarouselView from './CarouselView.js'
 
 export default class ListView extends Component {
     constructor(config) {
@@ -30,6 +31,10 @@ export default class ListView extends Component {
 
         return (
             <Fragment >
+                <div className="carouselContainer">
+                    <CarouselView className="carouselView" data={data["focusData"]}></CarouselView>
+                </div>
+                <Divider ></Divider>
                 <div className="favSection">
                     <span className="favTitle">超多人收藏的店！</span>
                     <div className="favContainer">
@@ -59,12 +64,18 @@ export default class ListView extends Component {
             this.root.innerHTML = "" 
             this.render().appendTo(this.root)
         }
+        if (name == "className") {
+            return this.root.className = value;
+        }
         return this.property[name] = value;
     }
 
     getAttribute(name) {
         if (name == 'style') {
             return this.root.getAttribute(name)
+        }
+        if (name == 'className') {
+            return this.root.className;
         }
         return this.property[name]
     }

@@ -65,7 +65,7 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         hot: true,
-        host: '192.168.1.149',
+        host: '192.168.1.152',
         port: 8080,
     },
     optimization: {
@@ -91,7 +91,8 @@ module.exports = {
             filename: 'css/[name].[contenthash].css',
         }),
         new CopyPlugin([
-            {from: './res/icons', to: './res/icons', force: true}
+            {from: './res/icons', to: './res/icons', force: true},
+            {from: './res/images', to: './res/images', forse: true},
         ])
     ]
 }

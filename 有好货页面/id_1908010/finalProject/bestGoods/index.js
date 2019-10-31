@@ -11,10 +11,13 @@ import "./apis/FetchApi.js"
 import './apis/LoadScript.js'
 import ApiPath from './apis/ApiPath.js'
 import icons from './res/icons/index.js'
-
+import Fragment from './src/Fragment.js'
 
 void async function(){ 
     let rPageData = ApiPath.recommendedPageData;
+    let iAllPageData  = ApiPath.interestingPageDataAll;
+    let iSupPageData  = ApiPath.interestingPageDataSuprise;
+    let iUnexpectData = ApiPath.interestingPageDataUnexpect;
     // let obj = await ((await fetch('./data.json')).json())
     // await happen(document, "DOMContentLoaded")
 
@@ -23,20 +26,39 @@ void async function(){
         (async function(){ //async 标签返回的一定是promise
             return (await fetch(rPageData)).json()
         })(),
+        (async function(){ 
+            return (await fetch(iAllPageData)).json()
+        })(),
+        (async function(){ 
+            return (await fetch(iSupPageData)).json()
+        })(),
+        (async function(){ 
+            return (await fetch(iUnexpectData)).json()
+        })(),
         //fetch("./data.json").then(res => res.json()), //这里写await是为了先得到response
         happen(document, "DOMContentLoaded"),
         loadScript('./app.js')
     ]);
+    console.log(obj)
     window.render(obj, document.body);
 
 }();
 
 
+function loadMore(a) {
+    console.log(a)
+    console.log('loadmore')
+}
+
 window.render = function(data){ //
     let test = (
         <TabView className={"tabContainer"}>
-            <ScrollView title="推荐" className={"scroll"} active={true}>
-                <ListView data={data} style="background: rgba(238, 238, 238, 1.00);"></ListView>
+            <ScrollView 
+                title="推荐" 
+                className={"scroll"} 
+                active={true} 
+                on-scrollToBottom={loadMore.bind(this, "mg")}>
+                <ListView data={data} className="listContainer"></ListView>
             </ScrollView>
             <ScrollView title="有趣的店" className={"scroll"}></ScrollView>
             <ScrollView title="品牌新店" className={"scroll"}></ScrollView>

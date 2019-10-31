@@ -1,9 +1,10 @@
 
-.testImage {
-    width: 100px;
-    height: 200px;
-    background: blue;
+.listContainer {
+   background: url('../res/images/carouselBg.png') no-repeat; 
+   background-size: 100% 8%;
 }
+
+
 .favSection {
     padding-left: 16px;
     margin-bottom: 20px;
@@ -24,3 +25,9 @@
     grid-template-rows: auto;
     gap: 12px;
 }
+
+.carouselContainer {
+    padding: 16px 16px 0px 16px;
+}
+
+
