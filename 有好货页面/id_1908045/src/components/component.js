@@ -10,7 +10,6 @@ export default class Component {
     this[EVENT_SYMBOL] = Object.create(null)
     this[STATE_SYMBOL] = Object.create(null)
 
-    this.created()
   }
 
   appendTo(element) {

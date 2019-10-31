@@ -108,6 +108,14 @@ export default class TabView {
             }
 
             this[STATE_SYMBOL].position = position
+
+            for (let i = 0; i < this.headerContainer.children.length; i++) {
+                if(i===position){
+                    this.headerContainer.children[i].classList.add('tab-active')
+                }else{
+                    this.headerContainer.children[i].classList.remove('tab-active')
+                }
+            }
         });
 
         this.listContainer.addEventListener("pancancel", event => {
@@ -182,7 +190,6 @@ export default class TabView {
                 this.headerContainer.children[i].classList.remove('tab-active')
             }
             header.classList.add('tab-active')
-
         })
 
         for (let i = 0; i < this.listContainer.children.length; i++) {
@@ -201,6 +208,4 @@ export default class TabView {
     moveContent(idx) {
         this.listContainer.style.transform = `translateX(${idx * -(100 / this.children.length)}%)`
     }
-
-
 } 
