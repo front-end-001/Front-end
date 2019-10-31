@@ -49,7 +49,7 @@ export default class Component {
             </div>
           </div>
           <div class='header-right'>
-            <a href="#" class="btn btn-primary">进店&gt;</a>
+            <a href="#" class="btn btn-primary">进店 &gt;</a>
           </div>
         </div>
         <div class='item-body'>
@@ -73,9 +73,11 @@ export default class Component {
             </div>
           </div>
         </div>
+        <div class='item-footer'>
+          <span class='same-store'>相似好店 &gt;</span>
+        </div>
       </div>
     )
-
   }
 
   appendChild(child) {

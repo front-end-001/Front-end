@@ -86,7 +86,7 @@ function hanppen(object,type,config) {
 void async function(){
     let [obj,event]=await Promise.all([
         (async ()=>{
-            return await (await fetch('./list.json')).json()
+            return await (await fetch('./data/list.json')).json()
         })(),
         hanppen(document, 'DOMContentLoaded'),
         loadScript('./main.js')
