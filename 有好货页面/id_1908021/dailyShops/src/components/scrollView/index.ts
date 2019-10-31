@@ -10,6 +10,20 @@ export default class ScrollView extends BaseComponent {
     this.created();
   }
 
+  set placeHolderText(text: string) {
+    if (this.placeHolder) {
+      setTimeout(() => {
+        // @ts-ignore
+        this.placeHolder.innerText = text;
+      }, 200);
+      this.PROPERTY.placeHolderText = text;
+    }
+  }
+
+  get placeHolderText(): string {
+    return this.PROPERTY.placeHolderText;
+  }
+
   created(): void {
     this.root = document.createElement('div');
     this.root.classList.add('scrollView');
@@ -64,6 +78,8 @@ export default class ScrollView extends BaseComponent {
           this.triggerEvent('scrollToBottom');
           triggered = true;
         }
+      } else {
+        this.placeHolderText = this.ATTRIBUTE.placeHolderText;
       }
     }
   }

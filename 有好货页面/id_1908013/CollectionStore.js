@@ -4,6 +4,7 @@ const PROPERTY_SYMBOL = Symbol('property')
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const EVENT_SYMBOL = Symbol('event')
 const STATE_SYMBOL = Symbol('state')
+import Img from './Img'
 
 export default class CollectionStore {
     constructor (config) {
@@ -37,25 +38,28 @@ export default class CollectionStore {
 
     }
     render () {
+        let data = this[ATTRIBUTE_SYMBOL]['data'] || {}
+        let items = data.items || []
+        console.log(data)
         return <div class="collection-store">
             <header class="header">
-                <div class="flex">
-                    <img src="" alt="" class="logo"/>
+                <div class="flex store-header">
+                    <Img src={data.icon} alt="" class="logo"/>
                     <div class="flex flex-column space-between">
-                        <h4 class="store-name">极客时间旗舰店</h4>
+                        <h4 class="store-name" style={'font-size:12px'}>极客时间旗舰店</h4>
                         <div>
-                            <i class="store-type">天猫</i>
+                            <i class="store-type" style={'font-size:10px;'}>天猫</i>
                         </div>
                     </div>
                 </div>
             </header>
             <div class="content flex">
-                <div class="image-container">
-                    <img src="" alt=""/>
-                </div>
-                <div class="image-container">
-                    <img src="" alt=""/>
-                </div>
+                {
+                    items.map(item => {
+                    return <div className="image-container">
+                        <Img src={item.image}/>
+                    </div>
+                })}
             </div>
         </div>
     }

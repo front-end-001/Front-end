@@ -1,0 +1,18 @@
+<template>
+  <TabView style="width: 100%; height: 100%">
+      <ScrollView tab-title="推荐" placeHolderText='加载中，请稍后'>
+          <ListView></ListView>
+      </ScrollView>
+      <ScrollView tab-title="有趣的店" style="background: lightgreen"></ScrollView>
+      <ScrollView tab-title="品牌新店" style="background: lightblue"></ScrollView>
+  </TabView>
+</template>
+
+<script>
+module.exports={
+
+}
+</script>
+
+<style>
+</style>

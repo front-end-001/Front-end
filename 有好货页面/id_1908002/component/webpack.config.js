@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/script.js",
+    entry: "./my.component",
     module: {
         rules: [
             {
@@ -14,9 +14,19 @@ module.exports = {
                 
             },
             {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader.js')
+                }
+            },
+            {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader'],
-            }
+            },
+            {
+                test: /\.css$/i,
+                use: [require.resolve('./component-css-loader.js')],
+            },
         ]
     },
     mode: "development",
