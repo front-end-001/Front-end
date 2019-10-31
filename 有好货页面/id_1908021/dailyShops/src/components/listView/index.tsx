@@ -1,5 +1,6 @@
 import BaseComponent from '../Base/BaseComponent';
 import { createElement } from '../../babel/babelTransformToJSX';
+import { timingSafeEqual } from 'crypto';
 class ListView extends BaseComponent {
   constructor() {
     super();
@@ -59,7 +60,7 @@ class ListView extends BaseComponent {
 
     if (this.ATTRIBUTE.renderItem) {
       return (
-        <div class='list-item'>
+        <div class={this.PROPERTY.itemStyle ? this.PROPERTY.itemStyle : 'list-item'}>
           {
             this.ATTRIBUTE.renderItem(data)
           }

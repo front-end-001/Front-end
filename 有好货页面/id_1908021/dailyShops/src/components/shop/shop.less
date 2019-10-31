@@ -1,9 +1,9 @@
 .hbw-shop {
   display: flex;
   flex-direction: column;
-  .shop-title {
+  .shop-title_row {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin: 0em 0 0.5em 0;
     .shop-title_icon {
       align-self: center;
@@ -24,41 +24,36 @@
         width: 63px;
       }
     }
-
-    .shop-title_btn {
-      align-self: center;
-      margin-right: -1px;
-      padding: 0.35em 0.8em;
-      background: linear-gradient(360deg, #fec900, #ffac00);
-      background: -webkit-linear-gradient(360deg, #fec900, #ffac00);
-      color: white;
-      font-size: 32px;
-      border-radius: 1em;
-    }
-    .shop-title_btn:after {
-      content: '>';
-    }
   }
 
-  .shop_fans {
-    display: flex;
-    background-color: rgba(245, 245, 245, 1);
-    border-radius: 16px;
-    padding: 0.25em;
-    margin-bottom: 0.5em;
-    align-items: flex-start;
-    img {
-      align-self: center;
-      width: 1em;
-      height: 1em;
+  .shop-title_col {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0em 0 0.5em 0;
+    width: 55%;
+    .shop-title_icon {
+      align-self: flex-start;
+      border-radius: 2em;
+      width: 2em;
+      height: 2em;
     }
-    span {
-      align-self: center;
-      margin-left: 1em;
-      color: #333333;
-      font-weight: 400;
-      font-size: 32px;
+    .shop-title_name {
+      display: flex;
+      flex-direction: column;
+      .shop-title_name_text {
+        font-size: 46px;
+        font-family: 'SimHe';
+        font-weight: 500;
+      }
+      .shop-title_name_icon {
+        width: 63px;
+      }
     }
+  }
+  .shop-title_promotion {
+    font-size: 32px;
+    font-weight: 100;
   }
 
   .shop_content_normal {
