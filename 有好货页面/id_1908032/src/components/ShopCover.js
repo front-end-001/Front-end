@@ -1,4 +1,5 @@
-import { create } from './create';
+import { create } from '../create';
+import './ShopCover.scss';
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
@@ -15,7 +16,6 @@ export default class Div {
 
         this[PROPERTY_SYMBOL].children = [];
 
-        this.created();
     }
 
     appendTo(element){
@@ -23,37 +23,29 @@ export default class Div {
         this.mounted();
     }
 
-    created(){
-        this.root = document.createElement("div");
-        this.root.innerHTML = '';
-        this.render();
-    }
-
     render(){
-        if(!this.getAttribute('data')) return;
-
-        let data = this.getAttribute('data') || {}
-        let { logo, name, images } = data;
-        this.root.classList.add('shop-view');
-        let element = <div class="inner">
-            <div class="top-info">
-                <img class="logo" src={logo} alt="" />
-                <div class="right-info">
-                    <h3 class="title">{name}</h3>
-                    <i class="badage"></i>
+        let isSmall = this.getAttribute('isSmall') || false;
+        let element = <div class={ `shopcover ${ isSmall ? 'small' : '' }` }>
+            <img src="https://gdp.alicdn.com/imgextra/i3/766568254/O1CN01jNbVh02AqNh4vIJ6k_!!766568254.jpg" alt="" class="img"/>
+            <div class="bottom-bar">
+                <div class="left-info">
+                    <div class="level">
+                        <img src={ require('../assets/icon-diamond.png') } alt=""/>
+                    </div>
+                    <p class="name">阿里巴巴</p>
+                </div>
+                <div class="right">
+                    <div class="button">
+                        <span class="text">进店</span>
+                        <i class="iconfont icon-sanjiao icon"></i>
+                    </div>
+                    <i class="iconfont icon-arrow more"></i>
                 </div>
             </div>
-            <div class="image-box-list">
-                {
-                    Array.isArray(images) && images.map(image => (
-                        <img class='image' src={image} alt=""/>
-                    ))
-                }
-            </div>
         </div>
+        this.root = document.createElement("div");
         element.appendTo(this.root);
     }
-
     mounted(){
 
     }
@@ -83,11 +75,10 @@ export default class Div {
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
+        this[ATTRIBUTE_SYMBOL][name] = value;
         if(name == 'data'){
-            this[ATTRIBUTE_SYMBOL][name] = value;
             this.render();
         }
-        return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     addEventListener(type, listener){
         if(!this[EVENT_SYMBOL][type])

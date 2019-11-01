@@ -1,11 +1,12 @@
-import { create } from './create';
+import './Header.scss';
+import { create } from '../create';
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ListView {
+export default class Div {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -24,23 +25,32 @@ export default class ListView {
     }
 
     created(){
+        let element = <div class="page-header">
+            <div class="head-bg"></div>
+            <div class="header-main">
+                <a href="">
+                    <i class="icon iconfont icon-fanhui back">
+                    </i>
+                </a>
+                <div style={{flex: 1}}></div>
+                <div class="center">
+                    <img src={ require('../assets/meirihaodian.png') } />
+                </div>
+                <a href="">
+                    <i class="icon iconfont icon-fenxiang share">
+                    </i>
+                </a>
+                <a href="">
+                    <i class="icon iconfont icon-gengduo menu">
+                    </i>
+                </a>
+            </div>
+        </div>;
         this.root = document.createElement("div");
-        this.render().appendTo(this.root);
+        element.appendTo(this.root);
     }
-
-    render(){
-        let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
-        return <div>
-            {
-                data.map(item => (
-                    <div>{item}</div> 
-                ))
-            }
-        </div>
-    }
-
     mounted(){
-        
+
     }
     unmounted(){
 
@@ -67,14 +77,6 @@ export default class ListView {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
-        }
-        if(name === 'data'){
-            this[ATTRIBUTE_SYMBOL][name] = value;
-
-            this.root.innerHTML = "";
-            this.render().appendTo(this.root);
-
-            return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

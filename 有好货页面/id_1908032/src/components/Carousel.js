@@ -14,7 +14,9 @@ export default class Carousel {
     }
 
     created(){
-        this.root = document.createElement('div')
+        this.root = document.createElement('div');
+        this.root.style.overflow = 'hidden';
+        this.root.style.whiteSpace = 'nowrap';
         this.root.classList.add('container')
     }
 
@@ -35,11 +37,11 @@ export default class Carousel {
     }
 
     get data(){
-        return this.getProperty('data') || [];
+        return this.getAttribute('data') || [];
     }
 
     get width(){
-        return this[PROPERTY_SYMBOL].width || 500;
+        return this[PROPERTY_SYMBOL].width || '100%';
     }
 
     getAttribute(name){
@@ -47,7 +49,14 @@ export default class Carousel {
     }
 
     setAttribute(name, value){
-       
+        if(name === 'data'){
+            this[ATTRIBUTE_SYMBOL][name] = value
+            this.render();
+        }
+        if(name === 'width'){
+            this[ATTRIBUTE_SYMBOL][name] = value
+            this.render();
+        }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
 
@@ -57,12 +66,6 @@ export default class Carousel {
 
     setProperty(name, value){
         this[PROPERTY_SYMBOL][name] = value;
-        if(name === 'data'){
-            this.render();
-        }
-        if(name === 'width'){
-            this.render();
-        }
     }
 
     appendTo(element){
@@ -72,7 +75,7 @@ export default class Carousel {
 
     render(){
         let width = this.width;
-        this.root.style.width = `${width}px`;
+        this.root.style.width = typeof width == 'number' ? `${width}px` : width;
 
         if(this.data.length === 0)
             return;
@@ -80,7 +83,10 @@ export default class Carousel {
         for(let slider of this.data){
             let item = document.createElement('img');
             item.src = slider.url;
-            item.classList.add('slider-item');
+            item.style.width = '100%';
+            item.style.height = 200;
+            item.style.display = 'inline-block';
+            item.style.transition = 'ease 0.5s';
             this.root.appendChild(item);
         }
 

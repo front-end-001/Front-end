@@ -1,5 +1,5 @@
-import Text from './Text';
-import Wrapper from './Wrapper';
+import Text from './components/Text';
+import Wrapper from './components/Wrapper';
 
 export function create(Class, attributes, ...children){
     let object;
@@ -9,7 +9,17 @@ export function create(Class, attributes, ...children){
         object = new Class;
     }
     for(let name in attributes){
-        object.setAttribute(name, attributes[name])
+        if(name.startsWith('on-')){
+            object.addEventListener(name.replace('on-', ''), attributes[name]);
+        } else if(name.startsWith('off-')){
+            object.addEventListener(name.replace('off-', ''), attributes[name]);
+        } else {
+            try {
+                object.setAttribute(name, attributes[name]);
+            } catch (error) {
+               console.log(error); 
+            }
+        }
     }
     for(let child of children){
         if(Array.isArray(child)){

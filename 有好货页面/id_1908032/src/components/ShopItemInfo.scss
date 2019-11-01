@@ -1,0 +1,85 @@
+.shopItemInfo {
+    margin: 0 3.15vw;
+    margin-top: 3.24vw;
+    padding: 3.05vw 3.24vw 3.33vw 3.24vw;
+    background-color: rgba(82, 59, 38, 0.3);
+    border-radius: 2vw;
+    overflow: hidden;
+    .top-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .shop-icon {
+            width: 10.74vw;
+            height: 10.74vw;
+            border-radius: 100%;
+        }
+        .right-info {
+            padding-right: 3.24vw;
+            width: 38.24vw;
+            height: 6.39vw;
+            background-color: rgba(0, 0, 0, 1);
+            border-radius: 3.19vw 0vw 0vw 3.19vw;
+            opacity: 0.3;
+            display: flex;
+            .icon {
+                width: 2.78vw;
+                height: 3.15vw;
+            }
+            .text {
+                font-size: 32px;
+                color: #fff;
+            }
+        }
+    }
+    .center-info {
+        padding-top: 2.87vw;
+        padding-bottom: 2.04vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .left-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 8.98vw;
+            .shop-name {
+                font-size: 46px;
+                color: #fff;
+                font-weight: bold;
+            }
+            .shop-slogan {
+                font-size: 32px;
+                color: #fff;
+            }
+        }
+        .button {
+            width: 14.81vw;
+            height: 6.67vw;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3.33vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .text {
+                font-size: 40px;
+                color: #fff;
+            }
+            .iconfont {
+                margin-left: 1.3vw;
+                font-size: 30px;
+                color: #fff;
+            }
+        }
+    }
+    .img-list {
+        display: flex;
+        justify-content: space-between;
+        .img {
+            width: 42.41vw;
+            height: 42.41vw;
+            border-radius: 1.5vw;
+            overflow: hidden;
+        }
+    }
+}

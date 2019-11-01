@@ -1,9 +1,12 @@
+import { create } from '../create';
+import './ShopItemInfo.scss';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ScrollView {
+export default class Div {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -23,13 +26,35 @@ export default class ScrollView {
 
     created(){
         this.root = document.createElement("div");
-        // this.root.style.overflow = 'scroll';
-        this[STATE_SYMBOL].h = 0;
-        this.root.addEventListener("touchmove", function(e){ 
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {passive:false});
     }
+
+    render(){
+        let element = <div class="shopItemInfo">
+            <div class="top-info">
+                <img src="https://img.alicdn.com/tfscom/TB127a5gwDD8KJjy0FdXXcjvXXa.jpg_b.jpg" alt="" class="shop-icon"/>
+                <div class="right-info">
+                    <i class="iconfont icon"></i>
+                    <p class="text">乐高官方旗舰店来啊</p>
+                </div>
+            </div>
+            <div class="center-info">
+                <div class="left-text">
+                    <h3 class="shop-name">乐高官方旗舰店</h3>
+                    <p class="shop-slogan">乐高官方旗舰店</p>
+                </div>
+                <div class="button">
+                    <span class="text">进店</span>
+                    <i class="iconfont icon-arrow icon"></i>
+                </div>
+            </div>
+            <div class="img-list">
+                <img src="https://g-search1.alicdn.com/img/bao/uploaded/i4/i3/2200595984506/O1CN01vcg0Wh1j9nEttBRLN_!!0-item_pic.jpg_460x460Q90.jpg" alt="" class="img"/>
+                <img src="https://g-search2.alicdn.com/img/bao/uploaded/i4/i1/1865963391/O1CN01aGsEHv1av7cmYKLcg_!!1865963391-0-pixelsss.jpg_460x460Q90.jpg" alt="" class="img"/>
+            </div>
+        </div>
+        element.appendTo(this.root);
+    }
+
     mounted(){
 
     }
@@ -59,7 +84,10 @@ export default class ScrollView {
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
-        return this[ATTRIBUTE_SYMBOL][name] = value;
+        this[ATTRIBUTE_SYMBOL][name] = value;
+        if(name == 'data'){
+            this.render();
+        }
     }
     addEventListener(type, listener){
         if(!this[EVENT_SYMBOL][type])

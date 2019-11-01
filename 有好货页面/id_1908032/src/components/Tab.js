@@ -1,3 +1,8 @@
+import './tab.scss';
+import enableGesture from '../gesture';
+import Header from './Header';
+import { create } from '../create';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
@@ -21,13 +26,20 @@ export default class Tab {
     }
 
     created(){
+        let header = <Header />
         this.root = document.createElement('div');
+        this.root.classList.add('tab');
         this.contentContainer = document.createElement('div');
         this.headerContainer = document.createElement('div');
+        header.appendTo(this.root);
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
         this.headerContainer.classList.add('tab-head');
+        this.contentContainer.classList.add('tab-content');
+        this.state = { currTab: 0 }
+        enableGesture(this.contentContainer);
     }
+
     mounted(){
 
     }
@@ -42,11 +54,28 @@ export default class Tab {
         this.children.push(child);
         
         let title = child.getAttribute('tab-title') || '';
+        let isDefault = child.getAttribute('default');
         this[PROPERTY_SYMBOL].headers.push(title);
 
         let header = document.createElement('header');
         header.innerText = title;
-        header.classList.add('tab-head-item')
+        header.classList.add('tab-head-item');
+        if(isDefault){
+            header.classList.add('curr');
+        }
+        header.addEventListener('click', event => {
+            // 处理头部样式
+            for(let i = 0; i < this.headerContainer.children.length; i++){
+                this.headerContainer.children[i].classList.remove('curr');
+            }
+            header.classList.add('curr');
+            // 处理tab样式
+            for(let i = 0; i < this.contentContainer.children.length; i++){
+                this.contentContainer.children[i].style.display = 'none';
+            }
+            child.setAttribute('style', { display: 'inline-block' });
+
+        })
 
         this.headerContainer.style.height = '120px';
         this.headerContainer.appendChild(header);
@@ -63,6 +92,13 @@ export default class Tab {
         }
     }
 
+    get state(){
+        return this[STATE_SYMBOL];
+    }
+
+    set state(state){
+        this[STATE_SYMBOL] = { ...this[STATE_SYMBOL], ...state };
+    }
 
     get children(){
         return this[PROPERTY_SYMBOL].children;
