@@ -58,7 +58,7 @@ export default class CarouselView extends Component {
     render() {
         let data = this.property['data'] || ""
         if(!data) return null;
-        console.log(data)
+
         return (
             <div style="overflow: hidden;">
                 {data.map(item => (

@@ -119,12 +119,14 @@
         flex-direction: column;
         display: inline-flex;
     }
-    .rounded {
-        border-radius: 18px;
-    }
+    
     .rightTop {
         margin-bottom: 4px;
     }
+}
+
+.rounded {
+    border-radius: 18px;
 }
 
 .itemFooter {

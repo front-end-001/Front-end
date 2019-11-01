@@ -26,7 +26,6 @@ export default class ScrollView extends Component {
 
         this.root.addEventListener("scroll", (event) => {
             let clientRect = this.root.getBoundingClientRect();
-            let loadMoreRect = this.loadMoreFooter.root.getBoundingClientRect()
 
             if (this.root.scrollHeight - clientRect.height <= this.root.scrollTop) {
                 if (!this.state.triggeredPullDown) {
@@ -38,9 +37,6 @@ export default class ScrollView extends Component {
                 this.state.triggeredPullDown = false;
             }
         })
-
-        
-        // .animate({spin, aliceTiming})
     }
 
     appendChild(child){

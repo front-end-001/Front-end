@@ -153,7 +153,7 @@ export default class TabView extends Component {
 
     setAttribute(name, value) {
         if (name == 'className') {
-            this.root.className = value
+            return this.root.className = value
         }
         return this.attrs[name] = value
     }

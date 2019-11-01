@@ -20,7 +20,7 @@ export default class RecommendItem extends Component {
         let data = this.property["data"] || ""
         if (!data) return null;
         let {name, promotion, icon, items} = data;
-        console.log(data)
+
         let header = (
             <div className="itemHeaderContainer">
                 <div className="left">
