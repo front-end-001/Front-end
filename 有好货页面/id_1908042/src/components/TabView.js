@@ -1,4 +1,4 @@
-import { enableGesture } from './../js/gesture.js'
+import { enableGesture } from '../utils/gesture'
 
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const PROPERTY_SYMBOL = Symbol('property')
@@ -146,7 +146,7 @@ export default class TabView {
         header.addEventListener('click', e => {
             this[STATE_SYMBOL].position = n
             for (let i = 0; i < this.listContainer.children.length; i++) {
-                this.listContainer.children[i].style.wisth = '100%'
+                this.listContainer.children[i].style.width = '100%'
                 this.listContainer.children[i].style.height = '100%'
                 this.listContainer.children[i].style.transition = 'ease 0.5s'
                 this.listContainer.children[i].style.transform = `translateX(${-n * (100)}%)`
