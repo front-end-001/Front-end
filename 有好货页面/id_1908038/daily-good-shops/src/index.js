@@ -4,6 +4,7 @@ import ScrollView from "./components/ScrollView";
 import ListView from "./components/ListView";
 import CollectionShop from './components/CollectionShop';
 import RecommendedShops from './components/RecommendedShops'
+import NewPage from './components/NewPage'
 import Carousel from './lib/carousel'
 
 import './styles/index.scss'
@@ -174,8 +175,8 @@ window.render = function (RecommendationPageData, interestingPageDataTypeAll, in
                         abc abc abc abc abc abc     abc abc abc  abc abc abc
                         abc abc abc abc abc abc
                         </ScrollView>
-                    <ScrollView tab-title="品牌新店" style="background-color:pink;">
-                        <ListView></ListView>
+                    <ScrollView tab-title="品牌新店">
+                        <NewPage data={newPageData.newShops}></NewPage>
                     </ScrollView>
                 </TabView>
             </div>

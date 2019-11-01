@@ -1,12 +1,12 @@
 import {create} from "../create.js"; //使用jsx
-import "../styles/RecommendedShops.scss"
+import "../styles/newPage.scss";
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class RecommendedShops {
+export default class NewPage {
     constructor(config) {
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -26,7 +26,7 @@ export default class RecommendedShops {
 
     created() {
         this.root = document.createElement("div");
-        this.root.classList.add("recommended-Shops");
+        this.root.classList.add("new-page");
         this.render().appendTo(this.root);
     }
     mounted() {
@@ -42,6 +42,7 @@ export default class RecommendedShops {
 
     render() {
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        console.log(data);
 
         return <div>
             <div class="item-box">{
@@ -49,22 +50,23 @@ export default class RecommendedShops {
                     <div class="item">
                         <div class="top">
                             <img class="icon" src={item.icon} />
-                            <div>
-                                <div class="name">{item.name}</div>
-                                <img class="tmall" src="./static/image/icon_tmall@2x.png" alt="天猫"/>
+                            <div class="attention">
+                                <img src="http://static001.geekbang.org/univer/classes/js_dev/static/icon/follow.svg" />
+                                该店已被3.9万人关注啦
                             </div>
-                            <div class="enter">进店></div>
                         </div>
                         <div class="center">
-                            <img src="./static/image/icon_goods_shop@2x.png" alt="好店君"/>
-                            好店君：该店已被1.3万人关注，快来关注吧！
+                            <div>
+                                <div class="name">{item.name}</div>
+                                <div class="promotion">{item.promotion}</div>
+                            </div>
+                            <div class="enter">进店&nbsp;></div>
                         </div>
                         <div class="bottom">{
                             item.items.map(i => (
                                 <img src={i.image} />
                             ))
                         }</div>
-                        <div class="similar-shop">相似好店&nbsp;></div>
                     </div>
                 ))
             }
