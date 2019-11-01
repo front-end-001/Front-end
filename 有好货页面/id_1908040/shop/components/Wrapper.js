@@ -32,6 +32,14 @@ export default class Wrapper {
     return this.root.getAttribute(name);
   }
   setAttribute(name, value) {
+    // react  css in js
+    if (name == 'style' && typeof value == 'object') {
+      // console.log(value);
+      for (let p in value) {
+        this.root.style[p] = value[p];
+      }
+      return;
+    }
     return this.root.setAttribute(name, value);
   }
   addEventListener(...args) {

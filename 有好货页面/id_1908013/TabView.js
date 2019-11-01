@@ -27,7 +27,7 @@ export default class TabView {
         this.headerContainer = document.createElement('div')
         this.contentContainer = document.createElement('div')
 
-        this.headerContainer.style = 'height: 46px;display:flex;align-items:center;background:url("./images/header_bg.png") center top no-repeat;background-size:100%'
+        this.headerContainer.style = 'height: 13.889vw;display:flex;align-items:center;background-image:linear-gradient(to right, #6b25fd , #9232fd);'
 
         this.contentContainer.style = 'flex:1;overflow:hidden;white-space:nowrap'
         this.root.appendChild(this.headerContainer)
@@ -123,12 +123,13 @@ export default class TabView {
         this[PROPERTY_SYMBOL].headers.push(title)
 
         let header = document.createElement('div')
-        header.style = `display:flex;flex-direction:column;margin: 0 10px;align-items:center`
+        header.style = `display:flex;flex-direction:column;margin: 0 3.148vw;align-items:center`
         // let bottomLine = document.createElement('div')
         // bottomLine.style = `display:inline-block;height:2px;background-color:white;width:20px;`
 
         let titleContainer = document.createElement('div')
-        titleContainer.style = `color:white;font-size: 16px;`
+        let dpr = window.devicePixelRatio
+        titleContainer.style = `color:white;font-size: ${dpr * 16}px;`
         titleContainer.innerText = title
         header.appendChild(titleContainer)
         //header.appendChild(bottomLine)

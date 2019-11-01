@@ -22,16 +22,30 @@ export default class ScrollView {
     }
     created() {
         this.root = document.createElement("div");
-        this.root.addEventListener( // 6、避免单指缩放
-            "touchmove",
-            function(e) {
-              if (e.touches.length == 1) {
-                e.cancelBubble = true;;
-                e.stopImmediatePropagation();
-              }
-            },
-            { passive: false }
-          );
+        this.placeHolder = document.createElement("div");
+        // this.placeHolder.innerText = "加载更多...";
+        this.placeHolder.style.backgroundColor = "lightgreen"
+        this.root.appendChild(this.placeHolder)
+
+
+        let triggerd = false;
+        this.root.addEventListener("scroll", event =>{
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            if(clientRect.bottom < placeHolderRect.top) {
+                if(!triggerd) {// 老师这里写的是  triggerd 
+                    this.triggerEvent('scrollToBottom');
+                    triggerd = true;
+                }
+               
+            }
+            // console.log(this.root.scrollHeight,clientRect.height,this.root.scrollTop)
+            /*if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
+               this.triggerEvent('scrollToBottom','a')//添加事件判断到底
+                console.log("到底了")
+            }*/
+
+        })
         this[STATE_SYMBOL].h = 0;
     }
 
@@ -51,6 +65,7 @@ export default class ScrollView {
     appendChild(child) {
         this.children.push(child);
         child.appendTo(this.root); // 添加过后需要 mount
+        this.root.appendChild(this.placeHolder)
     }
 
     get children() {
@@ -72,6 +87,10 @@ export default class ScrollView {
             this.root.setAttribute('style',value);
            
         }
+        if(name == "placeHolderText"){
+           this.placeHolder.innerText = value
+        }
+
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     
@@ -87,12 +106,12 @@ export default class ScrollView {
         }
         this[EVENT_SYMBOL][type].delete(listener);
     }
-    triggerEvent(type) { // 触发事件
+    triggerEvent(type,...args) { // 触发事件
         if(!this[EVENT_SYMBOL][type]){
            return;
         }
         for (let event of this[EVENT_SYMBOL][type]){
-            event.call(this);
+            event.call(this,...args);
         }
     }
 
