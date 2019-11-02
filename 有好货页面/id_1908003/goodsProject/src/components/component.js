@@ -266,7 +266,7 @@ export default class Component {
 
   /**
    * 获取状态
-   * @param {string} name 状态名
+   * @param {string} [name] 状态名
    */
   $getProp(name) {
     if (name) {

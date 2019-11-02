@@ -96,6 +96,13 @@ export default class Wraper extends Component {
     }
   }
 
+  removeChild(ele) {
+    if (ele instanceof Element) {
+      this.$el.removeChild(ele);
+    } else if (ele.$el instanceof Element) {
+      this.$el.removeChild(ele.$el);
+    }
+  }
 };
 
 function camelize(str) {

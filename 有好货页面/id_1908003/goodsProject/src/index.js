@@ -8,13 +8,30 @@ import Tab from './components/TabView';
 import TabItem from './components/TabItem';
 import ScrollView from './components/ScrollView';
 import ListView from './components/ListView';
+import Carousel from './components/Carousel';
+import Image from './components/ImageEle';
+
+const imgList = [{
+  "img": "xxxxx",
+  "target": {
+    "type": "shop",
+    "params": {
+      "shop_id": 123,
+    }
+  }
+}];
 
 fetch('/static/data/commendTab.json').then(res => res.json()).then((data) => {
   const indexHtml = (<Tab>
     <TabItem tab-title="推荐" tab-name="commend">
       <ScrollView>
-        <div data-list="轮播图数据">轮播图</div>
+        <Carousel style="width: 93.6vw;" data-list={imgList} />
         <div data-list="轮播图数据">双图推荐</div>
+        <Image src="/static/image/bacground.png" fit="contain" style="width: 100%; height: 200px;"></Image>
+        <Image src="/static/image/bacground2.png" style="width: 100%; height: 200px;"></Image>
+        <Image src="/static/image/bacground.png" style="width: 100%; height: 200px;"></Image>
+        <Image src="/static/image/bacground.png" style="width: 100%; height: 200px;"></Image>
+        <Image src="/static/image/bacground.png" style="width: 100%; height: 200px;"></Image>
         <ListView list-data="123">
           我是 推荐<br />
         </ListView>

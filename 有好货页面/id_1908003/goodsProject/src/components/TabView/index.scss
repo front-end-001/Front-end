@@ -21,6 +21,7 @@
       display: inline-block;
       position: relative;
       height: 35px;
+
       &.active {
         font-family: PingFangSC-Medium;
         font-weight: bold;
@@ -29,7 +30,7 @@
       &.active:after {
         content: ' ';
         width: 21px;
-    height: 2px;
+        height: 2px;
         background-color: white;
         display: inline-block;
         position: absolute;
@@ -49,6 +50,7 @@
     .o-tab-item {
       height: 100%;
       overflow: hidden;
+      white-space: normal;
       width: 100%;
       min-width: 100%;
       display: inline-block;
