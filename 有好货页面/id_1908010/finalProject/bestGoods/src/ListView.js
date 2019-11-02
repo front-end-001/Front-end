@@ -8,6 +8,7 @@ import Divider from './widgets/Divider.js'
 import FavoriteItem from './items/FavoriteItem.js'
 import CarouselView from './CarouselView.js'
 import SwitchView from './SwitchView.js'
+import ImageView from './ImageView.js'
 
 export default class ListView extends Component {
     constructor(config) {
@@ -86,7 +87,7 @@ export default class ListView extends Component {
                                     <Fragment>
                                         <div className="interestItem">
                                             <div className="interestItemBig">
-                                                <img src={item[0].image} width="100%" height="100%" className="rounded"></img>
+                                                <ImageView src={item[0].image} width="100%" height="100%" className="rounded"></ImageView>
                                                 <div className="interestItemFooterBig">
                                                     <div className="interestHeader">
                                                         <Fragment></Fragment>
@@ -94,16 +95,19 @@ export default class ListView extends Component {
                                                     </div>
                                                     <div className="interestEntry">
                                                         <span className="interestEntryName">进店</span>
-                                                        <img src="../res/icons/right_fill.svg" width="10" height="16"></img>
+                                                        <ImageView src="../res/icons/right_fill.svg" width="10" height="18"></ImageView>
+                                                        {/* <img src="../res/icons/right_fill.svg" width="10" height="16"></img> */}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="columnSection toLeft">
                                                 <div className="interestItemSmall">
-                                                    <img src={item[1].image} width="100%" height="100%" className="rounded"></img>
+                                                    <ImageView src={item[1].image} width="100%" height="100%" className="rounded"></ImageView>
+                                                    {/* <img src= width="100%" height="100%" className="rounded"></img> */}
                                                 </div>
                                                 <div className="interestItemSmall">
-                                                    <img src={item[2].image} width="100%" height="100%" className="rounded"></img>
+                                                    <ImageView src={item[2].image} width="100%" height="100%" className="rounded"></ImageView>
+                                                    {/* <img src={item[2].image} width="100%" height="100%" className="rounded"></img> */}
                                                 </div>
                                             </div>
                                         </div>
@@ -116,14 +120,17 @@ export default class ListView extends Component {
                                         <div className="interestItem">
                                             <div className="columnSection toRight">
                                                 <div className="interestItemSmall">
-                                                    <img src={item[0].image} width="100%" height="100%" className="rounded"></img>
+                                                    <ImageView src={item[0].image} width="100%" height="100%" className="rounded"></ImageView>
+                                                    {/* <img src={item[0].image} width="100%" height="100%" className="rounded"></img> */}
                                                 </div>
                                                 <div className="interestItemSmall">
-                                                    <img src={item[1].image} width="100%" height="100%" className="rounded"></img>
+                                                    <ImageView src={item[1].image} width="100%" height="100%" className="rounded"></ImageView>
+                                                    {/* <img src={item[1].image} width="100%" height="100%" className="rounded"></img> */}
                                                 </div>
                                             </div>
                                             <div className="interestItemBig">
-                                                <img src={item[2].image} width="100%" height="100%" className="rounded"></img>
+                                                <ImageView src={item[2].image} width="100%" height="100%" className="rounded"></ImageView>
+                                                {/* <img src={item[2].image} width="100%" height="100%" className="rounded"></img> */}
                                             </div>
                                         </div>
                                         <Divider></Divider>

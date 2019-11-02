@@ -3,7 +3,7 @@ import './FavoriteItem.scss'
 import {create} from '../../lib/create'
 import Fragment from '../Fragment.js'
 import Divider from  '../widgets/Divider.js'
-
+import ImageView from '../ImageView.js'
 
 export default class FavoriteItem extends Component {
     constructor(props) {
@@ -25,7 +25,8 @@ export default class FavoriteItem extends Component {
         let header = (
             <div className="favItemHeader">
                 <div className="favItemLogo">
-                    <img src={icon} width="26" height="26" className="icon"></img>    
+                    <ImageView src={icon} width="26" height="26" className="icon"></ImageView>
+                    {/* <img src={icon} width="26" height="26" className="icon"></img>     */}
                 </div>
                 <div className="itemTitle">
                     <div className="itemName">{name}</div>
@@ -36,8 +37,11 @@ export default class FavoriteItem extends Component {
 
         let content = (
             <div className="favContent">
+                <ImageView src={items[0].image} width="66" height="66" className="rounded"></ImageView>
+                <ImageView src={items[0].image} width="66" height="66" className="rounded"></ImageView>
+{/* 
                 <img src={items[0].image} width="66" height="66" className="rounded"></img>
-                <img src={items[0].image} width="66" height="66" className="rounded"></img>
+                <img src={items[0].image} width="66" height="66" className="rounded"></img> */}
             </div>
         )
 

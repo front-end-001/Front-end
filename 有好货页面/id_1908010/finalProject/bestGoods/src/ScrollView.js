@@ -1,6 +1,7 @@
 import Component from './BaseComponent'
 import './ScrollView.scss'
 import {create} from '../lib/create'
+import {enableGesture} from '../lib/gesture'
 
 export default class ScrollView extends Component {
     constructor(config){
@@ -16,13 +17,28 @@ export default class ScrollView extends Component {
     didCreate(){
 
         //阻止滑动事件向上传播
-        this.root.addEventListener('touchmove', (event) => {
-            event.cancelBubble = true
-            event.stopImmediatePropagation(); 
-        }, {
-            passive: false
-        })
+        // this.root.addEventListener('touchmove', (event) => {
+        //     event.cancelBubble = true
+        //     event.stopImmediatePropagation(); 
+        // }, {
+        //     passive: false
+        // })
+        enableGesture(this.root)
 
+
+        this.root.addEventListener("pan", (event) => {
+            console.log("event.isVertical", event.isVertical);
+            if (event.isVertical) {
+                console.log("cancelBubble");
+                event.origin.cancelBubble = true
+                event.stopImmediatePropagation();
+            } else {
+                
+            }
+        })
+        // , {
+        //     passive: true 
+        // }
 
         this.root.addEventListener("scroll", (event) => {
             let clientRect = this.root.getBoundingClientRect();

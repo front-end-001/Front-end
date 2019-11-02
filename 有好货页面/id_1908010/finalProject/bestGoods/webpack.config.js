@@ -65,7 +65,7 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         hot: true,
-        host: '192.168.1.148',
+        host: '192.168.3.8',
         port: 8080,
     },
     optimization: {

@@ -3,6 +3,7 @@ import {enableGesture} from '../lib/gesture.js'
 import Fragment from './Fragment';
 // 为什么 每个自己写的组件都要加这行代码
 import {create} from '../lib/create'
+import ImageView from './ImageView.js'
 
 export default class CarouselView extends Component {
     constructor(props) {
@@ -62,12 +63,14 @@ export default class CarouselView extends Component {
         return (
             <div style="overflow: hidden;">
                 {data.map(item => (
-                    <img 
+                    <ImageView 
                         className="carouselItem" 
                         src={item.image} 
                         width="100%" 
-                        height="100%" 
-                        style="display:inline-block;border-radius:18px;transition:ease 0.5s;"></img>
+                        height="100%"
+                        style="display:inline-block;border-radius:18px;transition:ease 0.5s;">
+
+                    </ImageView>
                 ))}
             </div>
         )
