@@ -11,7 +11,7 @@ export function h(component, props, ...children) {
   return instance;
 }
 export const ATTR_SYMBOL = Symbol('attr');
-export const PROP_SYMBOL = Symbol('prop');
+export const PROP_SYMBOL = Symbol('prop');// ？ 定义
 export const STATE_SYMBOL = Symbol('state');
 export const EVENT_SYMBOL = Symbol('event');
 export class BaseComponent {
