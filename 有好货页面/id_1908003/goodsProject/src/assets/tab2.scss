@@ -1,0 +1,52 @@
+.card2-container {
+  width: 93.6vw;
+  margin: 5vw auto;
+  display: flex;
+  border-radius: 6px;
+  font-size: 0;
+
+  img,
+  .image-ele {
+    border-radius: 6px;
+  }
+
+  &.odd {
+    .left-colum {
+      .image-ele {
+        width: 61.9vw;
+        height: 61.9vw;
+      }
+    }
+
+    .right-colum {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .image-ele {
+        width: 30.1vw;
+        height: 30.1vw;
+      }
+    }
+  }
+
+  &.even {
+    .left-colum {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .image-ele {
+        width: 30.1vw;
+        height: 30.1vw;
+      }
+    }
+
+    .right-colum {
+      .image-ele {
+        width: 61.9vw;
+        height: 61.9vw;
+      }
+    }
+  }
+}

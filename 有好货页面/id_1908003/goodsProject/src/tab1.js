@@ -91,5 +91,5 @@ async function fetchData() {
 
 export default {
   $el: tabContent,
-  fetchData
+  fetchData,
 };

@@ -25,8 +25,8 @@ export default class ListView extends Component {
 
     const tabItem = (
       <div class="o-list">
-        {listData.map(item => (
-          <div class="o-list-item">{createItem(item)}</div>
+        {listData.map((item, index) => (
+          <div class="o-list-item">{createItem(item, index)}</div>
         ))}
       </div>
     );

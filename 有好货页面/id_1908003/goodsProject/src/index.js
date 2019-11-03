@@ -41,10 +41,10 @@ const tab = (
       {tab1.$el}
     </TabItem>
     <TabItem tab-title="有趣的店" tab-name="funny">
-      {tab2}
+      {tab2.$el}
     </TabItem>
     <TabItem tab-title="品牌新店" tab-name="brand">
-      {tab3}
+      {tab3.$el}
     </TabItem>
   </Tab>
 );
