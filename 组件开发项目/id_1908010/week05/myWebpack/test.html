@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        .tabs {
+            display: flex;
+            justify-items: center;
+            background-color: aquamarine;
+        }
+        .tabItem {
+            font-size: 20px;
+            color: black;
+            padding: 4px 10px;
+        }
+    </style>
+</head>
+<body>
+    
+</body>
+<script type="module">
+    import TabComponent from './TabComponent.js'
+
+    let headers = ['推荐', '有趣的店', '品牌', '发现'];
+    let config = {
+        headers,
+    }
+
+    let tab = new TabComponent(config);
+    tab.appendTo(document.body);
+</script>
+
+</html>

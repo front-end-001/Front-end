@@ -158,3 +158,4 @@ function enableGesture(main) {
     main.addEventListener('touchend', touchend)
     main.addEventListener('touchcancel', touchcancel)
 }
+export default enableGesture

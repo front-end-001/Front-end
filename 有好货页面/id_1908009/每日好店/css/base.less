@@ -1,0 +1,188 @@
+@r: 1 / 100 * 1rem;
+
+.appearance-none {
+  appearance: none;
+}
+
+.imgWidth(@url) {
+  width: unit(image-width(@url)) * @r;
+}
+
+.imgHeight(@url) {
+  height: unit(image-height(@url)) * @r;
+}
+
+.setBacImg(@url, @width, @height) {
+  background-image: url(@url);
+  width: @width;
+  height: @height;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.setCoverImg(@url, @width, @height) {
+  background-image: url(@url);
+  width: @width;
+  height: @height;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+.setNormalImg(@url) {
+  background-image: url(@url);
+  .imgWidth(@url);
+  .imgHeight(@url);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calc(@prop; @val1; @val2; ) {
+  @{prop}: calc(~'@{val1} - @{val2}');
+  @{prop}: -moz-calc(~'@{val1} - @{val2}');
+  @{prop}: -webkit-calc(~'@{val1} - @{val2}');
+  @{prop}: -o-calc(~'@{val1} - @{val2}');
+}
+
+.calc-important(@prop; @val1; @val2; ) {
+  @{prop}: calc(~'@{val1} - @{val2}') !important;
+  @{prop}: -moz-calc(~'@{val1} - @{val2}') !important;
+  @{prop}: -webkit-calc(~'@{val1} - @{val2}') !important;
+  @{prop}: -o-calc(~'@{val1} - @{val2}') !important;
+}
+
+.clearfix {
+  zoom: 1;
+
+  &:after {
+    clear: both;
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+}
+
+.clearfix:after {
+  content: '';
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+html {
+  color: #000;
+  background: #fff;
+  overflow-y: scroll;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+html * {
+  outline: 0;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body,
+html {
+  font-family: sans-serif;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+article,
+aside,
+blockquote,
+body,
+button,
+code,
+dd,
+details,
+div,
+dl,
+dt,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+hr,
+input,
+legend,
+li,
+menu,
+nav,
+ol,
+p,
+pre,
+section,
+td,
+textarea,
+th,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+input,
+select,
+textarea {
+  font-size: 100%;
+  -webkit-appearance: none;
+  border: none;
+  background-color: #ffffff;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+fieldset,
+img {
+  border: 0;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  display: block;
+}

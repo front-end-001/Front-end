@@ -1,7 +1,10 @@
+const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = { 
   entry: "./index.js",
+  // entry: "./my.component",
   mode: "development",
   devServer: {
     contentBase: "./dist",
@@ -13,6 +16,10 @@ module.exports = {
   },
   module: {
     rules: [
+　　　　{
+　　　　　　test: /\.(png|jpg)$/,
+　　　　　　loader: 'url-loader?limit=8192'
+　　　　},
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
@@ -26,12 +33,31 @@ module.exports = {
             ]
           }
         }
+      },
+      {
+        test: /\.component$/,
+        use: {
+          loader: require.resolve('./component-loader.js')
+        }
+      },
+      {
+        test: /\.css$/i,
+        // use: ['to-string-loader', 'css-loader']
+        use: [require.resolve('./component-css-loader.js')]
       }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin(
       {template: "index.html"}
-    )
+    ),
+    // copy custom static assets
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, './static'),
+        to: 'static',
+        ignore: ['.*']
+      }
+    ])
   ]
 }

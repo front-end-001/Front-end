@@ -194,4 +194,4 @@ class DOMElementStyleNumberAnimation {
     }
 }
 
-// export { Timeline, DOMElementStyleNumberAnimation }
+export { Timeline, DOMElementStyleNumberAnimation }

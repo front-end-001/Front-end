@@ -10,7 +10,8 @@ export default class Text {
         this[ATTRIBUTE_SYMBOL] = Object.create(null)
         this[EVENT_SYMBOL] = Object.create(null)
         this[STATE_SYMBOL] = Object.create(null)
-        this[STATE_SYMBOL].children = []
+
+        this[PROPERTY_SYMBOL].children = []
         this.text = config || ''
         this.created()
     }
@@ -35,6 +36,11 @@ export default class Text {
 
     }
     appendChild (child) {
+        let dpr = window.devicePixelRatio
+        if (child.style.fontSize) {
+            let fontSize = parseInt(child.style.fontSize)
+            this.root.style = `font-size:${fontSize * dpr}px`
+        }
         this.children.push(child)
         child.appendChild(this.root)
     }
@@ -45,8 +51,8 @@ export default class Text {
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute (name, value) {
-        if (name === 'width') {
-            this.width = value
+        if (name === 'style') {
+            this.root.setAttribute('style', value)
         }
         return this[ATTRIBUTE_SYMBOL][name] = value
     }

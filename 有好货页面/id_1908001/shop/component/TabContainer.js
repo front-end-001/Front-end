@@ -1,7 +1,7 @@
 const PROPERTY_SYMBOL = Symbol("property")
 const ATTRIBUTE_SYMBOL = Symbol("property")
 const STATE_SYMBOL = Symbol("state")
-import initGesture from './../gesture'
+import initGesture from '../tool/gesture'
 export default class TabContainer {
     constructor() {
         this[PROPERTY_SYMBOL] = Object.create(null)
@@ -13,6 +13,12 @@ export default class TabContainer {
     }
     init () {
         this.container = document.createElement('div')
+        this.container.addEventListener('touchmove', (e) => {
+            e.cancelBubble = true
+            e.stopImmediatePropagation()
+        }, {
+            passive:false
+        })
         this.container.style.height = '100%'
 
         this.headerContainer = document.createElement('div')
@@ -24,102 +30,94 @@ export default class TabContainer {
         this.contentContainer.style.whiteSpace = 'nowrap'
         this.contentContainer.style.flex = '1'
         this.container.appendChild(this.contentContainer)
-        initGesture(this.container)
+        initGesture(this.contentContainer)
         this[STATE_SYMBOL].position = 0
-        this.container.addEventListener('pan', event => {
+        this.contentContainer.addEventListener('pan', event => {
+            if (event.isVertical) {
+                return
+            }
             event.preventDefault()
-            const children = this.children
-            const position = this[STATE_SYMBOL].position
-            const current = children[position]
-            const nextPosition = (position + 1) % children.length
-            const next = children[nextPosition]
-            const lastPosition = (children.length + position - 1) % children.length
-            const last = children[lastPosition]
-            console.log(current, last)
-            last.style.transition = 'ease 0s'
-            last.style.transform = `translate(${-500 - 500 * lastPosition + event.dx}px)`
-            next.style.transition = 'ease 0s'
-            next.style.transform = `translate(${500 - 500 * nextPosition  + event.dx}px)`
-            current.style.transition = 'ease 0s'
-            current.style.transform = `translate(${- 500 * position + event.dx}px)`
+            const width = this.contentContainer.getBoundingClientRect().width
+            for(let i = 0; i < this.contentContainer.children.length; i ++) {
+                this.contentContainer.children[i].style.transition = "ease 0.5s"
+                this.contentContainer.children[i].style.transform = `translateX(${event.dx - width * this[STATE_SYMBOL].position}px)`
+            }
         })
-        this.container.addEventListener('panEnd', event => {
-            event.origin.preventDefault()
-            let position = this[STATE_SYMBOL].position
-            const children = this.children
-            let isLeft
+        this.contentContainer.addEventListener('panEnd', event => {
+            if (event.isVertical) {
+                return
+            }
+            event.preventDefault()
+            const width = this.contentContainer.getBoundingClientRect().width
             if(event.isFlick) {
                 if(event.vx > 0) {
-                    position --
-                    isLeft = true
+                    this[STATE_SYMBOL].position --
                 }
                 if(event.vx < 0) {
-                    position ++
-                    isLeft = false
+                    this[STATE_SYMBOL].position ++
                 }
             } else {
-                if(event.dx > 250) {
-                    position --
-                    isLeft = true
-                } else if(event.dx < -250) {
-                    position ++
-                    isLeft = false
+                if(event.dx > width/2) {
+                    this[STATE_SYMBOL].position --
+                } else if(event.dx < -width/2) {
+                    this[STATE_SYMBOL].position ++
                 } else if(event.dx > 0) {
-                    isLeft = false
                 } else {
-                    isLeft = true
                 }
             }
-            position = (children.length + position) % children.length
-            let current = children[position]
-            let nextPosition = (position + 1) % children.length
-            let next = children[nextPosition]
-            let lastPosition = (children.length + position - 1) % children.length
-            let last = children[lastPosition]
-            if(!isLeft){
-                last.style.transition = ''
-            } else {
-                last.style.transition = 'ease 0s'
+            let position = this[STATE_SYMBOL].position
+            if (position < 0) {
+                position = 0
             }
-            last.style.transform = `translate(${-500 - 500 * lastPosition}px)`
-            if(isLeft){
-                next.style.transition = ''
-            } else {
-                next.style.transition = 'ease 0s'
+            const length = this.contentContainer.children.length
+            if (position >= length) {
+                position = length - 1
             }
-            next.style.transform = `translate(${500 - 500 * nextPosition}px)`
-            current.style.transition = ''
-            current.style.transform = `translate(${- 500 * position}px)`
-            this[STATE_SYMBOL].position = position
+            for(let i = 0; i < length; i ++) {
+                this.contentContainer.children[i].style.transition = "transform ease 0.5s"
+                this.contentContainer.children[i].style.transform = `translateX(${- width * position}px)`
+            }
         })
     }
     appendTo (body) {
         body.appendChild(this.container)
     }
     appendChild (child) {
-        const title = child.getAttribute('tabTitle') || ""
+        const title = child.getAttribute('tabTitle')
+        if (!title) {
+            return
+        }
+        const header = document.createElement('div')
+        header.innerText = title
+        // header.id = this.children.length
+        const n = this.children.length
+        header.style.display = 'inline-block'
+        header.style.height = '93px'
+        header.style.fontFamily = 'PingFang SC'
+        header.style.fontSize = '20px'
+        header.style.margin = '20px 35px 0 35px'
+        header.addEventListener('click', e => {
+            /*child.setAttribute("style", ``)
+            const current = this.children[this[STATE_SYMBOL].position]
+            current.setAttribute("style", ``)
+            this[STATE_SYMBOL].position = header.id
+            */
+            this[STATE_SYMBOL].position = n
+            console.log('++++n----', n, this.contentContainer.children.length)
+            for(let i = 0; i < this.contentContainer.children.length; i ++) {
+                this.contentContainer.children[i].style.transition = "ease 0.5s"
+                this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`
+            }
+        })
+        this.headerContainer.appendChild(header)
+        this.headers.push(header)
         this.children.push(child)
         child.appendTo(this.contentContainer)
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.display = "inline-block"
             this.contentContainer.children[i].style.width = "100%"
+            this.contentContainer.children[i].style.verticalAlign = "true"
             this.contentContainer.children[i].style.height = "100%"
-        }
-        if (title) {
-            const header = document.createElement('div')
-            header.innerText = title
-            header.style.display = 'inline-block'
-            header.style.height = '93px'
-            header.style.fontFamily = 'PingFang SC'
-            header.style.fontSize = '20px'
-            header.style.margin = '20px 35px 0 35px'
-            header.addEventListener('click', e => {
-                child.setAttribute("style", "transition:ease 0s;transform:translate(0px)")
-                const current = this.children[this[STATE_SYMBOL].position]
-                current.setAttribute("style", "transition:;transform:translate(0px)")
-            })
-            this.headerContainer.appendChild(header)
-            this.headers.push(header)
         }
     }
     get children () {

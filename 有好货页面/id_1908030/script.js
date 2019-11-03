@@ -1,29 +1,48 @@
 import ScrollView from "./ScrollView.js";
 import TabView from "./TabView.js";
 import Div from "./Div.js";
-import Text from "./Text.js";
+import ListView from "./ListView.js";
 
-function myCreate(Class, attributes, ...children){
-    var object = new Class();
-    for (let name in attributes)
-        object.setAttribute(name, attributes[name]);
-    for (let child of children) {
-        if (typeof child == "string") {
-            object.appendChild(new Text(children));
-        } else {
-            object.appendChild(child);    
-        }
-    }
-    return object; 
+import { create } from "./create.js"
+
+function loadMore() {
+    setTimeout(() => {
+        this.setAttribute("placeHolderText", "没有更多了")
+    }, 5000)
 }
 
-var c = <TabView>
-    <ScrollView tab-title="首页" style="background-color:blue;">dsfdsfs</ScrollView>
-    <ScrollView tab-title="推荐" style="background-color:blue;">dsfds</ScrollView>
-    <ScrollView tab-title="dfg" style="background-color:red;">sdfdsfsd</ScrollView>
-</TabView>
+window.render = (data, root) => {
+    var c = <TabView>
+        <ScrollView tab-title="推荐" placeHolderText="load more" on-scrollToBottom={loadMore} style="background-color:blue;">
+        <ListView data={data}></ListView>
+        <Div>gggg</Div>
+            {/* dsfdsfsfd
+            gdgfd
+            fgdshgfhgjhgj
+            hjkhktyuuyuuiiy
+            yiiiiiiiiiiiiii
+            iiiiiiiiiiiiii
+            iiiiiiiiiii
+            tyyyyyyyyyyy
+            yyyyyyyyyy
+            yyyyyyyyy
+            yyyyyyyyyy
+            yyyyy
+            ttttttttrr
+            rrrrrrrrrrrr
+            rrrrrrrrrrrrrrrrrr
+            ytuuuuuuuuuu
+            uuuuuuuuuuuuuu
+            uuuuuuuuu */}
+        </ScrollView>
+        <ScrollView tab-title="有趣的店" style="background-color:blue;">dsfds</ScrollView>
+        <ScrollView tab-title="品牌新店" style="background-color:red;">sdfdsfsd</ScrollView>
+    </TabView>
 
-c.appendTo(document.body);
+    c.appendTo(document.body);
+}
+
+
 
 
 

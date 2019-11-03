@@ -1,45 +1,30 @@
 import TabView from './components/TabView.js';
 import ScrollView from './components/ScrollView.js';
 import TextView from './components/TextView.js';
+import RecommendListView from './components/RecommendListView.js';
+// import RecommendItemView from './components/RecommendItemView.js';
+// import ListView from './components/ListView.js';
+import CarouselView from './components/CarouselView.js';
+import FavoriteView from './components/FavoriteView.js';
+import Div from './components/Div.js';
 
-// jsx的实现原理
-function create(Class, attributes, ...children) {
-  var object = new Class();
-  for (let name in attributes) {
-    // attribute
-    object.setAttribute(name, attributes[name]);
-  }
-  for (let child of children) {
-    if (typeof child === 'string') {
-      object.appendChild(new TextView(child));
-    } else {
-      object.appendChild(child);
-    }
-  }
-  return object;
+import {create} from './lib/create.js';
+
+// import tree from "./my.component";
+import tree from "./my2.component";
+
+
+// 下拉加载更多
+function loadMore() {
+  // console.log(111);
+  // console.log('load more');
+  setTimeout(() => {
+    this.setAttribute('placeHolderText', '没有更多啦!');
+  }, 2000);
 }
 
-var c = (
-  <TabView style="width:100%;height:100%;">
-    <ScrollView
-      tab-title="推荐"
-      style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;background-color:lightblue;font-size:50px;"
-    >
-        推荐
-    </ScrollView>
-    <ScrollView
-      tab-title="有趣的店"
-      style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;background-color:lightblue;font-size:50px;"
-    >
-        有趣的店
-    </ScrollView>
-    <ScrollView
-      tab-title="品牌新店"
-      style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;background-color:lightblue;font-size:50px;"
-    >
-        品牌新店
-    </ScrollView>
-  </TabView>
-);
-
-c.appendTo(document.body);
+window.render = function(data, root) {
+  var c = tree;
+  // var c = <Div>{tree}</Div>
+  c.appendTo(document.body);
+}
