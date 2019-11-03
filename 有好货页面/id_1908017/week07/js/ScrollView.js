@@ -26,3 +26,11 @@ export class ScrollView extends BaseComponent {
     }
   }
 }
+
+
+/**
+ * 需求整理：
+ * 作为容器
+ * 拦截 上下滑动
+ * 下滑到底部时，产生事件
+ */

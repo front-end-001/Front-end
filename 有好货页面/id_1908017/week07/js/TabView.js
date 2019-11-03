@@ -40,3 +40,10 @@ export class TabView extends BaseComponent {
     this[STATE_SYMBOL].pos = pos;
   }
 }
+/**
+ * 需求整理：
+ * 显示tab头 0
+ * 点击tab头显示对应内容 0
+ * 切换tab 时有动画 1
+ * 支持手势切换 1
+ */
