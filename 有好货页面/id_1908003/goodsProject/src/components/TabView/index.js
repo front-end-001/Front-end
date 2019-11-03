@@ -6,12 +6,12 @@ import Component, {
 import { getTransformXVal } from '../../assets/utils';
 import createComponent from '../createComponent';
 import './index.scss';
-import testcss from './test.css';
-import gesture from '../../assets/gesture';
+// import testcss from './test.css';
+import Gesture from '../../assets/gesture';
 
 const contexts = Object.create(null);
 
-console.log(testcss);
+// console.log(testcss);
 // const styleEle = document.createElement('style');
 // styleEle.innerHTML = testcss;
 // const head = document.getElementsByTagName('head');
@@ -35,11 +35,9 @@ export default class TabView extends Component {
     const doAlert = () => {
       alert('click');
     };
-    const styleObj = {
-      'background-color': 'red'
-    };
+
     const tab = (
-      <div class="o-tab" styleObj={styleObj}>
+      <div class="o-tab">
         <div style="text-align: center; position: relative; margin: 5vw 0;">
           <img
             src="/static/image/header-title.png"
@@ -50,19 +48,19 @@ export default class TabView extends Component {
             <img
               src="/static/image/header-back.png"
               alt="返回"
-              style="width: 10px; padding: 0 15px;"
+              style="width: 40px; padding: 0 15px;"
               on-click={doAlert}
             ></img>
             <img
               src="/static/image/header-share.png"
               alt="分享"
-              style="width: 24px; margin-left: auto; padding: 0 15px;"
+              style="width: 54px; margin-left: auto; padding: 0 15px;"
               on-click={doAlert}
             ></img>
             <img
               src="/static/image/header-more.png"
               alt="更多操作"
-              style="width: 20px;  padding: 0 15px;"
+              style="width: 50px;  padding: 0 15px;"
               on-click={doAlert}
             ></img>
           </div>
@@ -97,34 +95,21 @@ export default class TabView extends Component {
         </div>
       </div>
     );
-    console.log(this);
     this.setCurrent();
     return tab;
   }
 
   mounted() {
     // 开启拖拽
-    gesture.enableGesture(this[STATUS_SYMBOL].contentEle);
+    const gesture = new Gesture(this[STATUS_SYMBOL].contentEle);
+    gesture.enable();
 
     const contentEle = this[STATUS_SYMBOL].contentEle;
     let currentPos;
     let tabItemWidth;
 
-    contentEle.addEventListener(
-      'panstart',
-      evt => {
-        if (this.children.length === 0) return;
-        if (!evt.isHorizontal) return;
-        tabItemWidth = this.children[0].$el.getBoundingClientRect().width;
-        currentPos = getTransformXVal(this.children[0].$el);
-        this[STATUS_SYMBOL].contentEle.classList.add('on-drag');
-      },
-      false
-    );
-    contentEle.addEventListener(
-      'pan',
-      evt => {
-        if (this.children.length === 0) return;
+    const handleMove = (evt) => {
+      if (this.children.length === 0) return;
         let distance = currentPos + evt.dx;
         if (distance > 0) {
           distance = distance / 3;
@@ -136,6 +121,19 @@ export default class TabView extends Component {
         this.children.forEach(child => {
           child.$el.style.transform = `translateX(${distance}px)`;
         });
+    };
+    contentEle.addEventListener(
+      'panstart',
+      evt => {
+        if (this.children.length === 0) return;
+        if (!evt.isHorizontal) return;
+
+        window.stopScroll();
+
+        tabItemWidth = this.children[0].$el.getBoundingClientRect().width;
+        currentPos = getTransformXVal(this.children[0].$el);
+        this[STATUS_SYMBOL].contentEle.classList.add('on-drag');
+        contentEle.addEventListener('pan', handleMove, false);
       },
       false
     );
@@ -144,16 +142,15 @@ export default class TabView extends Component {
       'panend',
       evt => {
         if (this.children.length === 0) return;
+        if (!evt.isHorizontal) return;
 
         currentPos = getTransformXVal(this.children[0].$el);
         const currentIndex = Math.round((-1 * currentPos) / tabItemWidth);
         this.children[currentIndex].tabName;
         this.setCurrent(this.children[currentIndex].tabName);
-        // let distance = currentIndex * (-1) * tabItemWidth;
         this[STATUS_SYMBOL].contentEle.classList.remove('on-drag');
-        // this.children.forEach((child) => {
-        //   child.$el.style.transform = `translateX(${ distance }px)`;
-        // });
+        contentEle.removeEventListener('pan', handleMove);
+        window.cancelStopScroll();
       },
       false
     );
@@ -176,6 +173,7 @@ export default class TabView extends Component {
         }
 
         this.setCurrent(this.children[targetIndex].tabName);
+        window.cancelStopScroll();
       },
       false
     );
@@ -198,6 +196,9 @@ export default class TabView extends Component {
    */
   setCurrent(key) {
     if (this.children.length === 0) return;
+
+    // 缓存原 key 值
+    const oldCurrent = this[STATUS_SYMBOL].current;
 
     // 修改 current 状态
     this[STATUS_SYMBOL].current = key || this.children[0].tabName;
@@ -228,6 +229,10 @@ export default class TabView extends Component {
       child.$el.style.transform = `translateX(${targetPos}px)`;
     });
 
+    // 触发事件
+    if (oldCurrent !== key) {
+      this.triggerEvent('tabchange', key);
+    }
     // 执行子项展示逻辑
     // 暂不考虑动画过程中的当前项判断, 使用 css 逻辑实现切换动画
   }

@@ -14,7 +14,7 @@ import createComponent from '../createComponent';
 import './index.scss';
 
 let lazyImageObserver;
-const lazyImages = [];
+
 if (typeof window !== 'undefined' && window.IntersectionObserver) {
   lazyImageObserver = new IntersectionObserver(function(entries, observer) {
     entries.forEach(function(entry) {
@@ -81,6 +81,9 @@ export default class ImageEle extends Component {
     image.onerror = onErrorFuc;
     image.classList.add('c-image__inner');
     image.src = src;
+    image.addEventListener('contextmenu', function(e){
+      e.preventDefault();
+    });
     if (alt) {
       image.setAttribute('alt', alt);
     }
