@@ -15,13 +15,13 @@ module.exports = function(source,map){
             return tagOpen;
         }else if(c == "EOF"){
             emit("EOF", c);
-            return  ;
+            return ;
         }else {
             emit({
                type: "Text",
                content: c
             });
-            return  ;
+            return  data;
         }
     }
 
@@ -53,7 +53,8 @@ module.exports = function(source,map){
             currentToken = null;
             return data;
         } else {
-
+            currentToken.tagName += c;
+            return tagName;
         }
     }
 
@@ -87,6 +88,8 @@ module.exports = function(source,map){
         }
     }
 
+    
+
     function beforeAttributeValue(c){
         if(c.match(/^[\t\n\f ]$/) || c == ">" || c == EOF){
             return beforeAttributeValue;
@@ -104,9 +107,26 @@ module.exports = function(source,map){
     function doubleQuotedAttributeValue(c){
         if(c == "\""){
             currentToken[currentAttribute.name] = currentAttribute.value;
-            return beforeAttributeName;
+            return afterQuotedAttributeValue;
         } else if(c == "\u0000"){
 
+        } else if(c == EOF){
+
+        } else{
+            currentAttribute.value += c;
+            return doubleQuotedAttributeValue;
+        }
+    }
+
+    function afterQuotedAttributeValue(c){
+        if(c.match(/^[\t\n\f ]$/)){
+            return beforeAttributeName;
+        }else if(c == "/"){
+            return selfClosingStartTag;
+        } else if(c == ">"){
+            currentToken[currentAttribute.name] = currentAttribute.value;
+            emit(currentToken);
+            return data;
         } else if(c == EOF){
 
         } else{
@@ -135,6 +155,8 @@ module.exports = function(source,map){
             return beforeAttributeName;
         } else if(c == "\u0000"){
 
+        } else if(c == "\"" || c == "'" || c == "<" || c == "=" || c == "`"){
+            
         } else if(c == EOF){
 
         } else if(c == "/"){
@@ -143,11 +165,22 @@ module.exports = function(source,map){
         } else if(c == ">"){
             currentToken[currentAttribute.name] = currentAttribute.value;
             emit(currentToken);
-            currentToken = null;
             return data;
         } else{
             currentAttribute.value += c;
             return doubleQuotedAttributeValue;
+        }
+    }
+
+    function selfClosingStartTag(c){
+        if(c == ">"){
+            currentToken.isSelfClosing = true;
+            emit(currentToken);
+            return data;
+        } else if(c == EOF){
+
+        } else {
+
         }
     }
 
@@ -157,6 +190,7 @@ module.exports = function(source,map){
     
 
     for(let c of source){
+        console.log(c, state.name);
         state = state(c);
     }
     
