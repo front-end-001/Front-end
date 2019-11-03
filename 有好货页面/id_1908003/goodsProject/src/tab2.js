@@ -49,8 +49,40 @@ async function fetchData() {
 
   tabContent.removeChild(topContent);
   tabContent.removeChild(listView);
-
-  topContent = <div>123</div>;
+  const clickAll = () => {
+    btns.$el.classList.add('active-1');
+    btns.$el.classList.remove('active-2');
+    btns.$el.classList.remove('active-3');
+  };
+  const clickSuprise = () => {
+    btns.$el.classList.remove('active-1');
+    btns.$el.classList.add('active-2');
+    btns.$el.classList.remove('active-3');
+  };
+  const clickThink = () => {
+    btns.$el.classList.remove('active-1');
+    btns.$el.classList.remove('active-2');
+    btns.$el.classList.add('active-3');
+  };
+  const btns = (
+    <div class="btns active-1">
+      <div class="btn" on-click={clickAll}>
+        全部
+      </div>
+      <div class="btn" on-click={clickSuprise}>
+        小惊喜
+      </div>
+      <div class="btn" on-click={clickThink}>
+        想不到
+      </div>
+    </div>
+  );
+  topContent = (
+    <div class="tab-top">
+      <div class="title">新奇好店都在这</div>
+      {btns}
+    </div>
+  );
   listView = <ListView listData={data} listFuc={listItemFuc}></ListView>;
 
   tabContent.appendChild([topContent, listView]);
@@ -58,5 +90,5 @@ async function fetchData() {
 
 export default {
   $el: tabContent,
-  fetchData,
+  fetchData
 };
