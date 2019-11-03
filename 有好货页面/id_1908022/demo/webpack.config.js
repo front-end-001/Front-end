@@ -17,7 +17,7 @@ var path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: './src/my.component',
   module: {
         rules: [
             {
@@ -33,8 +33,12 @@ module.exports = {
                       plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
-            },
-            {
+            },{
+              test:  /\.component$/,
+              use: {
+                loader: require.resolve('./component-loader.js')
+              }
+            },{
               test: /\.(png|jpg|jpeg|gif|bmp)$/,
               use: 'url-loader'
             }
@@ -48,7 +52,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js'
+    filename: 'a.js'
   },
   optimization: {
     minimize: false
