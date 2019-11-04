@@ -23,13 +23,12 @@ export default class ListView extends Component {
         content.appendTo(this.root)
     }
 
+    
+
     render(){
         let data = this.property["data"]
         if (!data) return;
         console.log(data)
-        // console.log(data["focusData"])
-        // console.log(data["mostFavourateShops"])
-        // console.log(data["recommendedShops"])
         switch(data.type) {
             case 1: 
             return (
@@ -37,7 +36,7 @@ export default class ListView extends Component {
                     <div className="carouselContainer">
                         <CarouselView className="carouselView" data={data.rPageData["focusData"]}></CarouselView>
                     </div>
-                    <Divider ></Divider>
+                    <Divider></Divider>
                     <div className="favSection">
                         <span className="favTitle">超多人收藏的店！</span>
                         <div className="favContainer">
@@ -71,48 +70,54 @@ export default class ListView extends Component {
                         item.push(a)
                     }
                 }
-                console.log(datas)
-
+                // console.log(datas)
                 return (
                     <Fragment>
-                        <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 16px;">
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 16px; align-items: center;">
                             <span className="interestTitle">新奇好店都在这</span>
-                            <div style="white-space: nowrap;"><SwitchView></SwitchView></div>
+                            <SwitchView></SwitchView>
                         </div>
                         <div style="display:flex; flex-direction: column;">
                         {datas.map((item, index) => {
                             console.log(item[0].name)
+                            console.log(item[0].level)
+                            let favs = []
+                            for (let i = 0; i < item[0].level; i++) {
+                                let image = <ImageView src="../res/icons/heart.svg" width="12" height="12"></ImageView>
+                                favs.push(image)
+                            }
+
                             if (index % 2 == 0) {
                                 return (
-                                    <Fragment>
-                                        <div className="interestItem">
-                                            <div className="interestItemBig">
-                                                <ImageView src={item[0].image} width="100%" height="100%" className="rounded"></ImageView>
-                                                <div className="interestItemFooterBig">
-                                                    <div className="interestHeader">
-                                                        <Fragment></Fragment>
-                                                        <div><span>{item[0].name}</span></div>
-                                                    </div>
-                                                    <div className="interestEntry">
-                                                        <span className="interestEntryName">进店</span>
-                                                        <ImageView src="../res/icons/right_fill.svg" width="10" height="18"></ImageView>
-                                                        {/* <img src="../res/icons/right_fill.svg" width="10" height="16"></img> */}
-                                                    </div>
+                                <Fragment>
+                                    <div className="interestItem">
+                                        <div className="interestItemBig">
+                                            <ImageView src={item[0].image} width="100%" height="100%" className="rounded"></ImageView>
+                                            <div className="interestItemFooterBig">
+                                                <div className="interestHeader">
+                                                    <Fragment>{favs}</Fragment>
+                                                    <div><span className="shopName">{item[0].name}</span></div>
                                                 </div>
-                                            </div>
-                                            <div className="columnSection toLeft">
-                                                <div className="interestItemSmall">
-                                                    <ImageView src={item[1].image} width="100%" height="100%" className="rounded"></ImageView>
-                                                    {/* <img src= width="100%" height="100%" className="rounded"></img> */}
-                                                </div>
-                                                <div className="interestItemSmall">
-                                                    <ImageView src={item[2].image} width="100%" height="100%" className="rounded"></ImageView>
-                                                    {/* <img src={item[2].image} width="100%" height="100%" className="rounded"></img> */}
+                                                <div className="interestEntry">
+                                                    <span className="interestEntryName">进店</span>
+                                                    <ImageView 
+                                                        src="../res/icons/right_fill.svg" 
+                                                        width="10" 
+                                                        height="18"></ImageView>
                                                 </div>
                                             </div>
                                         </div>
-                                        <Divider></Divider>
-                                    </Fragment>
+                                        <div className="columnSection toLeft">
+                                            <div className="interestItemSmall">
+                                                <ImageView src={item[1].image} width="100%" height="100%" className="rounded"></ImageView>
+                                            </div>
+                                            <div className="interestItemSmall">
+                                                <ImageView src={item[2].image} width="100%" height="100%" className="rounded"></ImageView>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Divider></Divider>
+                                </Fragment>
                                 )
                             } else {
                                 return (
@@ -121,16 +126,26 @@ export default class ListView extends Component {
                                             <div className="columnSection toRight">
                                                 <div className="interestItemSmall">
                                                     <ImageView src={item[0].image} width="100%" height="100%" className="rounded"></ImageView>
-                                                    {/* <img src={item[0].image} width="100%" height="100%" className="rounded"></img> */}
                                                 </div>
                                                 <div className="interestItemSmall">
                                                     <ImageView src={item[1].image} width="100%" height="100%" className="rounded"></ImageView>
-                                                    {/* <img src={item[1].image} width="100%" height="100%" className="rounded"></img> */}
                                                 </div>
                                             </div>
                                             <div className="interestItemBig">
                                                 <ImageView src={item[2].image} width="100%" height="100%" className="rounded"></ImageView>
-                                                {/* <img src={item[2].image} width="100%" height="100%" className="rounded"></img> */}
+                                                <div className="interestItemFooterBig">
+                                                <div className="interestHeader">
+                                                    <Fragment>{favs}</Fragment>
+                                                    <div><span className="shopName">{item[0].name}</span></div>
+                                                </div>
+                                                <div className="interestEntry">
+                                                    <span className="interestEntryName">进店</span>
+                                                    <ImageView 
+                                                        src="../res/icons/right_fill.svg" 
+                                                        width="10" 
+                                                        height="18"></ImageView>
+                                                </div>
+                                            </div>
                                             </div>
                                         </div>
                                         <Divider></Divider>

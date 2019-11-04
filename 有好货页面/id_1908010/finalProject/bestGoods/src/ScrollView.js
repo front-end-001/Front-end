@@ -27,14 +27,10 @@ export default class ScrollView extends Component {
 
 
         this.root.addEventListener("pan", (event) => {
-            console.log("event.isVertical", event.isVertical);
             if (event.isVertical) {
-                console.log("cancelBubble");
                 event.origin.cancelBubble = true
                 event.stopImmediatePropagation();
-            } else {
-                
-            }
+            } 
         })
         // , {
         //     passive: true 

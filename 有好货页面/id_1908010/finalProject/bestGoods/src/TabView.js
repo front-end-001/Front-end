@@ -29,7 +29,7 @@ export default class TabView extends Component {
 
         this.contentContainer.addEventListener('pan', event => {
             event.origin.preventDefault()
-            console.log("pan contentContainer")
+
             let contentWidth = this.contentContainer.getBoundingClientRect().width;
 
             // --> 边界阻力效果
@@ -52,7 +52,7 @@ export default class TabView extends Component {
 
         this.contentContainer.addEventListener('panend', event => {
             event.origin.preventDefault()
-            console.log("panend")
+            // console.log("panend")
             let isLeft;
             let contentWidth = this.contentContainer.getBoundingClientRect().width
             if (event.isFlick) {

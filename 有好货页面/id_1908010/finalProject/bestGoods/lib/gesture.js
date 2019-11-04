@@ -18,21 +18,20 @@ export function enableGesture(main){
         //console.log("start",[point.clientX, point.clientY])
     }
     let move = (point, context, origin) => {
-        console.log(origin.target, "pan move");
+        // console.log(origin.target, "pan move");
         if(Math.abs(point.clientX - context.startX) > 10 || 
             Math.abs(point.clientY - context.startY) > 10){
-            console.log(origin.target, "panstart")
+            // console.log(origin.target, "panstart")
             context.isTap = false;
             if(context.isPan == false){
                 context.isPan = true;
                 if(context.isPress) {
                     context.isPress = false;
-                    var e = new Event("presscancel");
+                    let e = new Event("presscancel");
                     main.dispatchEvent(e);
                 }
                 if(Math.abs(point.clientX - context.startX) < Math.abs(point.clientY - context.startY)){
                     context.isVertical = true;
-        
                 } else {
                     context.isVertical = false;
                 }
@@ -52,7 +51,7 @@ export function enableGesture(main){
         }
 
         if(context.isPan) {
-            console.log("pan dispatch")
+            // console.log("pan dispatch")
             var e = new Event("pan");
             e.x = point.clientX;
             e.y = point.clientY;
@@ -84,7 +83,7 @@ export function enableGesture(main){
                 e.vy = (point.clientY - context.startY) / t;
                 main.dispatchEvent(e);
             }
-            console.log("panend")
+            // console.log("panend")
             var e = new Event("panend");
             e.x = point.clientX;
             e.y = point.clientY;
@@ -112,38 +111,38 @@ export function enableGesture(main){
         document.addEventListener("mousemove", mousemove);
         document.addEventListener("mouseup", mouseup);
         contexts[""] = {}
-        console.log("mousedown")
+        // console.log("mousedown")
         start(event, contexts[""], event);
     }
     let mousemove = event => {
-        console.log("mouse move")
+        // console.log("mouse move")
         move(event, contexts[""], event);
     }
     let mouseup = event => {
         document.removeEventListener("mousemove", mousemove);
         document.removeEventListener("mouseup", mouseup);
-        console.log("mouseup")
+        // console.log("mouseup")
         end(event, contexts[""], event);
         delete contexts[""];
     }
 
 
     let touchstart = event => {
-        console.log("touchstart")
+        // console.log("touchstart")
         for(let touch of event.changedTouches) {
             contexts[touch.identifier] = {};
             start(touch, contexts[touch.identifier], event);
         }
     }
     let touchmove = event => {
-        console.log(event.target, "touchmove")
+        // console.log(event.target, "touchmove")
         // console.log(event.changedTouches);
         for(let touch of event.changedTouches) {
             move(touch, contexts[touch.identifier], event);
         }
     }
     let touchend = event => {
-        console.log("touchend")
+        // console.log("touchend")
         for(let touch of event.changedTouches) {
             end(touch, contexts[touch.identifier], event);
             delete contexts[touch.identifier];
