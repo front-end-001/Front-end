@@ -7,8 +7,9 @@
 const PROPERTY_SYMBOL = Symbol('property')
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const EVENT_SYMBOL = Symbol('event')
-import initGesture from '../carousel/gesture/gesture.js'
-import { myCreate } from '../../../有好货页面/tool/create'
+import initGesture from '../tool/gesture.js'
+import { TimeLine, DOMElementStyleNumberAnimation } from '../tool/animation.js'
+import { myCreate } from '../tool/create'
 
 export default class Carousel {
     constructor () {
@@ -21,23 +22,22 @@ export default class Carousel {
         this.container = document.createElement('div')
         this.container.style.whiteSpace = 'nowrap'
         this.container.style.overflow = 'hidden'
-        const images = this.getAttribute('images')
+        // element.appendChild(this.container)
+    }
+    mounted () {
+        const images = this.getAttribute('data')
         for (let i = 0; i < images.length; i++) {
             const imageElement = document.createElement('img')
-            imageElement.src = this.images[i]
+            imageElement.src = images[i]
             imageElement.style.width = '100%'
             imageElement.style.height = '100%'
             imageElement.style.display = 'inline-block'
             imageElement.addEventListener('click', event => {
-                window.open(this.images[i])
+                window.open(images[i])
                 this.triggerEvent('click')
             })
             this.container.appendChild(imageElement)
         }
-        // element.appendChild(this.container)
-        this.mounted()
-    }
-    mounted () {
         console.log('mounted...')
         const children = Array.prototype.slice.call(this.container.children)
         const timeLine = new TimeLine()
@@ -200,6 +200,11 @@ export default class Carousel {
     setAttribute (name, value) {
         if (name === 'style') {
             this.container.setAttribute('style', value)
+            return
+        }
+        if (name === 'data') {
+            this[ATTRIBUTE_SYMBOL][name] = value
+            this.mounted()
             return
         }
         return this[ATTRIBUTE_SYMBOL][name] = value

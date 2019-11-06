@@ -89,13 +89,14 @@ export default class TabContainer {
         }
         const header = document.createElement('div')
         header.innerText = title
-        // header.id = this.children.length
         const n = this.children.length
+        // TODO 拿出去
         header.style.display = 'inline-block'
         header.style.height = '93px'
         header.style.fontFamily = 'PingFang SC'
-        header.style.fontSize = '20px'
-        header.style.margin = '20px 35px 0 35px'
+        header.style.fontSize = '23px'
+        header.style.color = 'white'
+        header.style.margin = '25px 35px 0 0'
         header.addEventListener('click', e => {
             /*child.setAttribute("style", ``)
             const current = this.children[this[STATE_SYMBOL].position]

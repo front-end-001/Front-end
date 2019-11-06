@@ -1,6 +1,7 @@
 const PROPERTY_SYMBOL = Symbol("property")
 const ATTRIBUTE_SYMBOL = Symbol("property")
 const EVENT_SYMBOL = Symbol("property")
+
 export default class ScrollContainer {
     constructor() {
         this[PROPERTY_SYMBOL] = Object.create(null)

@@ -4,7 +4,10 @@
     background-repeat: no-repeat;
     background-color: #EFEFEF;
     min-height: 100%;
+    padding: 0 20px;
 }
-.font {
-
+.scroll {
+    -webkit-overflow-scrolling:touch;
+    overflow:scroll;
+    white-space:normal;
 }
