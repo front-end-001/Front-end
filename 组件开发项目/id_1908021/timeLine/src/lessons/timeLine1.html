@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Animation 2</title>
+  </head>
+
+  <body>
+    <div
+      id="ball"
+      style="position:absolute;width:50px;height:50px; border-radius:25px;background-color:green"
+    ></div>
+    <button style="margin-top: 250px" onclick="tl.pause()">pause</button>
+    <button style="margin-top: 250px" onclick="tl.resume()">resume</button>
+    <script>
+      const AlgType = {
+        liner: 'liner',
+        cubeBezier: 'cubeBezier'
+      };
+
+      // TODO
+      // CubeBezierImpl extends InterpolationAlgImpl
+      // CubeBezierImpl 内置算子 & 可配算子
+      class InterpolationAlg {
+        static liner = (curT, startT, endT, startVal, endVal) => {
+          return ((curT - startT) / (endT - startT)) * (endVal - startVal) + startVal;
+        };
+
+        static generate(p1x, p1y, p2x, p2y) {
+          const ZERO_LIMIT = 1e-6;
+          // Calculate the polynomial coefficients,
+          // implicit first and last control points are (0,0) and (1,1).
+          const ax = 3 * p1x - 3 * p2x + 1;
+          const bx = 3 * p2x - 6 * p1x;
+          const cx = 3 * p1x;
+
+          const ay = 3 * p1y - 3 * p2y + 1;
+          const by = 3 * p2y - 6 * p1y;
+          const cy = 3 * p1y;
+
+          function sampleCurveDerivativeX(t) {
+            // `ax t^3 + bx t^2 + cx t' expanded using Horner 's rule.
+            return (3 * ax * t + 2 * bx) * t + cx;
+          }
+
+          function sampleCurveX(t) {
+            return ((ax * t + bx) * t + cx) * t;
+          }
+
+          function sampleCurveY(t) {
+            return ((ay * t + by) * t + cy) * t;
+          }
+
+          // Given an x value, find a parametric value it came from.
+          function solveCurveX(x) {
+            var t2 = x;
+            var derivative;
+            var x2;
+
+            // https://trac.webkit.org/browser/trunk/Source/WebCore/platform/animation
+            // First try a few iterations of Newton's method -- normally very fast.
+            // http://en.wikipedia.org/wiki/Newton's_method
+            for (let i = 0; i < 8; i++) {
+              // f(t)-x=0
+              x2 = sampleCurveX(t2) - x;
+              if (Math.abs(x2) < ZERO_LIMIT) {
+                return t2;
+              }
+              derivative = sampleCurveDerivativeX(t2);
+              // == 0, failure
+              /* istanbul ignore if */
+              if (Math.abs(derivative) < ZERO_LIMIT) {
+                break;
+              }
+              t2 -= x2 / derivative;
+            }
+
+            // Fall back to the bisection method for reliability.
+            // bisection
+            // http://en.wikipedia.org/wiki/Bisection_method
+            var t1 = 1;
+            /* istanbul ignore next */
+            var t0 = 0;
+
+            /* istanbul ignore next */
+            t2 = x;
+            /* istanbul ignore next */
+            while (t1 > t0) {
+              x2 = sampleCurveX(t2) - x;
+              if (Math.abs(x2) < ZERO_LIMIT) {
+                return t2;
+              }
+              if (x2 > 0) {
+                t1 = t2;
+              } else {
+                t0 = t2;
+              }
+              t2 = (t1 + t0) / 2;
+            }
+
+            // Failure
+            return t2;
+          }
+
+          function solve(x) {
+            return sampleCurveY(solveCurveX(x));
+          }
+
+          return solve;
+        }
+
+        static cubeBezier = (curT, startT, endT, startVal, endVal) => {
+          let progress = (curT - startT) / (endT - startT);
+          let displacement = this.generate(0.25, 0.1, 0.25, 1)(progress) * (endVal - startVal);
+          return displacement + startVal;
+        };
+
+        static getValue = (curT, startT, endT, startVal, endVal, type = AlgType.liner) => {
+          switch (type) {
+            case AlgType.liner:
+              return this.liner(curT, startT, endT, startVal, endVal);
+            case AlgType.cubeBezier:
+              return this.cubeBezier(curT, startT, endT, startVal, endVal);
+            default:
+              return this.liner(curT, startT, endT, startVal, endVal);
+          }
+        };
+      }
+
+      class TimeLine {
+        //initial, started, paused
+        constructor() {
+          this._animations = [];
+          this._rate = 1;
+          this._pauseStart = 0;
+          this._pauseTime = 0;
+          this._startPoint = 0;
+          this.status = 'initial';
+        }
+
+        pause = () => {
+          if (this.status !== 'started') return;
+          this.status = 'paused';
+          // 太僵硬了...
+          this._resumeTick = this._tick;
+          this._tick = null;
+          this._pauseStart = Date.now();
+        };
+
+        resume = () => {
+          if (this.status !== 'paused') return;
+          this._pauseTime += Date.now() - this._pauseStart;
+
+          this._tick = this._resumeTick;
+          requestAnimationFrame(this._tick);
+        };
+
+        get rate() {
+          return this._rate;
+        }
+
+        get startPoint() {
+          return this._startPoint;
+        }
+
+        set rate(value) {
+          this._rate = value;
+        }
+
+        set startPoint(value) {
+          this._startPoint = value;
+        }
+
+        addAnimation = animation => {
+          this._animations.push(animation);
+        };
+
+        start = () => {
+          if (this.status === 'started') return;
+          this.status = 'started';
+          this._pauseTime = 0;
+          let startTime = Date.now();
+
+          this._tick = () => {
+            for (let animation of this._animations) {
+              if (!animation.finished) {
+                animation.tick(
+                  (Date.now() - this._pauseTime - startTime) * this._rate + this._startPoint
+                );
+              }
+            }
+            if (this._tick) {
+              requestAnimationFrame(this._tick);
+            }
+          };
+          requestAnimationFrame(this._tick);
+        };
+
+        removeAnimation = () => {};
+      }
+
+      class DOMElementStyleNumberAnimation {
+        // TODO 参数封装
+        constructor(
+          element,
+          property,
+          startTime,
+          startValue,
+          endTime,
+          endValue,
+          converter,
+          animationType = AlgType.liner //新增插值算法配置
+        ) {
+          this.finished = false;
+          this._element = element;
+          this._property = property;
+          this._startTime = startTime;
+          this._endTime = endTime;
+          this._startValue = startValue;
+          this._endValue = endValue;
+          this._converter = converter;
+          this._animationType = animationType;
+          this._fixKeyFrame = false;
+        }
+
+        tick(t) {
+          if (t > this._endTime) {
+            if (!this._fixKeyFrame) return;
+            else {
+              this.finished = true;
+              t = this._endTime;
+
+              this._fixKeyFrame = false;
+            }
+          } else if (t < this._startTime) {
+            if (!this._fixKeyFrame) return;
+            else {
+              this.finished = true;
+              t = this._startTime;
+              this._fixKeyFrame = false;
+            }
+          } else {
+            this._fixKeyFrame = true;
+          }
+
+          const value = InterpolationAlg.getValue(
+            t,
+            this._startTime,
+            this._endTime,
+            this._startValue,
+            this._endValue,
+            this._animationType
+          );
+          console.log(value);
+          this._element.style[this._property] = this._converter(value);
+        }
+      }
+
+      let tl = new TimeLine();
+      tl.addAnimation(
+        new DOMElementStyleNumberAnimation(
+          document.getElementById('ball'),
+          'top',
+          0,
+          0,
+          500,
+          200,
+          v => `${v}px`
+        )
+      );
+      tl.addAnimation(
+        new DOMElementStyleNumberAnimation(
+          document.getElementById('ball'),
+          'left',
+          500,
+          0,
+          1000,
+          200,
+          v => `${v}px`
+        )
+      );
+      tl.addAnimation(
+        new DOMElementStyleNumberAnimation(
+          document.getElementById('ball'),
+          'top',
+          1000,
+          200,
+          1500,
+          0,
+          v => `${v}px`
+        )
+      );
+      tl.addAnimation(
+        new DOMElementStyleNumberAnimation(
+          document.getElementById('ball'),
+          'left',
+          1500,
+          200,
+          2000,
+          0,
+          v => `${v}px`
+        )
+      );
+      tl.rate = -1;
+
+      tl.startPoint = 2000;
+      tl.start();
+    </script>
+  </body>
+</html>

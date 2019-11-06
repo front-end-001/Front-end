@@ -1,0 +1,13 @@
+.tab-header {
+    width: 100px;
+    height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+
+
+.no-display {
+    display:none;
+}

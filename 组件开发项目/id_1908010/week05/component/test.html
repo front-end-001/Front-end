@@ -1,0 +1,36 @@
+<!-- <script src="./component.js"></script> -->
+<!-- <script src="./carousel.js"></script> -->
+<body>
+<script type="module">
+    import {CarouselView} from './Carousel.js'
+
+    let data = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+        "https://static001.geekbang.org/resource/image/82/af/823ef28a64096b4ffce19bca16a573af.jpg",
+        "https://static001.geekbang.org/resource/image/ee/70/ee7627bac9defb7621c2489fbacb3a70.jpg"
+    ];
+    let children = data.map(src => {
+        let img = document.createElement("img");
+        img.style.width = '100%'
+        img.style.height = '100%'
+        img.style.display = 'inline-block';
+        img.style.transition = 'ease 0.5s';
+        img.src = src;
+        return img;
+    });
+
+    let config = {
+        width: '500px',
+        height: '300px',
+        children: children,
+    }
+
+    let c = new CarouselView(config)
+    c.appendTo(document.body);
+
+</script>
+
+</body>

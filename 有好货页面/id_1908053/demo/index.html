@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="cls1 cls2" style="color: blue;">我是demo</div>
+</body>
+</html>
+
+<script>
+    var div = document.getElementsByTagName('div')[0];
+    div.style.cssText = 'border:1px solid red';
+
+    div.addEventListener('click', () => {
+        div.style.cssText = '';
+    })
+</script>
+
+<style>
+    .cls1 {
+        border: 1px solid blue;
+    }
+</style>

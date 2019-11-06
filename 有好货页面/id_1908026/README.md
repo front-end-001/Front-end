@@ -1,0 +1,1 @@
+# mao-cli-template
