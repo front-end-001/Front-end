@@ -65,15 +65,15 @@ const data = {
       [
         {
           img: './static/recommend/geektime-big.png',
-          title: 'InfoQ官方旗舰店',
+          title: 'RINATE',
           diamond: 4,
           link: 'javascript:void(0);'
         },
         {
           img: './static/recommend/geektime-small01.png',
-          title: null,
-          diamond: null,
-          link: null
+          title: '阿里妈妈',
+          diamond: 4,
+          link: 'javascript:void(0);'
         },
         {
           img: './static/recommend/geektime-small02.png',
@@ -97,9 +97,9 @@ const data = {
         },
         {
           img: './static/interesting/coffe-cup.png',
-          title: null,
-          diamond: null,
-          link: null
+          title: 'RINATE',
+          diamond: 4,
+          link: 'javascript:void(0);'
         }
       ],
       [
@@ -127,15 +127,15 @@ const data = {
       [
         {
           img: './static/recommend/geektime-big.png',
-          title: 'InfoQ官方旗舰店',
+          title: 'RINATE',
           diamond: 4,
           link: 'javascript:void(0);'
         },
         {
           img: './static/recommend/geektime-small01.png',
-          title: null,
-          diamond: null,
-          link: null
+          title: '阿里妈妈',
+          diamond: 4,
+          link: 'javascript:void(0);'
         },
         {
           img: './static/recommend/geektime-small02.png',
@@ -159,9 +159,9 @@ const data = {
         },
         {
           img: './static/interesting/coffe-cup.png',
-          title: null,
-          diamond: null,
-          link: null
+          title: '阿里妈妈',
+          diamond: 4,
+          link: 'javascript:void(0);'
         }
       ],
       [

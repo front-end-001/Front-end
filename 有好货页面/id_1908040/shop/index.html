@@ -18,6 +18,20 @@
 <!-- loadscript 这么加载的脚本会不会阻塞页面解析呢 圈圈问 -->
 <script>
 
+void function () {
+  var resizeEvt = "orientationchange" in window ? "orientationchange" : "resize"
+  var docEl = document.documentElement
+  function resizeFn() {
+    var docW = docEl.clientWidth
+    if (docW > 750) {
+      docW = 750
+    }
+    docEl.style.fontSize = (docW * 100) / 750 + "px"
+  }
+  resizeFn()
+  window.addEventListener(resizeEvt, resizeFn)
+}()
+
   let data = null;
   let domReady = false;
 

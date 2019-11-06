@@ -43,20 +43,11 @@ window.render = function(data, root) {
             data={data.recommand.favorites}>
           </FavoriteView>
           <RecommendListView data={data.recommand.list}></RecommendListView>
-          {/* <ListView>
-            {
-              data.recommand.list.map(item => {
-                retrun (
-                  <RecommendItemView data={item}></RecommendItemView>
-                );
-              })
-            }
-          </ListView> */}
         </ScrollView>
         <ScrollView
           tab-title="有趣的店"
           on-scrollToBottom={loadMore}
-          style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;background-color:lightgreen;font-size:50px;"
+          style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px;"
         >
           <InterestingListView data={data.recommand.list}></InterestingListView>
         </ScrollView>

@@ -1,0 +1,53 @@
+@import './variables';
+
+.shop-box {
+  width: 1012rem/$r;
+  margin: {
+    bottom: 12px;
+  }
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background: #fff;
+
+  &:nth-child(even) {
+    .shop {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+.shop {
+  display:flex;
+  justify-content:space-between;
+}
+
+.shop-main {
+  // width: 673rem/$r - 26rem/$r;
+  width: 4.3rem;
+  .main-img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.shop-main > div {
+    position: relative;
+}
+
+.shop-sub {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // width: 326rem/$r - 26rem/$r;
+  width: 2.1rem;
+  img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.diamond {
+  width: 35px;
+  height: 27px;
+}

@@ -43,6 +43,30 @@ module.exports = {
       },
       */
       {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // 'style-loader',
+          require.resolve('./component-css-loader.js'),
+          {
+            loader: 'sass-loader',
+            options: {
+              // Prefer `dart-sass`
+              implementation: require('sass'),
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              // Prefer `dart-sass`
+              implementation: require('sass'),
+              sassOptions: {
+                fiber: false,
+              }
+            },
+          },
+        ],
+      },
+      {
         test: /\.css$/i,
         // use: ['to-string-loader', 'css-loader']
         use: [require.resolve('./component-css-loader.js')]
