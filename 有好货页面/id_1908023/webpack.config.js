@@ -25,7 +25,9 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /(node_modules|bower_components)/,
-        use: ['style-loader', 'css-loader', { loader: 'postcss-loader'}],
+        // use: ['style-loader', 'css-loader', { loader: 'postcss-loader'}],
+        // use: ['to-string-loader', 'css-loader', { loader: 'postcss-loader'}],
+        use: [require.resolve('./component-css-loader.js')],
       },
       {
         test: /\.jsx?$/,
