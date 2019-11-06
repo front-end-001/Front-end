@@ -79,8 +79,6 @@ export default class ListView extends Component {
                         </div>
                         <div style="display:flex; flex-direction: column;">
                         {datas.map((item, index) => {
-                            console.log(item[0].name)
-                            console.log(item[0].level)
                             let favs = []
                             for (let i = 0; i < item[0].level; i++) {
                                 let image = <ImageView src="../res/icons/heart.svg" width="12" height="12"></ImageView>

@@ -31,17 +31,17 @@ export default class ScrollView extends Component {
                 event.origin.cancelBubble = true
                 event.stopImmediatePropagation();
             } 
+        }, {
+            passive: true 
         })
-        // , {
-        //     passive: true 
-        // }
+        
 
         this.root.addEventListener("scroll", (event) => {
             let clientRect = this.root.getBoundingClientRect();
 
             if (this.root.scrollHeight - clientRect.height <= this.root.scrollTop) {
                 if (!this.state.triggeredPullDown) {
-                    console.log('scrollToBottom')
+                    // console.log('scrollToBottom')
                     this.triggerEvent('scrollToBottom');
                     this.state.triggeredPullDown = true;
                 }

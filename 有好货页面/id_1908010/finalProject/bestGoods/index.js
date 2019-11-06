@@ -22,7 +22,7 @@ void async function(){
     // let obj = await ((await fetch('./data.json')).json())
     // await happen(document, "DOMContentLoaded")
 
-    console.log(iUnexpectDataUrl)
+    // console.log(iUnexpectDataUrl)
 
     // 所有的并行都逃避不开Promise.all
     let [rPageData, allPageData, supPageData, unexpectData, newPageData, event] = await Promise.all([

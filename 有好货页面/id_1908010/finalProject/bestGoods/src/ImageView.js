@@ -31,4 +31,14 @@ export default class ImageView  {
 
         return this[PROPERTY_SYMBOL][name] = value;
     }
+
+    getAttribute(name) {
+        if (name == 'style') {
+            return this.root.getAttribute(name)
+        }
+        if (name == 'className') {
+            return this.root.className;
+        }
+        return this[PROPERTY_SYMBOL][name];
+    }
 }

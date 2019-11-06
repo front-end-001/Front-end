@@ -21,7 +21,7 @@ export default class FavoriteItem extends Component {
         let data = this.property["data"] || ""
         if(!data) return null;
         let {name, icon, items} = data;
-        console.log(data)
+        // console.log(data)
         let header = (
             <div className="favItemHeader">
                 <div className="favItemLogo">

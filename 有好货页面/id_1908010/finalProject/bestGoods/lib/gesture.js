@@ -8,7 +8,7 @@ export function enableGesture(main){
         context.isTap = true;
         context.isPan = false;
         context.pressHandler = setTimeout(() => {
-            var e = new Event("pressstart");
+            let e = new Event("pressstart");
             e.origin = origin;
             main.dispatchEvent(e);
             context.isPress = true;
@@ -36,7 +36,7 @@ export function enableGesture(main){
                     context.isVertical = false;
                 }
                 
-                var e = new Event("panstart");
+                let e = new Event("panstart");
                 e.origin = origin;
                 e.startX = context.startX;
                 e.startY = context.startY;
@@ -52,7 +52,7 @@ export function enableGesture(main){
 
         if(context.isPan) {
             // console.log("pan dispatch")
-            var e = new Event("pan");
+            let e = new Event("pan");
             e.x = point.clientX;
             e.y = point.clientY;
             e.dx = point.clientX - context.startX;
@@ -67,7 +67,7 @@ export function enableGesture(main){
     let end = (point, context, origin) => {
         
         if(Date.now() - context.startTime < 300 && context.isTap) {
-            var e = new Event("tap");
+            let e = new Event("tap");
             main.dispatchEvent(e);
         }
 
@@ -78,13 +78,13 @@ export function enableGesture(main){
                 Math.pow(point.clientY - context.startY, 2)) / t)
             if(v > 0.3) {
                 isFlick = true;
-                var e = new Event("flick");
+                let e = new Event("flick");
                 e.vx = (point.clientX - context.startX) / t;
                 e.vy = (point.clientY - context.startY) / t;
                 main.dispatchEvent(e);
             }
             // console.log("panend")
-            var e = new Event("panend");
+            let e = new Event("panend");
             e.x = point.clientX;
             e.y = point.clientY;
             e.dx = point.clientX - context.startX;
@@ -99,7 +99,7 @@ export function enableGesture(main){
         }
 
         if(context.isPress){
-            var e = new Event("pressend");
+            let e = new Event("pressend");
             main.dispatchEvent(e);
         }
     }
@@ -156,9 +156,11 @@ export function enableGesture(main){
     }
     main.addEventListener("mousedown", mousedown);
     main.addEventListener("touchstart", touchstart);
-    main.addEventListener("touchmove", touchmove, {
-        passive: false,
-    });
+    main.addEventListener("touchmove", touchmove);
+    // 是否添加都不影响
+    // , {
+    //     passive: false,
+    // }
     main.addEventListener("touchend", touchend);
     main.addEventListener("touchcancel", touchcancel);
 }

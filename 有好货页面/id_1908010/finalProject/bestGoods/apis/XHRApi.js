@@ -11,7 +11,7 @@ function check() {
 
 function render() {
     console.log(document.body)
-    console.log(data)
+    // console.log(data)
 }
 
 let data = null;
