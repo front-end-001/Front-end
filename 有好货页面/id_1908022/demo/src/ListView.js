@@ -1,5 +1,6 @@
 import {create} from './create.js';
-import Div from './div.js'
+import Div from './div.js';
+import css from './ListView.css';
 
 
 const PROPERTY_SYMBOL = Symbol("property");
@@ -22,10 +23,17 @@ export default class ListView {
         this.mounted();
     }
 
+    addStyle(){
+        this.styleElement = document.createElement('style');
+        this.styleElement.innerHTML = css;
+        this.styleElement.setAttribute("scoped", "");
+        this.root.appendChild(this.styleElement);
+    }
+
     created(text){
         this.root = document.createElement("div");
-
         this.render().appendTo(this.root);
+        this.addStyle();
         
     }
     mounted(){
@@ -43,7 +51,7 @@ export default class ListView {
         return <div>
             {
                 data.map(item => {
-                   return <div><span>{item.aaa}</span><span>{item.bbb}</span></div>;
+                   return <div><span class="x">{item.aaa}</span><span>{item.bbb}</span></div>;
                 })
             }
         </div>;
@@ -85,6 +93,7 @@ export default class ListView {
             this[ATTRIBUTE_SYMBOL][name] = value;
             this.root.innerHTML = '';
             this.render().appendTo(this.root);
+            this.addStyle();
             return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
