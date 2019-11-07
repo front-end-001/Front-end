@@ -15,6 +15,7 @@ export default class CarouselView extends Component {
         super(props)
         this.props = props;
         this.property.children = []
+        this.property.dotChildren = [];
         this.property.timeLine = new TimeLine();
         this.state.position = 0
         this.state.startX = 0
@@ -30,13 +31,17 @@ export default class CarouselView extends Component {
         let content = this.render();
         if (!content) return;
         content.appendTo(this.root)
-        this.property.children = content.children
+        this.property.children = content.children.slice(0, content.children.length-1)
+        this.property.dotChildren = content.children[content.children.length - 1].children;
+        this.property.dotChildren[0].root.className = "dotItem dotActive";
         this.rootWidth = window.screen.width - 32;
         this.size = this.property.children.length;
 
 
         for (let d in this.property.children) {
             let child = this.property.children[d].root
+            // 初始化每个元素的transform, 这样自动轮播状态下元素的初始值就不会有tranform为undefined了
+
             child.style.transform = `translate(${parseInt(d)*this.rootWidth}px)`;
         }
         
@@ -63,6 +68,16 @@ export default class CarouselView extends Component {
         }
     }
 
+    updateDotsActive() {
+        for (let i = 0; i < this.property.dotChildren.length; i++) {
+            let dot = this.property.dotChildren[i].root
+            if (i == this.state.position) {
+                dot.className = "dotItem dotActive"
+            } else {
+                dot.className = "dotItem"
+            }
+        }
+    }
 
     enablePan() {
         this.root.addEventListener('pan', event => {
@@ -148,6 +163,7 @@ export default class CarouselView extends Component {
                 next.style.transform = `translate(${this.rootWidth - this.rootWidth * nextPos}px)`;
                 current.style.transform = `translate(${-this.rootWidth * this.state.position}px)`;
 
+                this.updateDotsActive()
                 this.restartAnimation()
             }
             else {
@@ -170,6 +186,7 @@ export default class CarouselView extends Component {
             let prevPosition = (this.state.position - 1 + this.size) % this.size;
             let prev = this.property.children[prevPosition].root;
 
+            // 关键逻辑 当手势引入时，this.state.position 会改变，这时，初始状态下各个元素的transform会发生改变，这里进行重置！
             current.style.transition = 'ease 0s'
             current.style.transform = `translate(${0}px)`;
             next.style.transition = 'ease 0s'
@@ -177,10 +194,11 @@ export default class CarouselView extends Component {
             prev.style.transition = 'ease 0s'
             prev.style.transform = `translate(${this.rootWidth + this.rootWidth}px)`
 
+            // current.style.zIndex = 20
+            // next.style.zIndex = 30
+            // prev.style.zIndex = 20
+
             if (prevPosition == 0) {
-                current.style.zIndex = 20
-                next.style.zIndex = 30
-                prev.style.zIndex = 20
                 this.property.timeLine.addAnimation(new NumberAnimation({
                     element: prev,
                     property: 'transform',
@@ -192,9 +210,6 @@ export default class CarouselView extends Component {
                     converter: (v) => `translateX(${v}px)`
                 }));
             } else {
-                current.style.zIndex = 20
-                next.style.zIndex = 30
-                prev.style.zIndex = 20
                 this.property.timeLine.addAnimation(new NumberAnimation({
                     element: prev,
                     property: 'transform',
@@ -232,6 +247,7 @@ export default class CarouselView extends Component {
 
             this.property.timeLine.start();
             this.state.position = nextPosition
+            this.updateDotsActive()
 
             this.nextPicTimer = setTimeout(this.nextPicture, 3000);
         }   
@@ -241,9 +257,16 @@ export default class CarouselView extends Component {
     render() {
         let data = this.property['data'] || ""
         if(!data) return null;
+        let dots = (
+            <div className="dotsContainer">
+                {data.map(item => (
+                    <div className="dotItem"></div>
+                ))}
+            </div>
+        )
 
         return (
-            <div style="overflow: hidden;">
+            <div style="overflow: hidden;position: relative;width: 343px; height: 167px;">
                 {data.map(item => (
                     <ImageView 
                         className="carouselItem" 
@@ -254,6 +277,7 @@ export default class CarouselView extends Component {
                         >
                     </ImageView>
                 ))}
+                {dots}
             </div>
         )
     }
