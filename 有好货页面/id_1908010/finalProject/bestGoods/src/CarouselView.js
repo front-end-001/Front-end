@@ -31,6 +31,18 @@ export default class CarouselView extends Component {
         if (!content) return;
         content.appendTo(this.root)
         this.property.children = content.children
+        this.rootWidth = window.screen.width - 32;
+        this.size = this.property.children.length;
+
+
+        // for (let d in this.property.children) {
+        //     let child = this.property.children[d].root
+        //     if (parseInt(d) == this.size - 1 && this.size > 2) {
+        //         child.style.transform = `translate(${-(parseInt(d) + 1)*this.rootWidth}px)`;
+        //     }
+        // }
+
+
         enableGesture(this.root);
 
         // this.root.addEventListener('mousedown', event => {
@@ -48,38 +60,38 @@ export default class CarouselView extends Component {
         // })
 
 
-        // this.root.addEventListener("touchstart", event => {
-        //     this.property.timeLine.pause();
-        //     // this.nextPicTimer = null
-        //     // 静止和动的时候不一样
-        //     let currentTime = Date.now();
-        //     let duration = currentTime - this.state.offsetTimeStart
+        this.root.addEventListener("touchstart", event => {
 
-        //     console.log("currentTime - this.state.offsetTimeStart",duration)
-        //     if (duration < ANIMATION_DURATION) {
-        //         this.state.offset = rootWidth - ease((duration)/ANIMATION_DURATION) * rootWidth;
-        //         console.log(this.state.offset)
-        //     } else {
-        //         this.state.offset = 0;
-        //     }
-        //     clearTimeout(this.nextPicTimer)
-        // })
+            this.property.timeLine.stop();
+            // this.nextPicTimer = null
+            // 静止和动的时候不一样
+            let currentTime = Date.now();
+            let duration = currentTime - this.state.offsetTimeStart
 
-        // this.root.addEventListener("touchend", event => {
-        //     console.log('touchend')
-        //     this.property.timeLine.resume();
-        // })
-        this.enablePan();
-        this.enableCarousel();
+            console.log("currentTime - this.state.offsetTimeStart",duration)
+            if (duration < ANIMATION_DURATION) {
+                // this.state.offset = this.rootWidth - ease((duration)/ANIMATION_DURATION) * this.rootWidth;
+                console.log("this.state.offset", this.state.offset)
+            } else {
+                this.state.offset = 0;
+            }
+            clearTimeout(this.nextPicTimer)
+            this.nextPicTimer = null;
+        })
+
+        this.root.addEventListener("touchend", event => {
+            // this.nextPicture();
+            setTimeout(()=> this.enableCarousel(), 2 * ANIMATION_DURATION);
+        })
+        // this.enablePan();
+        // this.enableCarousel();
     }
 
     enablePan() {
-        let rootWidth = window.screen.width - 32;
-        let size = this.property.children.length;
+
 
         this.root.addEventListener('pan', event => {
             if (!event.isVertical) {
-                // event.origin.cancelBubble = true;
                 event.origin.stopPropagation();
                 event.stopImmediatePropagation();
                 let current = this.property.children[this.state.position].root;
@@ -88,10 +100,8 @@ export default class CarouselView extends Component {
                 let nextPos = (this.state.position + 1) % size;
                 let next = this.property.children[nextPos].root;
 
-                console.log(this.state.offset)
-
                 prev.style.transition = "ease 0s";
-                prev.style.transform = `translate(${-rootWidth - rootWidth * prevPos + event.dx + this.state.offset}px)`;
+                prev.style.transform = `translate(${-this.rootWidth * (1 + prevPos) + event.dx + this.state.offset}px)`;
                 next.style.transition = "ease 0s";
                 next.style.transform = `translate(${rootWidth - rootWidth * nextPos + event.dx + this.state.offset}px)`;
                 current.style.transition = "ease 0s";
@@ -106,26 +116,13 @@ export default class CarouselView extends Component {
                 event.origin.cancelBubble = true;
                 event.cancelBubble = true;
                 event.stopImmediatePropagation();
-                let isLeft;
+
                 if (event.isFlick) {
                     this.state.position = event.dx > 0 ? this.state.position - 1 : this.state.position + 1;
-                    isLeft = event.dx < 0;
-                }
-                else {
-                    if (event.dx > rootWidth / 2) {
-                        this.state.position--;
-                        isLeft = false;
-                    }
-                    else if (event.dx < -rootWidth / 2) {
-                        this.state.position++;
-                        isLeft = true;
-                    }
-                    else if (event.dx > 0) {
-                        isLeft = false;
-                    }
-                    else {
-                        isLeft = true;
-                    }
+                } else {
+                    let pos = this.state.position;
+                    pos = event.dx > rootWidth / 2 ? pos - 1 : event.dx < -rootWidth / 2 ? pos + 1: pos
+                    this.state.position = pos;
                 }
                 // this.state.position = Math.max(0, Math.min(this.state.position, this.property.children.length - 1))
                 this.state.position = (size + this.state.position) % size;
@@ -136,21 +133,42 @@ export default class CarouselView extends Component {
                 let nextPos = (this.state.position + 1) % size;
                 let next = this.property.children[nextPos].root;
 
-                if (!isLeft) {
-                    prev.style.transition = "";
+                let animation_duration = `ease ${ANIMATION_DURATION/1000}s`
+                if (event.dx < -rootWidth/2 || (event.isFlick && event.dx < 0)) {
+                    // 向左 移动超过 rootWidth/2
+
+                    // 向左 prev 不可见
+                    prev.style.transition = animation_duration
+                    current.style.transition = animation_duration
+
+                     // 向左移动 next 滑动距离 > rootWidth/2, next 即将可见， prev 要绕后移到next右边
+                     next.style.zIndex = 30
+                     prev.style.zIndex = 20
+                     current.style.zIndex = 20
+                    
+                } else if (event.dx > rootWidth/2 || (event.isFlick && event.dx > 0)) {
+                    // 向右 移动超过 rootWidth/2
+                    // 向右 next 不可见
+                    next.style.transition = animation_duration
+                    current.style.transition = animation_duration
+                    // 向右移动 prev 滑动距离 > rootWidth/2, prev 即将可见， next 要绕后移到prev左边
+                    prev.style.zIndex = 30
+                    next.style.zIndex = 20
+                    current.style.zIndex = 20
+                } else if (event.dx < 0) {
+                    // 向左 移动 但距离小于 rootWidth/2
+                    // 向左 next滑动距离 小于 rootWidth/2
+                    next.style.transition = animation_duration
+                    current.style.transition = animation_duration
                 } else {
-                    prev.style.transition = "ease 0s";
-                    console.log("prev none")
+                    // 向右 移动 但距离小于 rootWidth/2
+                    // 向右 prev 滑动距离 小于 rootWidth/2
+                    prev.style.transition = animation_duration
+                    current.style.transition = animation_duration
                 }
+
                 prev.style.transform = `translate(${-rootWidth - rootWidth * prevPos}px)`;
-                if (isLeft) {
-                    next.style.transition = "";
-                } else {
-                    next.style.transition = "ease 0s";
-                    console.log("next none")
-                }
                 next.style.transform = `translate(${rootWidth - rootWidth * nextPos}px)`;
-                current.style.transition = "";
                 current.style.transform = `translate(${-rootWidth * this.state.position}px)`;
             }
             else {
@@ -163,18 +181,79 @@ export default class CarouselView extends Component {
     enableCarousel() {
         let rootWidth = window.screen.width - 32;
         let size = this.property.children.length;
-        this.state.position = 0;
-        let nextPicture = () => {
-            let nextPosition = this.state.position + 1;
-            nextPosition = nextPosition % size;
-            // console.log(nextPosition)
-            let current = this.property.children[this.state.position].root,
-                next = this.property.children[nextPosition].root;
-
+        console.log("updated: ",  this.state.position)
+        // this.state.position = 0;
+        this.nextPicture = () => {
             this.state.offsetTimeStart = Date.now()
+            this.property.timeLine.clear();
+            let current = this.property.children[this.state.position].root;
+            let nextPosition = (this.state.position + 1) % size;
+            let next = this.property.children[nextPosition].root;
+            let prevPosition = (this.state.position - 1 + size) % size;
+            let prev = this.property.children[prevPosition].root;
+            current.style.zIndex = 20
+            next.style.zIndex = 20
+            prev.style.zIndex = 20
+
 
             // next.style.transition = "ease 0s";
-            next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+            // next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
+
+            // prev.style.transition = "ease 0s";
+            // prev.style.transform = ``
+            console.log(prevPosition, this.state.position, nextPosition)
+
+
+            // console.log("prevPosition", prevPosition)
+
+            // console.log("nextPosition", nextPosition)
+
+            // this.property.timeLine.addAnimation(new NumberAnimation({
+            //     element: prev,
+            //     property: 'transform',
+            //     startTime: 0,
+            //     startValue: -rootWidth * (1 + prevPosition),
+            //     endTime: ANIMATION_DURATION,
+            //     endValue: -rootWidth * prevPosition,
+            //     transitMethod: ease,
+            //     converter: (v) => `translateX(${v}px)`
+            // }));
+
+            if (prevPosition == 2) {
+                this.property.timeLine.addAnimation(new NumberAnimation({
+                    element: prev,
+                    property: 'transform',
+                    startTime: 0,
+                    startValue: rootWidth * prevPosition,
+                    endTime: ANIMATION_DURATION,
+                    endValue: rootWidth * prevPosition -rootWidth,
+                    transitMethod: ease,
+                    converter: (v) => `translateX(${v}px)`
+                }));
+            } else if(prevPosition == 1){
+                this.property.timeLine.addAnimation(new NumberAnimation({
+                    element: prev,
+                    property: 'transform',
+                    startTime: 0,
+                    startValue: rootWidth * prevPosition,
+                    endTime: ANIMATION_DURATION,
+                    endValue: rootWidth * prevPosition -rootWidth,
+                    transitMethod: ease,
+                    converter: (v) => `translateX(${v}px)`
+                }));
+            } else {
+                this.property.timeLine.addAnimation(new NumberAnimation({
+                    element: prev,
+                    property: 'transform',
+                    startTime: 0,
+                    startValue: rootWidth * prevPosition,
+                    endTime: ANIMATION_DURATION,
+                    endValue: rootWidth * prevPosition + rootWidth + rootWidth,
+                    transitMethod: ease,
+                    converter: (v) => `translateX(${v}px)`
+                }));
+            }
+
 
             this.property.timeLine.addAnimation(new NumberAnimation({
                 element: current,
@@ -183,6 +262,7 @@ export default class CarouselView extends Component {
                 startValue: - rootWidth * this.state.position,
                 endTime: ANIMATION_DURATION,
                 endValue: -rootWidth - rootWidth * this.state.position,
+                transitMethod: ease,
                 converter: (v) => `translateX(${v}px)`
             }))
 
@@ -193,15 +273,17 @@ export default class CarouselView extends Component {
                 startValue: rootWidth - rootWidth * nextPosition,
                 endTime: ANIMATION_DURATION,
                 endValue: - rootWidth * nextPosition,
+                transitMethod: ease,
                 converter: (v) => `translateX(${v}px)`
             }))
 
-            this.property.timeLine.restart();
+
+            this.property.timeLine.start();
             this.state.position = nextPosition
 
-            this.nextPicTimer = setTimeout(nextPicture, 3000);
+            this.nextPicTimer = setTimeout(this.nextPicture, 3000);
         }   
-        this.nextPicTimer = setTimeout(nextPicture, 3000);
+        this.nextPicTimer = setTimeout(this.nextPicture, 3000);
     }
 
     render() {

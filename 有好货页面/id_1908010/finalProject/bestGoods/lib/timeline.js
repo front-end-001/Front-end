@@ -1,4 +1,3 @@
-import { clearInterval, setTimeout, clearTimeout } from "timers";
 
 const RATE_SYMBOL = Symbol('rate');
 const START_POINT = Symbol('startPoint')
@@ -32,6 +31,12 @@ export default class TimeLine {
         this.pauseStart = Date.now();
     }
 
+    stop() {
+        this.tick = null;
+        this.resumeTick = null;
+        this.status = STATUS.inited;
+    }
+
     resume() {
         if (this.status != STATUS.paused) 
             return; 
@@ -43,8 +48,8 @@ export default class TimeLine {
     }
 
     start() {
-        if (this.status == STATUS.started)
-            return;
+        // if (this.status == STATUS.started)
+        //     return;
         this.status = STATUS.started;
         let startTime = Date.now()
         this.pauseTime = 0 //初始暂停时间为0

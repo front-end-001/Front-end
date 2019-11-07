@@ -1,5 +1,3 @@
-import {ease, linear} from './cubicBezier.js'
-
 export class Animation {
     constructor(props){
         this.element = props.element;
@@ -9,12 +7,12 @@ export class Animation {
         this.endTime = props.endTime;
         this.endValue = props.endValue;
         this.converter = props.converter;
-
+        this.transitMethod = props.transitMethod;
         this.isKeyFrameFixed = false;
     }
 
     tick(t) {
-        console.log(t)
+        // console.log(t)
     }
     // 当引入负速率时，就需要引入关键帧修复的功能
     fixKeyframe(t) {
@@ -50,7 +48,7 @@ export class NumberAnimation extends Animation {
         t = this.fixKeyframe(t)
         //线性插值的算法
         let progress = (t - this.startTime) / (this.endTime - this.startTime);
-        let dv = (progress)  * (this.endValue - this.startValue);
+        let dv = this.transitMethod(progress) * (this.endValue - this.startValue);
         this.element.style[this.property] =  this.converter(dv + this.startValue);
     }
 }
@@ -67,7 +65,7 @@ export class VectorAnimation extends Animation {
         let dv = [];
         let currentValue = [];
         for (let i = 0; i < this.endValue.length; i++) {
-            dv[i] = progress  * (this.endValue[i] - this.startValue[i]);
+            dv[i] = this.transitMethod(progress)  * (this.endValue[i] - this.startValue[i]);
             currentValue[i] = dv[i] + this.startValue[i];
         }
         this.element.style[this.property] =  this.converter(currentValue);
@@ -84,6 +82,7 @@ timeLine.addAnimation(new NumberAnimation({
     startValue: 0,
     endTime: 500,
     endValue: 1000,
+    transitMethod: ease,
     convert: (v) => `translate(${v}px)`
 }))
 */

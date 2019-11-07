@@ -23,12 +23,10 @@ export default class ListView extends Component {
         content.appendTo(this.root)
     }
 
-    
-
     render(){
         let data = this.property["data"]
         if (!data) return;
-        console.log(data)
+        // console.log(data)
         switch(data.type) {
             case 1: 
             return (

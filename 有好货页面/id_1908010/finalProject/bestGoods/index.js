@@ -52,7 +52,7 @@ void async function(){
 
 
 function loadMore(a) {
-    console.log('loadmore')
+    // console.log('loadmore')
 }
 
 window.render = function(data){ 
