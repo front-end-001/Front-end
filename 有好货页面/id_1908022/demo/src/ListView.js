@@ -8,6 +8,14 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
+if(!window.LIST_VIEW_STYLE_ELEMENT){
+    let styleElement = document.createElement('style');
+    styleElement.innerHTML = css;
+    styleElement.setAttribute("scoped", "");
+    document.getElementsByTagName('head')[0].appendChild(styleElement);
+    window.LIST_VIEW_STYLE_ELEMENT = true;
+}
+
 export default class ListView {
     constructor(text){
         this[PROPERTY_SYMBOL] = Object.create(null);
@@ -23,17 +31,11 @@ export default class ListView {
         this.mounted();
     }
 
-    addStyle(){
-        this.styleElement = document.createElement('style');
-        this.styleElement.innerHTML = css;
-        this.styleElement.setAttribute("scoped", "");
-        this.root.appendChild(this.styleElement);
-    }
+    
 
     created(text){
         this.root = document.createElement("div");
         this.render().appendTo(this.root);
-        this.addStyle();
         
     }
     mounted(){
@@ -93,7 +95,6 @@ export default class ListView {
             this[ATTRIBUTE_SYMBOL][name] = value;
             this.root.innerHTML = '';
             this.render().appendTo(this.root);
-            this.addStyle();
             return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
