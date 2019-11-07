@@ -156,7 +156,9 @@ export function enableGesture(main){
     }
     main.addEventListener("mousedown", mousedown);
     main.addEventListener("touchstart", touchstart);
-    main.addEventListener("touchmove", touchmove);
+    main.addEventListener("touchmove", touchmove, {
+        passive: false
+    });
     // 是否添加都不影响
     // , {
     //     passive: false,

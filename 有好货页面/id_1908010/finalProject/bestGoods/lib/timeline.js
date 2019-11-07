@@ -43,8 +43,8 @@ export default class TimeLine {
     }
 
     start() {
-        // if (this.status == STATUS.started)
-        //     return;
+        if (this.status == STATUS.started)
+            return;
         this.status = STATUS.started;
         let startTime = Date.now()
         this.pauseTime = 0 //初始暂停时间为0
@@ -64,9 +64,9 @@ export default class TimeLine {
     restart() {
         if (this.tick) {
             this.tick = null;
-            this.resumeTick = null;
         }
         this.status = STATUS.inited;
+        this.resumeTick = null;
         requestAnimationFrame(() => this.start());
     }
 
@@ -77,6 +77,11 @@ export default class TimeLine {
     removeAnimation(animation){
 
     }
+
+    clear() {
+        this.animations = [];
+    }
+
     // 处理负速率时引入
     set startPoint(value) {
         return this[START_POINT].startPoint = value

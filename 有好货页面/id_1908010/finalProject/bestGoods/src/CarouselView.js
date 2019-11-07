@@ -48,27 +48,27 @@ export default class CarouselView extends Component {
         // })
 
 
-        this.root.addEventListener("touchstart", event => {
-            this.property.timeLine.pause();
-            // this.nextPicTimer = null
-            // 静止和动的时候不一样
-            let currentTime = Date.now();
-            let duration = currentTime - this.state.offsetTimeStart
+        // this.root.addEventListener("touchstart", event => {
+        //     this.property.timeLine.pause();
+        //     // this.nextPicTimer = null
+        //     // 静止和动的时候不一样
+        //     let currentTime = Date.now();
+        //     let duration = currentTime - this.state.offsetTimeStart
 
-            console.log("currentTime - this.state.offsetTimeStart",duration)
-            if (duration < ANIMATION_DURATION) {
-                this.state.offset = rootWidth - ease((duration)/ANIMATION_DURATION) * rootWidth;
-                console.log(this.state.offset)
-            } else {
-                this.state.offset = 0;
-            }
-            clearTimeout(this.nextPicTimer)
-        })
+        //     console.log("currentTime - this.state.offsetTimeStart",duration)
+        //     if (duration < ANIMATION_DURATION) {
+        //         this.state.offset = rootWidth - ease((duration)/ANIMATION_DURATION) * rootWidth;
+        //         console.log(this.state.offset)
+        //     } else {
+        //         this.state.offset = 0;
+        //     }
+        //     clearTimeout(this.nextPicTimer)
+        // })
 
-        this.root.addEventListener("touchend", event => {
-            console.log('touchend')
-            this.property.timeLine.resume();
-        })
+        // this.root.addEventListener("touchend", event => {
+        //     console.log('touchend')
+        //     this.property.timeLine.resume();
+        // })
         this.enablePan();
         this.enableCarousel();
     }
@@ -79,7 +79,8 @@ export default class CarouselView extends Component {
 
         this.root.addEventListener('pan', event => {
             if (!event.isVertical) {
-                event.origin.cancelBubble = true;
+                // event.origin.cancelBubble = true;
+                event.origin.stopPropagation();
                 event.stopImmediatePropagation();
                 let current = this.property.children[this.state.position].root;
                 let prevPos = (this.state.position - 1 + size) % size;
@@ -95,8 +96,7 @@ export default class CarouselView extends Component {
                 next.style.transform = `translate(${rootWidth - rootWidth * nextPos + event.dx + this.state.offset}px)`;
                 current.style.transition = "ease 0s";
                 current.style.transform = `translate(${-rootWidth * this.state.position + event.dx + this.state.offset}px)`;
-            }
-            else {
+            }else {
                 event.origin.cancelBubble = false;
                 return;
             }
@@ -104,6 +104,7 @@ export default class CarouselView extends Component {
         this.root.addEventListener("panend", event => {
             if (!event.isVertical) {
                 event.origin.cancelBubble = true;
+                event.cancelBubble = true;
                 event.stopImmediatePropagation();
                 let isLeft;
                 if (event.isFlick) {
@@ -195,19 +196,8 @@ export default class CarouselView extends Component {
                 converter: (v) => `translateX(${v}px)`
             }))
 
-            this.property.timeLine.start();
+            this.property.timeLine.restart();
             this.state.position = nextPosition
-
-            // setTimeout(() => {
-            //     //小技巧 这里置空之后，css的属性就会生效
-            //     current.style.transition = "";               
-            //     next.style.transition = "";
-
-            //     current.style.transform = `translate(${-100 - 100 * nextPosition}%)`;
-            //     next.style.transform = `translate(${-100*nextPosition}%)`
-
-            //     this.state.position = nextPosition
-            // }, 16.66);
 
             this.nextPicTimer = setTimeout(nextPicture, 3000);
         }   
