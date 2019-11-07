@@ -35,6 +35,7 @@ export default class TimeLine {
         this.tick = null;
         this.resumeTick = null;
         this.status = STATUS.inited;
+        this.clear();
     }
 
     resume() {
