@@ -1,10 +1,10 @@
 // import './TabComponent/style.less';
 
-import TabView from './TabComponent/TabView';
-import ScrollView from './TabComponent/ScrollView';
-// import TabContent from './TabComponent/TabContent';
+import TabView from './Components/TabView';
+import ScrollView from './Components/ScrollView';
+// import TabContent from './Components/TabContent';
 // import Text from './Components/Text';
-import ListView from './TabComponent/ListView';
+import ListView from './Components/ListView';
 
 import {create} from './create';
 

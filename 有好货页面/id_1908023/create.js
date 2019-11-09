@@ -1,5 +1,5 @@
 import Text from './Components/Text';
-import Wrapper from './TabComponent/Wrapper';
+import Wrapper from './Components/Wrapper';
 
 // react 也差不多做了相同的事情
 export function create(Component, attributes, ...children) {
