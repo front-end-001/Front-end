@@ -1,0 +1,143 @@
+.list-view {
+    padding: 0.2rem;
+}
+
+.card-1 {
+    background: #fff;
+    padding: 0.2rem 0.25rem;
+    float: left;
+}
+
+.card-1:first-child {
+    margin-right: 0.19rem;
+}
+
+.card-1-head {
+    font-size: 0.25rem;
+    font-weight: 400;
+    color: rgba(51, 51, 51, 1);
+    line-height: 0.27rem;
+}
+
+.card-1-img {
+    width: 0.54rem;
+    height: 0.54rem;
+    float: left;
+}
+
+.card-1 .img-content {
+    float: left;
+    width: 1.38rem;
+    height: 1.38rem;
+    margin-top: 0.27rem;
+}
+
+.icon-tm-1 {
+    width: 0.44rem;
+    height: 0.21rem;
+    border-radius: 0.15rem;
+    margin-top: 0.14rem;
+}
+
+.card-2 {
+    width: 6.3rem;
+    background: #fff;
+    border-radius: 0.18rem;
+    padding: 0.4rem 0.35rem;
+    margin-top: 0.35rem;
+    float: left;
+    position: relative;
+}
+
+.card-2-head p {
+    font-size: 0.32rem;
+    font-weight: 500;
+    color: rgba(51, 51, 51, 1);
+    line-height: 0.24rem;
+}
+
+.card-2-img {
+    width: 0.73rem;
+    height: 0.73rem;
+    float: left;
+}
+
+.icon-tm-2 {
+    width: 0.52rem;
+    height: 0.25rem;
+    border-radius: 0.18rem;
+    margin-top: 0.12rem;
+}
+
+.to-shop {
+    background: linear-gradient(90deg, rgba(255, 172, 0, 1), rgba(254, 201, 0, 1));
+    border-radius: 0.25rem;
+    width: 1.11rem;
+    padding: 0.12rem 0;
+    font-size: 0.28rem;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    right: 0.24rem;
+    top: 0.4rem;
+}
+
+.clearfix::after {
+    content: '';
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    display: block;
+    clear: both;
+}
+
+.card-2 .tips {
+    background: rgba(245, 245, 245, 1);
+    border-radius: 0.11rem;
+    overflow: hidden;
+    width: 6rem;
+    padding: 0.22rem 0.18rem;
+    font-size: 0.25rem;
+    margin-top: 0.19rem;
+}
+
+.card-2 .tips::before {
+    content: '';
+    width: 0.37rem;
+    height: 0.37rem;
+    background: url('https://i.pinimg.com/280x280_RS/e9/f7/e1/e9f7e101e3b7484d53b2b4d5a6004740.jpg') no-repeat center/100% auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.13rem;
+}
+
+
+
+.like-shop {
+    font-size: 0.22rem;
+    font-weight: 300;
+    color: rgba(136, 136, 136, 1);
+    line-height: 0.17rem;
+    float: right;
+    margin-top: 0.28rem;
+}
+
+.img-wrap .img-1 {
+    float: left;
+    width: 4rem;
+    height: 4.4rem;
+    margin-right: 0.06rem;
+}
+
+.img-wrap .img-2 {
+    width: 2.2rem;
+    height: 2.2rem;
+}
+
+.fr-19 {
+    margin-right: 0.19rem;
+}
+
+.mt-21 {
+    margin-top: 0.21rem;
+}

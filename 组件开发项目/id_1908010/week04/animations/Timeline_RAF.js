@@ -2,14 +2,19 @@
  * @Author: 玉皇大亮
  * @since: 2019-08-29 19:29:52
  * @LastAuthor: Do not edit
- * @lastTime: 2019-08-29 21:57:32
+ * @lastTime: 2019-09-07 16:13:35
  * @message: TimeLine RequestAnimationFrame 版本
  */
 
 /**
  * @description: 使用requestAnimationFrame的版本
  * @state 初始化 inited 开始 started 暂停 paused  
-、 */ 
+ */ 
+const TimeLineState = {
+    inited : 'inited',
+    started: 'started',
+    paused : 'paused',
+}
 
 class Timeline_RAF {
     constructor() {
@@ -58,6 +63,17 @@ class Timeline_RAF {
         // 动画恢复
         this.tick = this.savedTick;
         requestAnimationFrame(this.tick);
+    }
+
+    restart() {
+        if(this.tick) {
+            this.tick = null;
+            this.savedTick = null;
+        }
+        this.status = TimeLineState.inited;
+        requestAnimationFrame(() => {
+            this.start();
+        });
     }
 
     resetTimer() {

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .carousel {
+            /*width: 500px;*/
+            /*overflow: hidden;*/
+            /*white-space: nowrap;*/
+        }
+        .tab-nav {
+            display: flex;
+            justify-content: space-around;
+            color: #333;
+        }
+
+        .tab-nav .current {
+            color: #fff;
+            background: #87CEFA;
+        }
+
+        .carousel > div {
+            transition: ease 0.5s;
+        }
+
+        .tab-header {
+            color: #333;
+            line-height: 45px;
+
+        }
+        .tab-header header {
+            margin-right: 35px;
+            display: inline-block;
+            position: relative;
+        }
+        .tab-header .current {
+            font-size: 20px;
+        }
+        .tab-header .current:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 20px;
+            border-bottom: 5px solid;
+            margin: -5px auto 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script src="main.js"></script>
+<style type="text/css">
+    html,body {
+        margin: 0 0 0 0;
+        padding: 0 0 0 0;
+        width:100%;
+        height:100%;
+    }
+    /*body {
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-touch-callout: none;
+    }
+
+    * {
+        -webkit-text-size-adjust:none;
+    }*/
+</style>
+
+<script type="text/javascript">
+    //关闭选择
+    //document.addEventListener("selectstart",function(e){ e.preventDefault(); });
+    //避免鼠标变成文本选择形状
+    //document.addEventListener("mousedown",function(e){ e.preventDefault(); });
+    //避免上下滚屏
+    /*document.addEventListener("touchmove",function(e){
+        if(e.touches.length == 2)
+            e.preventDefault();
+    }, {passive:false});
+    document.addEventListener("touchmove",function(e){
+        if(e.touches.length == 1)
+            e.preventDefault();
+    }, {passive:false});
+    document.addEventListener("touchstart",function(e){
+        e.preventDefault();
+    }, {passive:false});*/
+    document.addEventListener("touchmove",function(e){
+        if(e.touches.length == 1)
+            e.preventDefault();
+    }, {
+        passive:false
+    })
+
+</script>
+
+</body>
+</html>
