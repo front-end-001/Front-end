@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./script.js",
+    entry: "./src/main.js",
     module: {
         rules: [
             {
@@ -15,12 +15,12 @@ module.exports = {
             {
                 test: /\.component$/,
                 use: {
-                    loader: require.resolve('./component-loader.js')
+                    loader: require.resolve('./src/component-loader.js')
                 }
             },
             {
                 test: /\.css$/i,
-                use: [require.resolve('./component-css-loader.js')],
+                use: [require.resolve('./src/component-css-loader.js')],
             },
         ]
     },

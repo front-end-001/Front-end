@@ -1,0 +1,46 @@
+.shop{
+    background-color:white;
+    padding:10px;
+    margin:10px;
+    border:solid;
+    border-radius: 15px;
+    height: 700px;
+}
+.info{
+    display:flex;
+    justify-content: space-between;
+}
+.enter{
+    background-color:red;
+    color:white;
+    padding:10px;
+    margin:10px;
+    border:solid;
+    border-radius: 30px;
+    float: right;
+}
+.imgs{
+    display:flex;
+    width: 100%; 
+    height: 80%;
+}
+.imgsLeft{
+    width: 60%; 
+    height: 100%;
+}
+.imgsRight{
+    width: 40%; 
+    height: 100%; 
+    display: flex; 
+    flex-direction: column;
+}
+.foot{
+    display: flex;
+    justify-content: space-between;
+}
+.footLeft{
+    display: flex;
+}
+.footLeft div{
+  margin-right: 10px;
+}

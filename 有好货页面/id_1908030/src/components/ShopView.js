@@ -1,26 +1,23 @@
-import {create} from "./create.js";
+import {create} from "../create.js";
 import Div from "./Div.js";
-import css from "./ListView.css";
+import css from "../assets/css/ShopView.css";
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-/*
 let styleElement = document.createElement("style");
 styleElement.innerHTML = css;
 document.getElementsByTagName("head")[0].appendChild(styleElement);
-*/
 
-export default class ListView {
+export default class ShopView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         
-        console.log(css);
 
         this[PROPERTY_SYMBOL].children = [];
 
@@ -38,7 +35,7 @@ export default class ListView {
 
     created(){
         this.root = document.createElement("div");
-        this.root.className = "list-view";
+        this.root.className = "shop-view";
         this.render().appendTo(this.root);
     }
     mounted(){
@@ -54,29 +51,32 @@ export default class ListView {
 
     render(){
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
-        return <div>
-            {
-                data.map(item => (
-                    <div class="shop" style="background-color:white;padding:10px;margin:10px;border:solid;border-radius: 15px;height: 700px">
-                        <div style="display:flex">
-                            <div>{item.shop}</div>
-                            <div style="background-color:red;color:white;padding:10px;margin:10px;border:solid;border-radius: 30px;float: right">进店 ></div>
-                        </div>
-                        <div>{item.introduce}</div>
-                        <div style="display:flex;width: 100%; height: 80%">
-                            <div style="width: 60%; height: 100%">
-                                <img style="width: 100%; height: 100%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                            </div>
-                            <div style="width: 40%; height: 100%">
-                                <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                                <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                            </div>
-                        </div>
-                    </div>
-                    // <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
-                ))
-            }
-        </div>
+        if (data.length == 0) {
+            return <div></div>
+        }
+        return <Div class="shop">
+                    <Div class="info">
+                        <Div>{data.shop}</Div>
+                        <Div class="enter">进店 ></Div>
+                    </Div>
+                    <Div>{data.introduce}</Div>
+                    <Div class="imgs">
+                        <Div class="imgsLeft">
+                            <img style="width: 100%; height: 100%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                        </Div>
+                        <Div class="imgsRight">
+                            <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                            <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                        </Div>
+                    </Div>
+                    <Div class="foot">
+                        <Div class="footLeft">
+                            <Div>dddd</Div>
+                            <Div>eeee</Div>
+                        </Div> 
+                        <Div>相似好店 ></Div>
+                    </Div>
+                </Div>
     }
 
     get style(){
