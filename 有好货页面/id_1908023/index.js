@@ -43,18 +43,18 @@ function loadMore() {
 
 // window.render = function (data, root) {
   let c = (
-    <TabView style="width: 100%;height: 100%;background:url(./pics/toubu.png) no-repeat;">
+    <TabView style="width: 100%;height: 100%;background: #ededed url(./pics/toubu.png) no-repeat;">
       <ScrollView tab-title="推荐" placeHolderText="" on-scrollToButtom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px">
         <ListView></ListView>
       </ScrollView>
-      <ScrollView class="tab-item" tab-title="有趣的店" style="background-color: red;font-size:50px">
-      有趣的店页面
+      <ScrollView tab-title="有趣的店" placeHolderText="" on-scrollToButtom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px">
+        <ListView></ListView>
       </ScrollView>
-      <ScrollView class="tab-item" tab-title="品牌新店" style="background-color: yellow;font-size:50px">
-      品牌新店页面
+      <ScrollView tab-title="品牌新店" placeHolderText="" on-scrollToButtom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px">
+        <ListView></ListView>
       </ScrollView>
-      <ScrollView class="tab-item" tab-title="发现" style="background-color: purple;font-size:50px">
-      发现页面
+      <ScrollView tab-title="发现" placeHolderText="" on-scrollToButtom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px">
+        <ListView></ListView>
       </ScrollView>
     </TabView>
   );
