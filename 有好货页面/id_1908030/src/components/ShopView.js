@@ -59,15 +59,11 @@ export default class ShopView {
                         <Div>{data.shop}</Div>
                         <Div class="enter">进店 ></Div>
                     </Div>
-                    <Div>{data.introduce}</Div>
+                    <Div class="tip">{data.introduce}</Div>
                     <Div class="imgs">
-                        <Div class="imgsLeft">
-                            <img style="width: 100%; height: 100%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                        </Div>
-                        <Div class="imgsRight">
-                            <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                            <img style="width: 100%; height: 50%" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                        </Div>
+                        <img class="img pic1" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                        <img class="img pic2" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                        <img class="img pic3" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
                     </Div>
                     <Div class="foot">
                         <Div class="footLeft">
