@@ -1,4 +1,5 @@
 import enableGesture from '../gesture.js';
+import './TabView.less';
 
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
@@ -21,34 +22,62 @@ export default class TapView {
   created() {
     this.root = document.createElement('div');
     this.root.style.display = "flex";
+    this.root.classList.add('tab-view');
     this.headerContainer = document.createElement('div');
     this.contentContainer = document.createElement('div');
+    this.topHeaderContainer = document.createElement('div');
     this.contentContainer.style.whiteSpace = "nowrap";
     this.contentContainer.style.overflow = "hidden";
     this.contentContainer.style.flex = "1";
     // this.headerContainer.style.height = "93px";
     // 页头背景颜色
-    this.headerContainer.style.backgroundColor = "#ff9900";
+    // this.headerContainer.style.backgroundColor = "#ff9900";
     this.headerContainer.style.color = '#fff';
     this.headerContainer.style.fontSize = '50px';
     // this.headerContainer.className = 'tab-header-container';
     // this.contentContainer.className = 'tab-content-container';
-    const headerBar = document.createElement('div');
-    const backIcon = document.createElement('div');
-    // backIcon.style.color = '#fff';
-    // backIcon.style.fontSize = '50px';
-    backIcon.innerText = '<';
-    const headerTitle = document.createElement('div');
-    // headerTitle.style.color = '#fff';
-    headerTitle.innerHTML = '<span>每日好店</span>';
-    const headerShare = document.createElement('div');
-    // headerShare.style.color = '#fff';
-    headerShare.innerHTML = 'share';
-    headerBar.appendChild(backIcon);
-    headerBar.appendChild(headerTitle);
-    headerBar.appendChild(headerShare);
-    // this.headerContainer.appendChild(headerBar);
 
+    this.topHeaderContainer.classList.add('top-container');
+
+    this.topHeaderContainer.innerHTML = `
+      <div class="back"><img src='../pics/fanhui.png'></div>
+      <div class="logo"><img src='../pics/meirihaodian-logo.png'></div>
+      <div class="more">
+        <img class="fx" src='../pics/fenxiang.png'>
+        <img class="m" src='../pics/gengduo.png'>
+      </div>
+    `
+
+
+    // const backIcon = document.createElement('div');
+    // backIcon.classList.add('back-icon');
+    // const back = document.createElement('img');
+    // back.src = '../pics/fanhui.png';
+    // backIcon.appendChild(back);
+    // this.topHeaderContainer.appendChild(backIcon);
+
+    // const headerTitle = document.createElement('div');
+    // headerTitle.classList.add('logo');
+    // const logo = document.createElement('img');
+    // logo.src = '../pics/meirihaodian-logo.png';
+    // headerTitle.appendChild(logo);
+    // this.topHeaderContainer.appendChild(headerTitle);
+
+    // const rightMore = document.createElement('div');
+    // rightMore.classList.add('more');
+    // rightMore.innerHTML = `
+    //   <img src='../pics/fenxiang.png'>
+    //   <img src='../pics/gengduo.png'>
+    // `;
+    // this.topHeaderContainer.appendChild(rightMore);
+    // const headerShare = document.createElement('div');
+    // headerShare.style.color = '#fff';
+    // headerShare.innerHTML = 'share';
+    // headerBar.appendChild(backIcon);
+    // headerBar.appendChild(headerTitle);
+    // headerBar.appendChild(headerShare);
+    // this.topHeaderContainer.appendChild(headerBar);
+    this.root.appendChild(this.topHeaderContainer);
     this.root.appendChild(this.headerContainer);
     this.root.appendChild(this.contentContainer);
 

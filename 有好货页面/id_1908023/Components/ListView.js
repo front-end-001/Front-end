@@ -58,18 +58,20 @@ export default class ListView {
   mounted() { }
 
   render() {
-    // return <div><div>text</div>abc<img src='https://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super' /></div>;
-    let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
     return (
-      <div>
-        hello
-        {
-          data.map(item => (
-            <div><span style={css.x}>{item.name}</span></div>
-          ))
-        }
-      </div>
+      <div>123</div>
     )
+    // return <div><div>text</div>abc<img src='https://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super' /></div>;
+    // let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
+    // return (
+    //   <div>
+    //     {
+    //       data.map(item => (
+    //         <div><span style={css.x}>{item.name}</span></div>
+    //       ))
+    //     }
+    //   </div>
+    // )
   }
 
   // addStyle() {

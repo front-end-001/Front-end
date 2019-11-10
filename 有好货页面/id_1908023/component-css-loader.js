@@ -20,6 +20,6 @@ module.exports = function (source, map) {
       jsobj[p][declaration.property] = declaration.value;
     }
   }
-  console.log(jsobj);
+  // console.log(jsobj);
   return 'export default' + JSON.stringify(jsobj);
 }

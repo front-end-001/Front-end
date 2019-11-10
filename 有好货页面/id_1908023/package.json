@@ -24,11 +24,14 @@
     "less-loader": "^5.0.0",
     "postcss-loader": "^3.0.0",
     "postcss-modules": "^1.4.1",
+    "preact": "^10.0.4",
     "precss": "^4.0.0",
     "style-loader": "^1.0.0",
     "to-string-loader": "^1.1.5",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",
-    "webpack-dev-server": "^3.8.0"
+    "webpack-dev-server": "^3.8.0",
+    "file-loader": "^4.2.0",
+    "url-loader": "^2.2.0"
   }
 }
