@@ -11,7 +11,6 @@ const STATE_SYMBOL = Symbol("state");
 if(!window.LIST_VIEW_STYLE_ELEMENT){
     let styleElement = document.createElement('style');
     styleElement.innerHTML = css;
-    styleElement.setAttribute("scoped", "");
     document.getElementsByTagName('head')[0].appendChild(styleElement);
     window.LIST_VIEW_STYLE_ELEMENT = true;
 }
