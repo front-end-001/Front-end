@@ -46,7 +46,8 @@ module.exports = {
             }, 
             {
               test: /\.css$/,
-              use: ['to-string-loader' , 'css-loader']
+              use: [require.resolve('./component-css-loader.js')]
+              // use: ['to-string-loader' , 'css-loader']
             }
         ]
   },
