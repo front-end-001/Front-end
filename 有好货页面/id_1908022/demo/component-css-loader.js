@@ -17,7 +17,11 @@ module.exports = function(source, map){
         // console.log(rule); 
         
         // var p = selectors[0].replace(/\./, "");
-        rule.selectors = rule.selectors.map( selector => '.' + classname + ' ' + selector);
+        rule.selectors = rule.selectors.map( selector =>{
+          console.log(selector.match(/filename/));
+          var selector = selector.replace(/filename/, l => classname);
+          return  '.' + classname + ' ' + selector;
+        });
     }
 
     // css.stringify(obj);
