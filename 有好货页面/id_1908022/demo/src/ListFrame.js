@@ -3,13 +3,13 @@ const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
-import css from './listHead.css';
+import css from './ListFrame.css';
 
 let styleElement = document.createElement('style');
 styleElement.innerHTML = css;
 document.getElementsByTagName('head')[0].appendChild(styleElement);
 
-export default class ListHead{
+export default class ListFrame{
 	constructor(config){
 		this[PROPERTY_SYMBOL] = Object.create(null);
 		this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -31,7 +31,7 @@ export default class ListHead{
 
 	created() {
         this.root = document.createElement('div');
-        this.root.classList.add('list-head');
+        this.root.classList.add('list-frame');
 		this.root.classList.add('root');
 		
 		this.container = document.createElement('div');

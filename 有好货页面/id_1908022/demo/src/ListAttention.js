@@ -3,19 +3,18 @@ const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
-import css from './listHead.css';
+import css from './ListAttention.css';
 
 let styleElement = document.createElement('style');
 styleElement.innerHTML = css;
 document.getElementsByTagName('head')[0].appendChild(styleElement);
 
-export default class ListHead{
+export default class ListAttention{
 	constructor(config){
 		this[PROPERTY_SYMBOL] = Object.create(null);
 		this[ATTRIBUTE_SYMBOL] = Object.create(null);
 		this[EVENT_SYMBOL] = Object.create(null);
 		this[STATE_SYMBOL] = Object.create(null);
-		this[PROPERTY_SYMBOL].urls = config.urls;
 		this[STATE_SYMBOL].position = 0;
 		this.created();
 	}
@@ -31,7 +30,7 @@ export default class ListHead{
 
 	created() {
         this.root = document.createElement('div');
-        this.root.classList.add('list-head');
+        this.root.classList.add('list-attention');
 		this.root.classList.add('root');
 		
 		this.container = document.createElement('div');
@@ -43,8 +42,9 @@ export default class ListHead{
 		this.container.appendChild(this.leftImg);
 
 		this.describe = document.createElement('div');
-		this.describe.classList.add('describe');
-		this.describeText = document.createElement('span');
+        this.describe.classList.add('describe');
+        this.describe.innerHTML = '好店君：该店已被2300人关注了，快来关注吧！';
+		/* this.describeText = document.createElement('span');
 		this.describeText.innerHTML = "极客大学天猫店";
 		this.describeText.classList.add('describe-text');
 		this.describeImg = document.createElement('img');
@@ -52,13 +52,13 @@ export default class ListHead{
 		this.describeImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
 
 		this.describe.appendChild(this.describeText);
-		this.describe.appendChild(this.describeImg);
+		this.describe.appendChild(this.describeImg); */
 		this.container.appendChild(this.describe);
 
-		this.rightImg = document.createElement('img');
+		/* this.rightImg = document.createElement('img');
 		this.rightImg.classList.add('right-img');
 		this.rightImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
-		this.container.appendChild(this.rightImg);
+		this.container.appendChild(this.rightImg); */
 
         this.root.appendChild(this.container);
 
