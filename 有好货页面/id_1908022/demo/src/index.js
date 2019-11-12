@@ -3,6 +3,7 @@ import Div from "./div.js";
 import Carousel from "./carousel.js";
 import ListView from "./ListView.js";
 import {create} from "./create.js";
+import Listhead from "./Listhead.js";
 
 function loadMore(a){
 	console.log(a);
@@ -89,6 +90,7 @@ window.render = function(obj, root) {
 	  123
 	</Div>
 	<Div tab-title="品牌新店" style="background: orange;">
+		<Listhead style="width: 100%;height: 100px;"></Listhead>
 		<ListView data={obj}></ListView>
 	</Div>
 </Tabview>

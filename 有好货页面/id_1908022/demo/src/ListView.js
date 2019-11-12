@@ -34,6 +34,7 @@ export default class ListView {
 
     created(text){
         this.root = document.createElement("div");
+        this.root.classList.add('list-view');
         this.render().appendTo(this.root);
         
     }
