@@ -1,0 +1,246 @@
+html, body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-touch-callout: none;
+    background-color: #ededed;
+}
+
+* {
+    -webkit-text-size-adjust: none;
+    padding: 0;
+    margin: 0;
+    font-family: "PingFang SC";
+    text-decoration: none;
+    font-weight: normal;
+    font-style: normal;
+    color: inherit;
+}
+.carousel {
+    width: 500px;
+    height: 300px;
+    white-space: nowrap;
+    outline: 1px solid #842dfd;
+    overflow: hidden;
+}
+
+.carousel > img {
+    display: inline-block;
+    width: 100%;
+    transition: ease 0.5s;
+}
+.title {
+    color: #333333;
+    font-weight: bold;
+    padding: 6.296vw 3.148vw 3.704vw;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-1 {
+    display: flex;
+    flex: 1;
+}
+.flex-column {
+    flex-direction: column;
+}
+.space-around {
+    display: flex;
+    justify-content: space-around;
+}
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+.items-center {
+    display: flex;
+    align-items: center;
+}
+/* 收藏店铺 */
+.collection-store .image-container {
+    display: flex;
+    width: 18.519vw;
+    height: 18.519vw;
+    background-color: #f3f3f3;
+    border-radius: 1.852vw;
+    overflow: hidden;
+}
+.collection-store-group {
+    padding: 0 3.241vw 3.241vw;
+}
+.image-container img {
+    width: 100%;
+}
+.collection-store {
+    width: 39.352vw;
+    background-color: white;
+    border-radius: 1.852vw;
+    padding: 0 3.241vw 3.241vw;
+}
+.collection-store .store-header {
+    margin: 2.407vw 0;
+}
+.collection-store .content {
+    display: flex;
+    justify-content: space-between;
+}
+.collection-store .header {
+    padding: 0.267rem 0;
+}
+.collection-store .logo {
+    display: inline-block;
+    width: 7.222vw;
+    height: 7.222vw;
+    background-color: #f3f3f3;
+    border-radius: 7.222vw;
+    margin-right: 0.187rem;
+}
+.collection-store .store-name {
+    font-size: 0.347rem;
+}
+/* 推荐的店 */
+.recommend-store {
+    padding: 0 3.241vw 3.241vw;
+    background-color: white;
+    border-radius: 1.852vw;
+    margin: 0 3.241vw 3.241vw;
+}
+
+.recommend-store .header {
+    padding: 3.889vw 0 2.407vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.recommend-store .message {
+    display: flex;
+    background-color: #f5f5f5;
+    border-radius: 1.481vw;
+    height: 9.259vw;
+}
+
+.recommend-store .content {
+    display: flex;
+    margin-top: 2.778vw;
+    justify-content: space-between;
+}
+
+.recommend-store .footer {
+    text-align: right;
+    color: silver;
+    padding-top: 2.778vw;
+}
+
+.recommend-store .logo {
+    display: inline-block;
+    width: 9.815vw;
+    height: 9.815vw;
+    border-radius: 9.815vw;
+    overflow: hidden;
+    background: #f3f3f3;
+    margin-right: 7px;
+}
+.store-type {
+    display: inline-block;
+    background-color: #ee0507;
+    color: white;
+    text-align: center;
+    padding: 0 0.926vw;
+    border-radius: 100px;
+}
+
+.recommend-store .btn-enter {
+    text-align: center;
+    line-height: 6.667vw;
+    display: inline-block;
+    width: 14.815vw;
+    height: 6.667vw;
+    border-radius: 6.667vw;
+    color: white;
+    background-image: linear-gradient(to right, #fec900, #ffad00);
+}
+
+.recommend-store .large-image-container {
+    background: #f3f3f3;
+    border-radius: 1.852vw;
+    height: 57.963vw;
+    width: 57.963vw;
+    overflow: hidden;
+}
+
+.recommend-store .small-image-container {
+    height: 28.426vw;
+    width: 28.426vw;
+    background-color: #f3f3f3;
+    border-radius: 1.852vw;
+    overflow: hidden;
+}
+/* 品牌新店 */
+.brand-store {
+    width: 93.611vw;
+    height: 69.444vw;
+    margin: 0 auto 3.148vw;
+    border-radius: 1.852vw;
+    background-color: white;
+    padding: 3.241vw 0;
+    background: url("./images/pp_bg.jpeg") center center no-repeat;
+
+}
+.brand-store .logo {
+    width: 10.741vw;
+    height: 10.741vw;
+    background: silver;
+    -webkit-border-radius: 10.741vw;
+    -moz-border-radius: 10.741vw;
+    border-radius: 10.741vw;
+}
+.brand-store .tips {
+    height: 6.296vw;
+    padding: 0 3.241vw;
+    background-color: #3e362d;
+    border-top-left-radius: 6.296vw;
+    border-bottom-left-radius: 6.296vw;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+.brand-store .product-image {
+    height: 42.222vw;
+    width: 42.222vw;
+    border-radius: 1.852vw;
+    background-color: #f3f3f3;
+    overflow: hidden;
+}
+.brand-store .product-image img {
+    width: 100%;
+}
+.brand-store .image-container {
+    padding: 0 3.241vw;
+}
+.brand-store .store-info {
+    margin-top: 2.778vw;
+    margin-bottom: 2.222vw;
+    padding: 0 3.241vw;
+    color: white;
+}
+.brand-store .store-head {
+    margin-left: 2.778vw;
+}
+.brand-store .enter-store {
+    height: 6.759vw;
+    width: 14.815vw;
+    background-color: #776d60;
+    border-radius: 6.759vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -24,11 +24,10 @@ export default class TabView {
     }
     created () {
         this.root = document.createElement('div')
-        this.root.style.display = 'flex'
         this.headerContainer = document.createElement('div')
         this.contentContainer = document.createElement('div')
 
-        this.headerContainer.style = 'height: 46px;display:flex;align-items:center'
+        this.headerContainer.style = 'height: 13.889vw;display:flex;align-items:center;background-image:linear-gradient(to right, #6b25fd , #9232fd);'
 
         this.contentContainer.style = 'flex:1;overflow:hidden;white-space:nowrap'
         this.root.appendChild(this.headerContainer)
@@ -37,17 +36,12 @@ export default class TabView {
         enableGesture(this.contentContainer)
         this[STATE_SYMBOL].position = 0
 
-        this.root.addEventListener("touchmove",function(e){
+        this.root.addEventListener("touchmove",function(e) {
             e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {
-            passive:false
-        });
-
-
+            e.stopImmediatePropagation()
+        }, { passive:false });
         this.contentContainer.addEventListener('pan', event => {
             event.preventDefault()
-            console.log(event.isVertical)
             if (event.isVertical) {
                 return
             }
@@ -107,9 +101,6 @@ export default class TabView {
                 this.contentContainer.children[i].style.transform = `translate(${ - width * this[STATE_SYMBOL].position }px)`
             }
         })
-        this.contentContainer.addEventListener('mousedown', event => {
-            event.preventDefault()
-        })
     }
     mounted () {
 
@@ -132,14 +123,16 @@ export default class TabView {
         this[PROPERTY_SYMBOL].headers.push(title)
 
         let header = document.createElement('div')
-        header.style = `display:flex;flex-direction:column;margin: 0 10px;align-items:center`
-        let bottomLine = document.createElement('div')
-        bottomLine.style = `display:inline-block;height:2px;background-color:white;width:20px;`
+        header.style = `display:flex;flex-direction:column;margin: 0 3.148vw;align-items:center`
+        // let bottomLine = document.createElement('div')
+        // bottomLine.style = `display:inline-block;height:2px;background-color:white;width:20px;`
 
         let titleContainer = document.createElement('div')
+        let dpr = window.devicePixelRatio
+        titleContainer.style = `color:white;font-size: ${dpr * 16}px;`
         titleContainer.innerText = title
         header.appendChild(titleContainer)
-        header.appendChild(bottomLine)
+        //header.appendChild(bottomLine)
 
         this.headerContainer.appendChild(header)
         child.appendTo(this.contentContainer)

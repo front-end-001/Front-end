@@ -1,18 +1,18 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: './src/index.js',
+  entry: "./src/index.js",
   mode: "development",
   devtool: "source-map",
   output: {
-    path: __dirname + '/dist',
-    filename: 'index_bundle.js'
+    path: __dirname + "/dist",
+    filename: "index_bundle.js"
   },
   resolve: {
     alias: {
-      MyCreate: path.resolve(__dirname, 'MyCreate'),
-      '~': path.resolve(__dirname, './src')
+      MyCreate: path.resolve(__dirname, "MyCreate"),
+      "~": path.resolve(__dirname, "./src")
     }
   },
   module: {
@@ -23,25 +23,27 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env"],
-            plugins: [["@babel/plugin-transform-react-jsx", {pragma: "MyCreate"}]]
+            plugins: [
+              [
+                "@babel/plugin-transform-react-jsx",
+                { pragma: "MyCreate" },
+              ],
+              "@babel/plugin-proposal-class-properties"
+            ]
           }
         }
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ["style-loader", "css-loader"]
       },
       {
-       test: /\.png|jpg$/,
-       use: {
-         loader: 'file-loader'
-       }
+        test: /\.png|jpg$/,
+        use: {
+          loader: "file-loader"
+        }
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin(
-      {template: "src/index.html"}
-    )
-  ]
-}
+  plugins: [new HtmlWebpackPlugin({ template: "src/index.html" })]
+};

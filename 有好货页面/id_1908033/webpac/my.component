@@ -1,0 +1,55 @@
+<template>
+    <TabView style="width:100%;height:100%;">
+        <ScrollView tab-title="推荐" placeHolderText="load more" on-scrolToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
+            <ListView></ListView>
+        </ScrollView>
+        <ScrollView tab-title="有趣的店"  style="background-color:lightgreen;">
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        def def def def def def def def def def def def def def def def def def 
+        </ScrollView>
+        <ScrollView tab-title="品牌新店" style="background-color:pink;"></ScrollView>
+    </TabView>
+</template>
+
+<script>
+module.exports = {
+  data: function () {
+    return {
+      greeting: 'Hello'
+    }
+  }
+}
+</script>
+
+<style scoped>
+p {
+  font-size: 2em;
+  text-align: center;
+}
+</style>

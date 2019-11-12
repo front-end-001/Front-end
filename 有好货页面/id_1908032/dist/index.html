@@ -25,41 +25,12 @@ html,body {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-touch-callout: none;
 }
-
 * {
     -webkit-text-size-adjust:none;
 }*/
-.title {
-    padding: 0 34px;
-    height: 76px;
-    line-height: 76px;
-    font-size: 64px;
-    color: rgba(51, 51, 51, 1);
-}
-
-.shop-box {
-    padding: 0 17px;
-    margin-bottom: 17.5px;
-    display: flex;
-}
-
-.shop-box .item {
-    flex: 1;
-    height: 100px;
-    background-color: #FFC107;
-}
-
-.shop-box .item:first-child {
-    margin-right: 12.5px;
-}
-
-.shop-item {
-    margin: 0 17px 17.5px 17px;
-    height: 100px;
-    background-color: #FFC107;
-}
 </style>
-
+<link rel="stylesheet" href="./index.css">
+<link rel="stylesheet" href="./ListShop.css">
 <script type="text/javascript">
     //关闭选择
     //document.addEventListener("selectstart",function(e){ e.preventDefault(); });
@@ -80,10 +51,7 @@ html,body {
     document.addEventListener("touchmove",function(e){ 
         if(e.touches.length == 1) 
             e.preventDefault(); 
-    }, {
-        passive:false
-    })
-
+    }, {passive:false});
 </script>
 </head>
 <body>

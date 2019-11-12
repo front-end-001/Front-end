@@ -1,0 +1,47 @@
+{
+  "carousel": [{
+    "img": "xxxxx",
+    "eventTrack": {
+      "pos": "每日好店-推荐-轮播",
+      "shopId": 123
+    }
+  }],
+  "collection": [{
+    "eventTrack": {
+      "pos": "每日好店-推荐-双图运营位",
+      "shopId": 123
+    },
+    "avatar": "xxxxx",
+    "title": "店铺名称",
+    "imgs": [
+      "xxxxx",
+      "xxxxxx"
+    ],
+    "signage": {
+      "type": 1,
+      "level": 3
+    },
+    "shopId": 123
+  }, {
+    "eventTrack": {
+      "pos": "每日好店-推荐-双图运营位",
+      "shopId": 123
+    },
+    "avatar": "xxxxx",
+    "title": "店铺名称",
+    "imgs": [
+      "xxxxx",
+      "xxxxxx"
+    ],
+    "signage": {
+      "type": 1,
+      "level": 3
+    },
+    "shopId": 123
+  }],
+  "commendList": {
+    "total": 100,
+    "since": 0,
+    "list": []
+  }
+}

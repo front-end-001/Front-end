@@ -1,0 +1,10 @@
+<template>
+    <MyTabView style="width:100%;height:100%;">
+        <MyScrollView tab-title="推荐" placeHolderText="load more" on-scrolToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
+            <MyListView></MyListView>
+        </MyScrollView>
+        <MyScrollView tab-title="有趣的店"  style="background-color:lightgreen;">
+            </MyScrollView>
+        <MyScrollView tab-title="品牌新店" style="background-color:pink;"></MyScrollView>
+    </MyTabView>
+</template>

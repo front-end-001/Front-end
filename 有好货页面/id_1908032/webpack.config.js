@@ -1,25 +1,33 @@
+const path = require('path');
+
 module.exports = {
-    entry: "./script.js",
+    entry: './src/index.js',
+    output: {
+      filename: 'main.js',
+      path: path.resolve(__dirname, 'dist')
+    },
+    mode: 'development',
+    devServer: {
+      contentBase: './dist',
+      // hosts: true
+    },
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                      presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
-                    }
-                }
+          {
+            test: /\.m?js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: [
+                    ["@babel/plugin-syntax-jsx"],
+                    ["babel-plugin-transform-react-jsx", { pragma: "create" }]
+                  ]
+              }
+              
             }
+          }
         ]
-    },
-    mode: "development",
-    devServer: {
-        contentBase: "./dist",
-        hot: true
-    },
-    optimization: {
-        minimize: false
-    }
-}
+      }
+  };

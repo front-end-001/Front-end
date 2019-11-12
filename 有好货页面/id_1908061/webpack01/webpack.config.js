@@ -3,7 +3,6 @@ const webpack = require('webpack');
 module.exports = {
     entry: {
         index:'./src/index.js',
-        // search:'./src/search.js'
     },
     output:{
         path: path.join(__dirname,'dist'),
@@ -19,10 +18,16 @@ module.exports = {
               loader: 'babel-loader',
               options: {
                 presets: ['@babel/preset-env','@babel/preset-react'],
-                plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
+                plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
               }
             }
           }
+          // {
+          //   test: /\.component$/,
+          //   use: {
+          //     loader:require.resolve('./component-loader.js')
+          //   }
+          // }
         ]
     },
     devServer: {

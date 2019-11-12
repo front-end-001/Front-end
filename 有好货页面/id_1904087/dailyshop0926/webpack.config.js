@@ -8,10 +8,18 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                       presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
+                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
+            },
+            {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader')
+                    
+                }
             }
+
         ]
     },
     mode: "development",

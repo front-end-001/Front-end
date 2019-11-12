@@ -36,7 +36,7 @@ export default class ScrollView {
         this.root.addEventListener("scroll", event =>{
             let clientRect = this.root.getBoundingClientRect();
             let placeHolderRect = this.placeHolder.getBoundingClientRect();
-            console.log(clientRect.bottom, placeHolderRect.top)
+         //   console.log(clientRect.bottom, placeHolderRect.top)
             if (clientRect.bottom < placeHolderRect.top){
                 if (!triggered) {
                     this.triggerEvent("scrollToBottom");
