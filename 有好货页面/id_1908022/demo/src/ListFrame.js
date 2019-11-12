@@ -4,6 +4,9 @@ const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
 import css from './ListFrame.css';
+import {create} from './create.js';
+import ListHead from './ListHead.js';
+import ListAttention from './ListAttention.js'
 
 let styleElement = document.createElement('style');
 styleElement.innerHTML = css;
@@ -37,7 +40,18 @@ export default class ListFrame{
 		this.container = document.createElement('div');
 		this.container.classList.add('container');
 		
-		this.leftImg = document.createElement('img');
+		this.listHead = <ListHead ></ListHead>;
+		this.listHead.appendTo(this.container);
+
+		this.listAttention = <ListAttention></ListAttention>;
+		this.listAttentionBox = document.createElement('div');
+		this.listAttentionBox.classList.add('list-attention-box');
+		this.listAttention.appendTo(this.listAttentionBox);
+		this.container.appendChild(this.listAttentionBox);
+
+
+		
+		/* this.leftImg = document.createElement('img');
 		this.leftImg.classList.add('left-img');
 		this.leftImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
 		this.container.appendChild(this.leftImg);
@@ -58,7 +72,7 @@ export default class ListFrame{
 		this.rightImg = document.createElement('img');
 		this.rightImg.classList.add('right-img');
 		this.rightImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
-		this.container.appendChild(this.rightImg);
+		this.container.appendChild(this.rightImg); */
 
         this.root.appendChild(this.container);
 

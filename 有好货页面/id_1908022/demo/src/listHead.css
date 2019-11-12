@@ -1,4 +1,4 @@
-.filename.root{
+.filename.root {
   width: 100%;
   height: 110px;
 }
@@ -11,28 +11,37 @@
 .left-img {
   width: 110px;
   height: 110px;
+  border-radius: 50%;
 }
 
-.describe{
+.describe {
   display: inline-block;
   vertical-align: top;
   margin-left: 10px;
 }
 
-.describe-text{
+.describe-text {
   font-size: 40px;
   display: block;
 }
 
-.describe-img{
-  width: 80px;
+.describe-img {
   height: 38px;
   margin-top: 17px;
 }
 
-.right-img{
+.right-img {
   width: 162px;
   height: 72px;
   float: right;
+  background-size: cover;
   margin-top: 19px;
+  font-size: 38px;
+  text-align: center;
+  line-height: 72px;
+  color: #fff;
+}
+
+.right-img-span {
+    font-size: 16px;
 }

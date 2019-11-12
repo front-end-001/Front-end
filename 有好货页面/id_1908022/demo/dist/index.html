@@ -42,7 +42,7 @@ body {
             let scriptElement = document.createElement("script");
             scriptElement.src = src;
             scriptElement,addEventListener("load", resolve)
-            document.getElementsByTagName('head')[0] .appendChild(scriptElement);
+            document.getElementsByTagName('head')[0].appendChild(scriptElement);
         })
     }
 
@@ -53,7 +53,7 @@ body {
             }()),
             // (await fetch('./aaa.json')).json(), 
             happen(document, "DOMContentLoaded"),
-            // loadScript('./main.js') 
+            loadScript('./main.js')
         ])
 
         window.render(obj, document.body); 
