@@ -18,8 +18,12 @@ module.exports = function(source, map){
         
         // var p = selectors[0].replace(/\./, "");
         rule.selectors = rule.selectors.map( selector =>{
-          console.log(selector.match(/filename/));
-          var selector = selector.replace(/filename/, l => classname);
+          if(selector.match(/filename/)){
+            selector = selector.replace(/filename/, l => {
+                return classname;
+            });
+            return selector;
+          }
           return  '.' + classname + ' ' + selector;
         });
     }

@@ -3,7 +3,10 @@ import Div from "./div.js";
 import Carousel from "./carousel.js";
 import ListView from "./ListView.js";
 import {create} from "./create.js";
-import Listhead from "./Listhead.js";
+import ListHead from "./ListHead.js";
+import ListAttention from "./ListAttention.js";
+import ListFrame from "./ListFrame.js";
+
 
 function loadMore(a){
 	console.log(a);
@@ -15,7 +18,8 @@ function loadMore(a){
 }
 
 window.render = function(obj, root) {
-	var c = <Tabview style="width: 100%;height: 100%;display: block;">
+	var c = <ListFrame></ListFrame>
+	{/* <Tabview style="width: 100%;height: 100%;display: block;">
 	<Div tab-title="推介" style="background: greenyellow;">
 		<Carousel style="width: 100%;height: auto;position: relative;padding: 20px;box-sizing: border-box;">
 		</Carousel>
@@ -90,10 +94,12 @@ window.render = function(obj, root) {
 	  123
 	</Div>
 	<Div tab-title="品牌新店" style="background: orange;">
-		<Listhead style="width: 100%;height: 100px;"></Listhead>
+		<div style="padding: 20px;">
+			<ListHead ></ListHead>
+		</div>
 		<ListView data={obj}></ListView>
 	</Div>
-</Tabview>
+</Tabview>; */}
 c.appendTo(document.body);
 }
 
