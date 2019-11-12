@@ -38,7 +38,7 @@ export default class ListAttention{
 		
 		this.leftImg = document.createElement('img');
 		this.leftImg.classList.add('left-img');
-		this.leftImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
+		this.leftImg.src = "https://gw.alicdn.com/tfs/TB1ggdZHAzoK1RjSZFlXXai4VXa-72-72.png_110x10000.jpg_.webp";
 		this.container.appendChild(this.leftImg);
 
 		this.describe = document.createElement('div');

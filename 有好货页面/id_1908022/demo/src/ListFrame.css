@@ -2,7 +2,16 @@
     width: 100%;
     height: 1056px;
     padding: 32px 35px;
-    background: yellow;
     border-radius: 20px;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.list-attention-box {
+    width: 100%;
+    margin-top: 26px;
 }
 

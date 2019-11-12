@@ -39,7 +39,7 @@ export default class ListHead{
 		
 		this.leftImg = document.createElement('img');
 		this.leftImg.classList.add('left-img');
-		this.leftImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
+		this.leftImg.src = "https://gw.alicdn.com/bao/uploaded//59/65/TB1o6x5bW1s3KVjSZFASut_ZXXa.jpg_110x10000Q75.jpg_.webp";
 		this.container.appendChild(this.leftImg);
 
 		this.describe = document.createElement('div');
@@ -49,16 +49,21 @@ export default class ListHead{
 		this.describeText.classList.add('describe-text');
 		this.describeImg = document.createElement('img');
 		this.describeImg.classList.add('describe-img');
-		this.describeImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
+		this.describeImg.src = "https://gw.alicdn.com/tps/i1/TB1QLgfFFXXXXXpapXX3e.oIVXX-78-24.png_110x10000.jpg_.webp";
 
 		this.describe.appendChild(this.describeText);
 		this.describe.appendChild(this.describeImg);
 		this.container.appendChild(this.describe);
 
-		this.rightImg = document.createElement('img');
+        this.rightImg = document.createElement('div');
+        this.rightImg.innerHTML = "进店";
 		this.rightImg.classList.add('right-img');
-		this.rightImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
-		this.container.appendChild(this.rightImg);
+		this.rightImg.style.backgroundImage = "url('https://gw.alicdn.com/tfs/TB1FAoOCXzqK1RjSZSgXXcpAVXa-220-100.png_140x10000.jpg_.webp')";
+        // this.rightImgSpan = document.createElement('span');
+        // this.rightImgSpan.classList.add('right-img-span');
+        // this.rightImgSpan.innerText = '进店';
+        // this.rightImg.appendChild(this.rightImgSpan);
+        this.container.appendChild(this.rightImg);
 
         this.root.appendChild(this.container);
 
