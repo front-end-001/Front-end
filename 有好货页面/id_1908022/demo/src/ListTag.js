@@ -3,13 +3,13 @@ const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
-import css from './listHead.css';
+import css from './listTag.css';
 
 let styleElement = document.createElement('style');
 styleElement.innerHTML = css;
 document.getElementsByTagName('head')[0].appendChild(styleElement);
 
-export default class ListHead{
+export default class ListTag{
 	constructor(config){
 		this[PROPERTY_SYMBOL] = Object.create(null);
 		this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -31,45 +31,33 @@ export default class ListHead{
 
 	created() {
         this.root = document.createElement('div');
-        this.root.classList.add('list-head');
+        this.root.classList.add('list-tag');
 		this.root.classList.add('root');
 		
 		this.container = document.createElement('div');
 		this.container.classList.add('container');
+        
+        this.listBottom = document.createElement('div');
+		this.listBottom.classList.add('list-bottom');
+
+		this.listBottomLeft = document.createElement('div');
+		this.listBottomLeft.classList.add('list-bottom-left');
+
+		this.listBottomRight = document.createElement('div');
+		this.listBottomRight.classList.add('list-bottom-right');
+		this.listBottomRightSpan = document.createElement('span');
+		this.listBottomRightSpan.classList.add('list-bottom-right-span');
+		this.listBottomRightSpan.innerHTML = '相似好店';
+		this.listBottomRightImg = document.createElement('img');
+		this.listBottomRightImg.classList.add('list-bottom-right-img');
+		this.listBottomRightImg.src = "https://gw.alicdn.com/tfs/TB1gmBrCzTpK1RjSZKPXXa3UpXa-24-54.png";
+		this.listBottomRight.appendChild(this.listBottomRightSpan);
+		this.listBottomRight.appendChild(this.listBottomRightImg);
 		
-        this.leftImgBox = document.createElement('div');
-        this.leftImgBox.classList.add('left-img-box');
-        
+		this.listBottom.appendChild(this.listBottomLeft);
+		this.listBottom.appendChild(this.listBottomRight);
 
-		this.leftImg = document.createElement('div');
-		this.leftImg.classList.add('left-img');
-		this.leftImg.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded//59/65/TB1o6x5bW1s3KVjSZFASut_ZXXa.jpg_110x10000Q75.jpg_.webp)";
-        this.container.appendChild(this.leftImg);
-        this.container.appendChild(this.leftImgBox);
-        
-
-		this.describe = document.createElement('div');
-		this.describe.classList.add('describe');
-		this.describeText = document.createElement('span');
-		this.describeText.innerHTML = "极客大学天猫店";
-		this.describeText.classList.add('describe-text');
-		this.describeImg = document.createElement('img');
-		this.describeImg.classList.add('describe-img');
-		this.describeImg.src = "https://gw.alicdn.com/tps/i1/TB1QLgfFFXXXXXpapXX3e.oIVXX-78-24.png_110x10000.jpg_.webp";
-
-		this.describe.appendChild(this.describeText);
-		this.describe.appendChild(this.describeImg);
-		this.container.appendChild(this.describe);
-
-        this.rightImg = document.createElement('div');
-        this.rightImg.innerHTML = "进店";
-		this.rightImg.classList.add('right-img');
-		this.rightImg.style.backgroundImage = "url('https://gw.alicdn.com/tfs/TB1FAoOCXzqK1RjSZSgXXcpAVXa-220-100.png_140x10000.jpg_.webp')";
-        // this.rightImgSpan = document.createElement('span');
-        // this.rightImgSpan.classList.add('right-img-span');
-        // this.rightImgSpan.innerText = '进店';
-        // this.rightImg.appendChild(this.rightImgSpan);
-        this.container.appendChild(this.rightImg);
+		this.container.appendChild(this.listBottom);
 
         this.root.appendChild(this.container);
 

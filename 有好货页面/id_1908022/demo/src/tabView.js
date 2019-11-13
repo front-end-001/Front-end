@@ -27,12 +27,45 @@ export default class Tabview {
         this.root = document.createElement("div");
         this.root.style.display = "flex";
         this.root.style.flexDirection = "column";
+        this.img = document.createElement("img");
+        this.img.src = "https://gw.alicdn.com/tfs/TB1v2koHq6qK1RjSZFmXXX0PFXa-1500-416.png_790x10000.jpg_.webp";
+        this.img.setAttribute('style', `
+            display: flex;
+            width: 100%;
+            height: 120px;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: -1;
+        `);
+        this.root.appendChild(this.img);
         this.headerContainer = document.createElement("div");
         this.contentContainer = document.createElement('div');
         this.contentContainer.style.flex = "1";
         this.contentContainer.style.whiteSpace = 'nowrap';
         this.contentContainer.style.overflow = 'hidden';
-        this.headerContainer.style.height = "93px";
+        this.headerContainer.style.height = "120px";
+        this.headerContainer.style.color = "#fff";
+        // this.headerContainer.style.fontWeight = "bold";
+        this.headerContainer.style.position = "relative";
+        this.silderBox = document.createElement('div');
+        this.silderBox.setAttribute('style',`
+            border: 0px solid black;
+            position: absolute;
+            box-sizing: border-box;
+            display: flex;
+            -webkit-box-orient: vertical;
+            flex-direction: column;
+            align-content: flex-start;
+            flex-shrink: 0;
+            width: 50px;
+            height: 10px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 2.208px;
+            left: 51px;
+            bottom: 20px;
+        `);
+        this.headerContainer.appendChild(this.silderBox);
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
 
@@ -92,7 +125,12 @@ export default class Tabview {
                 child.style.transition = "transform ease 0s";
                 child.style.transform = `translateX(${this[STATE_SYMBOL].position * -this.contentContainer.offsetWidth}px)`;
             }
-            
+            let childrens = this.headerContainer.children;
+            this.silderBox.style.left = (childrens[this[STATE_SYMBOL].position + 1].offsetLeft + childrens[this[STATE_SYMBOL].position + 1].clientWidth / 2 - this.silderBox.clientWidth / 2) + 'px';
+            for(let item of childrens){
+                item.style.fontWeight = "normal";
+            }
+            childrens[this[STATE_SYMBOL].position + 1].style.fontWeight = "bold";
         })
 
         //监听快滑手势
@@ -132,8 +170,12 @@ export default class Tabview {
 
         let title = child.getAttribute("tab-title") || '';
         this[PROPERTY_SYMBOL].header.push(title);
+       
 
         let header = document.createElement('header');
+        if(n === 0){
+            header.style.fontWeight = "bold";
+        }
         header.style.display = "inline-block";
         header.style.height = "93px";
         header.style.fontFamily = "PingFang SC";
@@ -143,11 +185,17 @@ export default class Tabview {
 
         this.headerContainer.appendChild(header);
 
-        header.addEventListener('click', () => {
+        header.addEventListener('click', (e) => {
             for(let item of  this.contentContainer.children){
                 item.style.transition = 'ease .5s';
                 item.style.transform = `translateX(${- n * 100}%)`;
             }
+            this.silderBox.style.left = (e.target.offsetLeft + e.target.clientWidth / 2 - this.silderBox.clientWidth / 2) + 'px'; 
+            let childrens = this.headerContainer.children;
+            for(let item of childrens){
+                item.style.fontWeight = "normal";
+            }
+            e.target.style.fontWeight = "bold";
         })
 
         child.appendTo(this.contentContainer);

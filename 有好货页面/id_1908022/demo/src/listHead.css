@@ -8,10 +8,24 @@
     height: 100%;
 }
 
+.left-img-box {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: 35px;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+
+
 .left-img {
   width: 110px;
   height: 110px;
   border-radius: 50%;
+  display: inline-block;
+  background-size: cover;
 }
 
 .describe {

@@ -2,10 +2,10 @@ import Text from './text.js';
 import Wrapper from './wrapper.js';
 
 let urls = [
-    "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg",
-    "https://gw.alicdn.com/imgextra/i4/122/O1CN01QcEEAP1ClusnDag9x_!!122-0-lubanu.jpg",
-    "https://aecpm.alicdn.com/simba/img/TB14ab1KpXXXXclXFXXSutbFXXX.jpg_q50.jpg",
-    "https://gw.alicdn.com/imgextra/i1/1141228/O1CN01QaESyl1KwSvmg9rrG_!!1141228-0-lubanu.jpg"
+    "https://gw.alicdn.com/imgextra/i3/1618197344/O1CN01ojvFXL247bENVZDBI_!!1618197344-0-beehive-scenes.jpg_790x10000Q75.jpg_.webp",
+    "https://gw.alicdn.com/imgextra/i4/1114322414/TB2Jq3lxlmWBuNkSndVXXcsApXa_!!1114322414-2-beehive-scenes.png_790x10000.jpg_.webp",
+    "https://gw.alicdn.com/imgextra/i1/3402647387/TB2Mr64rQCWBuNjy0FaXXXUlXXa_!!3402647387-0-beehive-scenes.jpg_790x10000Q75.jpg_.webp",
+    "https://gw.alicdn.com/imgextra/i3/1618197344/O1CN01ojvFXL247bENVZDBI_!!1618197344-0-beehive-scenes.jpg_790x10000Q75.jpg_.webp"
 ];
 
 /* let urls = [
