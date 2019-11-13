@@ -14,7 +14,17 @@ module.exports = {
           }
         }
       ]
-    }]
+    }, {
+      test: /\.css/,
+      use: [
+        'style-loader',
+        'css-loader'
+      ]
+    }, {
+      test: /\.(?:svg|png)/,
+      use: 'file-loader'
+    }
+    ]
   },
   devServer: {
     hot: true,
