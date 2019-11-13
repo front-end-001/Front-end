@@ -23,5 +23,6 @@ module.exports = {
   },
   optimization: {
     minimize: false
-  }
+  },
+  devtool: 'sourcemap'
 }
