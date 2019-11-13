@@ -1,5 +1,6 @@
 export function h(component, props, ...children) {
   const instance = new component;
+  instance.created();
   for (let [name, val] of Object.entries(props || {})) {
     if (/^on-([\s\S]+)/.exec(name)) {
       instance.addEventListener(RegExp.$1, val);
@@ -20,7 +21,6 @@ export class BaseComponent {
     this[ATTR_SYMBOL] = Object.create(null);
     this[PROP_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
-    this.created();
   }
   created() {
     this.root = document.createElement('div');
@@ -30,7 +30,7 @@ export class BaseComponent {
     this.mounted();
   }
   mounted() {
-
+      
   }
   setAttribute(name, val) {
     return this[ATTR_SYMBOL][name] = val;
@@ -61,3 +61,6 @@ export class BaseComponent {
     }
   }
 }
+/*
+ constructor,created 执行顺序调整：先 constructor ，再 created
+*/
