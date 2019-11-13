@@ -3,13 +3,13 @@ const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
 
-import css from './listHead.css';
+import css from './ListImgPermutation.css';
 
 let styleElement = document.createElement('style');
 styleElement.innerHTML = css;
 document.getElementsByTagName('head')[0].appendChild(styleElement);
 
-export default class ListHead{
+export default class ListImgPermutation{
 	constructor(config){
 		this[PROPERTY_SYMBOL] = Object.create(null);
 		this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -31,45 +31,34 @@ export default class ListHead{
 
 	created() {
         this.root = document.createElement('div');
-        this.root.classList.add('list-head');
+        this.root.classList.add('list-imgPermutation');
 		this.root.classList.add('root');
 		
 		this.container = document.createElement('div');
 		this.container.classList.add('container');
 		
-        this.leftImgBox = document.createElement('div');
-        this.leftImgBox.classList.add('left-img-box');
-        
+		this.listImgBox = document.createElement('div');
+		this.listImgBox.classList.add('list-img-box');
+		this.listImgBoxLeft = document.createElement('div');
+		this.listImgBoxLeft.classList.add("list-img-box-left");
+		this.listImgBoxLeft.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/TB1lYWEGXXXXXa2XXXXXXXXXXXX_!!0-item_pic.jpg_290x10000Q75.jpg_.webp)"
+		this.listImgBox.appendChild(this.listImgBoxLeft);
 
-		this.leftImg = document.createElement('div');
-		this.leftImg.classList.add('left-img');
-		this.leftImg.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded//59/65/TB1o6x5bW1s3KVjSZFASut_ZXXa.jpg_110x10000Q75.jpg_.webp)";
-        this.container.appendChild(this.leftImg);
-        this.container.appendChild(this.leftImgBox);
-        
+		this.listImgBoxRight = document.createElement('div');
+		this.listImgBoxRight.classList.add("list-img-box-right");
+		this.listImgBoxRightTop = document.createElement('div');
+		this.listImgBoxRightTop.classList.add("list-img-box-right-top");
+		this.listImgBoxRightTop.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/22092380/TB2SI.oaNfxQeBjSspjXXX4opXa_!!22092380.jpg_220x10000Q75.jpg_.webp)"
+		this.listImgBoxRight.appendChild(this.listImgBoxRightTop);
 
-		this.describe = document.createElement('div');
-		this.describe.classList.add('describe');
-		this.describeText = document.createElement('span');
-		this.describeText.innerHTML = "极客大学天猫店";
-		this.describeText.classList.add('describe-text');
-		this.describeImg = document.createElement('img');
-		this.describeImg.classList.add('describe-img');
-		this.describeImg.src = "https://gw.alicdn.com/tps/i1/TB1QLgfFFXXXXXpapXX3e.oIVXX-78-24.png_110x10000.jpg_.webp";
+		this.listImgBoxRightBottom = document.createElement('div');
+		this.listImgBoxRightBottom.classList.add("list-img-box-right-bottom");
+		this.listImgBoxRightBottom.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i3/22092380/TB2x5eFppXXXXX6XFXXXXXXXXXX_!!22092380.jpg_220x10000Q75.jpg_.webp)"
+		this.listImgBoxRight.appendChild(this.listImgBoxRightBottom);
 
-		this.describe.appendChild(this.describeText);
-		this.describe.appendChild(this.describeImg);
-		this.container.appendChild(this.describe);
+		this.listImgBox.appendChild(this.listImgBoxRight);
 
-        this.rightImg = document.createElement('div');
-        this.rightImg.innerHTML = "进店";
-		this.rightImg.classList.add('right-img');
-		this.rightImg.style.backgroundImage = "url('https://gw.alicdn.com/tfs/TB1FAoOCXzqK1RjSZSgXXcpAVXa-220-100.png_140x10000.jpg_.webp')";
-        // this.rightImgSpan = document.createElement('span');
-        // this.rightImgSpan.classList.add('right-img-span');
-        // this.rightImgSpan.innerText = '进店';
-        // this.rightImg.appendChild(this.rightImgSpan);
-        this.container.appendChild(this.rightImg);
+		this.container.appendChild(this.listImgBox);
 
         this.root.appendChild(this.container);
 

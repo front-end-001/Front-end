@@ -18,11 +18,14 @@ function loadMore(a){
 }
 
 window.render = function(obj, root) {
-	var c = <ListFrame></ListFrame>//<ListAttention></ListAttention>//
-	{/* <Tabview style="width: 100%;height: 100%;display: block;">
-	<Div tab-title="推介" style="background: greenyellow;">
-		<Carousel style="width: 100%;height: auto;position: relative;padding: 20px;box-sizing: border-box;">
+	var c = <Tabview style="width: 100%;height: 100%;display: block;">
+	<Div tab-title="推介" style="background-color: rgb(238, 238, 238);padding: 35px;box-sizing: border-box;">
+		<Carousel style="width: 100%;height: 496px;position: relative;box-sizing: border-box;">
 		</Carousel>
+		<div style="margin-top: 30px;">
+			<ListFrame  ></ListFrame>
+		</div>
+		
 	</Div>
 	<Div tab-title="有趣的店" placeHolder="load more" on-scrollToBottom={loadMore} style="background: blueviolet;-webkit-overflow-scrolling:touch;"> 
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
@@ -99,7 +102,7 @@ window.render = function(obj, root) {
 		</div>
 		<ListView data={obj}></ListView>
 	</Div>
-</Tabview>; */}
+</Tabview>;
 c.appendTo(document.body);
 }
 

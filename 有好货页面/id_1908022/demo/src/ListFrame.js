@@ -6,7 +6,9 @@ const STATE_SYMBOL = Symbol('state');
 import css from './ListFrame.css';
 import {create} from './create.js';
 import ListHead from './ListHead.js';
-import ListAttention from './ListAttention.js'
+import ListAttention from './ListAttention.js';
+import ListImgPermutation from './ListImgPermutation.js';
+import ListTag from './ListTag.js';
 
 let styleElement = document.createElement('style');
 styleElement.innerHTML = css;
@@ -48,40 +50,15 @@ export default class ListFrame{
 		this.listAttentionBox.classList.add('list-attention-box');
 		this.listAttention.appendTo(this.listAttentionBox);
 		this.container.appendChild(this.listAttentionBox);
+		
+		this.listImgPermutation = <ListImgPermutation></ListImgPermutation>;
+		this.listImgPermutationBox = document.createElement('div');
+		this.listImgPermutationBox.classList.add('list-img-permutation-box');
+		this.listImgPermutation.appendTo(this.listImgPermutationBox);
+		this.container.appendChild(this.listImgPermutationBox);
 
-
-		this.listImgBox = document.createElement('div');
-		this.listImgBox.classList.add('list-img-box');
-		this.listImgBoxLeft = document.createElement('div');
-		this.listImgBoxLeft.classList.add("list-img-box-left");
-		this.listImgBoxLeft.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/TB1lYWEGXXXXXa2XXXXXXXXXXXX_!!0-item_pic.jpg_290x10000Q75.jpg_.webp)"
-		this.listImgBox.appendChild(this.listImgBoxLeft);
-
-		this.listImgBoxRight = document.createElement('div');
-		this.listImgBoxRight.classList.add("list-img-box-right");
-		this.listImgBoxRightTop = document.createElement('div');
-		this.listImgBoxRightTop.classList.add("list-img-box-right-top");
-		this.listImgBoxRightTop.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/22092380/TB2SI.oaNfxQeBjSspjXXX4opXa_!!22092380.jpg_220x10000Q75.jpg_.webp)"
-		this.listImgBoxRight.appendChild(this.listImgBoxRightTop);
-
-		this.listImgBoxRightBottom = document.createElement('div');
-		this.listImgBoxRightBottom.classList.add("list-img-box-right-bottom");
-		this.listImgBoxRightBottom.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i3/22092380/TB2x5eFppXXXXX6XFXXXXXXXXXX_!!22092380.jpg_220x10000Q75.jpg_.webp)"
-		this.listImgBoxRight.appendChild(this.listImgBoxRightBottom);
-
-		this.listImgBox.appendChild(this.listImgBoxRight);
-
-		this.container.appendChild(this.listImgBox);
-
-
-		this.listBottom = document.createElement('div');
-		this.listBottom.classList.add('list-bottom');
-		this.listBottomLeft = document.createElement('div');
-		this.listBottomLeft.classList.add('list-bottom-left');
-		this.listBottomRight = document.createElement('div');
-		this.listBottomRight.classList.add('list-bottom-right');
-
-
+		this.listTag = <ListTag></ListTag>;
+		this.listTag.appendTo(this.container);
 
         this.root.appendChild(this.container);
 
