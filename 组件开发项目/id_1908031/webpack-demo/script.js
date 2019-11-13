@@ -2,7 +2,7 @@ import TabView from './Tab.js';
 import ScrollView from './Scroll.js';
 import ListView from './List.js';
 
-import {create} from './create.js';
+import {create} from './tools/create.js';
 
 function loadMore() {
 	setTimeout(() => {

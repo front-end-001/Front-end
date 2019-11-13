@@ -1,11 +1,16 @@
-import {create} from './create.js';
+import {create} from './tools/create.js';
 import Div from './Div.js';
+import css from './ListView.css';
 
 // 使用symbol私有唯一化
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
 const STATE_SYMBOL = Symbol('state');
+
+let styleElement = document.createElement('style');
+styleElement.innerHTML = css;
+document.getElementsByTagName('head')[0].appendChild(styleElement);
 
 export default class ListView {
 	constructor() {
@@ -99,6 +104,7 @@ export default class ListView {
 	// 生命周期
 	created() {
 		this.root = document.createElement('div');
+		this.root.classList.add('list-view');
 		// jsx 的组件定义
 		// 添加到DOM树中
 		this.render().appendTo(this.root);

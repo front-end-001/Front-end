@@ -1,5 +1,5 @@
-import Text from './Text.js';
-import Wrapper from './Wrapper.js';
+import Text from '../Text.js';
+import Wrapper from '../Wrapper.js';
 
 export function create(Class, attributes, ...children) {
 	let object;
