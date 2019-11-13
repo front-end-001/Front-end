@@ -1,10 +1,12 @@
 import { Text } from './Text';
+import { Wrapper } from './Wrapper';
 export function h(component, props, ...children) {
-  // if(typeof component === 'string'){
-  //   component
-  // }
-  //todo html 组件创建
-  const instance = new component;
+  let instance = null;
+  if (typeof component === 'string') {
+    instance = new Wrapper(component);
+  } else {
+    instance = new component;
+  }
   instance.created();
   for (let [name, val] of Object.entries(props || {})) {
     if (/^on-([\s\S]+)/.exec(name)) {

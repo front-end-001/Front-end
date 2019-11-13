@@ -49,3 +49,8 @@ function render({ recommend }) {
     </ScrollView>
   </TabView>).mount(document.getElementById('app'));
 }
+
+/**
+ * WrapperTest
+ */
+// (<div><span>2342</span></div>).mount(document.getElementById('app'));
