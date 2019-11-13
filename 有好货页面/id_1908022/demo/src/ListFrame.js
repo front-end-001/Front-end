@@ -50,29 +50,38 @@ export default class ListFrame{
 		this.container.appendChild(this.listAttentionBox);
 
 
-		
-		/* this.leftImg = document.createElement('img');
-		this.leftImg.classList.add('left-img');
-		this.leftImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
-		this.container.appendChild(this.leftImg);
+		this.listImgBox = document.createElement('div');
+		this.listImgBox.classList.add('list-img-box');
+		this.listImgBoxLeft = document.createElement('div');
+		this.listImgBoxLeft.classList.add("list-img-box-left");
+		this.listImgBoxLeft.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/TB1lYWEGXXXXXa2XXXXXXXXXXXX_!!0-item_pic.jpg_290x10000Q75.jpg_.webp)"
+		this.listImgBox.appendChild(this.listImgBoxLeft);
 
-		this.describe = document.createElement('div');
-		this.describe.classList.add('describe');
-		this.describeText = document.createElement('span');
-		this.describeText.innerHTML = "极客大学天猫店";
-		this.describeText.classList.add('describe-text');
-		this.describeImg = document.createElement('img');
-		this.describeImg.classList.add('describe-img');
-		this.describeImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
+		this.listImgBoxRight = document.createElement('div');
+		this.listImgBoxRight.classList.add("list-img-box-right");
+		this.listImgBoxRightTop = document.createElement('div');
+		this.listImgBoxRightTop.classList.add("list-img-box-right-top");
+		this.listImgBoxRightTop.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/22092380/TB2SI.oaNfxQeBjSspjXXX4opXa_!!22092380.jpg_220x10000Q75.jpg_.webp)"
+		this.listImgBoxRight.appendChild(this.listImgBoxRightTop);
 
-		this.describe.appendChild(this.describeText);
-		this.describe.appendChild(this.describeImg);
-		this.container.appendChild(this.describe);
+		this.listImgBoxRightBottom = document.createElement('div');
+		this.listImgBoxRightBottom.classList.add("list-img-box-right-bottom");
+		this.listImgBoxRightBottom.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i3/22092380/TB2x5eFppXXXXX6XFXXXXXXXXXX_!!22092380.jpg_220x10000Q75.jpg_.webp)"
+		this.listImgBoxRight.appendChild(this.listImgBoxRightBottom);
 
-		this.rightImg = document.createElement('img');
-		this.rightImg.classList.add('right-img');
-		this.rightImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
-		this.container.appendChild(this.rightImg); */
+		this.listImgBox.appendChild(this.listImgBoxRight);
+
+		this.container.appendChild(this.listImgBox);
+
+
+		this.listBottom = document.createElement('div');
+		this.listBottom.classList.add('list-bottom');
+		this.listBottomLeft = document.createElement('div');
+		this.listBottomLeft.classList.add('list-bottom-left');
+		this.listBottomRight = document.createElement('div');
+		this.listBottomRight.classList.add('list-bottom-right');
+
+
 
         this.root.appendChild(this.container);
 
