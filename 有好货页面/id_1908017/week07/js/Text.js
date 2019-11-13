@@ -1,10 +1,19 @@
 import { BaseComponent } from "./component";
 
-export class Text extends BaseComponent {
+export class Text {
+  constructor(text) {
+    this.text = text;
+    this.created();
+  }
   created() {
     this.root = document.createElement('p');
+    this.root.innerText = this.text;
   }
-  appendChildren(children) {
-    this.root.innerText = children.join('');
+  mount(el) {
+    el.appendChild(this.root);
   }
 }
+/**
+ * ？Text组件与 Base组件
+ * ? 循环引用报错
+ */

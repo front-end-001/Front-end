@@ -11,13 +11,11 @@ export class TabView extends BaseComponent {
     this.contents.style.height = '500px';
     this.root.appendChild(this.contents);
   }
-  appendChildren(children) {
-    for (let child of children) {
-      const header = document.createElement('div');
-      header.innerText = child[ATTR_SYMBOL]['tab-title'];
-      this.headers.appendChild(header);
-      child.mount(this.contents);
-    }
+  appendChild(child) {
+    const header = document.createElement('div');
+    header.innerText = child[ATTR_SYMBOL]['tab-title'];
+    this.headers.appendChild(header);
+    child.mount(this.contents);
   }
   mounted() {
     const { headers } = this;

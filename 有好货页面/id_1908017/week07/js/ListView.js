@@ -6,7 +6,7 @@ export class ListView extends BaseComponent {
   constructor() {
     super(...arguments);
     this[STATE_SYMBOL].data = null;
-    this[PROP_SYMBOL].template = item => <Text>{item}</Text>;
+    this[PROP_SYMBOL].template = item => new Text(item);
   }
   setAttribute(name, val) {
     if (name === 'data') {
@@ -23,14 +23,18 @@ export class ListView extends BaseComponent {
     const { data } = this[STATE_SYMBOL];
     const { template } = this[PROP_SYMBOL];
     const children = (data || []).map(template);
-    this.appendChildren(children);
+    for (let child of children) {
+      this.appendChild(child);
+    }
   }
   updateData(data) {
     const { data: oldData } = this[STATE_SYMBOL];
     const { template } = this[PROP_SYMBOL];
     /* 此处只实现了简单追加 */
     this[STATE_SYMBOL].data = data;
-    this.appendChildren(data.slice(oldData.length).map(template));
+    for (let child of data.slice(oldData.length).map(template)) {
+      this.appendChild(child);
+    }
   }
 }
 /**

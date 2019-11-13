@@ -1,4 +1,9 @@
+import { Text } from './Text';
 export function h(component, props, ...children) {
+  // if(typeof component === 'string'){
+  //   component
+  // }
+  //todo html 组件创建
   const instance = new component;
   instance.created();
   for (let [name, val] of Object.entries(props || {})) {
@@ -8,7 +13,12 @@ export function h(component, props, ...children) {
       instance.setAttribute(name, val);
     }
   }
-  instance.appendChildren(children);
+  for (let child of children || []) {
+    if (['string', 'number'].indexOf(typeof (child)) > -1) {
+      child = new Text(child);
+    }
+    instance.appendChild(child);
+  }
   return instance;
 }
 export const ATTR_SYMBOL = Symbol('attr');
@@ -21,6 +31,7 @@ export class BaseComponent {
     this[ATTR_SYMBOL] = Object.create(null);
     this[PROP_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
+    this[PROP_SYMBOL].children = [];
   }
   created() {
     this.root = document.createElement('div');
@@ -30,7 +41,7 @@ export class BaseComponent {
     this.mounted();
   }
   mounted() {
-      
+
   }
   setAttribute(name, val) {
     return this[ATTR_SYMBOL][name] = val;
@@ -54,13 +65,12 @@ export class BaseComponent {
       }
     }
   }
-
-  appendChildren(children) {
-    for (let child of children) {
-      child.mount(this.root);
-    }
+  appendChild(child) {
+    this[PROP_SYMBOL].children.push(child);
+    child.mount(this.root);
   }
 }
 /*
  constructor,created 执行顺序调整：先 constructor ，再 created
+ ? appendChild 与 mount
 */
