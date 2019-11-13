@@ -1,5 +1,6 @@
 import { Text } from './Text';
 import { Wrapper } from './Wrapper';
+import flatten from '_array-flatten@2.1.2@array-flatten';
 export function h(component, props, ...children) {
   let instance = null;
   if (typeof component === 'string') {
@@ -15,7 +16,7 @@ export function h(component, props, ...children) {
       instance.setAttribute(name, val);
     }
   }
-  for (let child of children || []) {
+  for (let child of flatten(children || [])) {
     if (['string', 'number'].indexOf(typeof (child)) > -1) {
       child = new Text(child);
     }
@@ -46,6 +47,12 @@ export class BaseComponent {
 
   }
   setAttribute(name, val) {
+    if (name === 'class') {
+      for (let _val of val.split(/\s+/).filter(s => s !== '')) {
+        this.root.classList.add(_val);
+      }
+      return val;
+    }
     return this[ATTR_SYMBOL][name] = val;
   }
   getAttribute(name) {

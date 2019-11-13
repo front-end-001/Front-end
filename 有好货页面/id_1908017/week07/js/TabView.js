@@ -5,14 +5,22 @@ export class TabView extends BaseComponent {
   created() {
     this[STATE_SYMBOL].pos = null;
     this.root = document.createElement('div');
-    this.headers = document.createElement('div');
+    //   <nav>
+    //     <a href="#" class="active">推荐</a>
+    //     <a href="#">有趣的店</a>
+    //     <a href="#">品牌新店</a>
+    //     <a href="#">发现</a>
+    //   </nav>
+
+    this.headers = document.createElement('nav');
     this.root.appendChild(this.headers);
     this.contents = document.createElement('div');
-    this.contents.style.height = '500px';
+    this.contents.classList.add('content');
+    this.contents.classList.add('bg01');
     this.root.appendChild(this.contents);
   }
   appendChild(child) {
-    const header = document.createElement('div');
+    const header = document.createElement('a');
     header.innerText = child[ATTR_SYMBOL]['tab-title'];
     this.headers.appendChild(header);
     child.mount(this.contents);
@@ -68,4 +76,11 @@ export class TabView extends BaseComponent {
  * 点击tab头显示对应内容 0
  * 切换tab 时有动画 1
  * 支持手势切换 1
+ */
+
+
+/**
+ * ?
+ *   支持rel: 来标记jsx中组件
+ *
  */

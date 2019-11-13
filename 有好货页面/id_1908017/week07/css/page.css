@@ -85,6 +85,7 @@ h1{
 } 
 nav{
   position: absolute;
+  left :calc(100vw * 34 / 1080);
   top: calc(100vw * 286 / 1080);
   font-size: calc(100vw * 46 / 1080);
   word-spacing: 1em;
@@ -93,6 +94,7 @@ nav a {
   color:#fff;
   font-weight: lighter;
   font-family: PingFang SC;
+  margin-right: 1em;
 }
 nav a:hover,nav a.active{
   font-weight: bold;
