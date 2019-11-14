@@ -2,6 +2,7 @@ import Tabview from "./tabView.js";
 import Div from "./div.js";
 import Carousel from "./carousel.js";
 import ListView from "./ListView.js";
+import ListShop from "./ListShop.js";
 import {create} from "./create.js";
 import ListHead from "./ListHead.js";
 import ListAttention from "./ListAttention.js";
@@ -23,7 +24,7 @@ window.render = function(obj, root) {
 		<Carousel style="width: 100%;height: 496px;position: relative;box-sizing: border-box;">
 		</Carousel>
 		<div style="margin-top: 30px;">
-			<ListFrame  ></ListFrame>
+			<ListShop data={ obj } ></ListShop>
 		</div>
 		
 	</Div>
@@ -100,7 +101,7 @@ window.render = function(obj, root) {
 		<div style="padding: 20px;">
 			<ListHead ></ListHead>
 		</div>
-		<ListView data={obj}></ListView>
+		<ListView ></ListView>
 	</Div>
 </Tabview>;
 c.appendTo(document.body);

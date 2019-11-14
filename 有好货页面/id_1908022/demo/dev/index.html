@@ -49,7 +49,7 @@ body {
     void async function(){
         let [obj, event] = await Promise.all([
             (async function(){
-                return await (await fetch("./aaa.json")).json();
+                return await (await fetch("./data.json")).json();
             }()),
             // (await fetch('./aaa.json')).json(), 
             happen(document, "DOMContentLoaded"),

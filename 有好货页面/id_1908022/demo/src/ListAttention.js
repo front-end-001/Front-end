@@ -36,14 +36,7 @@ export default class ListAttention{
 		this.container = document.createElement('div');
 		this.container.classList.add('container');
 		
-		this.leftImg = document.createElement('img');
-		this.leftImg.classList.add('left-img');
-		this.leftImg.src = "https://gw.alicdn.com/tfs/TB1ggdZHAzoK1RjSZFlXXai4VXa-72-72.png_110x10000.jpg_.webp";
-		this.container.appendChild(this.leftImg);
-
-		this.describe = document.createElement('div');
-        this.describe.classList.add('describe');
-        this.describe.innerHTML = '好店君：该店已被2300人关注了，快来关注吧！';
+		
 		/* this.describeText = document.createElement('span');
 		this.describeText.innerHTML = "极客大学天猫店";
 		this.describeText.classList.add('describe-text');
@@ -53,14 +46,14 @@ export default class ListAttention{
 
 		this.describe.appendChild(this.describeText);
 		this.describe.appendChild(this.describeImg); */
-		this.container.appendChild(this.describe);
 
 		/* this.rightImg = document.createElement('img');
 		this.rightImg.classList.add('right-img');
 		this.rightImg.src = "https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg";
 		this.container.appendChild(this.rightImg); */
 
-        this.root.appendChild(this.container);
+		
+		this.render();
 
 	}
 
@@ -69,7 +62,21 @@ export default class ListAttention{
 	}
 
 	
+	render(){
+		setTimeout(() => {
+			let data = this[ATTRIBUTE_SYMBOL]["data"] || {};
+			this.leftImg = document.createElement('img');
+			this.leftImg.classList.add('left-img');
+			this.leftImg.src = data.showImg || "https://gw.alicdn.com/tfs/TB1ggdZHAzoK1RjSZFlXXai4VXa-72-72.png_110x10000.jpg_.webp";
+			this.container.appendChild(this.leftImg);
 
+			this.describe = document.createElement('div');
+			this.describe.classList.add('describe');
+			this.describe.innerHTML = data.showTitle || '好店君：该店已被2300人关注了，快来关注吧！';
+			this.container.appendChild(this.describe);
+			this.root.appendChild(this.container);
+		}, 0);
+	}
 	
 
 

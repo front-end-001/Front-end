@@ -37,30 +37,9 @@ export default class ListImgPermutation{
 		this.container = document.createElement('div');
 		this.container.classList.add('container');
 		
-		this.listImgBox = document.createElement('div');
-		this.listImgBox.classList.add('list-img-box');
-		this.listImgBoxLeft = document.createElement('div');
-		this.listImgBoxLeft.classList.add("list-img-box-left");
-		this.listImgBoxLeft.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/TB1lYWEGXXXXXa2XXXXXXXXXXXX_!!0-item_pic.jpg_290x10000Q75.jpg_.webp)"
-		this.listImgBox.appendChild(this.listImgBoxLeft);
-
-		this.listImgBoxRight = document.createElement('div');
-		this.listImgBoxRight.classList.add("list-img-box-right");
-		this.listImgBoxRightTop = document.createElement('div');
-		this.listImgBoxRightTop.classList.add("list-img-box-right-top");
-		this.listImgBoxRightTop.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i2/22092380/TB2SI.oaNfxQeBjSspjXXX4opXa_!!22092380.jpg_220x10000Q75.jpg_.webp)"
-		this.listImgBoxRight.appendChild(this.listImgBoxRightTop);
-
-		this.listImgBoxRightBottom = document.createElement('div');
-		this.listImgBoxRightBottom.classList.add("list-img-box-right-bottom");
-		this.listImgBoxRightBottom.style.backgroundImage = "url(https://gw.alicdn.com/bao/uploaded/i3/22092380/TB2x5eFppXXXXX6XFXXXXXXXXXX_!!22092380.jpg_220x10000Q75.jpg_.webp)"
-		this.listImgBoxRight.appendChild(this.listImgBoxRightBottom);
-
-		this.listImgBox.appendChild(this.listImgBoxRight);
-
-		this.container.appendChild(this.listImgBox);
-
-        this.root.appendChild(this.container);
+		
+		
+		this.render();
 
 	}
 
@@ -69,7 +48,35 @@ export default class ListImgPermutation{
 	}
 
 	
+	render() {
+		setTimeout(() => {
+			let data = this[ATTRIBUTE_SYMBOL]['data'] || {};
+			this.listImgBox = document.createElement('div');
+			this.listImgBox.classList.add('list-img-box');
+			this.listImgBoxLeft = document.createElement('div');
+			this.listImgBoxLeft.classList.add("list-img-box-left");
+			this.listImgBoxLeft.style.backgroundImage = `url(${data.imgBig || "https://gw.alicdn.com/bao/uploaded/i2/TB1lYWEGXXXXXa2XXXXXXXXXXXX_!!0-item_pic.jpg_290x10000Q75.jpg_.webp"})`
+			this.listImgBox.appendChild(this.listImgBoxLeft);
 
+			this.listImgBoxRight = document.createElement('div');
+			this.listImgBoxRight.classList.add("list-img-box-right");
+			this.listImgBoxRightTop = document.createElement('div');
+			this.listImgBoxRightTop.classList.add("list-img-box-right-top");
+			this.listImgBoxRightTop.style.backgroundImage = `url(${data.imgSmallTop || "https://gw.alicdn.com/bao/uploaded/i2/22092380/TB2SI.oaNfxQeBjSspjXXX4opXa_!!22092380.jpg_220x10000Q75.jpg_.webp"})`
+			this.listImgBoxRight.appendChild(this.listImgBoxRightTop);
+
+			this.listImgBoxRightBottom = document.createElement('div');
+			this.listImgBoxRightBottom.classList.add("list-img-box-right-bottom");
+			this.listImgBoxRightBottom.style.backgroundImage = `url(${data.imgSmallBottom || "https://gw.alicdn.com/bao/uploaded/i3/22092380/TB2x5eFppXXXXX6XFXXXXXXXXXX_!!22092380.jpg_220x10000Q75.jpg_.webp"})`
+			this.listImgBoxRight.appendChild(this.listImgBoxRightBottom);
+
+			this.listImgBox.appendChild(this.listImgBoxRight);
+
+			this.container.appendChild(this.listImgBox);
+
+			this.root.appendChild(this.container);
+		}, 0);
+	}
 	
 
 
