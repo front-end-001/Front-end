@@ -1,10 +1,16 @@
 import { BaseComponent, PROP_SYMBOL,h, STATE_SYMBOL } from "../component";
 import { TimeLine, NormalAnimation, ease } from "../animation";
+import { enableGesture } from "../gesture.v2";
 
+const config = {
+  animationDuration:1000,
+  loopTimeout:2000
+};
 export class Carousel extends BaseComponent {
   constructor(){
     super(...arguments);
     this[STATE_SYMBOL].pos = 0;
+    this[PROP_SYMBOL].config = config;
   }
   setAttribute(name,val){
     if(name === 'data'){
@@ -28,10 +34,12 @@ export class Carousel extends BaseComponent {
   }
   mountPics(data){
     const pics=(this[PROP_SYMBOL].pics=[]);
+    let i=0;
     for(let {image} of data){
-      const pic = <img src={image} />;
+      const pic = <img src={image} alt={i} />;
       pics.push(pic);
       pic.mount(this.root);
+      i++;
     }
   }
   _getPics(){
@@ -42,7 +50,16 @@ export class Carousel extends BaseComponent {
    * @param {*} pos： 为0是正好显示第一张图片,为1时正好显示第二张图片；周期为 data.length
    */
   setPos(pos){
+    if(isNaN(pos)){
+      debugger;
+    }
+    let before = pos;
     pos = this._parsePos(pos);
+
+    if(isNaN(pos)){
+      console.log(before);
+      debugger;
+    }
     //隐藏不在视口的图片,将视口图片放在合适位置
     this._placePics(pos);
     this[STATE_SYMBOL].pos = pos;
@@ -91,11 +108,12 @@ export class Carousel extends BaseComponent {
     }
   }
   //动画移动
-  startAnimation(fromPos,toPos){
+  startAnimation(fromPos,toPos,duration){
+    const {animationDuration} = this[PROP_SYMBOL].config;
     console.log('startAnimation',fromPos,toPos);
     this.stopAnimation();
    const timeLine= this[STATE_SYMBOL].timeLine =  new TimeLine();
-   timeLine.addAnimation(new NormalAnimation(0,1000,{
+   timeLine.addAnimation(new NormalAnimation(0,duration||animationDuration,{
      pos:[`${fromPos}`,`${toPos}`]
    },(key,val)=>{
      val = parseFloat(val);
@@ -109,12 +127,13 @@ export class Carousel extends BaseComponent {
     } 
   }
   //自动切换
-  startAutoLoop(){
+  startAutoLoop(timeout){
+    const {loopTimeout} = this[PROP_SYMBOL].config;
     this[STATE_SYMBOL].timer = setTimeout(()=>{
       const pos = Math.round(this.getPos());
       this.startAnimation(pos,pos+1);
       this.startAutoLoop();
-    },2000);
+    },timeout||loopTimeout);
   }
   stopAutoLoop(){
     clearTimeout(this[STATE_SYMBOL].timer);
@@ -122,7 +141,44 @@ export class Carousel extends BaseComponent {
   }
   //支持手势
   setGuesture(){
-    
+    /**
+     * tap 跳转
+     * panStart stopAuto
+     * panMove 跟随移动
+     * panEnd 
+     *    flick？flick方向移动:就地复位; 
+     *    startAuto
+     * 
+     */
+    const {root} = this;
+    enableGesture(root);
+    root.addEventListener('tap',()=>{
+      console.log('tap',this.getPos());
+    })
+    let startPos;
+    let width ;
+    root.addEventListener('panstart',e=>{
+      this.stopAutoLoop();
+      startPos = this.getPos(); 
+      width = this.root.clientWidth;
+    })
+    root.addEventListener('pan',({dx})=>{
+      this.setPos(startPos-dx/width);
+    })
+    const onEnd = e=>{
+      let fromPos = this.getPos(),toPos;
+      if(e.isFlick){
+        toPos = Math.round(fromPos + (e.dx > 0?-1:1));
+      } else{
+        toPos=Math.round(fromPos);
+      }
+
+  const {animationDuration,loopTimeout}= this[PROP_SYMBOL].config;
+      let animationTime = Math.abs(toPos - fromPos)/1 * animationDuration;
+      this.startAnimation(fromPos,toPos, animationTime)
+      this.startAutoLoop(loopTimeout+animationTime);
+    };
+    root.addEventListener('panend',onEnd);
   }
 }
 /**
