@@ -1,6 +1,6 @@
 import {create} from './create.js';
-import Div from './div.js';
-import css from './ListView.css';
+import ListFrame from './ListFrame.js';
+import css from './ListShop.css';
 
 
 const PROPERTY_SYMBOL = Symbol("property");
@@ -8,14 +8,14 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-if(!window.LIST_VIEW_STYLE_ELEMENT){
+if(!window.LIST_SHOP_STYLE_ELEMENT){
     let styleElement = document.createElement('style');
     styleElement.innerHTML = css;
     document.getElementsByTagName('head')[0].appendChild(styleElement);
-    window.LIST_VIEW_STYLE_ELEMENT = true;
+    window.LIST_SHOP_STYLE_ELEMENT = true;
 }
 
-export default class ListView {
+export default class ListShop {
     constructor(text){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -34,8 +34,8 @@ export default class ListView {
 
     created(text){
         this.root = document.createElement("div");
-        this.root.classList.add('list-view');
-        // console.log(this.render().appendTo);
+        this.root.classList.add('list-shop');
+        this.root.classList.add('root');
         this.render().appendTo(this.root);
         
     }
@@ -54,7 +54,11 @@ export default class ListView {
         return <div>
             {
                 data.map(item => {
-                   return <div><span class="x">{item.aaa}</span><span>{item.bbb}</span></div>;
+                   return <div class="frame-box">
+                        {
+                            <ListFrame data={item}></ListFrame>
+                        }
+                   </div>;
                 })
             }
         </div>;

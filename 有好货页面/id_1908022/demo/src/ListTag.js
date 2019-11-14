@@ -37,29 +37,11 @@ export default class ListTag{
 		this.container = document.createElement('div');
 		this.container.classList.add('container');
         
-        this.listBottom = document.createElement('div');
-		this.listBottom.classList.add('list-bottom');
+        
 
-		this.listBottomLeft = document.createElement('div');
-		this.listBottomLeft.classList.add('list-bottom-left');
-
-		this.listBottomRight = document.createElement('div');
-		this.listBottomRight.classList.add('list-bottom-right');
-		this.listBottomRightSpan = document.createElement('span');
-		this.listBottomRightSpan.classList.add('list-bottom-right-span');
-		this.listBottomRightSpan.innerHTML = '相似好店';
-		this.listBottomRightImg = document.createElement('img');
-		this.listBottomRightImg.classList.add('list-bottom-right-img');
-		this.listBottomRightImg.src = "https://gw.alicdn.com/tfs/TB1gmBrCzTpK1RjSZKPXXa3UpXa-24-54.png";
-		this.listBottomRight.appendChild(this.listBottomRightSpan);
-		this.listBottomRight.appendChild(this.listBottomRightImg);
+		this.root.appendChild(this.container);
 		
-		this.listBottom.appendChild(this.listBottomLeft);
-		this.listBottom.appendChild(this.listBottomRight);
-
-		this.container.appendChild(this.listBottom);
-
-        this.root.appendChild(this.container);
+		this.render();
 
 	}
 
@@ -69,7 +51,34 @@ export default class ListTag{
 
 	
 
-	
+	render(){
+		setTimeout(() => {
+			let data = this[ATTRIBUTE_SYMBOL]["data"] || {};
+			console.log(data);
+			this.listBottom = document.createElement('div');
+			this.listBottom.classList.add('list-bottom');
+
+			this.listBottomLeft = document.createElement('div');
+			this.listBottomLeft.classList.add('list-bottom-left');
+
+			this.listBottomRight = document.createElement('div');
+			this.listBottomRight.classList.add('list-bottom-right');
+			this.listBottomRightSpan = document.createElement('span');
+			this.listBottomRightSpan.classList.add('list-bottom-right-span');
+			this.listBottomRightSpan.innerHTML = data.tagRight.message || '相似好店';
+			this.listBottomRightImg = document.createElement('img');
+			this.listBottomRightImg.classList.add('list-bottom-right-img');
+			this.listBottomRightImg.src = data.tagRight.messageToImg || "https://gw.alicdn.com/tfs/TB1gmBrCzTpK1RjSZKPXXa3UpXa-24-54.png";
+			this.listBottomRight.appendChild(this.listBottomRightSpan);
+			this.listBottomRight.appendChild(this.listBottomRightImg);
+			
+			this.listBottom.appendChild(this.listBottomLeft);
+			this.listBottom.appendChild(this.listBottomRight);
+
+			this.container.appendChild(this.listBottom);
+
+		}, 0 );
+	}
 
 
 	appendChild(child){
