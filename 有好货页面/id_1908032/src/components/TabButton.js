@@ -29,18 +29,21 @@ export default class Div {
         this.root = document.createElement("div");
     }
 
+    handleClick(index){
+        this.getAttribute('onClikTab') && this.getAttribute('onClikTab')(index);
+    }
+
     render(){
         let data = this.getAttribute('data') || [];
         let curr = this.getAttribute('curr') || 0;
-        let element = <div class="tab-button">
+        return <div class="tab-button">
             <div class="button-bg"></div>
             {
-                data.map((item, index) => <div class={ index == curr ? 'button-item curr' : 'button-item' }>
+                data.map((item, index) => <div on-click={() => this.handleClick(index)} class={ index == curr ? 'button-item curr' : 'button-item' }>
                     { item }
                 </div>)
             }
-        </div>
-        element.appendTo(this.root);
+        </div>;
     }
     mounted(){
 
@@ -72,8 +75,9 @@ export default class Div {
             this.root.setAttribute("style", value);
         }
         this[ATTRIBUTE_SYMBOL][name] = value;
-        if(name == 'data'){
-            this.render();
+        if(name == 'data' || name == 'curr'){
+            this.root.innerHTML = '';
+            this.render().appendTo(this.root);
         }
     }
     addEventListener(type, listener){

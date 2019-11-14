@@ -26,18 +26,18 @@ export default class ListShop {
 
     render(){
         let data = this.getAttribute('data') || {}
-        let { logo, name, images, link, mainImg, notice } = data;
+        let { icon, fans, name, items, url } = data;
 
         this.root = document.createElement("div");
         this.root.style.margin = '0 34px';
         let element = <div class="warp">
             <header class="shop-header">
-                <img src={logo} alt="" class="header-img"/>
+                <img src={icon} alt="" class="header-img"/>
                 <div class="text-info">
                     <h3 class="title">{name}</h3>
                     <img class="badage" src={require('../assets/icon-tmall@2x.png')} />
                 </div>
-                <a href={link} class="link">
+                <a href={url} class="link">
                     <span class="text">进店</span>
                     <i class="iconfont icon-arrow arrow"></i>
                 </a>
@@ -46,20 +46,20 @@ export default class ListShop {
                 <div class="icon">
                     <i class="iconfont icon-shop"></i>
                 </div>
-                <p class="text">{ notice }</p>
+                <p class="text">{ `好店君：该店已被${ parseInt(fans) ?  Math.floor(parseInt(fans) / 10000) + '万' : '很多' }人关注，快来关注吧！` }</p>
             </div>
             <div class="image-box">
-                <img src={mainImg} alt="" class="main-img"/>
+                <img src={items[0].image} alt="" class="main-img"/>
                 <div class="right-imgbox">
                     {
-                        images.map(img => (
-                            <img class="imgs" src={img} alt=""/>
+                        items.slice(1,3).map(img => (
+                            <img class="imgs" src={img.image} alt=""/>
                         ))
                     }
                 </div>
             </div>
             <div class="bottom-link">
-                <a href={link}><span>相似好店</span><i class="iconfont icon-arrow-s"></i></a>
+                <a href={url}><span>相似好店</span><i class="iconfont icon-arrow-s"></i></a>
             </div>
         </div>
         element.appendTo(this.root);

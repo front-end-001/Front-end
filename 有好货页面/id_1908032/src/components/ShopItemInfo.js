@@ -12,7 +12,6 @@ export default class Div {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        
 
         this[PROPERTY_SYMBOL].children = [];
 
@@ -29,30 +28,31 @@ export default class Div {
     }
 
     render(){
-        let element = <div class="shopItemInfo">
+        let data = this.getAttribute('data') || {};
+        let { icon, items, name, promotion, url } = data;
+        return  <div class="shopItemInfo">
             <div class="top-info">
-                <img src="https://img.alicdn.com/tfscom/TB127a5gwDD8KJjy0FdXXcjvXXa.jpg_b.jpg" alt="" class="shop-icon"/>
+                <img src={ icon } alt="" class="shop-icon"/>
                 <div class="right-info">
-                    <i class="iconfont icon"></i>
-                    <p class="text">乐高官方旗舰店来啊</p>
+                    <i class="iconfont icon icon-guanzhu"></i>
+                    <p class="text">{ name }</p>
                 </div>
             </div>
             <div class="center-info">
                 <div class="left-text">
-                    <h3 class="shop-name">乐高官方旗舰店</h3>
-                    <p class="shop-slogan">乐高官方旗舰店</p>
+                    <h3 class="shop-name">{name}</h3>
+                    <p class="shop-slogan">{promotion}</p>
                 </div>
-                <div class="button">
+                <a class="button" href={url}>
                     <span class="text">进店</span>
                     <i class="iconfont icon-arrow icon"></i>
-                </div>
+                </a>
             </div>
             <div class="img-list">
-                <img src="https://g-search1.alicdn.com/img/bao/uploaded/i4/i3/2200595984506/O1CN01vcg0Wh1j9nEttBRLN_!!0-item_pic.jpg_460x460Q90.jpg" alt="" class="img"/>
-                <img src="https://g-search2.alicdn.com/img/bao/uploaded/i4/i1/1865963391/O1CN01aGsEHv1av7cmYKLcg_!!1865963391-0-pixelsss.jpg_460x460Q90.jpg" alt="" class="img"/>
+                <img src={ items[0].image } alt="" class="img"/>
+                <img src={ items[1].image } alt="" class="img"/>
             </div>
         </div>
-        element.appendTo(this.root);
     }
 
     mounted(){
@@ -86,7 +86,7 @@ export default class Div {
         }
         this[ATTRIBUTE_SYMBOL][name] = value;
         if(name == 'data'){
-            this.render();
+            this.render().appendTo(this.root);
         }
     }
     addEventListener(type, listener){

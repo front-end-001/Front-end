@@ -25,14 +25,19 @@ export default class Div {
 
     render(){
         let isSmall = this.getAttribute('isSmall') || false;
+        let data = this.getAttribute('data') || {};
+        let { items, name, level, url  } = data;
         let element = <div class={ `shopcover ${ isSmall ? 'small' : '' }` }>
-            <img src="https://gdp.alicdn.com/imgextra/i3/766568254/O1CN01jNbVh02AqNh4vIJ6k_!!766568254.jpg" alt="" class="img"/>
+            <img src={ items[0].image } alt="" class="img"/>
             <div class="bottom-bar">
                 <div class="left-info">
                     <div class="level">
-                        <img src={ require('../assets/icon-diamond.png') } alt=""/>
+                    {
+                        // TODO:加载等级
+                        // new Array(parseInt(level)).map(() => <img src={ require('../assets/icon-diamond.png') } alt=""/>)
+                    }
                     </div>
-                    <p class="name">阿里巴巴</p>
+                    <p class="name">{ name }</p>
                 </div>
                 <div class="right">
                     <div class="button">

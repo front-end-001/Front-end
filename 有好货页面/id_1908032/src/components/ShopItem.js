@@ -31,20 +31,20 @@ export default class Div {
 
     render(){
         let isReverse = this.getAttribute('isReverse') || false;
-        let element = <div class={`shop-item ${ isReverse ? 'reverse' : '' }`}>
+        let data = this.getAttribute('data') || [];
+        return <div class={`shop-item ${ isReverse ? 'reverse' : '' }`}>
             <div class="left-part">
-                <ShopCover data={[]} />
+                <ShopCover data={data[0]} />
             </div>
             <div class="right-part">
                 <div class="item">
-                    <ShopCover isSmall={true} data={[]} />
+                    <ShopCover isSmall={true} data={data[1]} />
                 </div>
                 <div class="item">
-                    <ShopCover isSmall={true} data={[]} />
+                    <ShopCover isSmall={true} data={data[2]} />
                 </div>
             </div>
         </div>
-        element.appendTo(this.root);
     }
 
     mounted(){
@@ -78,7 +78,8 @@ export default class Div {
         }
         this[ATTRIBUTE_SYMBOL][name] = value;
         if(name == 'data'){
-            this.render();
+            this.root.innerHTML = '';
+            this.render().appendTo(this.root);
         }
     }
     addEventListener(type, listener){

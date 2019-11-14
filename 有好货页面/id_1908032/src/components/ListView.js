@@ -1,4 +1,5 @@
 import { create } from '../create';
+import { getRect } from '../util';
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
@@ -38,7 +39,12 @@ export default class ListView {
     }
 
     mounted(){
-        
+        window.addEventListener('scroll', () => {
+            let { isBottom } = getRect(this.root);
+            if(isBottom){
+                this.getAttribute('onEndReached') && this.getAttribute('onEndReached')();
+            }
+        })
     }
     unmounted(){
 

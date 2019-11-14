@@ -2,7 +2,9 @@
     margin: 0 3.15vw;
     margin-top: 3.24vw;
     padding: 3.05vw 3.24vw 3.33vw 3.24vw;
-    background-color: rgba(82, 59, 38, 0.3);
+    background-image: url(../assets/shop-img.png);
+    background-size: contain;
+    background-repeat: no-repeat;
     border-radius: 2vw;
     overflow: hidden;
     .top-info {
@@ -15,14 +17,18 @@
             border-radius: 100%;
         }
         .right-info {
-            padding-right: 3.24vw;
+            padding-left: 3.24vw;
             width: 38.24vw;
             height: 6.39vw;
-            background-color: rgba(0, 0, 0, 1);
+            background-color: rgba(0, 0, 0, 0.3);
             border-radius: 3.19vw 0vw 0vw 3.19vw;
-            opacity: 0.3;
             display: flex;
+            align-items: center;
             .icon {
+                margin-top: -1.5vw;
+                margin-right: 1.3vw;
+                font-size: 45px;
+                color: rgb(221,180,141);
                 width: 2.78vw;
                 height: 3.15vw;
             }
@@ -42,7 +48,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 8.98vw;
             .shop-name {
                 font-size: 46px;
                 color: #fff;
@@ -62,11 +67,10 @@
             justify-content: center;
             align-items: center;
             .text {
-                font-size: 40px;
+                font-size: 3.7vw;
                 color: #fff;
             }
             .iconfont {
-                margin-left: 1.3vw;
                 font-size: 30px;
                 color: #fff;
             }

@@ -1,3 +1,5 @@
+import './Carousel.scss';
+
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
 const EVENT_SYMBOL = Symbol('event');
@@ -17,7 +19,7 @@ export default class Carousel {
         this.root = document.createElement('div');
         this.root.style.overflow = 'hidden';
         this.root.style.whiteSpace = 'nowrap';
-        this.root.classList.add('container')
+        this.root.classList.add('carousel');
     }
 
     mounted(){
@@ -74,6 +76,7 @@ export default class Carousel {
     }
 
     render(){
+        this.root.innerHTML = '';
         let width = this.width;
         this.root.style.width = typeof width == 'number' ? `${width}px` : width;
 
@@ -82,11 +85,12 @@ export default class Carousel {
         // 插入轮播图片
         for(let slider of this.data){
             let item = document.createElement('img');
-            item.src = slider.url;
+            item.src = slider;
             item.style.width = '100%';
             item.style.height = 200;
             item.style.display = 'inline-block';
             item.style.transition = 'ease 0.5s';
+            item.classList.add('slide-item');
             this.root.appendChild(item);
         }
 
