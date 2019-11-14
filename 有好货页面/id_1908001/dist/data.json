@@ -1,5 +1,41 @@
 [
   {
+    "id": "789",
+    "name": "infoQ官方旗舰店",
+    "icon": "circle2.png",
+    "desc": "好店君: 该店已被1.3万人关注, 快来关注吧!",
+    "goods": [{
+      "id": "7891",
+      "img": "list-one@2x.png"
+    },
+      {
+        "id": "1231",
+        "img": "list-one@2x.png"
+      },
+      {
+        "id": "1231",
+        "img": "list-one@2x.png"
+      }]
+  },
+  {
+    "id": "789",
+    "name": "infoQ官方旗舰店",
+    "icon": "circle2.png",
+    "desc": "好店君: 该店已被1.3万人关注, 快来关注吧!",
+    "goods": [{
+      "id": "7891",
+      "img": "list-one@2x.png"
+    },
+      {
+        "id": "1231",
+        "img": "list-one@2x.png"
+      },
+      {
+        "id": "1231",
+        "img": "list-one@2x.png"
+      }]
+  },
+  {
   "id": "123",
   "name": "极客时间旗舰店",
   "icon": "circle4.png",

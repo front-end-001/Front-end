@@ -1,4 +1,6 @@
-
+.main {
+    white-space: nowrap;
+}
 .shop {
     background-color: white;
     margin-bottom: 20px;
@@ -7,6 +9,21 @@
     height: 360px;
 }
 .shopInfo {
+    background-color: white;
+    width: 41%;
+    margin-bottom: 20px;
+    margin-right: 2px;
+    border-radius: 18px;
+    padding: 15px;
+    display: inline-block;
+    font-size: 13px;
+    height: 130px;
+}
+.topGoodInfo {
+}
+.topGoodImg {
+    width: 50%;
+    float: left;
 }
 .shopName {
     vertical-align: top;

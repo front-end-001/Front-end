@@ -28,8 +28,6 @@ export default class Wrapper {
             this.container.classList.add(value)
         }
         if (name === 'src') {
-            console.log('---------cuican----', value)
-            console.log(this.container)
             this.container.src = value
         }
         this.container.setAttribute(name, value)
