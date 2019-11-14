@@ -7,6 +7,7 @@ import { EventBus } from './js/EventBus';
 import { RecommendationPage } from './js/pages/Recommendation';
 import { getData } from './js/data';
 import './css/page.css';
+import logo from './image/logo.png';
 
 const eventBus = new EventBus();
 let trigged = false;
@@ -35,7 +36,7 @@ function render({ recommend }) {
     <div>
       <header class="bg01">
         <h1>
-          <img class="h1-logo" src="./image/logo.png" alt="每日好店" />
+          <img class="h1-logo" src={logo} alt="每日好店" />
           <a href="#" class="icon icon_back pl">back</a>
           <a href="#" class="icon icon_more pr">more</a>
           <a href="#" class="icon icon_share pr mr_2">share</a>

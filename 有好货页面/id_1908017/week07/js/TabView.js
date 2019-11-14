@@ -60,12 +60,17 @@ export class TabView extends BaseComponent {
     if (pos < 0 || pos > this.contents.children.length - 1) return;
     const lastPos = this[STATE_SYMBOL].pos;
     if (!Number.isInteger(lastPos)) {
+      for (let h of this.headers.children) {
+        h.classList.remove('active');
+      }
       for (let content of this.contents.children) {
         content.style.display = 'none';
       }
     } else {
+      this.headers.children[lastPos].classList.remove('active');
       this.contents.children[lastPos].style.display = 'none';
     }
+    this.headers.children[pos].classList.add('active');
     this.contents.children[pos].style.display = '';
     this[STATE_SYMBOL].pos = pos;
   }
