@@ -178,13 +178,13 @@ h4{
   border-radius: calc(100vw * 12 / 1080);
 }
 .shop-list .shop{
-  width:calc(100vw * 1012 / 1080);
+  /* width:calc(100vw * 1012 / 1080); */
   height:calc(100vw * 1048 / 1080);
   border-radius: calc(100vw * 36 / 1080);
   margin-bottom: calc(100vw * 36 / 1080);
   background-color: #fff;
   box-sizing: border-box;
-  padding: 0 calc(100vw * 35 / 1080);
+  padding: 0 calc(100vw * 25 / 1080);
 }
 .shop-list .shop-header{
   box-sizing: border-box;
