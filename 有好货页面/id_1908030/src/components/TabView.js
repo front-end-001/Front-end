@@ -10,21 +10,27 @@ let styleElement = document.createElement("style");
 styleElement.innerHTML = css;
 document.getElementsByTagName("head")[0].appendChild(styleElement);
 
+
 export default class TabView {
-    constructor() {
+    constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
+        
+
         this[PROPERTY_SYMBOL].children = [];
         this[PROPERTY_SYMBOL].headers = [];
+
         this.created();
     }
-    appendTo(element) {
+
+    appendTo(element){
         element.appendChild(this.root);
         this.mounted();
     }
-    created() {
+
+    created(){
         this.root = document.createElement("div");
         this.root.classList.add("tab-view");
         this.root.style.display = "flex";
@@ -42,6 +48,7 @@ export default class TabView {
         this.root.appendChild(this.contentContainer);
 
         enableGesture(this.contentContainer);
+
         this[STATE_SYMBOL].position = 0;
 
         this.root.addEventListener("touchmove", event => {
@@ -51,20 +58,24 @@ export default class TabView {
         }, {
             passive: false
         });
+
         this.contentContainer.addEventListener("pan", event => {
-            if (event.isVertical) {
+            if(event.isVertical) {
                 return;
             }
-  
+            event.origin.preventDefault();
             //获取元素宽度
             let width = this.contentContainer.getBoundingClientRect().width;
 
             let dx = event.dx;
 
+            //console.log(dx);
+
             if (this[STATE_SYMBOL].position == 0 && event.dx > 0) {
                 dx = dx / 2;
             }
-            if (this[STATE_SYMBOL].position == this.contentContainer.children.length - 1 && event.dx > 0) {
+
+            if (this[STATE_SYMBOL].position == this.contentContainer.children.length - 1 && event.dx < 0) {
                 dx = dx / 2;
             }
 
@@ -72,15 +83,16 @@ export default class TabView {
                 this.contentContainer.children[i].style.transition = `transform ease 0s`;
                 this.contentContainer.children[i].style.transform = `translateX(${ dx -width * this[STATE_SYMBOL].position }px)`;
             }
-            event.oriEvent.cancelBubble = true;
-            event.oriEvent.stopPropagation();
-            event.oriEvent.stopImmediatePropagation();
+            event.origin.cancelBubble = true;
+            event.origin.stopPropagation();
+            event.origin.stopImmediatePropagation();
         });
+
         this.contentContainer.addEventListener("panend", event => {
             if (event.isVertical) {
                 return;
             }
-            event.oriEvent.preventDefault();
+            event.origin.preventDefault();
             let width = this.contentContainer.getBoundingClientRect().width;
 
             let isLeft;
@@ -108,6 +120,8 @@ export default class TabView {
                     isLeft = true;
                 }
             }
+            //position = (children.length + position) % children.length;
+
 
              if (this[STATE_SYMBOL].position < 0) {
                 this[STATE_SYMBOL].position = 0;
@@ -119,9 +133,9 @@ export default class TabView {
                 this.contentContainer.children[i].style.transition = `transform ease .5s`;
                 this.contentContainer.children[i].style.transform = `translateX(${ -width * this[STATE_SYMBOL].position }px)`;
             }
-            event.oriEvent.cancelBubble = true;
-            event.oriEvent.stopPropagation();
-            event.oriEvent.stopImmediatePropagation();
+            event.origin.cancelBubble = true;
+            event.origin.stopPropagation();
+            event.origin.stopImmediatePropagation();
         });
     }
     mounted() {
