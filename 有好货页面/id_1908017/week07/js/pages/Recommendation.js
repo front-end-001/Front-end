@@ -33,7 +33,7 @@ export class RecommendationPage extends BaseComponent {
     const { focusData, mostFavourateShops, recommendedShops } = this[ATTR_SYMBOL];
 
     for (let child of [
-      <Carousel data={focusData} class={"mb_1"} />,
+      <Carousel data={focusData} class={"carousel mb_1"} />,
       <h4 class="mb_067">超多人收藏的店!</h4>,
       <ListView data={mostFavourateShops} class={"two-shop mb_067"} template={(item) => shop1(item)}></ListView >,
       <ListView data={recommendedShops} class="shop-list" template={(item) => shop2(item)}></ListView >,

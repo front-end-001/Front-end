@@ -126,10 +126,12 @@ nav a:hover::before,nav a.active::before{
   height: calc(100vw * 497 / 1080);
   border-radius: calc(100vw * 36 / 1080);
   overflow: hidden;
+  position: relative;
 }
 .carousel img{
   width:100%;
   height:100%;
+  position: absolute;
 }
 
 h4{
