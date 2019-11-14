@@ -56,19 +56,30 @@ export default class ShopView {
         }
         return <Div class="shop">
                     <Div class="info">
-                        <Div>{data.shop}</Div>
-                        <Div class="enter">进店 ></Div>
+                        <Div class="shopInfo">
+                            <img class="shopImg" src={data.shopImg}></img>
+                            <Div>
+                                <Div class="shopName">{data.shop}</Div>
+                                <Div class="shopAttri">{data.attri}</Div>
+                            </Div>
+                        </Div>
+                        <Div class="enterShop">进店 ></Div>
                     </Div>
-                    <Div class="tip">{data.introduce}</Div>
+                    <Div class="tip">
+                        <img class="tipImg" src={data.tipImg}></img>
+                        <Div class="tipIntro">
+                            {data.introduce}
+                        </Div>
+                    </Div>
                     <Div class="imgs">
-                        <img class="img pic1" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                        <img class="img pic2" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
-                        <img class="img pic3" src="https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg"></img>
+                        <img class="img pic1" src={data.pic1}></img>
+                        <img class="img pic2" src={data.pic2}></img>
+                        <img class="img pic3" src={data.pic3}></img>
                     </Div>
                     <Div class="foot">
                         <Div class="footLeft">
-                            <Div>dddd</Div>
-                            <Div>eeee</Div>
+                            {/* <Div>dddd</Div>
+                            <Div>eeee</Div> */}
                         </Div> 
                         <Div>相似好店 ></Div>
                     </Div>

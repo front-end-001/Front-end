@@ -1,9 +1,14 @@
 import { enableGesture } from "./gesture.js"
+import css from "../assets/css/TabView.css";
 
 const PROPERTY_SYMBOL = Symbol("property"); 
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+
+let styleElement = document.createElement("style");
+styleElement.innerHTML = css;
+document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 export default class TabView {
     constructor() {
@@ -21,12 +26,17 @@ export default class TabView {
     }
     created() {
         this.root = document.createElement("div");
+        this.root.classList.add("tab-view");
         this.root.style.display = "flex";
         this.root.style.flexDirection = "column";
         this.headerContainer = document.createElement("div");
+        this.headerContainer.classList.add("headerContainer");
+        this.headerContainer.style["z-index"] = 0;
         this.contentContainer = document.createElement("div");
+        this.contentContainer.classList.add("contentContainer");
+        this.contentContainer.style["z-index"] = 0;
         this.contentContainer.style.whiteSpace = "nowrap";
-        this.contentContainer.style.overflow = "hidden";
+        this.contentContainer.style.overflow = "scroll";
         this.contentContainer.style.flex = "1";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
@@ -34,61 +44,65 @@ export default class TabView {
         enableGesture(this.contentContainer);
         this[STATE_SYMBOL].position = 0;
 
-        this.root.addEventListener("touchmove", e => {
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
+        this.root.addEventListener("touchmove", event => {
+            event.cancelBubble = true;
+            event.stopPropagation();
+            event.stopImmediatePropagation();
         }, {
             passive: false
         });
-        this.contentContainer.addEventListener("pan", e => {
-            if (e.isVertical) {
+        this.contentContainer.addEventListener("pan", event => {
+            if (event.isVertical) {
                 return;
             }
   
             //获取元素宽度
             let width = this.contentContainer.getBoundingClientRect().width;
 
-             let dx = e.dx;
+            let dx = event.dx;
 
-             if (this[STATE_SYMBOL].position == 0 && e.dx > 0) {
+            if (this[STATE_SYMBOL].position == 0 && event.dx > 0) {
                 dx = dx / 2;
             }
-            if (this[STATE_SYMBOL].position == this.contentContainer.children.length - 1 && e.dx > 0) {
+            if (this[STATE_SYMBOL].position == this.contentContainer.children.length - 1 && event.dx > 0) {
                 dx = dx / 2;
             }
 
-            for(let i = 0; i < this.contentContainer.children.length; i ++) {
+            for(let i = 0; i < this.contentContainer.children.length; i++) {
+                this.contentContainer.children[i].style.transition = `transform ease 0s`;
                 this.contentContainer.children[i].style.transform = `translateX(${ dx -width * this[STATE_SYMBOL].position }px)`;
-                this.contentContainer.children[i].style.transition = `transform ease .5s`;
             }
+            event.oriEvent.cancelBubble = true;
+            event.oriEvent.stopPropagation();
+            event.oriEvent.stopImmediatePropagation();
         });
-        this.contentContainer.addEventListener("panend", e => {
-            if (e.isVertical) {
+        this.contentContainer.addEventListener("panend", event => {
+            if (event.isVertical) {
                 return;
             }
-
+            event.oriEvent.preventDefault();
             let width = this.contentContainer.getBoundingClientRect().width;
 
             let isLeft;
-            if (e.isFlick) {
-                if (e.vx > 0) {
+            if (event.isFlick) {
+                if (event.vx > 0) {
                     this[STATE_SYMBOL].position--;
                     isLeft = true;
                 }
 
-                 if (e.vx < 0) {
+                 if (event.vx < 0) {
                     this[STATE_SYMBOL].position++;
                     isLeft = false;
                 }
 
              } else {
-                if (e.dx > width / 2) {
+                if (event.dx > width / 2) {
                     this[STATE_SYMBOL].position--
                     isLeft = true;
-                } else if (e.dx < - width / 2) {
+                } else if (event.dx < - width / 2) {
                     this[STATE_SYMBOL].position++
                     isLeft = false;
-                } else if (e.dx > 0) {
+                } else if (event.dx > 0) {
                     isLeft = false;
                 } else {
                     isLeft = true;
@@ -102,9 +116,12 @@ export default class TabView {
                 this[STATE_SYMBOL].position = this.contentContainer.children.length - 1;
             }
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
-                this.contentContainer.children[i].style.transform = `translateX(${ -width * this[STATE_SYMBOL].position }px)`;
                 this.contentContainer.children[i].style.transition = `transform ease .5s`;
+                this.contentContainer.children[i].style.transform = `translateX(${ -width * this[STATE_SYMBOL].position }px)`;
             }
+            event.oriEvent.cancelBubble = true;
+            event.oriEvent.stopPropagation();
+            event.oriEvent.stopImmediatePropagation();
         });
     }
     mounted() {
@@ -134,6 +151,7 @@ export default class TabView {
         header.style.fontFamily = "PingFang SC";
         header.style.fontSize = "46px";
         header.style.margin = "20px 35px 0 35px";
+        header.style.color = "white";
         this.headerContainer.appendChild(header);
 
         header.addEventListener("click", event => {
@@ -167,6 +185,9 @@ export default class TabView {
             this.root.setAttribute("style", value);
             this.root.style.display = "flex";
             this.root.style.flexDirection = "column";
+        }
+        if (name == "class") {
+            this.root.classList.add(value);
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

@@ -1,5 +1,5 @@
 export function enableGesture(container) {
-    let start = (point, context) => {
+    let start = (point, context, event) => {
         context.startX = point.clientX;
         context.startY = point.clientY;
 
@@ -11,13 +11,14 @@ export function enableGesture(container) {
             context.isPress = true;
             context.isTab = false;
             let e = new Event("pressstart");
+            e.oriEvent = event;
             container.dispatchEvent(e);
             context.pressHandler = null;
             console.log("pressstart");
         }, 500);
     }
 
-    let move = (point, context) => {
+    let move = (point, context, event) => {
         let dx = point.clientX - context.startX;
         let dy = point.clientY - context.startY;
 
@@ -30,6 +31,7 @@ export function enableGesture(container) {
             else if (context.isPress) {
                 context.isPress = false;
                 let e = new Event("presscancel");
+                e.oriEvent = event;
                 container.dispatchEvent(e);
                 console.log("presscancel");
             }
@@ -44,6 +46,7 @@ export function enableGesture(container) {
                     context.isHorizontal = false;
                 }
                 let e = new Event("panstart");
+                e.oriEvent = event;
                 e.startX = context.startX;
                 e.startY = context.startY;
                 container.dispatchEvent(e);
@@ -52,6 +55,7 @@ export function enableGesture(container) {
             }
             if (context.isPan) {
                 let e = new Event("pan");
+                e.oriEvent = event;
                 e.dx = dx;
                 e.dy = dy;
                 e.isVertical = context.isVertical;
@@ -62,13 +66,14 @@ export function enableGesture(container) {
         }
     }
 
-    let end = (point, context) => {
+    let end = (point, context, event) => {
         if (context.pressHandler) {
             clearTimeout(context.pressHandler);
             context.pressHandler = null;
         }
         if (context.isTab) {
             let e = new Event("tab");
+            e.oriEvent = event;
             container.dispatchEvent(e);
             console.log("tab");
         }
@@ -81,6 +86,7 @@ export function enableGesture(container) {
         if (context.isPan && v > 0.3) {
             context.isFlick = true;
             let e = new Event("flick");
+            e.oriEvent = event;
             e.dx = dx;
             e.dy = dy;
             container.dispatchEvent(e);
@@ -91,6 +97,7 @@ export function enableGesture(container) {
 
         if (context.isPan) {
             let e = new Event("panend");
+            e.oriEvent = event;
             e.dx = dx;
             e.dy = dy;
             e.isFlick = context.isFlick;
@@ -102,23 +109,27 @@ export function enableGesture(container) {
 
         if (context.isPress) {
             let e = new Event("pressend");
+            e.oriEvent = event;
             container.dispatchEvent(e);
             console.log("pressend");
         }
     }
 
-    let cancel = (point, context) => {
+    let cancel = (point, context, event) => {
         console.log("cancel", point.clientX, point.clientY);
         if (context.isPan) {
             let e = new Event("pancancel");
+            e.oriEvent = event;
             container.dispatchEvent(e);
         }
         if (context.isPress) {
             let e = new Event("presscancel");
+            e.oriEvent = event;
             container.dispatchEvent(e);
         }
         if (context.isPress) {
             let e = new Event("presscancel");
+            e.oriEvent = event;
             container.dispatchEvent(e);
         }
     }
@@ -129,21 +140,21 @@ export function enableGesture(container) {
     let mousestart = event => {
         event.preventDefault();
         contexts[mouseSymbol] = Object.create(null);
-        start(event, contexts[mouseSymbol]);
+        start(event, contexts[mouseSymbol], event);
         document.addEventListener("mousemove", mousemove);
         document.addEventListener("mouseup", mouseend);
     };
 
     let mousemove = event => {
         event.preventDefault();
-        move(event, contexts[mouseSymbol]);
+        move(event, contexts[mouseSymbol], event);
     }
 
     let mouseend = event => {
         event.preventDefault();
         document.removeEventListener("mousemove", mousemove);
         document.removeEventListener("mouseup", mouseend);
-        end(event, contexts[mouseSymbol]);
+        end(event, contexts[mouseSymbol], event);
         delete contexts[mouseSymbol];
     }
     container.addEventListener("mousedown", mousestart);
@@ -151,26 +162,26 @@ export function enableGesture(container) {
     let touchstart = event => {
         for (let touch of event.changedTouches) {
             contexts[touch.identified] = Object.create(null);
-            start(touch, contexts[touch.identified]);
+            start(touch, contexts[touch.identified], event);  
         }
     }
 
     let touchmove = event => {
         for (let touch of event.changedTouches) {
-            move(touch, contexts[touch.identified]);
+            move(touch, contexts[touch.identified], event);
         }
     }
 
     let touchend = event => {
         for (let touch of event.changedTouches) {
-            end(touch, contexts[touch.identified]);
+            end(touch, contexts[touch.identified], event);
             delete contexts[touch.identified];
         }
     }
 
     let touchcancel = event => {
         for (let touch of event.changedTouches) {
-            cancel(touch, contexts[touch.identified]);
+            cancel(touch, contexts[touch.identified], event);
             delete contexts[touch.identified];
         }
     }

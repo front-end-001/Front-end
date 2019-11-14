@@ -1,24 +1,72 @@
-[{
-    "a": 1,
-    "b": 2,
-    "shop": "商家1",
-    "introduce": "商品描述"
-},
 {
-    "a": 13,
-    "b": 24,
-    "shop": "商家2",
-    "introduce": "商品描述, 减价"
-},
-{
-    "a": 15,
-    "b": 25,
-    "shop": "商家3",
-    "introduce": "商品描述，甩卖"
-},
-{
-    "a": 16,
-    "b": 27,
-    "shop": "商家4",
-    "introduce": "商品描述"
-}]
+    "tabOne": {
+        "carouselImgs": ["./imgs/carousel/pic1.png",
+            "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+            "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+            "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+        ],
+        "shopList": [
+            {
+                "shop": "极客时间旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop1/jk.png",
+                "tipImg": "./imgs/shop1/tip.png",
+                "pic1": "./imgs/shop1/pic1.png",
+                "pic2": "./imgs/shop1/pic2.png",
+                "pic3": "./imgs/shop1/pic3.png"
+            },
+            {
+                "shop": "极客时间天猫店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop2/jk.png",
+                "tipImg": "./imgs/shop2/tip.png",
+                "pic1": "./imgs/shop2/pic1.png",
+                "pic2": "./imgs/shop2/pic2.png",
+                "pic3": "./imgs/shop2/pic3.png"
+            },
+            {
+                "shop": "InfoQ官方旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop3/infoQ.png",
+                "tipImg": "./imgs/shop3/tip.png",
+                "pic1": "./imgs/shop3/pic1.png",
+                "pic2": "./imgs/shop3/pic2.png",
+                "pic3": "./imgs/shop3/pic3.png"
+            },
+            {
+                "shop": "极客时间旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop1/jk.png",
+                "tipImg": "./imgs/shop1/tip.png",
+                "pic1": "./imgs/shop1/pic1.png",
+                "pic2": "./imgs/shop1/pic2.png",
+                "pic3": "./imgs/shop1/pic3.png"
+            },
+            {
+                "shop": "极客时间天猫店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop2/jk.png",
+                "tipImg": "./imgs/shop2/tip.png",
+                "pic1": "./imgs/shop2/pic1.png",
+                "pic2": "./imgs/shop2/pic2.png",
+                "pic3": "./imgs/shop2/pic3.png"
+            },
+            {
+                "shop": "InfoQ官方旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop3/infoQ.png",
+                "tipImg": "./imgs/shop3/tip.png",
+                "pic1": "./imgs/shop3/pic1.png",
+                "pic2": "./imgs/shop3/pic2.png",
+                "pic3": "./imgs/shop3/pic3.png"
+            }
+        ]
+    }
+}
+

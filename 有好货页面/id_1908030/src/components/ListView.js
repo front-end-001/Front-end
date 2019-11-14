@@ -52,13 +52,14 @@ export default class ListView {
 
     render(){
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
-        return <div>
+        return <Div>
             {
                 data.map(item => (
                     <ShopView data={item}></ShopView>
                 ))
             }
-        </div>
+            <Div>cvcx</Div>
+        </Div>
     }
 
     get style(){

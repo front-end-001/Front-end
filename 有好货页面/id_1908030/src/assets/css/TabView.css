@@ -1,0 +1,6 @@
+.headerContainer{
+    height: 113px;
+}
+.contentContainer{
+    height: calc(100% - 113px);
+}

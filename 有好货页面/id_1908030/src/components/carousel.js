@@ -1,10 +1,15 @@
 import Timeline, { DomElementStyleNumberAnimation } from "./animation.js";
 import { enableGesture } from "./gesture.js"
+import css from "../assets/css/Carousel.css";
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+
+let styleElement = document.createElement("style");
+styleElement.innerHTML = css;
+document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 export default class Carousel {
     constructor(config){
@@ -25,10 +30,12 @@ export default class Carousel {
         element.appendChild(this.root);
         this.mounted();
     }
-
     created(){
         this.root = document.createElement("div");
         this.root.className = "carousel";
+        this.contentContainer = document.createElement("div");
+        this.contentContainer.className = "carousel";
+        this.root.appendChild(this.contentContainer);
     }
     mounted(){
         this.render();
@@ -44,17 +51,16 @@ export default class Carousel {
         if (imgs.length == 0) {
             return;
         }
-        this.root.classList.add("carousel");
         for (let e of imgs) {
             let img = document.createElement("img");
             img.src = e;
             img.style.width = "100%";
             img.style.height = "100%";
             img.style.transition = "ease 0.5s";
-            this.root.appendChild(img);
+            this.contentContainer.appendChild(img);
         }
 
-        let children = Array.prototype.slice.call(this.root.children);
+        let children = Array.prototype.slice.call(this.contentContainer.children);
         let position = 0;
         let nextFrame = () => {
             let nextposition = position + 1;
@@ -69,7 +75,7 @@ export default class Carousel {
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     current.style.transition = "";
-                    current.style.transform = `translate(${- 100 - 100 * position}%)`;
+                    current.style.transform = `translate(${- 200 - 100 * position}%)`;
 
                     next.style.transition = "";
                     next.style.transform = `translate(${- 100 * nextposition}%)`;
@@ -81,23 +87,22 @@ export default class Carousel {
         };
         setTimeout(nextFrame, 3000);
 
-        enableGesture(this.root);
+        enableGesture(this.contentContainer);
 
         let x = 0;
-        this.root.addEventListener("pan", event => {
-            event.stopPropagation();
+        this.contentContainer.addEventListener("pan", event => {
             for (let e of children) {
                 e.style.transition = "ease 0s";
                 e.style.transform = `translate(${x + event.dx}px)`;
             }
-            event.cancelBubble = true;
-            event.stopImmediatePropagation();
+            event.oriEvent.cancelBubble = true;
+            event.oriEvent.stopPropagation();
+            event.oriEvent.stopImmediatePropagation();
         }, {
             passive: false
         });
 
-        this.root.addEventListener("panend", event => {
-            event.stopPropagation();
+        this.contentContainer.addEventListener("panend", event => {
             if (event.isVertical) {
                 return;
             }
@@ -108,7 +113,7 @@ export default class Carousel {
                     position = position + 1;
                 }
             } else {
-                position = - Math.round((x + event.dx) / 500);
+                position = - Math.round((x + event.dx) / this.getScreenWidth());
             }
             
             position = Math.max(0, Math.min(children.length - 1, position));
@@ -116,12 +121,16 @@ export default class Carousel {
                 e.style.transition = "";
                 e.style.transform = `translate(${- 100 * position}%)`;
             }
-            x = - 500 * position;
-            event.cancelBubble = true;
-            event.stopImmediatePropagation();
+            x = - this.getScreenWidth() * position;
+            event.oriEvent.cancelBubble = true;
+            event.oriEvent.stopPropagation();
+            event.oriEvent.stopImmediatePropagation();
         }, {
             passive: false
         });
+    }
+    getScreenWidth() {
+        return window.screen.width - 68;
     }
     log(){
         console.log("width:", this.width);
@@ -146,7 +155,7 @@ export default class Carousel {
         }
         if(name == "imgs") {
             this[ATTRIBUTE_SYMBOL][name] = value;
-            this.root.innerHTML = "";
+            this.contentContainer.innerHTML = "";
             this.render();
             return;
         }

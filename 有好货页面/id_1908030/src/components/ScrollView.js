@@ -1,7 +1,13 @@
+import css from "../assets/css/ScrollView.css";
+
 const PROPERTY_SYMBOL = Symbol("property"); 
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+
+let styleElement = document.createElement("style");
+styleElement.innerHTML = css;
+document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 export default class ScrollView {
     constructor() {
@@ -18,8 +24,9 @@ export default class ScrollView {
     }
     created() {
         this.root = document.createElement("div");
+        this.root.className = "scroll-view";
         this.placeHolder = document.createElement("div");
-        this.placeHolder.style.backgroundColor = "lightgreen";
+        this.placeHolder.className = "scrollView";
         this.root.appendChild(this.placeHolder);
 
         let triggered = false;
