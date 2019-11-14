@@ -43,6 +43,7 @@ export default class TabView {
         this.contentContainer.style["z-index"] = 0;
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "scroll";
+        this.contentContainer.style["overflow-x"] = "hidden";
         this.contentContainer.style.flex = "1";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);

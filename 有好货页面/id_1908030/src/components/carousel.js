@@ -91,13 +91,14 @@ export default class Carousel {
 
         let x = 0;
         this.contentContainer.addEventListener("pan", event => {
+            event.origin.preventDefault();
             for (let e of children) {
                 e.style.transition = "ease 0s";
                 e.style.transform = `translate(${x + event.dx}px)`;
             }
-            event.oriEvent.cancelBubble = true;
-            event.oriEvent.stopPropagation();
-            event.oriEvent.stopImmediatePropagation();
+            event.origin.cancelBubble = true;
+            event.origin.stopPropagation();
+            event.origin.stopImmediatePropagation();
         }, {
             passive: false
         });
@@ -122,9 +123,9 @@ export default class Carousel {
                 e.style.transform = `translate(${- 100 * position}%)`;
             }
             x = - this.getScreenWidth() * position;
-            event.oriEvent.cancelBubble = true;
-            event.oriEvent.stopPropagation();
-            event.oriEvent.stopImmediatePropagation();
+            event.origin.cancelBubble = true;
+            event.origin.stopPropagation();
+            event.origin.stopImmediatePropagation();
         }, {
             passive: false
         });
