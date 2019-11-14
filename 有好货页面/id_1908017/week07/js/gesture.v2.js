@@ -19,8 +19,9 @@ export function enableGesture(el) {
   const contexts = Object.create(null);
   const pressTime = 500;
   const createContext = event => {
-    const instance = new Context(new Context({ startX: event.clientX, startY: event.clientY }))
+    const instance = new Context({ startX: event.clientX, startY: event.clientY });
     instance.getTimeZone = () => (new Date - instance.createTime) > 500 ? 1 : 0;
+    instance.origin = event;
     return instance;
   }
   //listen ,emit
@@ -75,11 +76,13 @@ export function enableGesture(el) {
     start(event, contexts[mouseId] = createContext(event));
   }
   const mousemove = event => {
+    contexts[mouseId].origin = event;
     move(event, contexts[mouseId]);
   }
   const mouseup = event => {
     document.removeEventListener('mousemove', mousemove);
     document.removeEventListener('mouseup', mouseup);
+    contexts[mouseId].origin = event;
     end(event, contexts[mouseId]);
     delete contexts[mouseId];
   }
@@ -93,17 +96,20 @@ export function enableGesture(el) {
   }
   const touchmove = event => {
     for (const touch of event.changedTouches) {
+      contexts[touch.identifier].origin = event;
       move(touch, contexts[touch.identifier])
     }
   }
   const touchend = event => {
     for (const touch of event.changedTouches) {
+      contexts[touch.identifier].origin = event;
       end(touch, contexts[touch.identifier])
       delete contexts[touch.identifier]
     }
   }
   const touchcancel = event => {
     for (const touch of event.changedTouches) {
+      contexts[touch.identifier].origin = event;
       cancel(touch, contexts[touch.identifier])
       delete contexts[touch.identifier]
     }
@@ -131,6 +137,7 @@ function enablePress(listen, emit) {
     if (!context.moved) {
       context[pressSymbol] = Object.create(null);
       const e = new Event('pressstart');
+      e.context = context;
       emit(e);
     }
   })
@@ -138,6 +145,7 @@ function enablePress(listen, emit) {
     const pressContext = context[pressSymbol];
     if (pressContext) {
       const e = new Event('presscancel');
+      e.context = context;
       emit(e);
     }
   })
@@ -145,6 +153,7 @@ function enablePress(listen, emit) {
     const pressContext = context[pressSymbol];
     if (pressContext && !context.moved) {
       const e = new Event('pressend');
+      e.context = context;
       emit(e);
     }
   })
@@ -154,14 +163,18 @@ const panSymbol = Symbol('pan');
 
 function enablePan(listen, emit) {
   listen('firstMove', ({ context }) => {
-    const panContext = context[panSymbol] = Object.create(null);
+    context[panSymbol] = Object.create(null);
     const e = new Event('panstart');
+    e.origin = context.origin;
+    e.dx = context.dx;
+    e.dy = context.dy;
     emit(e);
   })
   listen('move', ({ context }) => {
     const panContext = context[panSymbol];
     if (panContext) {
       const e = new Event('pan');
+      e.origin = context.origin;
       e.dx = context.dx;
       e.dy = context.dy;
       emit(e);
@@ -171,9 +184,12 @@ function enablePan(listen, emit) {
     const panContext = context[panSymbol];
     if (panContext) {
       const e = new Event('panend');
+      e.origin = context.origin;
       e.dx = context.dx;
       e.dy = context.dy;
       e.isFlick = context.getSpeed() > flickSpeed;
+
+      console.log('emit panend');
       emit(e);
     }
   })
@@ -181,6 +197,7 @@ function enablePan(listen, emit) {
     const panContext = context[panSymbol];
     if (panContext) {
       const e = new Event('pancancel');
+      e.origin = context.origin;
       emit(e);
     }
   })

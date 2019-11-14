@@ -40,8 +40,10 @@ export class TabView extends BaseComponent {
      * 瞬滑 切屏
      * *慢滑 随手指移动
      */
-    this.root.addEventListener('flick', e => {
-      if (Math.abs(e.dx) >= Math.abs(e.dy)) {
+    this.root.addEventListener('panend', e => {
+      if (e.isFlick&&Math.abs(e.dx) >= Math.abs(e.dy)) {
+
+      // console.log('end TabView',e,e===window.cc);
         const to = this[STATE_SYMBOL].pos + (e.dx < 0 ? 1 : -1);
         this.setState_pos(to);
       }

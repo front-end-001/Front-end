@@ -141,6 +141,11 @@ export class Carousel extends BaseComponent {
   }
   //支持手势
   setGuesture(){
+    const {root} = this;
+    //阻止拖拽图片
+    root.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
+    root.addEventListener('mousedown',e=>e.preventDefault(),{passive:false});
+    
     /**
      * tap 跳转
      * panStart stopAuto
@@ -150,22 +155,43 @@ export class Carousel extends BaseComponent {
      *    startAuto
      * 
      */
-    const {root} = this;
     enableGesture(root);
     root.addEventListener('tap',()=>{
       console.log('tap',this.getPos());
     })
-    let startPos;
-    let width ;
+    let startPos,width,stopPropagation ;
+
     root.addEventListener('panstart',e=>{
       this.stopAutoLoop();
+      stopPropagation = Math.abs(e.dx) >= Math.abs(e.dy);
+      if(stopPropagation){
+        e.stopPropagation();
+      } else {
+        return;
+      }
       startPos = this.getPos(); 
       width = this.root.clientWidth;
     })
-    root.addEventListener('pan',({dx})=>{
-      this.setPos(startPos-dx/width);
+    root.addEventListener('pan',e=>{
+      if(stopPropagation){
+        e.stopPropagation();
+      } else {
+        return;
+      }
+      this.setPos(startPos-e.dx/width);
     })
     const onEnd = e=>{
+      console.log('end carousel',stopPropagation,e);
+      if(stopPropagation){
+        e.origin.stopPropagation();
+        e.stopPropagation();
+        //？ todo  stopPropagation 不适用于 document.addEventListener('mouseup')
+          //？ 但 mousedown 适用，处理一下
+        // window.cc = e;
+        // console.log('carousel end stopPropagation',stopPropagation,e);
+      } else {
+        return;
+      }
       let fromPos = this.getPos(),toPos;
       if(e.isFlick){
         toPos = Math.round(fromPos + (e.dx > 0?-1:1));
@@ -173,12 +199,13 @@ export class Carousel extends BaseComponent {
         toPos=Math.round(fromPos);
       }
 
-  const {animationDuration,loopTimeout}= this[PROP_SYMBOL].config;
+    const {animationDuration,loopTimeout}= this[PROP_SYMBOL].config;
       let animationTime = Math.abs(toPos - fromPos)/1 * animationDuration;
       this.startAnimation(fromPos,toPos, animationTime)
       this.startAutoLoop(loopTimeout+animationTime);
     };
     root.addEventListener('panend',onEnd);
+    root.addEventListener('pancancel',onEnd);
   }
 }
 /**
@@ -193,7 +220,7 @@ export class Carousel extends BaseComponent {
   *   基本实现
   *     显示n个图片
   *     限制在一个容器中
-*     图片能移动:从一个位置移动到另一位置
+  *     图片能移动:从一个位置移动到另一位置
         控制：
           帧:显示固定位置 
           帧动画：从一个位置到另一位置；补间计算
