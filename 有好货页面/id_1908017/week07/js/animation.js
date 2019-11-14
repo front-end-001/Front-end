@@ -1,4 +1,4 @@
-class TimeLine {
+export class TimeLine {
   constructor() {
     this._ratio = 1;
     this._animations = [];
@@ -88,6 +88,42 @@ class StyleAnimation {
     const elStyle = this.el.style;
     for (const [key, [start, end]] of Object.entries(style)) {
       elStyle[key] = getBetweenVal(start, end, diffValRatio);
+    }
+  }
+}
+export class NormalAnimation {
+  constructor(startTime, endTime, vals, updater, timingFunction = diffTRatio => diffTRatio) {
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.vals = vals;
+    this.timingFunction = timingFunction;
+    this._lastInRange = false;
+    this.updater = updater;
+  }
+  tick(t) {
+    const [doUpdate, adjustT] = this._adjustTick(t);
+    if (doUpdate) {
+      this._update(adjustT);
+    }
+  }
+  _adjustTick(t) {
+    const { startTime, endTime, _lastInRange } = this;
+    const lOutRange = t <= startTime, rOutRange = t >= endTime;
+    if (!lOutRange & !rOutRange) {
+      this._lastInRange = true;
+      return [true, t];
+    }
+    if (_lastInRange) {
+      this._lastInRange = false;
+      return [true, lOutRange ? startTime : endTime];
+    }
+    return [false];
+  }
+  _update(t) {
+    const { startTime, endTime, timingFunction, vals, updater } = this;
+    const diffValRatio = timingFunction((t - startTime) / (endTime - startTime));
+    for (const [key, [start, end]] of Object.entries(vals)) {
+      updater(key, getBetweenVal(start, end, diffValRatio));
     }
   }
 }
@@ -205,12 +241,12 @@ function cubicBezier(p1x, p1y, p2x, p2y) {
   return solve;
 }
 
-let linear = cubicBezier(0, 0, 1, 1);
-let ease = cubicBezier(.25, .1, .25, 1);
-let easeIn = cubicBezier(.42, 0, 1, 1);
-let easeOut = cubicBezier(0, 0, .58, 1);
-let easeInOut = cubicBezier(.42, 0, .58, 1);
-let myCB = cubicBezier(.69, -0.85, .25, 1);
+export let linear = cubicBezier(0, 0, 1, 1);
+export let ease = cubicBezier(.25, .1, .25, 1);
+export let easeIn = cubicBezier(.42, 0, 1, 1);
+export let easeOut = cubicBezier(0, 0, .58, 1);
+export let easeInOut = cubicBezier(.42, 0, .58, 1);
+export let myCB = cubicBezier(.69, -0.85, .25, 1);
 /*
 问题：
 pause 检查，少参数？

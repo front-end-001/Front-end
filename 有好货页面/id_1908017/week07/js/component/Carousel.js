@@ -1,4 +1,5 @@
 import { BaseComponent, PROP_SYMBOL,h, STATE_SYMBOL } from "../component";
+import { TimeLine, NormalAnimation, ease } from "../animation";
 
 export class Carousel extends BaseComponent {
   constructor(){
@@ -76,7 +77,7 @@ export class Carousel extends BaseComponent {
          * pos 在 [0,len] 区间时, 在pic末尾补0， 以下pos范围第0张图显示
          * 0：(-1,1)||(-1+len,1+len)
          */
-        showRange.push([i-1+len],[i+1+len]);
+        showRange.push([i-1+len,i+1+len]);
       }
       let isShow = false;
       for(let [left,right] of showRange){
@@ -89,12 +90,35 @@ export class Carousel extends BaseComponent {
       pics[i].el.style.display=isShow?'':'none';
     }
   }
+  //动画移动
+  startAnimation(fromPos,toPos){
+    console.log('startAnimation',fromPos,toPos);
+    this.stopAnimation();
+   const timeLine= this[STATE_SYMBOL].timeLine =  new TimeLine();
+   timeLine.addAnimation(new NormalAnimation(0,1000,{
+     pos:[`${fromPos}`,`${toPos}`]
+   },(key,val)=>{
+     val = parseFloat(val);
+     this.setPos(val);
+   },ease));
+   timeLine.play();
+  }
+  stopAnimation(){
+    if(this[STATE_SYMBOL].timeLine){
+      this[STATE_SYMBOL].timeLine.pause();
+    } 
+  }
   //自动切换
   startAutoLoop(){
-
+    this[STATE_SYMBOL].timer = setTimeout(()=>{
+      const pos = Math.round(this.getPos());
+      this.startAnimation(pos,pos+1);
+      this.startAutoLoop();
+    },2000);
   }
   stopAutoLoop(){
-    
+    clearTimeout(this[STATE_SYMBOL].timer);
+    this.stopAnimation();
   }
   //支持手势
   setGuesture(){
