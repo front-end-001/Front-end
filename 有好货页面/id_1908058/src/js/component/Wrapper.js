@@ -22,13 +22,10 @@ export default class Wrapper {
     appendTo(element){
         element.appendChild(this.root);
     }
-
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
     }
-
-
     get children(){
         return this[PROPERTY_SYMBOL].children;
     }

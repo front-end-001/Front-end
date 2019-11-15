@@ -178,13 +178,15 @@ export class DOMElementStyleAnimation{
         // console.log(t);
         if(t > this._endTime){
             if(!this._fixKeyFrame){
+                t = this._endTime;
                 return;
             }else {
-                t = this.endTime;
+                t = this._endTime;
                 this._fixKeyFrame = false;
             }
         }else if( t < this._startTime ){
             if(!this._fixKeyFrame){
+                t = this._startTime;
                 return;
             }else{
                 t = this._startTime;
@@ -217,10 +219,10 @@ export class DOMElementStyleVectorAnimation{
         // console.log(t);
         if(t > this._endTime){
             if(!this._fixKeyFrame){
-                t = this.endTime;
+                t = this._endTime;
                 return;
             }else {
-                t = this.endTime;
+                t = this._endTime;
                 this._fixKeyFrame = false;
             }
         }else if( t < this._startTime ){

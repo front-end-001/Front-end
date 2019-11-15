@@ -3,7 +3,7 @@ import Wrapper from "./component/Wrapper.js";
 
 
 export function create(Class, attributes, ...children){
-    console.log(children);
+    // console.log(children);
     
     var object;
 

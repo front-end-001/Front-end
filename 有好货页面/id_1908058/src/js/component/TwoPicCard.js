@@ -2,7 +2,8 @@ const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-// import css from "./ListView.css";
+import style from "./twoPicCard.less";
+import StoreInformation from './StoreInformation';
 
 import { enableGesture } from './gesture.js';
 import { create } from '../create';
@@ -16,7 +17,7 @@ import { DOMElementStyleVectorAnimation, DOMElementStyleAnimation, Timeline } fr
 // document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 
-export default class ListView {
+export default class TwoPicCard {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -37,16 +38,10 @@ export default class ListView {
 
     created(){
         this.root = document.createElement("div")
-        // console.log( this[ATTRIBUTE_SYMBOL], 'create')
-        // this.root.classList.add(this[ATTRIBUTE_SYMBOL]["className"])
-        console.log(1)
         this.render().appendTo( this.root );
-
-
-
     }
     mounted(){
-        this.triggerEvent('didMount');
+
     }
     unmounted(){
 
@@ -56,21 +51,19 @@ export default class ListView {
     }
 
     render(){
-        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
-
-        return <div>
-            {
-                data.map(item=>{
-                    return(
-                        <div class={"x"}>
-                            <span>{item.a}</span>
-                            <span>{item.b}</span>
-                        </div>
-                    )
-                    
-                })
-            }
-        </div>
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || {};
+        
+        let { imgLeft="img1.png", imgRight= "img2.png", logo="logo.png"} = data;
+        
+        return (
+            <div class={style['wrap']}>
+                <StoreInformation title={data.title} logo={logo} />
+                <div class={style['content']}>
+                    <img src={`../../image/${imgLeft}`} />
+                    <img src={`../../image/${imgRight}`} />
+                </div>
+            </div>
+        )
     }
     appendChild(child){
         this.children.push(child);

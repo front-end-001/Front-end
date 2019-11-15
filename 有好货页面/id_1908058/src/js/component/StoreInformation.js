@@ -2,7 +2,7 @@ const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-// import css from "./ListView.css";
+import style from "./storeInformation.less";
 
 import { enableGesture } from './gesture.js';
 import { create } from '../create';
@@ -16,7 +16,7 @@ import { DOMElementStyleVectorAnimation, DOMElementStyleAnimation, Timeline } fr
 // document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 
-export default class ListView {
+export default class StoreInformation {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -39,14 +39,10 @@ export default class ListView {
         this.root = document.createElement("div")
         // console.log( this[ATTRIBUTE_SYMBOL], 'create')
         // this.root.classList.add(this[ATTRIBUTE_SYMBOL]["className"])
-        console.log(1)
         this.render().appendTo( this.root );
-
-
-
     }
     mounted(){
-        this.triggerEvent('didMount');
+
     }
     unmounted(){
 
@@ -57,20 +53,20 @@ export default class ListView {
 
     render(){
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        let title = this[ATTRIBUTE_SYMBOL]["title"] || "title";
+        let logo = this[ATTRIBUTE_SYMBOL]["logo"] || "/logo.png";
 
-        return <div>
-            {
-                data.map(item=>{
-                    return(
-                        <div class={"x"}>
-                            <span>{item.a}</span>
-                            <span>{item.b}</span>
-                        </div>
-                    )
-                    
-                })
-            }
-        </div>
+        
+
+        return (
+            <div class={`${style['store-infor']}`}>
+                <img class={`${style['logo']}`} src={`../../image/${logo}`} />
+                <div class={`${style['desc']}`}>    
+                    <span class={`${style['title']}`}>{title}</span>
+                    <span class={`${style['tag']} tag`}></span>
+                </div>
+            </div>
+        )
     }
     appendChild(child){
         this.children.push(child);
@@ -87,10 +83,12 @@ export default class ListView {
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
+        let data = ["data", 'title', 'logo'];
+
         if(name == "style") {
             return this.root.setAttribute("style", value);
         }
-        if(name == "data"){
+        if( data.indexOf( name ) > -1 ){
             this[ATTRIBUTE_SYMBOL][name] = value;
             this.root.innerHTML = "";
             this.render().appendTo( this.root );

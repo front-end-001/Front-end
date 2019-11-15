@@ -32,8 +32,20 @@ export default class TabView {
         this.contentContainer = document.createElement("div");
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "hidden";
-        this.contentContainer.style.flex = "1";
+        // this.contentContainer.style.background = "url('image/background1.png') no-repeat center -50%";
+        // this.contentContainer.style.backgroundSize="300% 50%";
+        this.contentContainer.style.backgroundColor = "#eee;";
+
+        // background-image: url(../image/background1.png);
+        // background-repeat: no-repeat;
+        // background-origin: border-box;
+        // background-size: 300% 50%;
+        // background-position: center -50%;
+
+        // this.contentContainer.style.flex = "1";
         this.headerContainer.style.height = "93px";
+        this.headerContainer.style.background = "url('image/background1.jpg') no-repeat center 50%";
+        this.headerContainer.style.backgroundSize="200% 200%";
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
         // this[STATE_SYMBOL].h = 0;
@@ -76,15 +88,11 @@ export default class TabView {
                 dx = dx /2;
             }
 
-
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
                 this.contentContainer.children[i].style.transition = "ease 0s";
                 this.contentContainer.children[i].style.transform = `translateX(${dx - width * this[STATE_SYMBOL].position}px)`;
             }
             
-            
-
-
         });
         
         this.contentContainer.addEventListener("panend", event => {
@@ -131,7 +139,14 @@ export default class TabView {
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
                 this.contentContainer.children[i].style.transition = "ease 0.5s";
                 this.contentContainer.children[i].style.transform = `translateX(${-width * (this[STATE_SYMBOL].position)}px)`;
+
+                if(i === this[STATE_SYMBOL].position){
+                    this.headerContainer.children[i].style.borderBottom = "4px solid rgba(255,255,255,1)";
+                }else{
+                    this.headerContainer.children[i].style.borderBottom = "none";
+                }
             }
+
 
         });
 
@@ -160,16 +175,19 @@ export default class TabView {
         let header = document.createElement("div");
         header.innerText = title;
         header.style.display = "inline-block";
-        header.style.height = "93px";
+        header.style.height = "50px";
         header.style.fontFamily = "PingFang SC";
-        header.style.fontSize = "46px";
+        header.style.fontSize = "32px";
         header.style.margin = "20px 35px 0 35px";
+        header.style.color = "rgba(255,255,255,1)";
         this.headerContainer.appendChild(header);
 
         // let timeline = new Timeline();
 
         header.addEventListener("click", event=>{
             this[STATE_SYMBOL].position = n;
+            this.contentContainer.children[n].style.color = "red";
+
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
                 // this.contentContainer.children[i].style.width = "100%";
                 // this.contentContainer.children[i].style.height = "100%";
@@ -177,6 +195,11 @@ export default class TabView {
                 this.contentContainer.children[i].style.transition = "ease 0.3s";
                 this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`;
 
+                if(i === n){
+                    this.headerContainer.children[i].style.borderBottom = "4px solid rgba(255,255,255,1)";
+                }else{
+                    this.headerContainer.children[i].style.borderBottom = "none";
+                }
                 // timeline.addAnimation(new DOMElementStyleAnimation(
                 //     this.contentContainer.children[i],
                 //     "transform",
@@ -198,6 +221,7 @@ export default class TabView {
             this.contentContainer.children[i].style.display = "inline-block";
             this.contentContainer.children[i].style.verticalAlign = "top";
         }
+        this.headerContainer.children[0].style.borderBottom = "4px solid rgba(255,255,255,1)";
 
     }
 
@@ -216,6 +240,11 @@ export default class TabView {
             this.root.setAttribute("style", value);
             this.root.style.display = "flex";
             this.root.style.flexDirection = "column"
+        }
+        if( name == "className"){
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            this.root.classList.add(value);
+            return
         }
 
         return this[ATTRIBUTE_SYMBOL][name] = value;

@@ -2,7 +2,8 @@ const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-// import css from "./ListView.css";
+import style from "./threePicCard.less";
+import StoreInformation from './StoreInformation';
 
 import { enableGesture } from './gesture.js';
 import { create } from '../create';
@@ -16,7 +17,7 @@ import { DOMElementStyleVectorAnimation, DOMElementStyleAnimation, Timeline } fr
 // document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 
-export default class ListView {
+export default class ThreePicCard {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -39,14 +40,11 @@ export default class ListView {
         this.root = document.createElement("div")
         // console.log( this[ATTRIBUTE_SYMBOL], 'create')
         // this.root.classList.add(this[ATTRIBUTE_SYMBOL]["className"])
-        console.log(1)
+
         this.render().appendTo( this.root );
-
-
-
     }
     mounted(){
-        this.triggerEvent('didMount');
+
     }
     unmounted(){
 
@@ -56,21 +54,33 @@ export default class ListView {
     }
 
     render(){
-        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || {};
+        
+        let { imgLeft="img1.png", imgMiddle="img1.png", imgRight= "img2.png", logo="logo.png", title="title"} = data;
+        
+        return (
+            <div class={style['wrap']}>
+                <div class={style['header']}>
+                        <StoreInformation title={title} logo={logo} />
+                        <span class={style["enter-btn"]}>进店 ></span>
+                </div>
+                <div class={style['info']}>
+                    <span class={style["info-logo"]}></span>
+                    <span class={style["info-text"]}>好店君：该店已被1.3万人关注，快来关注吧！</span>
+                </div>
 
-        return <div>
-            {
-                data.map(item=>{
-                    return(
-                        <div class={"x"}>
-                            <span>{item.a}</span>
-                            <span>{item.b}</span>
-                        </div>
-                    )
+                <div class={style['content']}>
+                    <img class={style['content-left']} src={`../../image/${imgLeft}`} />
+                    <div class={style['content-right']}>
+                        <img class={style['content-right-top']} src={`../../image/${imgMiddle}`} />
+                        <img class={style['content-right-bottom']} src={`../../image/${imgRight}`} />
+                    </div>
                     
-                })
-            }
-        </div>
+                </div>
+
+                <div class={style['link']}>相似店铺 ></div>
+            </div>
+        )
     }
     appendChild(child){
         this.children.push(child);
