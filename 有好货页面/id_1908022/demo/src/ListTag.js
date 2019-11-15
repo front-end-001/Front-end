@@ -54,7 +54,6 @@ export default class ListTag{
 	render(){
 		setTimeout(() => {
 			let data = this[ATTRIBUTE_SYMBOL]["data"] || {};
-			console.log(data);
 			this.listBottom = document.createElement('div');
 			this.listBottom.classList.add('list-bottom');
 

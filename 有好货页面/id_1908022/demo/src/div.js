@@ -32,12 +32,13 @@ export default class Div {
         this.root.addEventListener('scroll', event => {
             let clientRect = this.root.getBoundingClientRect();
             let placeHolderRect = this.placeHolder.getBoundingClientRect();
-            if(clientRect.bottom < placeHolderRect.top){
+            /* if(clientRect.bottom < placeHolderRect.top){
                 this.triggerEvent('scrollToBottom', 'aaa');
+            } */
+            if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height + 10){
+                this.triggerEvent('scrollToBottom', '没有更多了');
+                
             }
-            // if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height){
-            //     this.triggerEvent('scrollToBottom', 'aaa');
-            // }
             // console.log(this.root.scrollHeight, clientRect.height, this.root.scrollTop);
         })
 
@@ -92,6 +93,10 @@ export default class Div {
             this.root.style.verticalAlign = "top";
             this.root.style.overflowY = 'scroll';
         }
+        if(name == "data"){
+
+        }
+
         if(name == "placeHolder"){
             this.placeHolder.innerText = value;
         }
