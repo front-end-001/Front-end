@@ -61,10 +61,10 @@ export default class Carousel {
             this.tl.restart();
 
             position = nextPosition;
-            // this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
+            this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
         }
 
-        this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);
+        // this.nextPicTimer = setTimeout(nextPic, this[PROPERTY_SYMBOL].speed);//不做动画只做手势
     }
     createContainer() {
         this.root = document.createElement("div");
@@ -122,7 +122,8 @@ export default class Carousel {
             clearTimeout(this.nextPicTimer);
         });
         this.root.addEventListener("pan", event => {
-            // event.origin.preventDefault();
+            event.origin.preventDefault();
+            event.origin.stopPropagation();
             let current = children[position];
 
             let nextPosition = (position + 1) % children.length;
@@ -139,7 +140,7 @@ export default class Carousel {
             current.style.transform = `translate(${- this.width * position + event.dx + offset}px)`
         });
         this.root.addEventListener("panend", event => {
-            // event.origin.preventDefault();
+            event.origin.preventDefault();
             let isLeft;
             if (event.isFlick) {
                 if (event.vx > 0) {
