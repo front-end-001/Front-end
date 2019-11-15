@@ -1,3 +1,4 @@
+
 module.exports = {
     entry: "./src/main.js",
     module: {
@@ -28,7 +29,7 @@ module.exports = {
     devServer: {
         contentBase: "./dist",
         hot: true,
-        // host: "10.1.71.26",
+        host: "10.1.71.26",
         port: 8082
     },
     optimization: {

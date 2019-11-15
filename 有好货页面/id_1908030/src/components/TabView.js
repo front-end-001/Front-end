@@ -42,7 +42,6 @@ export default class TabView {
         this.contentContainer.classList.add("contentContainer");
         this.contentContainer.style["z-index"] = 0;
         this.contentContainer.style.whiteSpace = "nowrap";
-        this.contentContainer.style.overflow = "scroll";
         this.contentContainer.style["overflow-x"] = "hidden";
         this.contentContainer.style.flex = "1";
         this.root.appendChild(this.headerContainer);
@@ -181,9 +180,12 @@ export default class TabView {
         child.appendTo(this.contentContainer);
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.width = "100%";
-            this.contentContainer.children[i].style.height = "100%";
+            this.contentContainer.children[i].style.height = "calc(100% - 34px)";
+            this.contentContainer.children[i].style['padding-top'] = "34px";
             this.contentContainer.children[i].style.verticalAlign = "top";
             this.contentContainer.children[i].style.display = "inline-block";
+            this.contentContainer.children[i].style.overflow = "scroll";
+            this.contentContainer.style["overflow-x"] = "hidden";
         }
     }
     get children() {

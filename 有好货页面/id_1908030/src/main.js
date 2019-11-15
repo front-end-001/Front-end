@@ -25,11 +25,14 @@ window.render = (data, root) => {
             <TabView class="tabview" style="z-index: 100;">
                 <ScrollView tab-title="推荐" placeHolderText="人家是有底线的啦" on-scrollToBottom={loadMore}>
                     <Carousel imgs={data.tabOne.carouselImgs}></Carousel>
-                    <ListView data={data.tabOne.shopList}></ListView>
+                    <ListView data={data.tabOne}></ListView>
                 </ScrollView>
-                <ScrollView tab-title="有趣的店" style="background-color:blue;">cxvfd
+                <ScrollView tab-title="有趣的店" placeHolderText="人家是有底线的啦" on-scrollToBottom={loadMore}>
+                    <ListView data={data.tabSecond}></ListView>
                 </ScrollView>
-                <ScrollView tab-title="品牌新店" style="background-color:red;">sdfdsfsd</ScrollView>
+                <ScrollView tab-title="品牌新店" placeHolderText="人家是有底线的啦" on-scrollToBottom={loadMore}>
+                    <ListView data={data.tabThree}></ListView>
+                </ScrollView>
             </TabView>
         </Div>
     </Div>

@@ -1,27 +1,24 @@
 import {create} from "../create.js";
 import Div from "./Div.js";
-import css from "../assets/css/ListView.css";
-import ShopView from "./ShopView.js";
-import ShopImgView from "./ShopImgView.js";
-import ShopNewView from "./ShopNewView.js";
+import css from "../assets/css/ShopNewView.css";
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-
 let styleElement = document.createElement("style");
 styleElement.innerHTML = css;
 document.getElementsByTagName("head")[0].appendChild(styleElement);
 
-export default class ListView {
+export default class ShopNewView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         
+
         this[PROPERTY_SYMBOL].children = [];
 
         this.created();
@@ -38,7 +35,8 @@ export default class ListView {
 
     created(){
         this.root = document.createElement("div");
-        this.root.className = "list-view";
+        this.root.className = "shop-newView";
+        this.render().appendTo(this.root);
     }
     mounted(){
 
@@ -52,39 +50,28 @@ export default class ListView {
 
 
     render(){
-        let data = this[ATTRIBUTE_SYMBOL]["data"]["shopList"] || [];
-        let displayType = this[ATTRIBUTE_SYMBOL]["data"]["displayType"] || 1;
-        
-        if (displayType == 1) {
-            return <Div>
-                {
-                    data.map(item => (
-                        <ShopView data={item}></ShopView>
-                    ))
-                }
-            </Div>
-        } else if (displayType == 2) {
-            let dataGroup = [];
-            for (let i = 0; i < data.length; i+=3) {
-                dataGroup.push(data.slice(i, i + 3))
-            }
-            return <Div>
-                {      
-                    dataGroup.map((item, index) => (
-                        <ShopImgView data={item}></ShopImgView>
-                    ))
-                }
-            </Div>
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        if (data.length == 0) {
+            return <div></div>
         }
-        else if (displayType == 3) {
-            return <Div>
-                {
-                    data.map(item => (
-                        <ShopNewView data={item}></ShopNewView>
-                    ))
-                }
-            </Div>
-        }
+        return <Div class="shop">
+                    <Div class="info">
+                        <Div class="shopInfo">
+                            <img class="shopImg" src={data.shopImg}></img>
+                            <Div class="tip">
+                                <img class="tipImg" src={data.tipImg}></img>
+                                <Div class="tipIntro"> {data.introduce}</Div>
+                            </Div>
+                            <Div class="shopName">{data.shop}</Div>
+                            <Div class="shopAttri">{data.attri}</Div>
+                            <Div class="enterShop">进店 ></Div>
+                        </Div>
+                    </Div>
+                    <Div class="imgs">
+                        <img class="img pic1" src={data.pic1}></img>
+                        <img class="img pic2" src={data.pic2}></img>
+                    </Div>
+                </Div>
     }
 
     get style(){

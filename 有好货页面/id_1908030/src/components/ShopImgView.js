@@ -1,27 +1,26 @@
 import {create} from "../create.js";
 import Div from "./Div.js";
-import css from "../assets/css/ListView.css";
-import ShopView from "./ShopView.js";
-import ShopImgView from "./ShopImgView.js";
-import ShopNewView from "./ShopNewView.js";
+import css from "../assets/css/ShopImgView.css";
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-
 let styleElement = document.createElement("style");
 styleElement.innerHTML = css;
 document.getElementsByTagName("head")[0].appendChild(styleElement);
 
-export default class ListView {
+let isOdd = false;
+
+export default class ShopImgView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         
+
         this[PROPERTY_SYMBOL].children = [];
 
         this.created();
@@ -38,7 +37,7 @@ export default class ListView {
 
     created(){
         this.root = document.createElement("div");
-        this.root.className = "list-view";
+        this.root.className = "shop-imgView";
     }
     mounted(){
 
@@ -49,42 +48,47 @@ export default class ListView {
     update(){
 
     }
-
-
     render(){
-        let data = this[ATTRIBUTE_SYMBOL]["data"]["shopList"] || [];
-        let displayType = this[ATTRIBUTE_SYMBOL]["data"]["displayType"] || 1;
-        
-        if (displayType == 1) {
-            return <Div>
-                {
-                    data.map(item => (
-                        <ShopView data={item}></ShopView>
-                    ))
-                }
-            </Div>
-        } else if (displayType == 2) {
-            let dataGroup = [];
-            for (let i = 0; i < data.length; i+=3) {
-                dataGroup.push(data.slice(i, i + 3))
+        let imgContainer = document.createElement("div");
+        this.root.appendChild(imgContainer);
+        imgContainer.className = "imgs";
+        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        let len = Math.min(data.length, 3);
+        isOdd = !isOdd;
+        for (let i = 0; i < len; i++) {
+            let className = "img " + (isOdd ? "odd" : "even") + "pic" + (i + 1);
+            if ((isOdd && i == 0) || (!isOdd && i == 0)) {
+                this.renderMaxImg(data[i], className).appendTo(imgContainer);
+            } else {
+                this.renderMinImg(data[i], className).appendTo(imgContainer);
             }
-            return <Div>
-                {      
-                    dataGroup.map((item, index) => (
-                        <ShopImgView data={item}></ShopImgView>
-                    ))
-                }
-            </Div>
         }
-        else if (displayType == 3) {
-            return <Div>
-                {
-                    data.map(item => (
-                        <ShopNewView data={item}></ShopNewView>
-                    ))
-                }
+    }
+
+    renderMaxImg(item, className) {
+        return <Div class={className}>
+                <img style="height: 100%;width:100%" src={item.pic}></img>
+                <Div class="bottom">
+                    <Div class="bottomleft">
+                        <img class="shopImg" src={item.shopImg}></img>
+                        <Div class="shopName">{item.shop}</Div>
+                    </Div>
+                    <Div class="maxEnterShop">进店 ></Div>
+                </Div>
             </Div>
-        }
+    }
+
+    renderMinImg(item, className) {
+        return <Div class={className}>
+                <img style="height: 100%;width:100%" src={item.pic}></img>
+                <Div class="bottom">
+                    <Div class="bottomleft">
+                        <img class="shopImg" src={item.shopImg}></img>
+                        <Div class="shopName">{item.shop}</Div>
+                    </Div>
+                    <Div class="minEnterShop"> ></Div>
+                </Div>
+            </Div>
     }
 
     get style(){
@@ -117,7 +121,7 @@ export default class ListView {
             this[ATTRIBUTE_SYMBOL][name] = value;
 
             this.root.innerHTML = "";
-            this.render().appendTo(this.root);
+            this.render();
 
             return value;
         }
