@@ -36,7 +36,26 @@ export default class ListShop {
         this.root = document.createElement("div");
         this.root.classList.add('list-shop');
         this.root.classList.add('root');
-        this.render().appendTo(this.root);
+        /* setTimeout(() => {
+            console.log(this.root.parentElement.parentElement.triggerEvent('scrollToBottom', '加载中123'));
+        },0) */
+
+       /*  setTimeout(() => {
+            window.getJSON("../data.json").then( data => {
+                // this[ATTRIBUTE_SYMBOL]["data"].push(data[2]);
+                
+                this.render([data[2]]).appendTo(this.root);
+            }).catch(
+                err => {
+                    console.log(err);
+                    return err;
+                }
+            )
+        }, 5000) */
+        
+        setTimeout(() => {
+            this.render(this[ATTRIBUTE_SYMBOL]["data"] || []).appendTo(this.root);
+        },0)
         
     }
     mounted(){
@@ -49,8 +68,9 @@ export default class ListShop {
 
     }
 
-    render() {
-        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+    render(data) {
+        // let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        console.log(data);
         return <div>
             {
                 data.map(item => {
@@ -99,7 +119,7 @@ export default class ListShop {
         if(name == 'data'){
             this[ATTRIBUTE_SYMBOL][name] = value;
             this.root.innerHTML = '';
-            this.render().appendTo(this.root);
+            // this.render().appendTo(this.root);
             return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;

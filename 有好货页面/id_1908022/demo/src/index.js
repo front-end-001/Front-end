@@ -9,22 +9,61 @@ import ListAttention from "./ListAttention.js";
 import ListFrame from "./ListFrame.js";
 
 
+window.getJSON = function(url) {
+	const promise = new Promise(function(resolve, reject){
+		const handler = function() {
+			if (this.readyState !== 4) {
+				return;
+			}
+			if (this.status === 200) {
+				resolve(this.response);
+			} else {
+				reject(new Error(this.statusText));
+			}
+		};
+		const client = new XMLHttpRequest();
+		client.open("GET", url);
+		client.onreadystatechange = handler;
+		client.responseType = "json";
+		client.setRequestHeader("Accept", "application/json");
+		client.send();
+
+	});							
+
+	return promise;
+};
+
+
+
+
+
+
 function loadMore(a){
-	console.log(a);
-	console.log("load more");
+	// console.log(a);
+	// console.log("load more");
 
 	setTimeout(() => {
-		this.setAttribute('placeHolder', '没有更多了');
+		window.getJSON("../data.json").then( data => {
+			window.render(data);
+			this.setAttribute('placeHolder', "我也是有底线的！");
+		}).catch(
+			err => {
+				console.log(err);
+				return err;
+			}
+		)
+		
+		
 	}, 1000)
 }
 
 window.render = function(obj, root) {
 	var c = <Tabview style="width: 100%;height: 100%;display: block;">
-	<Div tab-title="推介" style="background-color: rgb(238, 238, 238);padding: 35px;box-sizing: border-box;">
+	<Div tab-title="推介" placeHolder="load more" on-scrollToBottom={loadMore} style="background-color: rgb(238, 238, 238);padding: 35px;box-sizing: border-box;">
 		<Carousel style="width: 100%;height: 496px;position: relative;box-sizing: border-box;">
 		</Carousel>
 		<div style="margin-top: 30px;">
-			<ListShop data={ obj } ></ListShop>
+			<ListShop  data={ obj } ></ListShop>
 		</div>
 		
 	</Div>
@@ -104,6 +143,7 @@ window.render = function(obj, root) {
 		<ListView ></ListView>
 	</Div>
 </Tabview>;
+document.body.innerHTML = "";
 c.appendTo(document.body);
 }
 
