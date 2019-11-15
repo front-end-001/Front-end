@@ -44,8 +44,8 @@ function loadMore(a){
 
 	setTimeout(() => {
 		window.getJSON("../data.json").then( data => {
-			window.render(data);
-			this.setAttribute('placeHolder', "我也是有底线的！");
+			// window.render(data);
+			this.setAttribute('placeHolder', a );
 		}).catch(
 			err => {
 				console.log(err);
@@ -59,15 +59,15 @@ function loadMore(a){
 
 window.render = function(obj, root) {
 	var c = <Tabview style="width: 100%;height: 100%;display: block;">
-	<Div tab-title="推介" placeHolder="load more" on-scrollToBottom={loadMore} style="background-color: rgb(238, 238, 238);padding: 35px;box-sizing: border-box;">
+	<Div tab-title="推介" placeHolder="加载更多......" on-scrollToBottom={loadMore} style="background-color: rgb(238, 238, 238);padding: 35px;box-sizing: border-box;">
 		<Carousel style="width: 100%;height: 496px;position: relative;box-sizing: border-box;">
 		</Carousel>
 		<div style="margin-top: 30px;">
-			<ListShop  data={ obj } ></ListShop>
 		</div>
+		<ListFrame  data={ obj } ></ListFrame>
 		
 	</Div>
-	<Div tab-title="有趣的店" placeHolder="load more" on-scrollToBottom={loadMore} style="background: blueviolet;-webkit-overflow-scrolling:touch;"> 
+	<Div tab-title="有趣的店" placeHolder="load more..." on-scrollToBottom={loadMore} style="background: blueviolet;-webkit-overflow-scrolling:touch;"> 
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
 	  abc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abcabc abc abc
