@@ -14,7 +14,7 @@ import Component, {
 } from './component';
 import createComponent from './createComponent';
 import { getTransformXVal } from '../assets/utils';
-import './carousel.scss';
+import './Carousel.scss';
 
 /** 默认配置 */
 const DEFAULT_CONFIG = {
