@@ -24,7 +24,7 @@ window.render = function (RecommendationPageData, interestingPageDataTypeAll, in
     var c = <div id="app">
                 <TabView class="tab">
                     <ScrollView tab-title="推荐">
-                        <Carousel speed="1500" style="margin:0 auto;border-radius:3.333vw;" data={RecommendationPageData.focusData}></Carousel>
+                        <Carousel speed="2000" style="margin:0 auto;border-radius:3.333vw;" data={RecommendationPageData.focusData}></Carousel>
                         <CollectionShop data={RecommendationPageData.mostFavourateShops}></CollectionShop>
                         <RecommendedShops data={RecommendationPageData.recommendedShops}></RecommendedShops>
                     </ScrollView>
