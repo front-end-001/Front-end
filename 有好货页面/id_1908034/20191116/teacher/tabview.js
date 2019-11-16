@@ -93,8 +93,10 @@ export default class TabView {
             for (let i = 0; i < this.headerContainer.children.length; i++) {
                 if (i === this[STATE_SYMBOL].position) {
                     this.headerContainer.children[i].style.opacity = "inherit";
+                    this.headerContainer.children[i].style.textDecoration = "underline";
                 } else {
                     this.headerContainer.children[i].style.opacity = "0.5";
+                    this.headerContainer.children[i].style.textDecoration = "none";
                 }
             }
 
