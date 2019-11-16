@@ -1,0 +1,162 @@
+{
+  "carousel": [
+    {
+      "id": 1,
+      "img": "/static/image/slider1.webp",
+      "target": {
+        "type": "shop",
+        "params": {
+          "shop_id": 123
+        }
+      }
+    },
+    {
+      "id": 2,
+      "img": "/static/image/slider2.webp",
+      "target": {
+        "type": "shop",
+        "params": {
+          "shop_id": 233
+        }
+      }
+    },
+    {
+      "id": 3,
+      "img": "/static/image/slider3.webp",
+      "target": {
+        "type": "shop",
+        "params": {
+          "shop_id": 666
+        }
+      }
+    }
+  ],
+  "collection": [
+    {
+      "eventTrack": {
+        "pos": "每日好店-推荐-双图运营位",
+        "shopId": 123
+      },
+      "avatar": "xxxxx",
+      "title": "店铺名称",
+      "imgs": [
+        "xxxxx",
+        "xxxxxx"
+      ],
+      "signage": {
+        "type": 1,
+        "level": 3
+      },
+      "shopId": 123
+    },
+    {
+      "eventTrack": {
+        "pos": "每日好店-推荐-双图运营位",
+        "shopId": 123
+      },
+      "avatar": "xxxxx",
+      "title": "店铺名称",
+      "imgs": [
+        "xxxxx",
+        "xxxxxx"
+      ],
+      "signage": {
+        "type": 1,
+        "level": 3
+      },
+      "shopId": 123
+    }
+  ],
+  "commendList": {
+    "total": 100,
+    "since": 0,
+    "list": [{
+      "shop_id": 1,
+      "shop_title": "KOOW STUDIO",
+      "shop_type": "天猫",
+      "desc": "大V推荐：羊绒的细腻与芒果黄色相互映衬，非常抢眼的温柔",
+      "url": "https://h5.m.taobao.com/awp/core/detail.htm?id=602545416896&rmdChannelCode=goodShop&spm=a1z67.7917908.tuijian.d1",
+      "labels": ["淘宝线上购物节"],
+      "shop_icon": "/static/image/circle11.webp",
+      "goods": [{
+        "goods_id": 123,
+        "goods_thumb": "/static/image/square_big_1.webp"
+      }, {
+        "goods_id": 234,
+        "goods_thumb": "/static/image/square_small_1.webp"
+      }, {
+        "goods_id": 345,
+        "goods_thumb": "/static/image/square_small_12.webp"
+      }]
+    }, {
+      "shop_id": 2,
+      "shop_title": "3颗猫饼干外贸玩具",
+      "shop_type": "天猫",
+      "desc": "好店君：该店已被3.1万人关注，快来关注吧！",
+      "labels": ["独到设计"],
+      "shop_icon": "/static/image/circle21.gif",
+      "goods": [{
+        "goods_id": 123,
+        "goods_thumb": "/static/image/square_big_22.webp"
+      }, {
+        "goods_id": 234,
+        "goods_thumb": "/static/image/square_small_21.webp"
+      }, {
+        "goods_id": 345,
+        "goods_thumb": "/static/image/square_small_22.webp"
+      }]
+    }, {
+      "shop_id": 3,
+      "shop_title": "持家太太 韩国家居",
+      "shop_type": "天猫",
+      "desc": "大V推荐：我们的目的很简单，就是要把少女心做到淋漓尽致",
+      "labels": ["值得收藏"],
+      "shop_icon": "/static/image/circle31.webp",
+      "goods": [{
+        "goods_id": 123,
+        "goods_thumb": "/static/image/square_big_31.webp"
+      }, {
+        "goods_id": 234,
+        "goods_thumb": "/static/image/square_small_31.webp"
+      }, {
+        "goods_id": 345,
+        "goods_thumb": "/static/image/square_small_32.webp"
+      }]
+    }, {
+      "shop_id": 4,
+      "shop_title": "夏末橡果 文艺清新女装",
+      "shop_type": "天猫",
+      "desc": "大V推荐：传统的日系配色加上改良汉服设计，软萌少女快接招",
+      "labels": ["软妹梦工厂"],
+      "shop_icon": "/static/image/circle41.webp",
+      "goods": [{
+        "goods_id": 123,
+        "goods_thumb": "/static/image/square_big_41.webp"
+      }, {
+        "goods_id": 234,
+        "goods_thumb": "/static/image/square_small_41.webp"
+      }, {
+        "goods_id": 345,
+        "goods_thumb": "/static/image/square_small_42.webp"
+      }]
+    },
+    {
+      "shop_id": 5,
+      "shop_title": "番茄小铺子tomato shop",
+      "shop_type": "天猫",
+      "desc": "大V推荐：迷人的波浪条针织针衫，复古少女的心头爱",
+      "labels": ["金牌卖家"],
+      "shop_icon": "/static/image/circle51.webp",
+      "goods": [{
+        "goods_id": 123,
+        "goods_thumb": "/static/image/square_big_51.webp"
+      }, {
+        "goods_id": 234,
+        "goods_thumb": "/static/image/square_small_51.webp"
+      }, {
+        "goods_id": 345,
+        "goods_thumb": "/static/image/square_small_53.webp"
+      }]
+    }]
+  }
+}
