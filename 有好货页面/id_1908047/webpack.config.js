@@ -14,8 +14,6 @@ module.exports = {
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
       {
         test: /\.css$/i,
-        // use: [require.resolve('./component-css-loader.js')],
-        // use: ['to-string-loader', 'css-loader'],
         use: ['style-loader', 'css-loader'],
       },
       {
@@ -32,12 +30,7 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   test: /\.component$/,
-      //   use: {
-      //     loader: require.resolve('./component-loader.js'),
-      //   },
-      // }
+     
     ]
   },
   plugins: [
@@ -50,6 +43,7 @@ module.exports = {
   devServer: {
     contentBase: './dist',
     host: '0.0.0.0',
+    port: '8000',
     hot: true
   },
   optimization: {
