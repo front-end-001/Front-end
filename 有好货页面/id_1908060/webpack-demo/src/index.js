@@ -1,108 +1,35 @@
-import { Carousel } from "./components/Carousel.js";
-// import { Tab } from "./components/Tab.js";
-// import Div from './components/Div';
-//
-// function myCreate(Class, attributes, ...children){
-//     var object = new Class();
-//     console.log(Class, attributes, ...children);
-//     for(let name in attributes) {
-//         if(/^on/.test(name)) {
-//             let event = name.replace(/^on/, '');
-//             event = event[0].toLowerCase() + event.slice(1);
-//             object.addEventListener(event, attributes[name]);
-//         } else {
-//             object[name] = attributes[name];
-//         }
-//     }
-//     for(let child of children)
-//         object.appendChild(child);
-//     return object;
-// }
-// ''
-// const imgList = [
-//     "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-//     "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-//     "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-//     "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
-// ];
-//
-// const tabInfo = [{
-//     src: "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-//     name: '一个名字'
-// }, {
-//     src: "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-//     name: '一个名字'
-// }, {
-//     src: "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-//     name: '一个名字'
-// }, {
-//     src: "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
-//     name: 'faaa 一个名字'
-// }];
-//
-//
-//
-// // var c = <Carousel onPanend={(data) => console.log('onPanend', data)} data={imgList}></Carousel>;
-// // c.appendTo(document.getElementById('container'));
-// var d = <Tab onPanend={(data) => console.log('onPanend', data)} data={tabInfo}>
-//     <Div data={1}><Div></Div></Div>
-//     <Div></Div>
-//     <Div></Div>
-// </Tab>;
-//
-//
-// d.appendTo(document.getElementById('container'));
+import { Carousel } from "./Carousel.js";
+
+import Tab from "./base-component/Tab.js"
+import Div from "./base-component/Div.js"
+import Text from './base-component/Text';
+import ScrollView from './base-component/ScrollView';
+import Title from './base-component/Title';
+import ListView from './component-demo/ListView';
+
+import myCreate from './utils/myCreate';
 
 
-
-import Tab from "./winter/Tab.js"
-import Div from "./winter/Div.js"
-import Text from './winter/Text';
-import ScrollView from './winter/ScrollView';
-
-function myCreate(Class, attributes, ...children){
-    var object = new Class();
-    for(let name in attributes)
-        object.setAttribute(name, attributes[name]);
-    for(let child of children)
-        if(typeof child === "string") {
-            object.appendChild(new Text(child));
-        } else {
-            object.appendChild(child);
-        }
-    return object;
-}
-
-
-var c = <Tab style="width:100%;height:500px;" width={500}>
-    <Div tab-title="推荐" style="background-color:lightblue; overflow: scroll">
-        <ScrollView>
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-            abc abc abc abc abc abc abc abc abc abc abc abc
-        </ScrollView>
-    </Div>
-    <Div tab-title="有趣的店"  style="background-color:lightgreen;"></Div>
-    <Div tab-title="品牌新店" style="background-color:pink;"></Div>
-</Tab>
+var c = <Div>
+            <Title></Title>
+            <Tab style="width:100%;height: 700px;">
+                <Div tab-title="推荐" style="overflow: scroll">
+                    <ScrollView>
+                        <Div class="carousel-wrap" style="width: 7.04rem; height: 3.43rem;margin: 0 .23rem; border-radius: .25rem; overflow: hidden;">
+                        <Carousel style="width:100%;height:500px;" width={500} data={[
+                            "https://static001.geekbang.org/univer/classes/js_dev/static/recommendation/banner1.jpg",
+                            "https://static001.geekbang.org/univer/classes/js_dev/static/recommendation/banner2.jpg",
+                            "https://static001.geekbang.org/univer/classes/js_dev/static/recommendation/banner3.jpg",
+                        ]}>
+                        </Carousel>
+                        </Div>
+                        <ListView data={[{a: '12312', b: 'dsafds'}]}></ListView>
+                    </ScrollView>
+                </Div>
+                <Div tab-title="有趣的店"  style="background-color:lightgreen;">
+                    <Div> dafdsafds </Div>
+                </Div>
+                <Div tab-title="品牌新店" style="background-color:pink;"></Div>
+            </Tab>
+        </Div>
 c.appendTo(document.body);
