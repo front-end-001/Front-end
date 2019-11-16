@@ -1,0 +1,23 @@
+.recommend {
+  margin: 0 24px;
+}
+.recommend_title {
+  font-size: 32px;
+  font-weight: 500;
+  color: rgba(51, 51, 51, 1);
+  margin-bottom: 28px;
+}
+.small {
+  display: flex;
+  justify-content: space-between;
+  height: 251px;
+  margin-bottom: 24px;
+}
+.small_left {
+  margin-right: 17px;
+}
+.big {
+  width: 703px;
+  height: 728px;
+  margin-bottom: 24px;
+}
