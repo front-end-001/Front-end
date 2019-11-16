@@ -64,7 +64,17 @@ let listItemFuc = data => {
   );
 };
 
-const tabContent = <ScrollView></ScrollView>;
+let hasInit = false;
+const onScrollBottom = async () => {
+  if (!hasInit) return;
+  const data = await fetch('/static/data/commendList.json').then(res =>
+    res.json()
+  );
+  console.log(data);
+  listView.pushData(data.list);
+};
+
+const tabContent = <ScrollView on-bottom={onScrollBottom}></ScrollView>;
 
 // 获取数据
 async function fetchData() {
@@ -87,6 +97,7 @@ async function fetchData() {
   listView = <ListView listData={data.commendList} listFuc={listItemFuc}></ListView>;
 
   tabContent.appendChild([carousel, towPic, listView]);
+  hasInit = true;
 }
 
 export default {

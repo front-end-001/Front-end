@@ -40,4 +40,20 @@ export default class ListView extends Component {
     //   e.stopImmediatePropagation();
     // }, { passive: false});
   }
+
+  pushData(list) {
+    if (!Array.isArray(list)) {
+      // this[STATUS_SYMBOL].list = [...this[STATUS_SYMBOL].list, ...list];
+      // this.$render();
+      return;
+    }
+
+    const createItem = this[PROP_SYMBOL].listFuc;
+
+
+    list.map((item, index) => {
+      const child = <div class="o-list-item">{createItem(item, index)}</div>;
+      this.$el.appendChild(child.$el);
+    });
+  }
 }
