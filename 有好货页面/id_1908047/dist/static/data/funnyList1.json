@@ -1,0 +1,166 @@
+{
+  "since": 0,
+  "total": 100,
+  "list": [
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_big_01.webp",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_small_01.webp",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_small_02.webp",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ],
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_small_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_small_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_big_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ],
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_big_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_small_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_small_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ],
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_small_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_big_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_big_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ],
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_big_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_small_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_small_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ],
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_small_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_small_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_big_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ],
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_big_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_small_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_small_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ],
+    [
+      {
+        "shop_id": 123,
+        "shop_thumb": "/static/image/square_small_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 234,
+        "shop_thumb": "/static/image/square_big_1.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      },
+      {
+        "shop_id": 345,
+        "shop_thumb": "/static/image/square_big_2.png",
+        "shop_type": "天猫",
+        "shop_title": "极客大学"
+      }
+    ]
+  ]
+}
