@@ -148,7 +148,7 @@ export default class Tab {
            // this.headerContainer.childNodes.setAttribute('class','')
             for (let i = 0; i < this.contentContainer.children.length; i++) {
                 this.contentContainer.children[i].style.width = "100%";
-                this.contentContainer.children[i].style.height = "100%";
+                this.contentContainer.children[i].style.height = "calc(100% - 2.7rem)";
                 // this.contentContainer.children[i].style.display = "none";
              //   this.contentContainer.children[i].style.transition = 'ease 0.5s';
                 let an = new animation
