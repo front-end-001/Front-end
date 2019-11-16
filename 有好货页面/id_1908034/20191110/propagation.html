@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>冒泡页面</title>
+</head>
+<body>
+<div id="outer">
+    <div id="inner" style="height: 200px; width: 200px; background-color: #ba3cf9;">
+
+    </div>
+</div>
+
+<script>
+    let clickEvent = (event) => {
+        console.log(Date.now());
+        event.stopPropagation();
+        // event.stopImmediatePropagation();
+    };
+    let [inner, outer] = [document.getElementById('inner'), document.getElementById('outer')];
+    inner.addEventListener('click', event=>{
+        console.log('我是内部div');
+        event.stopImmediatePropagation();
+    });
+    outer.addEventListener('click', event => {
+        console.log('我是外部div')
+    });
+
+
+</script>
+</body>
+</html>
