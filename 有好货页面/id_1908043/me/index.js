@@ -24,13 +24,16 @@ function loadMore (event) {
 
 window.render = function(data) {
     console.log('data', data);
+    const CarouselUrls = data.focusData.map(item => item.image)
+
     var d = <TabView class="tabview" style="width:100%;height:100%;">
         <ScrollView
             tab-title="推荐"
             placeHolderText="加载更多"
             on-scrollToBottom={loadMore}
-            // style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px"
+            style="-webkit-overflow-scrolling:touch;overflow:scroll;"
         >
+            <Carousel data={CarouselUrls} ></Carousel>
             <ListView data={data.recommendedShops}></ListView>
         </ScrollView>
         <ScrollView tab-title="有趣的店"  style="background-color:lightgreen;"></ScrollView>

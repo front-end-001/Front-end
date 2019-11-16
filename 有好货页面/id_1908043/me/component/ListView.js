@@ -38,7 +38,6 @@ export default class ListView extends BaseComponent {
 
     render () {
         let data = this[ATTRIBUTE]["data"] || [];
-        console.log('=====data', this[ATTRIBUTE]["data"])
         // return <div>123131231233</div>;
 
         // return <div>
