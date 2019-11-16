@@ -13,6 +13,7 @@ import ThreePicCard from './component/ThreePicCard';
 import BackTop from './component/BackTop';
 import ThreePicCardTwo from './component/ThreePicCardTwo'
 import Menu from './component/Menu';
+import TwoPicCardTwo from './component/TwoPicCardTwo';
 
 
 function loadMore(){
@@ -80,7 +81,13 @@ var c =
     </ScrollView>
     <ScrollView className={`${style["page-three"]}`} tab-title="品牌新店" style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;box-sizing:border-box;">
         <ListView className={style["list"]} >
-            
+            { TWO_CARD_DATA_TWO.map(item=>{
+                return (
+                    <TwoPicCardTwo data= {
+                        item
+                    } />
+                )
+            }) } 
         </ListView>
     </ScrollView>
 </TabView>
@@ -110,7 +117,7 @@ let THREE_CARD_DATA = [{
 
 let TWO_CARD_DATA=[{
     title: "极客时间旗舰店",
-    imgLeft: "img1.png",
+    imgLeft: "img01.jpg",
     imgRight: "img2.png",
 },{
     title: "乔丹旗舰店",
@@ -140,4 +147,21 @@ let THREE_PIC_CARD_TWO = [{
         {url: "img6.png"},
         {url: "img23.jpg"}
     ],
+}]
+
+let TWO_CARD_DATA_TWO=[{
+    title: "极客时间旗舰店",
+    tip: "科技风 行业优质",
+    logo: "logo31.jpg",
+    items: [{img: "img27.jpg"}, {img: "img9.jpg"}]
+},{
+    title: "极客大学天猫店",
+    tip: "科技风 行业优质",
+    logo: "logo32.jpg",
+    items: [{img: "img33.jpg"}, {img: "img01.jpg"}]
+},{
+    title: "InfoQ官方旗舰店",
+    tip: "科技风 行业优质",
+    logo: "logo4.png",
+    items: [{img: "img10.jpg"}, {img: "img34.jpg"}]
 }]

@@ -56,8 +56,6 @@ export default class StoreInformation {
         let title = this[ATTRIBUTE_SYMBOL]["title"] || "title";
         let logo = this[ATTRIBUTE_SYMBOL]["logo"] || "/logo.png";
 
-        
-
         return (
             <div class={`${style['store-infor']}`}>
                 <img class={`${style['logo']}`} src={`../../image/${logo}`} />

@@ -2,7 +2,7 @@ const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-import style from "./menu.less";
+import style from "./twoPicCardTwo.less";
 
 import { enableGesture } from './gesture.js';
 import { create } from '../create';
@@ -16,7 +16,7 @@ import { DOMElementStyleVectorAnimation, DOMElementStyleAnimation, Timeline } fr
 // document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 
-export default class Menu {
+export default class TwoPicCardTwo {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -38,43 +38,9 @@ export default class Menu {
     created(){
         this.root = document.createElement("div")
         this.render().appendTo( this.root );
-
-        this.root.children[0].children[0].classList.add(style['active']);
-
-        this.root.children[0].addEventListener('click', (e)=>{
-            let target;
-            if(e.target.classList.contains(style["item"])){
-                target = e.target;
-            }else{
-                target = e.target.parentNode;
-            }
-
-            if(!target.classList.contains(style["item"])){
-                target = target.parentNode;
-            }
-
-            if(target.classList.contains(style["active"])){
-                return
-            }
-
-            for(let i = 0; i < this.root.children[0].children.length; i++){
-                this.root.children[0].children[i].classList.remove(style["active"]);
-            }
-            let value = target.getAttribute('data-value');
-            let animateNode = this.root.children[0].getElementsByClassName(style["animate"]);
-            animateNode[0].style.zIndex = 0;
-            animateNode[0].style.left = `${value*114}px`;
-            setTimeout(()=>{
-                target.classList.add(style["active"]);
-                animateNode[0].style.zIndex = "-1";
-                this.triggerEvent('click', target.getAttribute('data-value'));
-            }, 300);
-        })
-
-
     }
     mounted(){
-
+        this.triggerEvent('didMount');
     }
     unmounted(){
 
@@ -85,17 +51,32 @@ export default class Menu {
 
     render(){
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
-        let { items=[{name: '全部', value: '0' }, {name: '小惊喜', value: '1' },{name: '想不到', value: '2' }] } = data 
-
-        return <div class={style["menu-wrap"]}>
-            {items.map(item=>{
-                return (
-                    <div class={style["item"]} data-value={item.value}>
-                        <span>{item.name}</span>
-                    </div>
-                )
-            })}
-            <div class={style["animate"]}></div>
+        let { logo="logo31.jpg", title="极客时间旗舰店", tip="科技风 行业优质", items =[{img: 'img31.jpg'}, {img: 'img32.jpg'}] } = data
+        
+        return <div class={style['wrap']}>
+            <div class={style['header']}>
+                <img class={style['logo']} src={`/image/${logo}`}></img>
+                <p class={style['banner']} >
+                    <img class={style['user-icon']} src={`/image/user.png`} ></img>
+                    <span class={style['test']}>该店已被3.9万人关注啦</span>
+                </p>
+            </div>
+            <div class={style['panel']}>
+                <div class={style['content']} >
+                    <span class={style['title']}>{title}</span>
+                    <span class={style['tip']}>{tip}</span>
+                </div>
+                <span class={style["enter-btn"]}>进店 ></span>
+            </div>
+            <div class={style['content']}>
+                {
+                    items.map(item=>{
+                        return (
+                            <img class={style['item']} src={`/image/${item.img}`}></img>
+                        )
+                    })
+                }
+            </div>
         </div>
     }
     appendChild(child){
@@ -141,10 +122,10 @@ export default class Menu {
             return;
         this[EVENT_SYMBOL][type].delete(listener);
     }
-    triggerEvent(type, ...args){
+    triggerEvent(type){
         if(!this[EVENT_SYMBOL][type])
             return;
         for(let event of this[EVENT_SYMBOL][type])
-            event.call(this, ...args);
+            event.call(this);
     }
 }

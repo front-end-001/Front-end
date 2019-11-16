@@ -244,7 +244,7 @@ export class DOMElementStyleVectorAnimation{
         let currentValiue = [];
 
         for( let i = 0; i < this._endValue.length; i++ ){
-            let displacement = ease(progress) * ( this._endValue[i] - this._startValue[i] );
+            let displacement = linear(progress) * ( this._endValue[i] - this._startValue[i] );
             
             currentValiue[i] = displacement + this._startValue[i];
         }

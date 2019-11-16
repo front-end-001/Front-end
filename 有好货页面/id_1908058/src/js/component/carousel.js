@@ -65,7 +65,7 @@ export default class Carousel {
             dotsContainer.appendChild(dots);
             dots.setAttribute('data-pos', index);
             if(index == 0){
-                dots.classList.add(`${style["active"]}`);  
+                dots.classList.add(`${style["active"]}`); 
             }
 
             img.src = item;
@@ -99,32 +99,47 @@ export default class Carousel {
             let nextPosition = pos ? pos : position + 1;
 
             nextPosition = nextPosition % children.length;
+            let lastPosition = (children.length + position - 1) % children.length;
+            let last = children[lastPosition];
 
             // console.log(nextPosition);
             
             let current = children[position];
             let next = children[nextPosition];
             
+            // console.log(lastPosition, position, nextPosition);
+
             //把next 摆放到正确的位置
             next.style.transition = 'ease 0s';
             next.style.transform = `translate(${ 100 - 100 * nextPosition }%)`;
+
+            // current.style.transition = 'ease 0s';
+            // current.style.transform = `translate(${ -100 * current }%)`;
+            
+            console.log(100 - 100 * nextPosition, nextPosition);
+            // last.style.transition='ease 0s';
+            // last.style.transform = `translate(${ 100 - 100 * nextPosition }%)`;
+
+            console.log(last.style.transform, - 702 - 702 * position);
             
             offsetTimeStart = Date.now();
+            tl = new Timeline();
             tl.addAnimation(new DOMElementStyleAnimation(
                 current,
                 "transform",
                 0, - 702 * position,
-                1404, - 702 - 702 * position,
+                1000, - 702 - 702 * position,
                 (v) => `translateX(${v}px)`
             ));
             tl.addAnimation(new DOMElementStyleAnimation(
                 next,
                 "transform",
                 0, 702 - 702 * nextPosition,
-                1404, - 702 * nextPosition,
+                1000, - 702 * nextPosition,
                 (v) => `translateX(${v}px)`
             ));
-            tl.restart();
+            tl.start();
+
             position = nextPosition;
 
             setTimeout(()=>{
@@ -135,8 +150,10 @@ export default class Carousel {
                         dotsContainer.children[i].classList.remove(`${style["active"]}`);
                     }
                 }
-            }, 0)
+                
+            }, 0);
 
+            
             // requestAnimationFrame((()=>{
             //     requestAnimationFrame(()=>{
             //         current.style.transition = '';
@@ -199,7 +216,7 @@ export default class Carousel {
             let next = children[nextPosition];
             let last = children[lastPosition];
             
-                
+            console.log(lastPosition, position, nextPosition );
             last.style.transition = 'ease 0s';
             last.style.transform = `translate(${ -702 - 702 * lastPosition + event.dx + offset }px)`;
             
@@ -275,6 +292,11 @@ export default class Carousel {
             current.style.transition = '';
             current.style.transform = `translate(${ -702 * position }px)`;
 
+
+
+            console.log('end', lastPosition, position, nextPosition, );
+            console.log(-702 - 702 * lastPosition , -702 * position ,  702 - 702 * nextPosition )
+            console.log('end');
             // for(let child of children) {
             //     child.style.transition = "";
             //     child.style.transform = `translate(${-position * 702}px)`;
