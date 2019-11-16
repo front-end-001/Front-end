@@ -25,7 +25,12 @@ export default class Div {
     }
 
     created(){
-        let element = <div class="page-header">
+        this.root = document.createElement("div");
+        this.render().appendTo(this.root);
+    }
+
+    render(){
+        return <div class="page-header">
             <div class="head-bg"></div>
             <div class="header-main">
                 <a href="">
@@ -46,9 +51,8 @@ export default class Div {
                 </a>
             </div>
         </div>;
-        this.root = document.createElement("div");
-        element.appendTo(this.root);
     }
+
     mounted(){
 
     }

@@ -23,12 +23,32 @@ export default class ScrollView {
 
     created(){
         this.root = document.createElement("div");
-        // this.root.style.overflow = 'scroll';
-        this[STATE_SYMBOL].h = 0;
-        this.root.addEventListener("touchmove", function(e){ 
+        this.placeHolder = document.createElement("div");
+        //this.placeHolder.innerText = "加载更多";
+        /*this.root.addEventListener("touchmove",function(e){ 
             e.cancelBubble = true;
             e.stopImmediatePropagation();
-        }, {passive:false});
+        }, {
+            passive:false
+        });*/
+
+        let triggered = false;
+
+        this.root.addEventListener("scroll", event => {
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            //console.log(clientRect.bottom, )
+            if(clientRect.bottom < placeHolderRect.top) {
+                if(triggered) {
+                    this.triggerEvent("scrolToBottom");
+                    triggered = true;
+                }
+            }
+            //console.log(this.root.scrollHeight, clientRect.height, this.root.scrollTop );
+            /*if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
+                this.triggerEvent("scrolToBottom", "b");
+            }*/
+        })
     }
     mounted(){
         window.addEventListener('scroll', () => {

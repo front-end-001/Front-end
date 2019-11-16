@@ -33,7 +33,6 @@ export default class Wrapper {
     setAttribute(name, value){
         if(name == 'style'){
             if(typeof value == 'object'){
-                console.log(value)
                 for(let key in value){
                     this.root.style[key] = value[key];
                 }
