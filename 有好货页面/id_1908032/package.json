@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server --open --inline --host 0.0.0.0 --progress"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

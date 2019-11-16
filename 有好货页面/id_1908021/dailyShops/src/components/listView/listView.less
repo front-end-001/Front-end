@@ -1,13 +1,29 @@
-.list-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  margin: 0.15rem 0.2rem;
-  border: 1px solid grey;
-  border-radius: 0.15rem;
-  .list-item_content {
-    margin: 0em 1em 0.5em 1em;
-    color: #333333;
-    font-size: 0.8em;
+
+.listView {
+  .list-item:first-child {
+    margin: 0em 0;
+  }
+  .list-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0.1rem 0.2rem;
+    margin: 0.5em 0;
+    border-radius: 0.15rem;
+    background-color: white;
+    .list-item_title {
+      display: flex;
+      justify-content: flex-start;
+      margin: 0em 0 0.5em 0;
+      .list-item_title_image {
+        align-self: center;
+        width: 1.5em;
+        height: 1.5em;
+      }
+    }
+    .list-item_content {
+      color: #333333;
+      font-size: 0.8em;
+    }
   }
 }

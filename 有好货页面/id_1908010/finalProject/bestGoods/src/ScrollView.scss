@@ -1,0 +1,23 @@
+$colors: red, orange, yellow, green, blue, purple;
+$repeat: 20;
+
+@for $i from 1 through $repeat {
+    div.scroll:nth-child(#{$i}) {
+        background: lighten(nth($colors, random(length($colors))), 20%);
+    }
+}
+
+.scroll {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+    vertical-align: top;
+    overflow: scroll;
+}
+
+// .active {
+//     height: 100%;
+//     width: 100%;
+//     display: inline-block;
+//     vertical-align: top;
+// }

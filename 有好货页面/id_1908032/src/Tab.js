@@ -48,16 +48,18 @@ export default class Tab {
         header.innerText = title;
         header.classList.add('tab-head-item')
 
+        this.headerContainer.style.height = '120px';
         this.headerContainer.appendChild(header);
 
         child.appendTo(this.contentContainer);
         for(let i = 0; i < this.contentContainer.children.length; i++){
             this.contentContainer.children[i].style.width = '100%';
-            this.contentContainer.children[i].style.height = '100%';
+            this.contentContainer.children[i].style.height = '99%';
             this.contentContainer.children[i].style.display = 'inline-block';
+            this.contentContainer.children[i].style.whiteSpace = 'normal';
             this.contentContainer.style.whiteSpace = 'nowrap';
+            this.contentContainer.style.flex = 1;
             this.contentContainer.style.overflow = 'hidden';
-
         }
     }
 
@@ -74,7 +76,9 @@ export default class Tab {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
-            this.root.style.whiteSpace = 'nowrap';
+            // this.root.style.whiteSpace = 'nowrap';
+            this.root.style.display = 'flex';
+            this.root.style.flexDirection = 'column';
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

@@ -24,17 +24,17 @@ export function enableGesture(main) {
         dy = point.clientY - context.startY; //计算差值，手指移动的距离
 
 
-      if (dx * dx + dy * dy > 100) {
+      if (Math.abs(dx) > 10 ||Math.abs(dy) > 10 ) {
           
-    if(context.pressHandler !== null){
-        clearTimeout(context.pressHandler);
-        context.pressHandler = null;
-        context.isPress = false;
-    }else if(context.isPress){
-        context.isPress = false;
-        let e = new Event("presscancel");
-        main.dispatchEvent(e);
-    }
+        if(context.pressHandler !== null){
+            clearTimeout(context.pressHandler);
+            context.pressHandler = null;
+            context.isPress = false;
+        }else if(context.isPress){
+            context.isPress = false;
+            let e = new Event("presscancel");
+            main.dispatchEvent(e);
+        }
         context.isTap = false;
 
         if (context.isPan == false) {
@@ -45,11 +45,16 @@ export function enableGesture(main) {
                 context.isVertical = true;//垂直方向
                 context.isHorizontal = false;//水平方向
             }
+
+
           let e = new Event("panstart"); // 添加事件
           main.dispatchEvent(e); // 触发事件
           e.startX = context.startX;
           e.startY = context.startY;
           context.isPan = true;
+
+
+          
         }
       }
       if (context.isPan) {

@@ -57,15 +57,17 @@ class ListView extends BaseComponent {
     if (this.ATTRIBUTE.renderItem) {
       return this.ATTRIBUTE.renderItem(data)
     }
+    debugger
     let childRoot = (
-      // @ts-ignore
       <div class='list-item'>
-        <Title level="4">{data.title}</Title>
-        {
-          //@ts-ignore 
-          <div class="list-item_content">{data.content}</div>
-        }
-      //@ts-ignore
+
+        <div class='list-item_title'>
+          <img src={data.icon} class='list-item_title_image' ></img>
+          <Title level="4" class='list-item_title_content'>{data.title}</Title>
+        </div>
+
+
+        <div class='list-item_content'>{data.content}</div>
       </div>
     );
     return childRoot;

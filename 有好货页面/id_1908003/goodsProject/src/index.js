@@ -1,5 +1,5 @@
-import 'normalize.css';
-import './assets/style.css';
+// import 'normalize.css';
+import './assets/style.scss';
 // import './views/test';
 
 // 组件体系必备
