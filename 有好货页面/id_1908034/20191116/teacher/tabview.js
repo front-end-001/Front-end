@@ -135,6 +135,8 @@ export default class TabView {
         header.style.color = "#FFFFFF";
         if (n > 0) {
             header.style.opacity = "0.5";
+        } else {
+            header.style.textDecoration = "underline";
         }
         this.headerContainer.appendChild(header);
         header.addEventListener('click', event => {
@@ -144,8 +146,10 @@ export default class TabView {
                 this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`;
                 if (i !== n) {
                     this.headerContainer.children[i].style.opacity = "0.5";
+                    this.headerContainer.children[i].style.textDecoration = "none";
                 } else {
                     this.headerContainer.children[i].style.opacity = "inherit";
+                    this.headerContainer.children[i].style.textDecoration = "underline";
                 }
 
             }
