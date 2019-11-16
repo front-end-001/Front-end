@@ -1,34 +1,14 @@
-import enableGesture from './gesture'
+import enableGesture from '../gesture'
+import {PROPERTY, ATTRIBUTE, EVENT, STATE } from '../symbol';
+import BaseComponent from './BaseComponent'
+import './TabView.css'
 
-const PROPERTY = Symbol("property");
-const ATTRIBUTE = Symbol("attribute");
-const EVENT = Symbol("event");
-const STATE = Symbol("state");
-
-export default class Tab {
-    constructor(){
-        this[PROPERTY] = Object.create(null);
-        this[ATTRIBUTE] = Object.create(null);
-        this[EVENT] = Object.create(null);
-        this[STATE] = Object.create(null);
-
-        this[PROPERTY].children = [];
-        this[PROPERTY].headers = [];
-
-        this[STATE].startTransform = 0
-
-        this.handleGesture = this.handleGesture.bind(this);
-
-        this.created();
-        this.render();
-    }
-
-    appendTo(element){
-        element.appendChild(this.root);
-        this.mounted();
-    }
-
+export default class Tab extends BaseComponent {
     created(){
+        this.handleGesture = this.handleGesture.bind(this);
+        this[PROPERTY].headers = [];
+        this[STATE].startTransform = 0;
+
         this.root = document.createElement("div");
         this.root.style.display = "flex";
         this.headerContainer = document.createElement("div");
@@ -47,21 +27,10 @@ export default class Tab {
             passive:false
         });
 
-
         this[STATE].h = 0;
-    }
-    mounted(){
 
-    }
-    render() {
         enableGesture(this.contentContainer)
         this.handleGesture()
-    }
-    unmounted(){
-
-    }
-    update(){
-
     }
 
     appendChild(child){
@@ -77,7 +46,7 @@ export default class Tab {
         header.style.display = "inline-block";
         // header.style.height = '22px';
         header.style.fontFamily = 'PingFangSC-Light';
-        header.style.fontSize = '20px';
+        // header.style.fontSize = '20px';
         header.style.margin = '10px 17px 10px 17px';
         this.headerContainer.appendChild(header);
         child.appendTo(this.contentContainer);
@@ -130,20 +99,9 @@ export default class Tab {
 
     get width() {
         return this.contentContainer.getBoundingClientRect().width
-        return this.root.clientWidth;
+        // return this.root.clientWidth;
     }
-    get children(){
-        return this[PROPERTY].children;
-    }
-    getAttribute(name){
-        if(name == "style") {
-            return this.root.getAttribute("style");
-        }
-        if(name === 'class') {
-            return this.root.getAttribute('class');
-        }
-        return this[ATTRIBUTE][name]
-    }
+
     setAttribute(name, value){
         if (name == "style") {
             this.root.setAttribute("style", value);
@@ -155,22 +113,6 @@ export default class Tab {
         }
 
         return this[ATTRIBUTE][name] = value;
-    }
-    addEventListener(type, listener){
-        if(!this[EVENT][type])
-            this[EVENT][type] = new Set;
-        this[EVENT][type].add(listener);
-    }
-    removeEventListener(type, listener){
-        if(!this[EVENT][type])
-            return;
-        this[EVENT][type].delete(listener);
-    }
-    triggerEvent(type){
-        if(!this[EVENT][type])
-            return;
-        for(let event of this[EVENT][type])
-            event.call(this);
     }
 
     handleGesture(){

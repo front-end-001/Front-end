@@ -90,7 +90,6 @@ function happen(object, type, config) {
 // }()
 
 void async function() {
-    console.log('run')
     let [obj, event] = await Promise.all([
         (async () => {
             return await(await fetch('./data.json')).json()
@@ -100,8 +99,6 @@ void async function() {
     ])
 
     window.render(obj, document.body)
-
-    console.log(obj, event);
 }()
 
 
