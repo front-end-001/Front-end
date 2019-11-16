@@ -48,6 +48,9 @@ class Component {
     if (name === 'placeHolderText') {
       this[PROPERTY_SYMBOL].placeHolder.innerText = value;
     }
+    if (name === 'class') {
+      this[PROPERTY_SYMBOL].root.classList.add(value);
+    }
     return (this[ATTRIBUTE_SYMBOL][name] = value);
   }
   addEventListener(type, listener) {

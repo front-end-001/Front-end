@@ -185,7 +185,32 @@ const data = {
         }
       ]
     ]
-  }
+  },
+  newShop: [{
+    title: '极客时间旗舰店',
+    logo: './static/geektime-logo.png',
+    tag: '科技风 行业优质',
+    count: 39000,
+    img01: './static/interesting/taideng01.png',
+    img02: './static/recommend/infoq-big.png',
+    link: 'javascript:void(0);'
+  }, {
+    title: '极客大学天猫店',
+    logo: './static/geekcollege-logo.png',
+    tag: '科技风 行业优质',
+    count: 18000,
+    img01: './static/interesting/taideng01.png',
+    img02: './static/recommend/infoq-big.png',
+    link: 'javascript:void(0);'
+  }, {
+    title: 'InfoQ官方旗舰店',
+    logo: './static/infoq-logo.png',
+    tag: '科技风 行业优质',
+    count: 24000,
+    img01: './static/interesting/taideng01.png',
+    img02: './static/recommend/infoq-big.png',
+    link: 'javascript:void(0);'
+  }]
 };
 
 const fs = require('fs');

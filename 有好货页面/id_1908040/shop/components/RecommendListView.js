@@ -1,7 +1,7 @@
 import { Component, PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL } from './Component.js';
 import Img from './Img.js';
 import { create } from '../lib/create.js';
-import RecommendListViewCss from './RecommendListView.css?classname=recommend-listview';
+import RecommendListViewCss from './css/RecommendListView.css?classname=recommend-listview';
 // import RecommendListViewCss from './RecommendListView.css';
 
 // console.log('RecommendListViewCss', RecommendListViewCss);

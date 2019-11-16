@@ -3,8 +3,8 @@ import ScrollView from './components/ScrollView.js';
 import TextView from './components/TextView.js';
 import RecommendListView from './components/RecommendListView.js';
 import InterestingListView from './components/InterestingListView.js';
-// import RecommendItemView from './components/RecommendItemView.js';
-// import ListView from './components/ListView.js';
+import NewShopView from './components/NewShopView.js'
+
 import CarouselView from './components/CarouselView.js';
 import FavoriteView from './components/FavoriteView.js';
 import Div from './components/Div.js';
@@ -17,8 +17,6 @@ import {create} from './lib/create.js';
 
 // 下拉加载更多
 function loadMore() {
-  // console.log(111);
-  // console.log('load more');
   setTimeout(() => {
     this.setAttribute('placeHolderText', '没有更多啦!');
   }, 2000);
@@ -49,20 +47,14 @@ window.render = function(data, root) {
           on-scrollToBottom={loadMore}
           style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px;"
         >
-          <InterestingListView data={data.recommand.list}></InterestingListView>
+          <InterestingListView data={data.interesting.surprise}></InterestingListView>
         </ScrollView>
         <ScrollView
           tab-title="品牌新店"
           on-scrollToBottom={loadMore}
-          style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;background-color:red;font-size:50px;"
+          style="-webkit-overflow-scrolling:touch;overflow:scroll;white-space:normal;font-size:50px;"
         >
-            品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店
-            品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店
-            品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店
-            品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店
-            品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店
-            品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店品牌新店
-
+          <NewShopView data={data.newShop}></NewShopView>
         </ScrollView>
       </TabView>
     </Div>
