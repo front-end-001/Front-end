@@ -1,0 +1,20 @@
+html, body {
+  height: 100%;
+}
+.good-shop {
+  background-color: rgb(238, 238, 238);
+  height: 100%;
+  .carousel_wrapper {
+    width: calc(100% - 24px);
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+.listview {
+  background-color: blue;
+}
+
+.listitem {
+  background-color: red;
+}

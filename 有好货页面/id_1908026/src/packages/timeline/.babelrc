@@ -11,14 +11,6 @@
   "plugins": [
     "@babel/plugin-proposal-export-default-from",
     "@babel/plugin-proposal-class-properties",
-    ["@babel/plugin-transform-runtime",
-      {
-        "absoluteRuntime": false,
-        "corejs": false,
-        "helpers": true,
-        "regenerator": true,
-        "useESModules": false
-      }],
     [
       "@babel/plugin-transform-react-jsx",
       {
