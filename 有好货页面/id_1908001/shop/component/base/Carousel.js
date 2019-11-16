@@ -7,9 +7,9 @@
 const PROPERTY_SYMBOL = Symbol('property')
 const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const EVENT_SYMBOL = Symbol('event')
-import initGesture from '../tool/gesture.js'
-import { TimeLine, DOMElementStyleNumberAnimation } from '../tool/animation.js'
-import { myCreate } from '../tool/create'
+import initGesture from '../../tool/gesture.js'
+import { TimeLine, DOMElementStyleNumberAnimation } from '../../tool/animation.js'
+import { myCreate } from '../../tool/create'
 
 export default class Carousel {
     constructor () {
@@ -32,6 +32,7 @@ export default class Carousel {
             imageElement.style.width = '100%'
             imageElement.style.height = '100%'
             imageElement.style.display = 'inline-block'
+            imageElement.style.borderRadius = '20px'
             imageElement.addEventListener('click', event => {
                 window.open(images[i])
                 this.triggerEvent('click')
@@ -50,20 +51,19 @@ export default class Carousel {
                 next = children[nextPosition]
             // ---实现第二张替换第一张的动画效果--begin
             next.style.transform = `translate(${100 - 100 * nextPosition}%)`
-                console.log(nextPosition, 100 - 100 * nextPosition)
             offsetTimeStart = Date.now()
             timeLine.addAnimation(new DOMElementStyleNumberAnimation(
                 current,
                 'transform',
-                0, - 500 * position,
-                1000, - 500 - 500 * position,
+                0, - 335 * position,
+                300, - 335 - 335 * position,
                 (v) => `translateX(${v}px)`
             ))
             timeLine.addAnimation(new DOMElementStyleNumberAnimation(
                 next,
                 'transform',
-                0, 500 - 500 * nextPosition,
-                1000, - 500 * nextPosition,
+                0, 335 - 335 * nextPosition,
+                300, - 335 * nextPosition,
                 (v) => `translateX(${v}px)`
             ))
             timeLine.restart()

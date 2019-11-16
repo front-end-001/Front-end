@@ -4,6 +4,8 @@
 https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow 
  https://html.spec.whatwg.org/multipage/parsing.html#tag-open-state
 
+1. component抽取出来后, setAttribute重写还是封装到super里?
+
 ##布局
 layout
 ##单数据展示
@@ -34,3 +36,6 @@ form
 alert
 toast
 loading
+
+    
+    

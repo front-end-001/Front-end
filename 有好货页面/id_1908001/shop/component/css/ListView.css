@@ -10,20 +10,35 @@
 }
 .shopInfo {
     background-color: white;
-    width: 41%;
+    width: 39%;
     margin-bottom: 20px;
-    margin-right: 2px;
+    margin-right: 10px;
     border-radius: 18px;
     padding: 15px;
     display: inline-block;
-    font-size: 13px;
-    height: 130px;
+    height: 100px;
 }
 .topGoodInfo {
+
 }
 .topGoodImg {
     width: 50%;
     float: left;
+}
+.topShopName {
+    vertical-align: top;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+.topIcon {
+    width: 20px;
+    vertical-align: middle;
+}
+.topTmallImg {
+    width: 20px;
+    display: block;
 }
 .shopName {
     vertical-align: top;

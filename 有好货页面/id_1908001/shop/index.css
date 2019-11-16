@@ -6,8 +6,3 @@
     min-height: 100%;
     padding: 0 20px;
 }
-.scroll {
-    -webkit-overflow-scrolling:touch;
-    overflow:scroll;
-    white-space:normal;
-}

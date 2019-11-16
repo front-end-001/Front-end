@@ -1,11 +1,7 @@
 import { myCreate } from '../tool/create'
 import css from './css/ListView.css'
-import Component from './Component'
+import Component from './base/Component'
 export default class ShopInfo extends Component {
-    constructor() {
-        console.log('log.....')
-        super()
-    }
     render () {
         const shop = this.getAttribute('data')
         if (!shop) {
@@ -35,12 +31,5 @@ export default class ShopInfo extends Component {
                 }
             </div>
         </div>
-    }
-    setAttribute (name, value) {
-        super.setAttribute(name, value)
-        if (name === 'data') {
-            this.container.innerHTML = ''
-            this.render().appendTo(this.container)
-        }
     }
 }

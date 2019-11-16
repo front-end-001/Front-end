@@ -1,23 +1,21 @@
 import { myCreate } from '../tool/create'
 import css from './css/ListView.css'
-import Component from './Component'
+import Component from './base/Component'
 import ShopInfo from './ShopInfo'
 export default class ListView extends Component {
-    constructor() {
-        super()
-    }
     render () {
         const data = this.getAttribute('data') || []
-        const topTwoData = data.slice(0, 2)
+        const topShops = data.topShops || []
+        const shops = data.shops || []
         return <div>
             {
-                topTwoData.map(shop => {
+                topShops.map(shop => {
                     const icon = './static/' + shop.icon
                     return <div style={css.shopInfo}>
-                            <img src={icon} style={css.icon} />
-                            <span style={css.shopName}>
+                            <img src={icon} style={css.topIcon} />
+                            <span style={css.topShopName}>
                                 <span>{shop.name}</span>
-                                <img src='./static/icon-tmall@2x.png' style={css.tmallImg} />
+                                <img src='./static/icon-tmall@2x.png' style={css.topTmallImg} />
                             </span>
                             {
                                 shop.goods.slice(0, 2).map((good, index) => {
@@ -30,17 +28,10 @@ export default class ListView extends Component {
                 })
             }
             {
-                data.slice(2, 5).map(shop => {
+                shops.map(shop => {
                     return <ShopInfo data={shop} />
                 })
             }
         </div>
-    }
-    setAttribute (name, value) {
-        super.setAttribute(name, value)
-        if (name === 'data') {
-            this.container.innerHTML = ''
-            this.render().appendTo(this.container)
-        }
     }
 }

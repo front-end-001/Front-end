@@ -9,10 +9,7 @@ export default class Div {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        
-
         this[PROPERTY_SYMBOL].children = [];
-
         this.created();
     }
 
@@ -45,13 +42,13 @@ export default class Div {
         return this[PROPERTY_SYMBOL].children;
     }
     getAttribute(name){
-        if(name == "style") {
+        if(name === "style") {
             return this.root.getAttribute("style");
         }
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
-        if(name == "style") {
+        if(name === "style") {
             this.root.setAttribute("style", value);
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
