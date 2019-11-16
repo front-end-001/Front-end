@@ -1,0 +1,60 @@
+html,body{
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.tab-container{
+  display: flex;
+  z-index: 1;
+  position: relative;
+  color: white;
+  padding: 10px;
+}
+.tab-container>.tab-item{
+  margin-right: 20px;
+  font-weight: 300;
+  position: relative;
+}
+.tab-container>.tab-item.active{
+  font-weight: bold;
+}
+.tab-container>.tab-item.active::after{
+  content: '';
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: white;
+}
+.carousel-container{
+  width: 100%;
+  overflow: hidden;
+}
+.carousel-wrapper{
+  display: flex;
+}
+.carousel-item{
+  flex:0 0 auto ;
+  width: 100%;
+}
+.recommend-carousel{
+  margin: 0 10px;
+}
+.recommend-duo{
+  font-size: 24px;
+}
+.app{
+  background-color: #f2f2f2;
+  height: 100vh;
+  position: relative;
+}
+.bg{
+  position: absolute;
+  z-index: 0;
+  background-color: #9233fd;
+  height: 20vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+}

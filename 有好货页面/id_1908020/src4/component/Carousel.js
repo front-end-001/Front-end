@@ -24,7 +24,7 @@ class Carousel extends React.Component {
     return (
       <div className="carousel-container">
         <div
-          id="carousel"
+          id={this.props.name}
           className="carousel-wrapper">
           {children.map(value => (
             <div className="carousel-item">
@@ -38,8 +38,10 @@ class Carousel extends React.Component {
 
   componentDidMount (base) {
     setTimeout(_ => {
-      this.props.vm(this)
-      this.dom = document.querySelector('#carousel')
+      if (this.props.vm) {
+        this.props.vm(this)
+      }
+      this.dom = document.querySelector(`#${this.props.name}`)
       this.go(this.props.index)
       this.dom.addEventListener('touchstart', this.touchstart.bind(this))
       this.dom.addEventListener('touchmove', this.touchmove.bind(this))
@@ -76,19 +78,6 @@ class Carousel extends React.Component {
   end (point) {
     this.state.last_x = this.state.move_x
     this.state.end_x = point.clientX
-    console.log(Math.abs(this.state.move_x) > this.dom.offsetWidth / 3)
-    console.log('direction', this.direction())
-    // if (Math.abs(this.state.move_x) > this.dom.offsetWidth / 3) {
-    //   this.go(this.state.index + this.direction())
-    // } else {
-    //   this.go(0)
-    // }
-    // if ((this.direction() > 0 && this.state.index === this.props.children.length) || (this.direction() < 0 && this.state.index === 0)) {
-    //   this.go(0)
-    // } else if (Math.abs(this.state.move_x) > this.dom.offsetWidth / 3) {
-    //   console.log(2222222)
-    //   this.go(this.state.index + this.direction())
-    // }
     if ((this.state.index === 0 && this.direction() < 0) || (this.direction() > 0 && this.state.index === this.props.children.length - 1)) {
       this.go(this.state.index)
     } else {
