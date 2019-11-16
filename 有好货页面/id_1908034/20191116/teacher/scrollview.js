@@ -29,9 +29,10 @@ export default class ScrollView {
         this.placeHolder.style.textAlign = 'center';
         this.placeHolder.style.lineHeight = '52px';
         this.root.appendChild(this.placeHolder);
-        let triggered = false;
+        this[STATE_SYMBOL]['triggered'] = false;
         this.root.addEventListener('scroll', (event) => {
             event.preventDefault();
+            let triggered = this[STATE_SYMBOL]['triggered'];
             let cliRect = this.root.getBoundingClientRect();
             let placeHolderRect = this.placeHolder.getBoundingClientRect();
             if (cliRect.bottom < placeHolderRect.top) {
@@ -83,6 +84,9 @@ export default class ScrollView {
         }
         if (name === 'placeHolderText') {
             this.placeHolder.innerText = value;
+        }
+        if (name === 'triggered') {
+            return this[STATE_SYMBOL][name] = value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

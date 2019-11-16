@@ -12,7 +12,8 @@ function loadMore() {
     this.setAttribute('placeHolderText', '加载中......');
     setTimeout(() => {
         this.setAttribute('placeHolderText', '没有更多了');
-        console.log('end', Date.now())
+        console.log('end', Date.now());
+        this.setAttribute('triggered', false);
     }, 2500);
 }
 
