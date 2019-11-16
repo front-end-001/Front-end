@@ -44,7 +44,8 @@ module.exports = {
     contentBase: './dist',
     host: '0.0.0.0',
     port: '8000',
-    hot: true
+    hot: true,
+    disableHostCheck: true
   },
   optimization: {
     minimize: false

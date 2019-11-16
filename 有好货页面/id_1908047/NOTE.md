@@ -1,6 +1,7 @@
 学习笔记
  ```
 npm install webpack -g
+npm install webpack-cli -g
 npm install
 webpack
 npm start
