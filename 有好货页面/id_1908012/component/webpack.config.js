@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./my.component",
+    entry: "./script.js",
     module: {
         rules: [
             {
@@ -8,7 +8,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                       presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"myCreate"}]]
+                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
             },
@@ -17,7 +17,19 @@ module.exports = {
                 use: {
                     loader: require.resolve('./component-loader'),
                 }
-            }
+            },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
+            {
+                test: /\.(png|jpg|gif)$/i,
+                use: [
+                  {
+                    loader: 'url-loader',
+                  },
+                ],
+              },
         ]
     },
     mode: "development",

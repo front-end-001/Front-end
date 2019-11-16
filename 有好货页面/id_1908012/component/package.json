@@ -16,12 +16,16 @@
     "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-react-jsx": "^6.24.1",
+    "css-loader": "^3.2.0",
+    "url-loader": "^2.2.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
-    "babel-preset-spritejsx": "^1.0.7"
+    "babel-preset-spritejsx": "^1.0.7",
+    "style-loader": "^1.0.0",
+    "to-string-loader": "^1.1.6"
   }
 }
