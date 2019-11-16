@@ -28,153 +28,9 @@ window.render = function (RecommendationPageData, interestingPageDataTypeAll, in
                         <CollectionShop data={RecommendationPageData.mostFavourateShops}></CollectionShop>
                         <RecommendedShops data={RecommendationPageData.recommendedShops}></RecommendedShops>
                     </ScrollView>
-                    <ScrollView tab-title="有趣的店" placeHolderText="load more" on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc     abc abc abc  abc abc abc
-                        abc abc abc abc abc abc
-                        </ScrollView>
+                    <ScrollView tab-title="有趣的店">
+                        <RecommendedShops data={RecommendationPageData.recommendedShops}></RecommendedShops>
+                    </ScrollView>
                     <ScrollView tab-title="品牌新店">
                         <NewPage data={newPageData.newShops}></NewPage>
                     </ScrollView>
@@ -182,3 +38,6 @@ window.render = function (RecommendationPageData, interestingPageDataTypeAll, in
             </div>
     c.appendTo(root);
 }
+/* <ScrollView tab-title="有趣的店" placeHolderText="load more" on-scrollToBottom={loadMore} style="-webkit-overflow-scrolling:touch;overflow:scroll;background-color:lightblue;white-space:normal;font-size:50px">
+                        <RecommendedShops data={RecommendationPageData.recommendedShops}></RecommendedShops>
+                    </ScrollView> */
