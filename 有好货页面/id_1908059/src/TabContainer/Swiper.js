@@ -9,7 +9,7 @@ import {
 import ListContainer from "./ListContainer";
 import mockListData from "./tabConfig";
 
-import "./Swiper.css";
+import "./Swiper.common.css";
 
 export default class Swiper extends Component {
   componentDidMount() {

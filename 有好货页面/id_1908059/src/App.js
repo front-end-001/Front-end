@@ -2,7 +2,7 @@ import MyCreate, { Component } from "MyCreate";
 import TabContainer from "./TabContainer";
 import Header from './Header'
 
-import "./App.css";
+import "./App.common.css";
 
 export default class App extends Component {
   componentDidMount() {

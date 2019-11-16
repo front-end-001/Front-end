@@ -24,18 +24,25 @@ module.exports = {
           options: {
             presets: ["@babel/preset-env"],
             plugins: [
-              [
-                "@babel/plugin-transform-react-jsx",
-                { pragma: "MyCreate" },
-              ],
+              ["@babel/plugin-transform-react-jsx", { pragma: "MyCreate" }],
               "@babel/plugin-proposal-class-properties"
             ]
           }
         }
       },
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        test: /\.module\.css$/,
+        use: [
+          "style-loader",
+          require.resolve("./loaders/css-modules-loader"),
+        ]
+      },
+      {
+        test: /common\.css$/,
+        use: [
+          "style-loader",
+          "css-loader",
+        ]
       },
       {
         test: /\.png|jpg$/,

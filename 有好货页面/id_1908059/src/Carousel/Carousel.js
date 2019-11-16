@@ -3,7 +3,7 @@ import "./animation";
 import "./gesture";
 import CarouselComponent from "./component";
 
-import "./Carousel.css";
+import "./Carousel.common.css";
 
 export default class Carousel extends Component {
   componentDidMount() {

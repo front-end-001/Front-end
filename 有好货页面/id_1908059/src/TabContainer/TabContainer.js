@@ -7,7 +7,7 @@ import MyCreate, {
 import TabList from "./TabList";
 import Swiper from "./Swiper";
 
-import "./TabContainer.css";
+import "./TabContainer.common.css";
 
 export default class TabContainer extends Component {
   render() {
