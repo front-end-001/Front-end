@@ -53,6 +53,7 @@ export default class Carousel {
         }
         for (let e of imgs) {
             let img = document.createElement("img");
+            img.className = "img";
             img.src = e;
             img.style.width = "100%";
             img.style.height = "100%";

@@ -4,6 +4,7 @@ import css from "../assets/css/ListView.css";
 import ShopView from "./ShopView.js";
 import ShopImgView from "./ShopImgView.js";
 import ShopNewView from "./ShopNewView.js";
+import SwitchButton from "./SwitchButton.js"
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
@@ -21,6 +22,21 @@ export default class ListView {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
+        this[STATE_SYMBOL]['swibtnData'] = {
+            defaultIndex: "all",
+            btnData: [{
+                index: 'all',
+                description: "全部"
+            },
+            {
+                index: 'jingxi',
+                description: "小惊喜"
+            },
+            {
+                index: 'xiangbudao',
+                description: "想不到"
+            }]
+        };
         
         this[PROPERTY_SYMBOL].children = [];
 
@@ -52,6 +68,7 @@ export default class ListView {
 
 
     render(){
+        let thisObj = this;
         let data = this[ATTRIBUTE_SYMBOL]["data"]["shopList"] || [];
         let displayType = this[ATTRIBUTE_SYMBOL]["data"]["displayType"] || 1;
         
@@ -64,11 +81,34 @@ export default class ListView {
                 }
             </Div>
         } else if (displayType == 2) {
+            let swibtnData = thisObj[STATE_SYMBOL]['swibtnData'];
+            let len = data.length;
+            switch (swibtnData.defaultIndex) {
+                case "jingxi":
+                    len = Math.min(len, 9);
+                    break;
+                case "xiangbudao":
+                    len = Math.min(len, 6);
+                    break;
+                default:
+                    break;
+            }
             let dataGroup = [];
-            for (let i = 0; i < data.length; i+=3) {
+            for (let i = 0; i < len; i+=3) {
                 dataGroup.push(data.slice(i, i + 3))
             }
+            let switchbtn = function(index) {
+                thisObj[STATE_SYMBOL]['swibtnData'].defaultIndex = index;
+                thisObj.root.innerHTML = "";
+                thisObj.render().appendTo(thisObj.root);
+            };
             return <Div>
+                <Div class="secondType">
+                    <Div class="xinqihaodian">
+                        新奇好店都在这
+                    </Div>
+                    <SwitchButton data={swibtnData} on-switch={switchbtn}></SwitchButton>
+                </Div>
                 {      
                     dataGroup.map((item, index) => (
                         <ShopImgView data={item}></ShopImgView>

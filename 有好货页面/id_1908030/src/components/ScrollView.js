@@ -34,6 +34,7 @@ export default class ScrollView {
         this.root.addEventListener("scroll", event => {
             let clientRect = this.root.getBoundingClientRect();
             let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            // this.placeHolder.innerText = "正在加载中";
             if(clientRect.bottom < placeHolderRect.top) {
                 if(triggered) {
                     this.triggerEvent("scrolToBottom");

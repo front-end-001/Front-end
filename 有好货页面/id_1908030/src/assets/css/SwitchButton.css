@@ -1,0 +1,23 @@
+.switchButton{
+    display: flex;
+    height:60px;
+    background:rgba(254,254,254,1);
+    border-radius:30px;
+}
+.switchItem{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 173px;
+    height:100%;
+    font-size:34px;
+    font-family:Adobe Heiti Std;
+    font-weight:normal;
+    color:rgba(255,134,63,1);
+    line-height:26px;
+}
+.switchCurItem{
+    background:linear-gradient(90deg,rgba(253,147,1,1),rgba(250,129,1,1));
+    border-radius:30px;
+    color:rgba(255,255,255,1);
+}
