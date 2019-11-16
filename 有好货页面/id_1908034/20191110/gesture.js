@@ -148,6 +148,7 @@ export function enableGesture(main) {
 
     };
     let touchmove = event => {
+        event.stopImmediatePropagation();
         for (let touch of event.changedTouches)
             move(touch, contexts[touch.identifier]);
     };
