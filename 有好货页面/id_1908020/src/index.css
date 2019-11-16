@@ -1,5 +1,15 @@
-.container{
-  background-color: rgba(0, 0, 0, .1);
-  padding: 10px;
-  box-sizing: border-box;
+.tab-container{
+  display: flex;
+}
+.carousel-container{
+  width: 100%;
+  overflow: hidden;
+}
+.carousel-wrapper{
+  display: flex;
+}
+.carousel-item{
+  flex:0 0 auto ;
+  width: 100%;
+  border: 1px solid #ccc;
 }
