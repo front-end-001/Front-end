@@ -44,7 +44,7 @@ function createElement(NodeClass, attributes, ...children) {
         else if (childElem instanceof BaseComponent) {
           childElem.appendTo(elem);
         } else {
-          if (typeof childElem === 'string' && childElem.startsWith('//')) return elem;
+          if (typeof childElem === 'string' && childElem.startsWith('//')) continue;
           childElem = document.createTextNode(childElem.toString());
           elem.appendChild(childElem);
         }

@@ -21,8 +21,8 @@ export default class Text {
         this.mounted()
     }
     created () {
-        this.root = document.createTextNode(this.text)
-        //this.root.innerText = this.text
+        this.root = document.createElement('span')
+        this.root.innerText = this.text
     }
     mounted () {
 
@@ -36,6 +36,11 @@ export default class Text {
 
     }
     appendChild (child) {
+        let dpr = window.devicePixelRatio
+        if (child.style.fontSize) {
+            let fontSize = parseInt(child.style.fontSize)
+            this.root.style = `font-size:${fontSize * dpr}px`
+        }
         this.children.push(child)
         child.appendChild(this.root)
     }
@@ -46,12 +51,9 @@ export default class Text {
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute (name, value) {
-        if (name === 'width') {
-            this.width = value
+        if (name === 'style') {
+            this.root.setAttribute('style', value)
         }
-        // if (name === 'className') {
-        //     this.root.setAttribute('class', value)
-        // }
         return this[ATTRIBUTE_SYMBOL][name] = value
     }
     addEventListener (type, listener) {

@@ -10,6 +10,7 @@ export default class Div {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
+        this[PROPERTY_SYMBOL].children = [];
         this.created();
     }
     appendTo(element) {
@@ -30,6 +31,13 @@ export default class Div {
     }
     log() {
         console.log("width", this.width);
+    }
+    appendChild(child) {
+        this.children.push(child);
+        child.appendTo(this.root);
+    }
+    get children(){
+        return this[PROPERTY_SYMBOL].children;
     }
     getAttribute(name) {
         if (name == "style") {

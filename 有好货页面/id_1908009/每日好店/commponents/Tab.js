@@ -161,11 +161,12 @@ export default class Tab {
 
         for (let i = 0; i < this.contentContainer.children.length; i++) {
             this.contentContainer.children[i].style.width = "100%";
-            this.contentContainer.children[i].style.height = "100%";
+            this.contentContainer.children[i].style.height = "calc(100% - 2.8rem)";
             this.contentContainer.children[i].style.display = "inline-block";
             this.contentContainer.children[i].style.overflowY = "auto";
             this.contentContainer.children[i].style.whiteSpace='normal';
         }
+   
     }
     get children() {
         return this[PROPERTY_SYMBOL].children;

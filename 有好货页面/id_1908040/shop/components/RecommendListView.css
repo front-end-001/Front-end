@@ -1,0 +1,18 @@
+/* 加上.list-view相当于一个命名空间，只在当前组件内生效 */
+.x {
+  background-color: black;
+  color: blue;
+}
+
+.list-wrap {
+  padding: 0 11px;
+}
+
+.list {
+  width: 100%;
+  margin-bottom:12px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius:6px;
+  background:#fff;
+}

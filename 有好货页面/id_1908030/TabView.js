@@ -138,6 +138,15 @@ export default class TabView {
         header.style.margin = "20px 35px 0 35px";
         this.headerContainer.appendChild(header);
 
+        header.addEventListener("click", event => {
+            this[STATE_SYMBOL].position = n;
+            for(let i = 0; i < this.contentContainer.children.length; i ++) {
+                this.contentContainer.children[i].style.transition = "ease 0.5s";
+                this.contentContainer.children[i].style.transform = `translateX(${ - n * 100 }%)`;
+            }
+        })
+
+
         child.appendTo(this.contentContainer);
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.width = "100%";
@@ -156,7 +165,7 @@ export default class TabView {
         return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
-        if (name = "style") {
+        if (name == "style") {
             this.root.setAttribute("style", value);
             this.root.style.display = "flex";
             this.root.style.flexDirection = "column";

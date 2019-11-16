@@ -3,6 +3,7 @@ var CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
+  // entry: './my.component',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -13,7 +14,9 @@ module.exports = {
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: [require.resolve('./component-css-loader.js')],
+        // use: ['to-string-loader', 'css-loader'],
+        // use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.s[ac]ss$/i,
@@ -29,6 +32,12 @@ module.exports = {
           },
         ],
       },
+      // {
+      //   test: /\.component$/,
+      //   use: {
+      //     loader: require.resolve('./component-loader.js'),
+      //   },
+      // }
     ]
   },
   plugins: [

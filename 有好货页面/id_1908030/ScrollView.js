@@ -10,7 +10,6 @@ export default class ScrollView {
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL].children = [];
-        this[PROPERTY_SYMBOL].headers = [];
         this.created();
     }
     appendTo(element) {
@@ -19,15 +18,23 @@ export default class ScrollView {
     }
     created() {
         this.root = document.createElement("div");
-        this.root.style.width = "300px";
-        this.root.style.height = "300px";
-        this.headerContainer = document.createElement("div");
-        this.contentContainer = document.createElement("div");
-        this.contentContainer.style.whiteSpace = "nowrap";
-        this.contentContainer.style.overflow = "hidden";
-        this.contentContainer.style.height = "100%";
-        this.root.appendChild(this.headerContainer);
-        this.root.appendChild(this.contentContainer);
+        this.placeHolder = document.createElement("div");
+        this.placeHolder.style.backgroundColor = "lightgreen";
+        this.root.appendChild(this.placeHolder);
+
+        let triggered = false;
+
+        this.root.addEventListener("scroll", event => {
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            if(clientRect.bottom < placeHolderRect.top) {
+                if(triggered) {
+                    this.triggerEvent("scrolToBottom");
+                    triggered = true;
+                }
+            }
+        })
+        this[STATE_SYMBOL].h = 0;
     }
     mounted() {
 
@@ -43,18 +50,8 @@ export default class ScrollView {
     }
     appendChild(child) {
         this.children.push(child);
-        let title = child.getAttribute("tab-title") || "ff";
-        this[PROPERTY_SYMBOL].headers.push(title);
-
-        let header = document.createElement("div");
-        header.innerText = title;
-        this.headerContainer.appendChild(header);
-        child.appendTo(this.contentContainer);
-        for (let i = 0; i < this.contentContainer.children.length; i++) {
-            this.contentContainer.children[i].style.height = "100%";
-            this.contentContainer.children[i].style.width = "30%";
-            this.contentContainer.children[i].style.display = "inline-block";
-        }
+        child.appendTo(this.root);
+        this.root.appendChild(this.placeHolder);
     }
     get children() {
         return this[PROPERTY_SYMBOL].children;
@@ -66,8 +63,11 @@ export default class ScrollView {
         return this[ATTRIBUTE_SYMBOL][name];
     }
     setAttribute(name, value) {
-        if (name = "style") {
+        if (name == "style") {
             this.root.setAttribute("style", value);
+        }
+        if(name == "placeHolderText") {
+            this.placeHolder.innerText = value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

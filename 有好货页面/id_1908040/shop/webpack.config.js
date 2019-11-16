@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = { 
   entry: "./index.js",
+  // entry: "./my.component",
   mode: "development",
   devServer: {
     contentBase: "./dist",
@@ -32,6 +33,17 @@ module.exports = {
             ]
           }
         }
+      },
+      {
+        test: /\.component$/,
+        use: {
+          loader: require.resolve('./component-loader.js')
+        }
+      },
+      {
+        test: /\.css$/i,
+        // use: ['to-string-loader', 'css-loader']
+        use: [require.resolve('./component-css-loader.js')]
       }
     ]
   },

@@ -1,0 +1,10 @@
+.main {
+    background-image: url('static/background.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: #EFEFEF;
+    min-height: 100%;
+}
+.font {
+
+}
