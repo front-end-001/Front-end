@@ -1,0 +1,12 @@
+.carousel {
+  width: 750px;
+  height: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    // transition: ease 0.5s;
+  }
+}

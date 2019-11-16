@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+
+    <!--禁止电话号码和邮箱识别-->
+    <meta content="telephone=no,email=no" name="format-detection" />
+
+    <!--TODO:添加一个网页标题-->
+    <title>A sample of HTML5 game</title>
+
+    <!--TODO:改成你想要的缩放比例-->
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <link href='./css/base.css' rel='stylesheet'/>
+    <link href='./css/index.css' rel='stylesheet'/>
+<!-- 
+    <script type="text/javascript">
+        //关闭选择
+        //document.addEventListener("selectstart",function(e){ e.preventDefault(); });
+        //避免鼠标变成文本选择形状
+        //document.addEventListener("mousedown",function(e){ e.preventDefault(); });
+        //避免上下滚屏
+        document.addEventListener("touchmove", function (e) { if (e.touches.length == 2) e.preventDefault(); }, { passive: false });
+
+    </script> -->
+    <script src="./js/rem.js"></script>
+    <script>
+         let data, domReady = false
+        // document.addEventListener("DOMContentLoaded",event=>{
+        //     console.log('asd')
+        //     domReady = true
+        //     check()
+        // })
+
+        // let request = new XMLHttpRequest()
+        // request.open('get','./dist/data.json',true)
+        // request.send(null)
+       // fetch('./dist/data.json').then(res=> res.json()).then(obj=>{console.log(obj)})
+
+        // request.addEventListener("readystatechange",event=>{
+        //     if(request.readyState == 4){
+        //         data = request.responseText
+        //         check()
+        //     }
+        // })
+        // function check(){
+        //     if(!data)return;
+        //     if(!domReady) return;
+        //     render()
+        // }
+
+        // function render(){
+        
+        //     console.log(data)
+        //     console.log(document.body)
+        // }
+        function loadScript(src){
+            return new Promise((resolve, reject)=>{
+                let scriptElement = document.createElement('script')
+                scriptElement.src = src
+                scriptElement.addEventListener('load',resolve)
+                document.getElementsByTagName('head')[0].appendChild(scriptElement)
+            })
+        }
+        function happen(obj,type,config){
+            return new Promise((resolve,reject)=>{
+                obj.addEventListener(type, resolve,config)
+            })
+        }
+        // Promise.all([
+        //     happen('document','DOMContentLoaded'),
+        //     fetch('./dist/data.json').then(res => res.json())
+        // ]).then((res)=>{
+        //     console.log(res)
+        // })
+
+        void async function(){
+           let [obj, ]= await Promise.all([
+                 (async () => {
+                    return await (await fetch('./dist/data.json')).json()
+                })(),
+                 happen(document, 'DOMContentLoaded'),
+                 loadScript('./dist/main.js')
+                 //fetch('./ dist/data.json').then(res => res.json())
+            ])
+            window.render(obj,document.body)
+        }()
+        
+    </script>
+</head>
+
+<body>
+    <div id='app'></div>
+    <!-- <script src="./dist/main.js"></script> -->
+</body>
+
+</html>
