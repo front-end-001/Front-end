@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "dev":"webpack-dev-server --open"
+    "dev": "webpack-dev-server --open"
   },
   "keywords": [],
   "author": "",
@@ -18,10 +18,19 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-react-jsx": "^6.24.1",
+    "css": "^2.2.4",
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "json-loader": "^0.5.7",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "to-string-loader": "^1.1.5",
+    "url-loader": "^2.2.0",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1"
+  },
+  "dependencies": {
+    "px2vw-view-loader": "^1.0.2"
   }
 }
