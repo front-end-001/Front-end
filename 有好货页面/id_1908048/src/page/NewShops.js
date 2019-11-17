@@ -1,3 +1,8 @@
+import { create } from '../create';
+import ListView from '../components/ListView';
+import ShopItemInfo from '../components/ShopItemInfo';
+import shopApi from '../api/shop';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
@@ -12,8 +17,9 @@ export default class Div {
         
 
         this[PROPERTY_SYMBOL].children = [];
-
+        this.data = [];
         this.created();
+        this.fetchShops = this.fetchShops.bind(this);
     }
 
     appendTo(element){
@@ -24,8 +30,17 @@ export default class Div {
     created(){
         this.root = document.createElement("div");
     }
-    mounted(){
 
+    async fetchShops(){
+        let response = await shopApi.fetchNew();
+        let result = await response.json();
+        this.data = [...this.data, ...result.newShops];
+        this.root.innerHTML = '';
+        this.render().appendTo(this.root);
+    }
+    
+    mounted(){
+       this.fetchShops(); 
     }
     unmounted(){
 
@@ -39,6 +54,16 @@ export default class Div {
         child.appendTo(this.root);
     }
 
+    render(){
+        let data = this.data || [];
+        console.log(this.data);
+        return <ListView 
+            //TODO:这里renderItem必须要在data之前，否者会报错，待优化
+            // onEndReached={this.fetchShops}
+            renderItem={item => <ShopItemInfo data={item} />}
+            data={data} 
+        />
+    }
 
     get children(){
         return this[PROPERTY_SYMBOL].children;
@@ -53,7 +78,10 @@ export default class Div {
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
-        return this[ATTRIBUTE_SYMBOL][name] = value;
+        this[ATTRIBUTE_SYMBOL][name] = value;
+        if(name == 'data'){
+            this.render().appendTo(this.root);
+        }
     }
     addEventListener(type, listener){
         if(!this[EVENT_SYMBOL][type])

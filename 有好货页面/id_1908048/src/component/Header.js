@@ -1,3 +1,6 @@
+import './Header.scss';
+import { create } from '../create';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
@@ -23,7 +26,33 @@ export default class Div {
 
     created(){
         this.root = document.createElement("div");
+        this.render().appendTo(this.root);
     }
+
+    render(){
+        return <div class="page-header">
+            <div class="head-bg"></div>
+            <div class="header-main">
+                <a href="">
+                    <i class="icon iconfont icon-fanhui back">
+                    </i>
+                </a>
+                <div style={{flex: 1}}></div>
+                <div class="center">
+                    <img src={ require('../assets/meirihaodian.png') } />
+                </div>
+                <a href="">
+                    <i class="icon iconfont icon-fenxiang share">
+                    </i>
+                </a>
+                <a href="">
+                    <i class="icon iconfont icon-gengduo menu">
+                    </i>
+                </a>
+            </div>
+        </div>;
+    }
+
     mounted(){
 
     }
