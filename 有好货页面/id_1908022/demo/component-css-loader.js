@@ -3,7 +3,7 @@ var css = require('css');
 module.exports = function(source, map){
     // console.log(source);
 
-    let filename = this.resourcePath.match(/([^\\]+)\.css$/)[1]; 
+    let filename = this.resourcePath.match(/([^(\\ | |/)]+)\.css$/)[1]; 
     var classname = filename.replace(/^[A-Z]/, l => l.toLowerCase()).replace(/[A-Z]/, l => '-' + l.toLowerCase());
     // console.log(classname);
     var obj = css.parse(source);
