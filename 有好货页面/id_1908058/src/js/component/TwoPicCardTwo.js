@@ -2,7 +2,7 @@ const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
-// import css from "./ListView.css";
+import style from "./twoPicCardTwo.less";
 
 import { enableGesture } from './gesture.js';
 import { create } from '../create';
@@ -16,7 +16,7 @@ import { DOMElementStyleVectorAnimation, DOMElementStyleAnimation, Timeline } fr
 // document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 
-export default class ListView {
+export default class TwoPicCardTwo {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -37,13 +37,7 @@ export default class ListView {
 
     created(){
         this.root = document.createElement("div")
-        // console.log( this[ATTRIBUTE_SYMBOL], 'create')
-        // this.root.classList.add(this[ATTRIBUTE_SYMBOL]["className"])
-        console.log(1)
         this.render().appendTo( this.root );
-
-
-
     }
     mounted(){
         this.triggerEvent('didMount');
@@ -57,19 +51,32 @@ export default class ListView {
 
     render(){
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
-
-        return <div>
-            {
-                data.map(item=>{
-                    return(
-                        <div class={"x"}>
-                            <span>{item.a}</span>
-                            <span>{item.b}</span>
-                        </div>
-                    )
-                    
-                })
-            }
+        let { logo="logo31.jpg", title="极客时间旗舰店", tip="科技风 行业优质", items =[{img: 'img31.jpg'}, {img: 'img32.jpg'}] } = data
+        
+        return <div class={style['wrap']}>
+            <div class={style['header']}>
+                <img class={style['logo']} src={`/image/${logo}`}></img>
+                <p class={style['banner']} >
+                    <img class={style['user-icon']} src={`/image/user.png`} ></img>
+                    <span class={style['test']}>该店已被3.9万人关注啦</span>
+                </p>
+            </div>
+            <div class={style['panel']}>
+                <div class={style['content']} >
+                    <span class={style['title']}>{title}</span>
+                    <span class={style['tip']}>{tip}</span>
+                </div>
+                <span class={style["enter-btn"]}>进店 ></span>
+            </div>
+            <div class={style['content']}>
+                {
+                    items.map(item=>{
+                        return (
+                            <img class={style['item']} src={`/image/${item.img}`}></img>
+                        )
+                    })
+                }
+            </div>
         </div>
     }
     appendChild(child){

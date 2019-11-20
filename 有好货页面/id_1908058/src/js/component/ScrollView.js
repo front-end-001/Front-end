@@ -26,7 +26,8 @@ export default class ScrollView {
 
         this.placeHolder = document.createElement('div');
         // this.placeHolder.innerText = "家爱更多";
-        this.placeHolder.style.backgroundColor = "blue";
+        // this.placeHolder.style.backgroundColor = "blue";
+        this.placeHolder.style.marginTop = "20px";
         this.root.appendChild(this.placeHolder);
         let triggered = false;
 
@@ -39,9 +40,7 @@ export default class ScrollView {
                     this.triggerEvent('scrollToBottom');
                     triggered = true
                 }
-                
             }
-
         })
 
         // this.root.addEventListener('scroll', event=>{
@@ -98,6 +97,18 @@ export default class ScrollView {
         }
         if(name == "placeHolderText"){
             this.placeHolder.innerText = value;
+        }
+        if( name == "className"){
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            // console.log(name, value, 'test' );
+            this.root.classList.add(value);
+            return
+        }
+        if( name == "id"){
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            // console.log(name, value, 'test' );
+            this.root.setAttribute('id', value);
+            return
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

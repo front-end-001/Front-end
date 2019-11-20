@@ -178,13 +178,15 @@ export class DOMElementStyleAnimation{
         // console.log(t);
         if(t > this._endTime){
             if(!this._fixKeyFrame){
+                t = this._endTime;
                 return;
             }else {
-                t = this.endTime;
+                t = this._endTime;
                 this._fixKeyFrame = false;
             }
         }else if( t < this._startTime ){
             if(!this._fixKeyFrame){
+                t = this._startTime;
                 return;
             }else{
                 t = this._startTime;
@@ -217,10 +219,10 @@ export class DOMElementStyleVectorAnimation{
         // console.log(t);
         if(t > this._endTime){
             if(!this._fixKeyFrame){
-                t = this.endTime;
+                t = this._endTime;
                 return;
             }else {
-                t = this.endTime;
+                t = this._endTime;
                 this._fixKeyFrame = false;
             }
         }else if( t < this._startTime ){
@@ -242,7 +244,7 @@ export class DOMElementStyleVectorAnimation{
         let currentValiue = [];
 
         for( let i = 0; i < this._endValue.length; i++ ){
-            let displacement = ease(progress) * ( this._endValue[i] - this._startValue[i] );
+            let displacement = linear(progress) * ( this._endValue[i] - this._startValue[i] );
             
             currentValiue[i] = displacement + this._startValue[i];
         }
