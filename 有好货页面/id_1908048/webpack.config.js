@@ -1,37 +1,59 @@
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-    entry: "./src/my.component",
+    entry: './src/index.js',
+    output: {
+      filename: 'main.js',
+      path: path.resolve(__dirname, 'dist')
+    },
+    mode: 'development',
+    devServer: {
+      contentBase: './dist',
+    },
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env'],
-                        plugins: [['babel-plugin-transform-react-jsx', { pragma: "create" }]]
-                    }
-                }
-            },
-            {
-                test: /\.component$/,
-                use: {
-                    loader: require.resolve('./component-loader.js')
-                }
-            },
-            {
-                test: /\.css$/,
-                use: {
-                    loader: require.resolve('./component-css-loader.js')
+          {
+            test: /\.m?js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: [
+                    ["@babel/plugin-syntax-jsx"],
+                    ["@babel/plugin-transform-runtime"],
+                    ["babel-plugin-transform-react-jsx", { pragma: "create" }]
+                  ]
+              }
+              
+            }
+          },
+          {
+            test: /\.s[ac]ss$/i,
+            use: [
+              // Creates `style` nodes from JS strings
+              'style-loader',
+              // Translates CSS into CommonJS
+              'css-loader',
+              // Compiles Sass to CSS
+              'sass-loader',
+            ],
+          },
+          {
+            test: /\.(png|jpe?g|gif)$/i,
+            use: [
+              {
+                loader: 'url-loader',
+                options: {
+                  limit: 8192,
                 },
-            },
+              },
+            ],
+          },
         ]
-    },
-    mode: "development",
-    devServer: {
-        contentBase: "./dist",
-        hot: true
-    },
-    optimization: {
-        minimize: false
-    }
-}
+      },
+      plugins: [new HtmlWebpackPlugin({
+        template: 'src/index.html'
+      })],
+  };
