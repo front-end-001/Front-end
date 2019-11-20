@@ -1,18 +1,16 @@
-const PROPERTY_SYMBOL = Symbol("property");
-const ATTRIBUTE_SYMBOL = Symbol("attribute");
-const EVENT_SYMBOL = Symbol("event");
-const STATE_SYMBOL = Symbol("state");
+import {PROPERTY, ATTRIBUTE, EVENT, STATE } from '../symbol';
 
-export default class Div {
-    constructor(){
-        this[PROPERTY_SYMBOL] = Object.create(null);
-        this[ATTRIBUTE_SYMBOL] = Object.create(null);
-        this[EVENT_SYMBOL] = Object.create(null);
-        this[STATE_SYMBOL] = Object.create(null);
 
-        this[PROPERTY_SYMBOL].children = [];
+export default class Base {
+    constructor(config){
+        this[PROPERTY] = Object.create(null);
+        this[ATTRIBUTE] = Object.create(null);
+        this[EVENT] = Object.create(null);
+        this[STATE] = Object.create(null);
 
-        this.created();
+        this[PROPERTY].children = [];
+
+        this.created(config);
     }
 
     appendTo(element){
@@ -41,7 +39,7 @@ export default class Div {
     }
 
     get children() {
-        return this[PROPERTY_SYMBOL].children;
+        return this[PROPERTY].children;
     }
 
     getDOM () {
@@ -54,7 +52,7 @@ export default class Div {
         if(name === 'class') {
             return this.root.getAttribute('class');
         }
-        return this[ATTRIBUTE_SYMBOL][name]
+        return this[ATTRIBUTE][name]
     }
     setAttribute(name, value){
         if (name == 'style') {
@@ -63,22 +61,22 @@ export default class Div {
         if(name === 'class') {
             this.root.setAttribute('class', value);
         }
-        return this[ATTRIBUTE_SYMBOL][name] = value;
+        return this[ATTRIBUTE][name] = value;
     }
     addEventListener(type, listener){
-        if(!this[EVENT_SYMBOL][type])
-            this[EVENT_SYMBOL][type] = new Set;
-        this[EVENT_SYMBOL][type].add(listener);
+        if(!this[EVENT][type])
+            this[EVENT][type] = new Set;
+        this[EVENT][type].add(listener);
     }
     removeEventListener(type, listener){
-        if(!this[EVENT_SYMBOL][type])
+        if(!this[EVENT][type])
             return;
-        this[EVENT_SYMBOL][type].delete(listener);
+        this[EVENT][type].delete(listener);
     }
     triggerEvent(type){
-        if(!this[EVENT_SYMBOL][type])
+        if(!this[EVENT][type])
             return;
-        for(let event of this[EVENT_SYMBOL][type])
+        for(let event of this[EVENT][type])
             event.call(this);
     }
 }

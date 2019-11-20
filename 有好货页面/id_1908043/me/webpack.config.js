@@ -1,5 +1,6 @@
 module.exports = {
     entry: "./index.js",
+    // entry: "./my.component",
     module: {
         rules: [
             {
@@ -11,6 +12,24 @@ module.exports = {
                         presets: ["@babel/preset-env"],
                         plugins: [["@babel/plugin-transform-react-jsx", {pragma: 'myCreate'}]]
                     }
+                }
+            },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
+            {
+                test: /\.(png|jpg|gif)$/i,
+                use: [
+                  {
+                    loader: 'url-loader',
+                  },
+                ],
+            },
+            {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./component-loader.js')
                 }
             }
         ]

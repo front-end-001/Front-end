@@ -1,26 +1,7 @@
+import {PROPERTY, ATTRIBUTE, EVENT, STATE } from '../symbol';
+import BaseComponent from './BaseComponent'
 
-const PROPERTY_SYMBOL = Symbol("property");
-const ATTRIBUTE_SYMBOL = Symbol("attribute");
-const EVENT_SYMBOL = Symbol("event");
-const STATE_SYMBOL = Symbol("state");
-
-export default class Carousel {
-    constructor(){
-        this[PROPERTY_SYMBOL] = Object.create(null);
-        this[ATTRIBUTE_SYMBOL] = Object.create(null);
-        this[EVENT_SYMBOL] = Object.create(null);
-        this[STATE_SYMBOL] = Object.create(null);
-
-        this[PROPERTY_SYMBOL].children = [];
-
-        this.created();
-    }
-
-    appendTo(element){
-        element.appendChild(this.root);
-        this.mounted();
-    }
-
+export default class Carousel extends BaseComponent {
     created(){
         this.root = document.createElement("div");
         this.placeHolder= document.createElement("div");
@@ -43,18 +24,6 @@ export default class Carousel {
         })
     }
 
-    mounted(){
-
-    }
-
-    unmounted(){
-
-    }
-
-    update(){
-
-    }
-
     appendChild(child) {
         this.children.push(child)
         child.appendTo(this.root)
@@ -65,23 +34,6 @@ export default class Carousel {
         return this.root.style;
     }
 
-    get children() {
-        return this[PROPERTY_SYMBOL].children;
-    }
-
-    getDOM () {
-        return this.root;
-    }
-
-    getAttribute(name){
-        if (name == 'style') {
-            return this.root.getAttribute('style')
-        }
-        if(name === 'class') {
-            return this.root.getAttribute('class');
-        }
-        return this[ATTRIBUTE_SYMBOL][name]
-    }
     setAttribute(name, value){
         if (name == 'style') {
             this.root.setAttribute('style', value)
@@ -92,21 +44,11 @@ export default class Carousel {
         if(name === 'class') {
             this.root.setAttribute('class', value);
         }
-        return this[ATTRIBUTE_SYMBOL][name] = value;
+        return this[ATTRIBUTE][name] = value;
     }
 
-    addEventListener(type, listener){
-        if(!this[EVENT_SYMBOL][type])
-            this[EVENT_SYMBOL][type] = new Set;
-        this[EVENT_SYMBOL][type].add(listener);
-    }
-    removeEventListener(type, listener){
-        if(!this[EVENT_SYMBOL][type])
-            return;
-        this[EVENT_SYMBOL][type].delete(listener);
-    }
     triggerEvent(type){
-        for(let event of this[EVENT_SYMBOL][type])
+        for(let event of this[EVENT][type])
             event.call(this);
     }
 }
