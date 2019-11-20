@@ -1,0 +1,10 @@
+.bg-circle{
+    width: 2000px;
+    height: 900px;
+    position: absolute;
+    top: -630px;
+    background: #9E48ff;
+    border-radius: 50%;
+    left: -620px;
+    z-index: -1;
+}

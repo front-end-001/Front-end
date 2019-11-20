@@ -1,18 +1,15 @@
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Text {
+export default class CarouselItem {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        this.text = config || "";
-
-        this[PROPERTY_SYMBOL].children = [];
-
         this.created();
     }
 
@@ -20,14 +17,21 @@ export default class Text {
         element.appendChild(this.root);
         this.mounted();
     }
-
-    created(){
-        this.root = document.createElement("span");
-        this.root.innerText = this.text;
-        this[STATE_SYMBOL].h = 0;
+    appendChild(child){
+        this.children.push(child);
+        child.style='width: 100%;height: 100%;display: inline-block;transition: ease 0.5s';
     }
-    mounted(){
-
+    created(){
+        this.root = document.createElement("img");
+        this.root.src=this[ATTRIBUTE_SYMBOL].src;
+        this.root.style= "background:yellow;width: 500px;height: 300px;white-space: nowrap;overflow: hidden";
+        
+    }
+    mounted(){ //？@nyc
+      
+    }
+    get src(){
+        return this[ATTRIBUTE_SYMBOL].src;
     }
     unmounted(){
 
@@ -35,25 +39,24 @@ export default class Text {
     update(){
 
     }
-
-    appendChild(child){
-        this.children.push(child);
-        child.appendTo(this.root);
+    
+    log(){
+        console.log("width:", this.width);
     }
-
-
-    get children(){
-        return this[PROPERTY_SYMBOL].children;
+    get width(){
+        return this[PROPERTY_SYMBOL].width;
+    }
+    set width(value){
+        console.log("property change");
+        return this[PROPERTY_SYMBOL].width = value;
     }
     getAttribute(name){
-        if(name == "style") {
-            return this.root.getAttribute("style");
-        }
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
-        if(name == "style") {
-            this.root.setAttribute("style", value);
+        if(name == "width") {
+            this.width = value;
+            console.log("attibute change");
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
