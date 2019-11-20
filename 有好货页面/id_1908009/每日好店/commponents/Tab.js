@@ -30,15 +30,18 @@ export default class Tab {
         this.root = document.createElement("div");
         this.headerContainer = document.createElement("div");
         this.headerContainer.setAttribute('class','header')
+      
 
         this.contentContainer = document.createElement("div");
         this.contentContainer.style.whiteSpace = "nowrap";
         this.contentContainer.style.overflow = "hidden";
         this.contentContainer.style.height = "100%";
 
+
         this.root.appendChild(this.headerContainer);
         this.root.appendChild(this.contentContainer);
      
+
 
         enable(this.contentContainer)
 
@@ -100,7 +103,13 @@ export default class Tab {
             for (let i = 0; i < this.contentContainer.children.length; i++) {
                 this.contentContainer.children[i].style.transition = 'transform ease 0.5s';
                 this.contentContainer.children[i].style.transform = `translateX(${-width * this[STATE_SYMBOL].position}px)`
+                if (this[STATE_SYMBOL].position!=i){
+                    this.headerContainer.children[i].setAttribute('class', '')
+                }else{
+                    this.headerContainer.children[i].setAttribute('class', 'active')
+                }
             }
+           
         })
       
        
@@ -108,8 +117,7 @@ export default class Tab {
     mounted() {
         // let width = parseInt(this.contentContainer.parentElement.style.width.slice(0,-2))
       //  let width = this.contentContainer.getBoundingClientRect().width;
-        
-      
+        this.headerContainer.children[0].setAttribute('class','active')
     }
    
     unmounted() {
@@ -140,7 +148,7 @@ export default class Tab {
            // this.headerContainer.childNodes.setAttribute('class','')
             for (let i = 0; i < this.contentContainer.children.length; i++) {
                 this.contentContainer.children[i].style.width = "100%";
-                this.contentContainer.children[i].style.height = "100%";
+                this.contentContainer.children[i].style.height = "calc(100% - 2.7rem)";
                 // this.contentContainer.children[i].style.display = "none";
              //   this.contentContainer.children[i].style.transition = 'ease 0.5s';
                 let an = new animation

@@ -4,6 +4,10 @@ const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+import Card1 from './Card-1.js'
+import Card2 from './Card-2.js'
+import Card3 from './Card-3.js'
+import Card4 from './Card-4.js'
 
 if(!window.LIST_VIEW_STYLE_ELEMENT){
     let styleElement = document.createElement('style')
@@ -11,7 +15,6 @@ if(!window.LIST_VIEW_STYLE_ELEMENT){
     document.getElementsByTagName('head')[0].appendChild(styleElement)
     window.LIST_VIEW_STYLE_ELEMENT = true
 }
-
 
 export default class List {
     constructor() {
@@ -24,7 +27,7 @@ export default class List {
     created() {
        this.root = document.createElement('div')
        this.root.classList.add('list-view')
-       this.render().appendTo(this.root)
+      // this.render().appendTo(this.root)
     }
     updated() {
 
@@ -34,35 +37,36 @@ export default class List {
     }
     render(){
         let data = this.ATTRIBUTE_SYMBOL['data'] || []
-        let resArr = []
-        //debugger;
+        if(!(data instanceof Array)){
+           // console.log(data)
+            data = [
+                ...data.mostFavourateShops,
+                ...data.recommendedShops
+            ]
+        }
+        let resArr = [], item, card3Arr = [], flag=true
         for(let i of data){
             if(i.type==1){
-                let t = this.title1('../image/icon-gk.png', 'asdsa', false)
-                let item = <div class="card-1 clearfix">
-                                {t}
-                                <img class='img-content fr-19' src=''></img>
-                                <img class='img-content' src=''></img>
-                            </div>
+                item = <Card1 data={i}></Card1>
                 resArr.push(item)
             } else if (i.type == 2){
-                let b = this.title1('../image/icon-gk.png', 'vvvvv', true)
-                resArr.push(
-                    <div class='card-2'>
-                        {b}
-                        <div class='tips'>好店君</div>
-                        <div class='mt-21 img-wrap clearfix'>
-                            <img src='' class='img-1'></img>
-                            <img src='' class='img-2'></img>
-                            <img src='' class='img-2'></img>
-                        </div>
-                        <div class='like-shop'>相似好店 ></div>
-                     </div>
-                )
+                item = <Card2 data={i}></Card2>
+                resArr.push(item)
             }else if(i.type ==3){
-                //resArr.push(<p>{i.b}</p>)
+                if (card3Arr.length<3){
+                    card3Arr.push(i)
+                }else{
+                    item = flag ? <Card3 type='1' data={card3Arr} ></Card3> : <Card3 type='2' data={card3Arr} ></Card3>
+                    flag = !flag
+                    card3Arr=[]
+                    resArr.push(item)
+                }
+            }else if(i.type==5){
+                item = <Card4 data={i}></Card4>
+                resArr.push(item)
             }
         }
+      //  console.log(resArr,'1111')
         return  <div class='clearfix'>
                 {
                     resArr.map(item=>item)
@@ -98,7 +102,8 @@ export default class List {
         if (name == 'data') {
             this.ATTRIBUTE_SYMBOL[name] = value
             this.root.innerHTML = ''
-           this.render().appendTo(this.root)
+            this.render().appendTo(this.root)
+            //.log(this.render(), this.root,'222')
             return value
         }
         return this.ATTRIBUTE_SYMBOL[name] = value

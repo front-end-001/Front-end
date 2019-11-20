@@ -19,18 +19,19 @@ export default class Scroll {
         
         let trigged = false
         this.root.addEventListener('scroll',event =>{
+            
             let clientRect = this.root.getBoundingClientRect()
             let placeholder = this.placeholder.getBoundingClientRect()
+           
             if (clientRect.bottom > placeholder.top){
                 if (trigged){
-                    this.triggerEvent('scrolToBottom', 'b') 
+                    this.triggerEvent('scrolToBottom', event) 
                     trigged = true
                 }
             }
-            // if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height){
-            //    // console.log('到底啦')
-            //     this.triggerEvent('scrolToBottom','b')
-            // }
+            if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height){
+                this.triggerEvent('scrolToBottom', event)
+            }
         })
         
     }

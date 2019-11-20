@@ -30,12 +30,13 @@ export default class Carousel {
         }
     }
     render(){
-     
         let imgData = this.STATE_SYMBOL['data'] || []
         return <div class='carousel-content' id='carousel-container'>
             {
                 imgData.map(item => (
-                    <img src={item}/>
+                    <a href={item.url}>
+                         <img src={item.image}/>
+                    </a>
                 ))
                  
        }
@@ -56,6 +57,7 @@ export default class Carousel {
             return this.root.setAttribute('id', value)
         }
         if (name == 'data') {
+           // console.log(value)
             this.STATE_SYMBOL[name] = value
             this.render().appendTo(this.root)
             return value
