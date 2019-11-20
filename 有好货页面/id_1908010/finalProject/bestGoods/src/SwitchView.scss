@@ -1,0 +1,25 @@
+
+
+.switchContainer{
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 16px;
+}
+
+.switchItem {
+    display: inline-block;
+    font-size:12px;
+    font-family:PingFangSC;
+    font-weight:400;
+    color:rgba(255,125,49,1);
+    line-height:12px;
+    padding: 7px 0px;
+    width: 60px;
+    text-align: center;
+}
+
+.activeSwitch {
+    color:rgba(255,255,255,1);
+    background: linear-gradient(90deg,rgba(253,147,1,1),rgba(250,129,1,1));
+    border-radius: 16px;
+}

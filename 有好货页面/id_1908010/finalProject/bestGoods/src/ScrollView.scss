@@ -1,11 +1,11 @@
-$colors: red, orange, yellow, green, blue, purple;
-$repeat: 20;
+// $colors: red, orange, yellow, green, blue, purple;
+// $repeat: 20;
 
-@for $i from 1 through $repeat {
-    div.scroll:nth-child(#{$i}) {
-        background: lighten(nth($colors, random(length($colors))), 20%);
-    }
-}
+// @for $i from 1 through $repeat {
+//     div.scroll:nth-child(#{$i}) {
+//         background: lighten(nth($colors, random(length($colors))), 20%);
+//     }
+// }
 
 .scroll {
     height: 100%;
@@ -13,6 +13,7 @@ $repeat: 20;
     display: inline-block;
     vertical-align: top;
     overflow: scroll;
+    background: rgba(238, 238, 238, 1.00);
 }
 
 // .active {
@@ -21,3 +22,10 @@ $repeat: 20;
 //     display: inline-block;
 //     vertical-align: top;
 // }
+
+.footer {
+    background: rgba(238, 238, 238, 1.00);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4px;
+}

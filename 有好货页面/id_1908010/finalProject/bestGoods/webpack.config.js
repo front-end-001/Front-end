@@ -1,15 +1,14 @@
-// import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
+//__dirname 是项目根目录
 const pathResolve = targetPath => path.resolve(__dirname, targetPath)
-
-
 
 module.exports = {
     entry: {
-        app:"./index.js",
+        app:["babel-polyfill", "./index.js"]
     },
     output: {
         path: pathResolve('dist'),
@@ -47,12 +46,18 @@ module.exports = {
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 8192,
+                            limit: 20 * 1024,
                             name: '[name].[hash:7].[ext]',
-                            outputPath: 'img',
+                            outputPath: '/img/',
                         }
                     }
-                ]
+                ],
+                exclude: path.resolve(__dirname, './res/icons')
+            },
+            {
+                test: /\.svg$/,
+                loader: 'svg-sprite-loader',
+                include: path.resolve(__dirname, './res/icons')
             }
         ]
     },
@@ -60,7 +65,7 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         hot: true,
-        host: '192.168.1.135',
+        host: '192.168.1.137',
         port: 8080,
     },
     optimization: {
@@ -80,10 +85,14 @@ module.exports = {
             }
 
         }),
-        new webpack.HotModuleReplacementPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),
         new MiniCssExtractPlugin({
             filename: 'css/[name].[contenthash].css',
-        })
+        }),
+        new CopyPlugin([
+            {from: './res/icons', to: './res/icons', force: true},
+            {from: './res/images', to: './res/images', forse: true},
+        ])
     ]
 }

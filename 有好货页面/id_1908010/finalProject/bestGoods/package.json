@@ -11,17 +11,24 @@
     "start": "webpack-dev-server --open",
     "build": "webpack --mode development"
   },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  },
   "author": "玉皇大亮",
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
     "@babel/plugin-transform-react-jsx-source": "^7.5.0",
     "@babel/preset-env": "^7.6.2",
     "autoprefixer": "^9.6.4",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-polyfill": "^6.26.0",
+    "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
@@ -30,6 +37,7 @@
     "postcss-loader": "^3.0.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
+    "svg-sprite-loader": "^4.1.6",
     "url-loader": "^2.2.0",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",

@@ -47,10 +47,10 @@ export default class Component {
         this[EVENT_SYMBOL][type].delete(listener)
     }
 
-    triggerEvent(type) {
+    triggerEvent(type, ...args) {
         if(!this[EVENT_SYMBOL][type]) return;
         this[EVENT_SYMBOL][type].forEach(event => {
-            event.call(this);
+            event.call(this, ...args);
         })
     }
 

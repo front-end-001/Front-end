@@ -1,17 +1,16 @@
-
 import {PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL, EVENT_SYMBOL, STATE_SYMBOL} from '../lib/consts'
 
-export default class Wrapper {
-    constructor(type){
+export default class Fragment  {
+    constructor(config) {
         this[PROPERTY_SYMBOL] = Object.create(null)
         this[ATTRIBUTE_SYMBOL] = Object.create(null)
         this[EVENT_SYMBOL] = Object.create(null)
         this[STATE_SYMBOL] = Object.create(null)
         this.property.children = []
-        this.root = document.createElement(type)
+        this.root = document.createDocumentFragment();
     }
 
-    appendTo(element){
+    appendTo(element) {
         element.appendChild(this.root);
     }
 
@@ -20,30 +19,20 @@ export default class Wrapper {
         child.appendTo(this.root)
     }
 
-    get children(){
-        return this.property.children;
-    }
-
     getAttribute(name){
         if(name == 'className'){
             return this.root.className
         } 
-        return this.root.getAttribute(name);
     }
     setAttribute(name, value) {
         if (name == 'className') {
             this.root.className = value
             return;
         }
-        this.root.setAttribute(name, value)
     }
 
-    addEventListener(type, listener) {
-        this.root.addEventListener(...arguments)
-    }
-
-    removeEventListener(type, listener) {
-        this.root.removeEventListener(...arguments)
+    get children(){
+        return this.property.children;
     }
 
     get property() {

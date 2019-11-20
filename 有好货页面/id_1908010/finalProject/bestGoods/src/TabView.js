@@ -1,7 +1,7 @@
 import Component from './BaseComponent'
 import './TabView.scss'
 import {enableGesture} from '../lib/gesture.js'
-import { STATE_SYMBOL } from '../lib/consts';
+
 
 export default class TabView extends Component {
     constructor(config){
@@ -29,7 +29,7 @@ export default class TabView extends Component {
 
         this.contentContainer.addEventListener('pan', event => {
             event.origin.preventDefault()
-            console.log("pan")
+
             let contentWidth = this.contentContainer.getBoundingClientRect().width;
 
             // --> 边界阻力效果
@@ -43,7 +43,7 @@ export default class TabView extends Component {
             // <-- 边界阻力效果
 
             for(let i = 0; i < this.contentContainer.children.length; i++) {
-                this.contentContainer.children[i].style.transition = 'transform ease 0.5s'
+                // this.contentContainer.children[i].style.transition = 'transform ease 0.5s'
                 let originOffset = contentWidth * this.state.position //起始位置
                 this.contentContainer.children[i].style.transform = `translateX(${dx - originOffset}px)`
             }
@@ -52,7 +52,7 @@ export default class TabView extends Component {
 
         this.contentContainer.addEventListener('panend', event => {
             event.origin.preventDefault()
-            console.log("panend")
+            // console.log("panend")
             let isLeft;
             let contentWidth = this.contentContainer.getBoundingClientRect().width
             if (event.isFlick) {
@@ -153,7 +153,7 @@ export default class TabView extends Component {
 
     setAttribute(name, value) {
         if (name == 'className') {
-            this.root.className = value
+            return this.root.className = value
         }
         return this.attrs[name] = value
     }
