@@ -1,9 +1,6 @@
+
 module.exports = {
-    entry: "./script.js",
-    // output: {
-    //     path: path.resolve(__dirname, 'dist'),
-    //     filename: 'bundle.js'
-    // },
+    entry: "./src/main.js",
     module: {
         rules: [
             {
@@ -11,23 +8,29 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                      presets: ['@babel/preset-env'],
-                      plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
+                        presets: ['@babel/preset-env'],
+                        plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
             },
             {
+                test: /\.component$/,
+                use: {
+                    loader: require.resolve('./src/component-loader.js')
+                }
+            },
+            {
                 test: /\.css$/i,
-                use: [require.resolve('./component-css-loader.js')],
+                use: [require.resolve('./src/component-css-loader.js')],
             },
         ]
     },
     mode: "development",
     devServer: {
-        contentBase: './dist',
-        // host: '0.0.0.0',
-        // port: 9000,
-        hot: true
+        contentBase: "./dist",
+        hot: true,
+        // host: "10.1.71.26",
+        port: 8082
     },
     optimization: {
         minimize: false

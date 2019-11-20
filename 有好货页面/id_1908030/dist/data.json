@@ -1,16 +1,310 @@
-[{
-    "a": 1,
-    "b": 2
-},
 {
-    "a": 13,
-    "b": 24
-},
-{
-    "a": 15,
-    "b": 25
-},
-{
-    "a": 16,
-    "b": 27
-}]
+    "tabOne": {
+        "carouselImgs": ["./imgs/carousel/pic1.png",
+            "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+            "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+            "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+        ],
+        "displayType": 1,
+        "shopList": [
+            {
+                "shop": "极客时间旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop1/jk.png",
+                "tipImg": "./imgs/shop1/tip.png",
+                "pic1": "./imgs/shop1/pic1.png",
+                "pic2": "./imgs/shop1/pic2.png",
+                "pic3": "./imgs/shop1/pic3.png"
+            },
+            {
+                "shop": "极客时间天猫店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop2/jk.png",
+                "tipImg": "./imgs/shop2/tip.png",
+                "pic1": "./imgs/shop2/pic1.png",
+                "pic2": "./imgs/shop2/pic2.png",
+                "pic3": "./imgs/shop2/pic3.png"
+            },
+            {
+                "shop": "InfoQ官方旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop3/infoQ.png",
+                "tipImg": "./imgs/shop3/tip.png",
+                "pic1": "./imgs/shop3/pic1.png",
+                "pic2": "./imgs/shop3/pic2.png",
+                "pic3": "./imgs/shop3/pic3.png"
+            },
+            {
+                "shop": "极客时间旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop1/jk.png",
+                "tipImg": "./imgs/shop1/tip.png",
+                "pic1": "./imgs/shop1/pic1.png",
+                "pic2": "./imgs/shop1/pic2.png",
+                "pic3": "./imgs/shop1/pic3.png"
+            },
+            {
+                "shop": "极客时间天猫店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop2/jk.png",
+                "tipImg": "./imgs/shop2/tip.png",
+                "pic1": "./imgs/shop2/pic1.png",
+                "pic2": "./imgs/shop2/pic2.png",
+                "pic3": "./imgs/shop2/pic3.png"
+            },
+            {
+                "shop": "InfoQ官方旗舰店",
+                "attri": "天猫",
+                "introduce": "好店君：该店已被1.3万人关注，快来关注吧！",
+                "shopImg": "./imgs/shop3/infoQ.png",
+                "tipImg": "./imgs/shop3/tip.png",
+                "pic1": "./imgs/shop3/pic1.png",
+                "pic2": "./imgs/shop3/pic2.png",
+                "pic3": "./imgs/shop3/pic3.png"
+            }
+        ]
+    },
+    "tabSecond": {
+        "displayType": 2,
+        "shopList": [
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic1.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic2.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic3.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic4.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic5.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic6.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic7.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic8.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic9.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic1.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic2.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic3.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic4.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic5.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic6.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic7.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic8.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic9.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic1.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic2.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic3.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic4.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic5.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic6.png"
+            },
+            {
+                "shop": "RINATE",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic7.png"
+            },
+            {
+                "shop": "阿里巴巴",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic8.png"
+            },
+            {
+                "shop": "阿里妈妈",
+                "attri": "天猫",
+                "shopImg": "./imgs/shops/jk.png",
+                "pic": "./imgs/shops/pic9.png"
+            }
+        ]
+    },
+    "tabThree": {
+        "carouselImgs": ["./imgs/carousel/pic1.png",
+            "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+            "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+            "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+        ],
+        "displayType": 3,
+        "shopList": [
+            {
+                "shop": "极客时间旗舰店",
+                "attri": "科技风 行业优质",
+                "introduce": "该店已被3.9万人关注啦",
+                "shopImg": "./imgs/shop1/jk.png",
+                "tipImg": "./imgs/shop1/tip.png",
+                "pic1": "./imgs/shop1/pic1.png",
+                "pic2": "./imgs/shop1/pic2.png",
+                "pic3": "./imgs/shop1/pic3.png"
+            },
+            {
+                "shop": "极客时间天猫店",
+                "attri": "科技风 行业优质",
+                "introduce": "该店已被3.9万人关注啦",
+                "shopImg": "./imgs/shop2/jk.png",
+                "tipImg": "./imgs/shop2/tip.png",
+                "pic1": "./imgs/shop2/pic1.png",
+                "pic2": "./imgs/shop2/pic2.png",
+                "pic3": "./imgs/shop2/pic3.png"
+            },
+            {
+                "shop": "InfoQ官方旗舰店",
+                "attri": "科技风 行业优质",
+                "introduce": "该店已被3.9万人关注啦",
+                "shopImg": "./imgs/shop3/infoQ.png",
+                "tipImg": "./imgs/shop3/tip.png",
+                "pic1": "./imgs/shop3/pic1.png",
+                "pic2": "./imgs/shop3/pic2.png",
+                "pic3": "./imgs/shop3/pic3.png"
+            },
+            {
+                "shop": "极客时间旗舰店",
+                "attri": "科技风 行业优质",
+                "introduce": "该店已被3.9万人关注啦",
+                "shopImg": "./imgs/shop1/jk.png",
+                "tipImg": "./imgs/shop1/tip.png",
+                "pic1": "./imgs/shop1/pic1.png",
+                "pic2": "./imgs/shop1/pic2.png",
+                "pic3": "./imgs/shop1/pic3.png"
+            },
+            {
+                "shop": "极客时间天猫店",
+                "attri": "科技风 行业优质",
+                "introduce": "该店已被3.9万人关注啦",
+                "shopImg": "./imgs/shop2/jk.png",
+                "tipImg": "./imgs/shop2/tip.png",
+                "pic1": "./imgs/shop2/pic1.png",
+                "pic2": "./imgs/shop2/pic2.png",
+                "pic3": "./imgs/shop2/pic3.png"
+            },
+            {
+                "shop": "InfoQ官方旗舰店",
+                "attri": "科技风 行业优质",
+                "introduce": "该店已被3.9万人关注啦",
+                "shopImg": "./imgs/shop3/infoQ.png",
+                "tipImg": "./imgs/shop3/tip.png",
+                "pic1": "./imgs/shop3/pic1.png",
+                "pic2": "./imgs/shop3/pic2.png",
+                "pic3": "./imgs/shop3/pic3.png"
+            }
+        ]
+    }
+}
+

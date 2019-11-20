@@ -1,0 +1,15 @@
+.secondType{
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 34px;
+    padding-right: 34px;
+    padding-bottom: 10px;
+}
+.xinqihaodian{
+    font-size:46px;
+    font-family:PingFangSC;
+    font-weight:500;
+    line-height:35px;
+}

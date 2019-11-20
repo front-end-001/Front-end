@@ -1,0 +1,127 @@
+.shop{
+    margin-left: 34px;
+    margin-right: 34px;
+    margin-bottom: 35px;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 33px;
+    padding-bottom: 61px;
+    height: 85vw;
+    background:rgba(254,254,254,1);
+    border-radius:36px;
+}
+
+.info{
+    display:flex;
+    justify-content: space-between;
+}
+.shopInfo{
+    display:flex;
+}
+.shopImg{
+    width:106px;
+    height:106px;
+    border-radius:50%;
+}
+.shopName{
+    margin-left: 15px;
+    margin-top: 7px;
+    height:44px;
+    font-size:46px;
+    font-family:"PingFangSC";
+    font-weight:500;
+    color:rgba(51,51,51,1);
+    line-height:35px;
+}
+.shopAttri{
+    display:flex;
+    margin-left: 15px;
+    margin-top: 7px;
+    width:75px;
+    height:36px;
+    background:rgba(238,5,7,1);
+    border-radius:18px;
+    align-items: center;
+    justify-content: center;
+    color:white;
+}
+.enterShop{
+    margin-top: 10px;
+    width:160px;
+    height:72px;
+    background:linear-gradient(90deg,rgba(255,172,0,1),rgba(254,201,0,1));
+    border-radius:36px;
+    font-size:40px;
+    font-family:PingFangSC;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:24px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.tip{
+    margin-left: 26px;
+    display:flex;
+    align-items: center;
+    height:98px;
+    background:rgba(245,245,245,1);
+    border-radius:16px;
+}
+.tipImg{
+    width:53px;
+    height:53px;
+    background:linear-gradient(90deg,rgba(255,172,0,1),rgba(254,201,0,1));
+    border-radius:50%;
+}
+.tipIntro{
+    height:36px;
+    font-size:36px;
+    font-family:PingFangSC;
+    font-weight:300;
+    color:rgba(51,51,51,1);
+    line-height:21px;
+    display:flex;
+    align-items: center;
+}
+.imgs{
+    margin-top: 20px;
+    position: relative;
+    display:flex;
+    width: 100%; 
+    height: 58vw;
+}
+.img {
+    border-radius:36px;
+}
+.pic1{
+    left: 0;
+    width: 66%;
+    height: 100%;
+}
+.pic2{
+    position: absolute;
+    right: 0;
+    width: 32%;
+    height: 48%;
+}
+.pic3{
+    position: absolute;
+    right: 0;
+    top: 51%;
+    width: 32%;
+    height: 48%;
+}
+
+.foot{
+    margin-top: 41px;
+    display: flex;
+    justify-content: space-between;
+
+}
+.footLeft{
+    display: flex;
+}
+.footLeft div{
+  margin-right: 10px;
+}
