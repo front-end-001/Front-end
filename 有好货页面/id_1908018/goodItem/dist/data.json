@@ -1,0 +1,41 @@
+{
+  "dataList": [
+    {
+      "title": "极客大学旗舰店",
+      "logo": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3117799872,2369415256&fm=26&gp=0.jpg",
+      "pictures": [
+        "https://img.alicdn.com/imgextra/i4/2130152348/O1CN01wNk0RE1TDQUjvCoAO_!!0-item_pic.jpg_430x430q90.jpg",
+        "https://img.alicdn.com/imgextra/i1/2274338009/O1CN01CX74y0292AetcnOgp_!!2274338009-0-pixelsss.jpg_430x430q90.jpg",
+        "https://img.alicdn.com/imgextra/i4/739179444/O1CN01WomSRa2JdOw1a4KAa_!!739179444.jpg_430x430q90.jpg"
+      ]
+    },
+    {
+      "title": "重学前端旗舰店",
+      "logo": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3117799872,2369415256&fm=26&gp=0.jpg",
+      "pictures": [
+        "https://img.alicdn.com/imgextra/i1/2406931838/O1CN01WjXfUV1PRqWaM5Au0_!!2406931838.jpg_1152x1920Q50s50.jpg",
+        "https://img.alicdn.com/imgextra/i1/3954877919/O1CN01pQ18Jj28MwxyqWBXe_!!3954877919.jpg_430x430q90.jpg",
+        "https://img.alicdn.com/imgextra/i3/3954877919/O1CN01V0UUen28Mwy1c9xR1_!!0-item_pic.jpg_430x430q90.jpg"
+      ]
+    },
+    {
+      "title": "LeetCode旗舰店",
+      "logo": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573303219233&di=a29398a26470755e385b4cc45428587a&imgtype=0&src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-5410c9a27a63897b473ab9c51a653f3d_b.jpg",
+      "pictures": [
+        "https://img.alicdn.com/imgextra/i3/4093052206/O1CN01O4KZTI1SAOI2O3LNU_!!0-item_pic.jpg_430x430q90.jpg",
+        "https://img.alicdn.com/imgextra/i1/3954877919/O1CN01pQ18Jj28MwxyqWBXe_!!3954877919.jpg_430x430q90.jpg",
+        "https://img.alicdn.com/imgextra/i3/3954877919/O1CN01V0UUen28Mwy1c9xR1_!!0-item_pic.jpg_430x430q90.jpg"
+      ]
+    },
+    {
+      "title": "前端训练营旗舰店",
+      "logo": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3117799872,2369415256&fm=26&gp=0.jpg",
+      "pictures": [
+        "https://img.alicdn.com/imgextra/i3/2191160435/TB19WqyqASWBuNjSszdXXbeSpXa_!!0-item_pic.jpg_430x430q90.jpg",
+        "https://img.alicdn.com/imgextra/i1/2274338009/O1CN01CX74y0292AetcnOgp_!!2274338009-0-pixelsss.jpg_430x430q90.jpg",
+        "https://img.alicdn.com/imgextra/i4/2274338009/O1CN01vC8AkK292AdnMTgq5_!!2274338009.jpg_430x430q90.jpg"
+      ]
+    }
+  ],
+  "dataType": "cardview1"
+}
