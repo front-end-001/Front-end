@@ -146,7 +146,7 @@ let easeOut = cubicBezier(0, 0, .58, 1);
 let easeInOut = cubicBezier(.42, 0, .58, 1);
 let myCB = cubicBezier(.69,-0.85,.25,1);
 
-class DOMElementStyleNumberAnimation {
+export default class DOMElementStyleNumberAnimation {
     constructor(element, property, startTime, startValue, endTime, endValue, converter){
         this._element = element;
         this._property = property;

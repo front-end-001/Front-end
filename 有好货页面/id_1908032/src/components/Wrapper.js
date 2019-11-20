@@ -39,6 +39,7 @@ export default class Wrapper {
             } else {
                 this.root.setAttribute(name, value);
             }
+            return;
         }
         this.root.setAttribute(name, value);
     }

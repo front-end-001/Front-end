@@ -1,11 +1,12 @@
-import { create } from './create';
+import { create } from '../create';
+import './shop.scss';
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Div {
+export default class Shop {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -33,20 +34,20 @@ export default class Div {
         if(!this.getAttribute('data')) return;
 
         let data = this.getAttribute('data') || {}
-        let { logo, name, images } = data;
+        let { icon, name, items } = data;
         this.root.classList.add('shop-view');
         let element = <div class="inner">
             <div class="top-info">
-                <img class="logo" src={logo} alt="" />
+                <img class="logo" src={icon} alt="" />
                 <div class="right-info">
                     <h3 class="title">{name}</h3>
-                    <i class="badage"></i>
+                    <img class="badage" src={require('../assets/icon-tmall@2x.png')} />
                 </div>
             </div>
             <div class="image-box-list">
                 {
-                    Array.isArray(images) && images.map(image => (
-                        <img class='image' src={image} alt=""/>
+                    Array.isArray(items) && items.map(image => (
+                        <img class='image' src={image.image} alt=""/>
                     ))
                 }
             </div>

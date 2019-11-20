@@ -1,17 +1,17 @@
-import { create } from './create';
+import { create } from '../create';
+import './ShopItemInfo.scss';
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ListView {
+export default class Div {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        
 
         this[PROPERTY_SYMBOL].children = [];
 
@@ -25,22 +25,38 @@ export default class ListView {
 
     created(){
         this.root = document.createElement("div");
-        this.render().appendTo(this.root);
     }
 
     render(){
-        let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
-        return <div>
-            {
-                data.map(item => (
-                    <div>{item}</div> 
-                ))
-            }
+        let data = this.getAttribute('data') || {};
+        let { icon, items, name, promotion, url } = data;
+        return  <div class="shopItemInfo">
+            <div class="top-info">
+                <img src={ icon } alt="" class="shop-icon"/>
+                <div class="right-info">
+                    <i class="iconfont icon icon-guanzhu"></i>
+                    <p class="text">{ name }</p>
+                </div>
+            </div>
+            <div class="center-info">
+                <div class="left-text">
+                    <h3 class="shop-name">{name}</h3>
+                    <p class="shop-slogan">{promotion}</p>
+                </div>
+                <a class="button" href={url}>
+                    <span class="text">进店</span>
+                    <i class="iconfont icon-arrow icon"></i>
+                </a>
+            </div>
+            <div class="img-list">
+                <img src={ items[0].image } alt="" class="img"/>
+                <img src={ items[1].image } alt="" class="img"/>
+            </div>
         </div>
     }
 
     mounted(){
-        
+
     }
     unmounted(){
 
@@ -68,15 +84,10 @@ export default class ListView {
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
-        if(name === 'data'){
-            this[ATTRIBUTE_SYMBOL][name] = value;
-
-            this.root.innerHTML = "";
+        this[ATTRIBUTE_SYMBOL][name] = value;
+        if(name == 'data'){
             this.render().appendTo(this.root);
-
-            return value;
         }
-        return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     addEventListener(type, listener){
         if(!this[EVENT_SYMBOL][type])

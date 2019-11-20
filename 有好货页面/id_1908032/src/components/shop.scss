@@ -1,0 +1,53 @@
+.shop-view {
+    padding: 28px 35px 30px 35px;
+    background: #fff;
+    border-radius: 18px;
+    .innner {
+        padding: 28px 45px 30px 45px;
+    }
+
+    .top-info {
+        margin-bottom: 27px;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        margin-right: 18px;
+        width: 78px;
+        height: 78px;
+        border-radius: 100%;
+    }
+
+    .right-info {
+        height: 78px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .title {
+        margin: 0;
+        font-size: 36px;
+        color: rgba(51, 51, 51, 1);
+    }
+
+    .badage {
+        width: 63px;
+        height: 30px;
+        background-color: rgba(238, 5, 7, 1);
+        border-radius: 15px;
+    }
+
+    .image-box-list {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .image {
+        width: 18vw;
+        height: 18vw;
+        border-radius: 3px;
+    }
+
+}

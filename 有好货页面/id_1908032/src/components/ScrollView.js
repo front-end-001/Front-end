@@ -3,15 +3,17 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Title {
+export default class ScrollView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        this[PROPERTY_SYMBOL].children = [];
-        this.created();
+        
 
+        this[PROPERTY_SYMBOL].children = [];
+
+        this.created();
     }
 
     appendTo(element){
@@ -21,9 +23,37 @@ export default class Title {
 
     created(){
         this.root = document.createElement("div");
+        this.placeHolder = document.createElement("div");
+        //this.placeHolder.innerText = "加载更多";
+        /*this.root.addEventListener("touchmove",function(e){ 
+            e.cancelBubble = true;
+            e.stopImmediatePropagation();
+        }, {
+            passive:false
+        });*/
+
+        let triggered = false;
+
+        this.root.addEventListener("scroll", event => {
+            let clientRect = this.root.getBoundingClientRect();
+            let placeHolderRect = this.placeHolder.getBoundingClientRect();
+            //console.log(clientRect.bottom, )
+            if(clientRect.bottom < placeHolderRect.top) {
+                if(triggered) {
+                    this.triggerEvent("scrolToBottom");
+                    triggered = true;
+                }
+            }
+            //console.log(this.root.scrollHeight, clientRect.height, this.root.scrollTop );
+            /*if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
+                this.triggerEvent("scrolToBottom", "b");
+            }*/
+        })
     }
     mounted(){
-
+        window.addEventListener('scroll', () => {
+            window.outerHeight;
+        })
     }
     unmounted(){
 
@@ -35,8 +65,6 @@ export default class Title {
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
-        // this.root.appendChild(this.bottomPlaceholder);
-        // this.root.insertBefore(this.topPlaceholder, this.root.firstChild);
     }
 
 
@@ -47,25 +75,17 @@ export default class Title {
         if(name == "style") {
             return this.root.getAttribute("style");
         }
-
-        
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
-        if(name == "style") {
-            this.root.setAttribute("style", value);
-            //this.root.style.overflow = "visible";
+        if(typeof value == 'object'){
+            console.log(value)
+            for(let key in value){
+                this.root.style[key] = value[key];
+            }
+        } else {
+            this.root.setAttribute(name, value);
         }
-        if(name == "bottomText") {
-            this.bottomPlaceholder.innerText = value
-        }
-        if(name == "topText") {
-            this.topContent.innerText = value
-        }
-        if(name == "className"){
-            this.root.classList.add(value)
-        }
-        
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     addEventListener(type, listener){
@@ -78,10 +98,10 @@ export default class Title {
             return;
         this[EVENT_SYMBOL][type].delete(listener);
     }
-    triggerEvent(type, event){
+    triggerEvent(type){
         if(!this[EVENT_SYMBOL][type])
             return;
         for(let event of this[EVENT_SYMBOL][type])
-            event.call(this, event);
+            event.call(this);
     }
 }

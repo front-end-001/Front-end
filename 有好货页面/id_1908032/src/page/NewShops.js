@@ -1,9 +1,14 @@
+import { create } from '../create';
+import ListView from '../components/ListView';
+import ShopItemInfo from '../components/ShopItemInfo';
+import shopApi from '../api/shop';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ScrollView {
+export default class Div {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -12,8 +17,9 @@ export default class ScrollView {
         
 
         this[PROPERTY_SYMBOL].children = [];
-
+        this.data = [];
         this.created();
+        this.fetchShops = this.fetchShops.bind(this);
     }
 
     appendTo(element){
@@ -23,15 +29,18 @@ export default class ScrollView {
 
     created(){
         this.root = document.createElement("div");
-        // this.root.style.overflow = 'scroll';
-        this[STATE_SYMBOL].h = 0;
-        this.root.addEventListener("touchmove", function(e){ 
-            e.cancelBubble = true;
-            e.stopImmediatePropagation();
-        }, {passive:false});
     }
-    mounted(){
 
+    async fetchShops(){
+        let response = await shopApi.fetchNew();
+        let result = await response.json();
+        this.data = [...this.data, ...result.newShops];
+        this.root.innerHTML = '';
+        this.render().appendTo(this.root);
+    }
+    
+    mounted(){
+       this.fetchShops(); 
     }
     unmounted(){
 
@@ -45,6 +54,16 @@ export default class ScrollView {
         child.appendTo(this.root);
     }
 
+    render(){
+        let data = this.data || [];
+        console.log(this.data);
+        return <ListView 
+            //TODO:这里renderItem必须要在data之前，否者会报错，待优化
+            // onEndReached={this.fetchShops}
+            renderItem={item => <ShopItemInfo data={item} />}
+            data={data} 
+        />
+    }
 
     get children(){
         return this[PROPERTY_SYMBOL].children;
@@ -59,7 +78,10 @@ export default class ScrollView {
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
-        return this[ATTRIBUTE_SYMBOL][name] = value;
+        this[ATTRIBUTE_SYMBOL][name] = value;
+        if(name == 'data'){
+            this.render().appendTo(this.root);
+        }
     }
     addEventListener(type, listener){
         if(!this[EVENT_SYMBOL][type])
