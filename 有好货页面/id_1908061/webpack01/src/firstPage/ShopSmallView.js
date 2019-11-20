@@ -1,9 +1,18 @@
+import css from './ShopSmallView.css';
+import Div from '../Div.js';
+import ShopSmall from './ShopSmall.js';
+import {create} from '../create.js';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ScrollView {
+let styleElement = document.createElement('style');
+styleElement.innerHTML = css;
+document.getElementsByTagName('head')[0].appendChild(styleElement);
+
+export default class ShopSmallView {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -17,26 +26,16 @@ export default class ScrollView {
         element.appendChild(this.root);
         this.mounted();
     }
-
     created(){
         this.root = document.createElement("div");
-        this.placeHolder = document.createElement("div");
-        // this.placeHolder.innerText = "加载更多";
-        this.placeHolder.classList.add('place-holder');
-        this.placeHolder.style.textAlign = 'center';
-        this.root.appendChild(this.placeHolder);
-        this.root.addEventListener("scroll", event => {
-            let clientRect = this.root.getBoundingClientRect();
-            let placeHolderRect = this.placeHolder.getBoundingClientRect();
-            if(clientRect.bottom < placeHolderRect.top) {
-                    this.triggerEvent("scrolToBottom");
-            }
-            // if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
-            //     this.triggerEvent("scrolToBottom");
-            // }
-        });
+        this.root.classList.add('shop-small-view');
+        this.render().appendTo(this.root);
     }
     mounted(){
+       let childOne = this.root.children[0].children[0];
+       let childTwo = this.root.children[0].children[1];
+       childOne.style.cssFloat = 'left';
+       childTwo.style.cssFloat = 'right';
     }
     unmounted(){
     
@@ -44,13 +43,20 @@ export default class ScrollView {
     update(){
     
     }
+    render(){
+        let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
+        return <Div>
+            <ShopSmall data = {data[0]}></ShopSmall>
+            <ShopSmall data = {data[1]}></ShopSmall>
+        </Div>
+        
+    }
     get style(){
         return this.root.style;
     }
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
-        this.root.appendChild(this.placeHolder);
     }
     get children(){
         return this[PROPERTY_SYMBOL].children;
@@ -65,8 +71,11 @@ export default class ScrollView {
         if(name == "style") {
             this.root.setAttribute("style", value);
         }
-        if(name == "placeHolderText") {
-            this.placeHolder.innerText = value;
+        if(name == "data") {
+            this[ATTRIBUTE_SYMBOL][name] = value;
+            this.root.innerHTML = '';
+            this.render().appendTo(this.root);
+            return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }

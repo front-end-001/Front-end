@@ -10,7 +10,7 @@ document.getElementById("main").addEventListener("pan", event=> {
     document.getElementById("main").style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`
 });
 */
-export function enableGesture(main){
+function gesture(main){
     let contexts = Object.create(null);
 
     let start = (point, context, origin) => {

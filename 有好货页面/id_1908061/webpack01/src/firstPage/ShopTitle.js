@@ -1,15 +1,22 @@
+import css from './ShopTitle.css';
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class ScrollView {
+let styleElement = document.createElement('style');
+styleElement.innerHTML = css;
+document.getElementsByTagName('head')[0].appendChild(styleElement);
+
+export default class ShopTitle {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
         this[PROPERTY_SYMBOL].children = [];
+
         this.created();
     }
 
@@ -20,38 +27,27 @@ export default class ScrollView {
 
     created(){
         this.root = document.createElement("div");
+        this.root.classList.add('shop-title');
         this.placeHolder = document.createElement("div");
-        // this.placeHolder.innerText = "加载更多";
-        this.placeHolder.classList.add('place-holder');
-        this.placeHolder.style.textAlign = 'center';
+        this.placeHolder.classList.add('title');
+        this.placeHolder.innerText = "超多人收藏的店！";
         this.root.appendChild(this.placeHolder);
-        this.root.addEventListener("scroll", event => {
-            let clientRect = this.root.getBoundingClientRect();
-            let placeHolderRect = this.placeHolder.getBoundingClientRect();
-            if(clientRect.bottom < placeHolderRect.top) {
-                    this.triggerEvent("scrolToBottom");
-            }
-            // if(this.root.scrollHeight - this.root.scrollTop <= clientRect.height) {
-            //     this.triggerEvent("scrolToBottom");
-            // }
-        });
     }
     mounted(){
+
     }
     unmounted(){
-    
+
     }
     update(){
-    
+
     }
-    get style(){
-        return this.root.style;
-    }
+
     appendChild(child){
         this.children.push(child);
         child.appendTo(this.root);
-        this.root.appendChild(this.placeHolder);
     }
+
     get children(){
         return this[PROPERTY_SYMBOL].children;
     }
@@ -59,7 +55,7 @@ export default class ScrollView {
         if(name == "style") {
             return this.root.getAttribute("style");
         }
-        return this[ATTRIBUTE_SYMBOL][name];
+        return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
         if(name == "style") {

@@ -21,6 +21,32 @@ module.exports = {
                 plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
               }
             }
+          },
+          {
+            test: /\.css$/,
+            use: [ 'to-string-loader', 'css-loader' ]
+          },
+          // {
+          //     test: /\.css$/i,
+          //     use: [require.resolve('./component-css-loader.js')],
+          // },
+          {
+            test: /\.(png|jpeg|svg)$/,
+            use: ['url-loader']
+          },
+          {
+            test: /\.json$/,
+            loader: 'json-loader'
+          },
+          {
+            test: /\.css$/,
+            loader:'px2vw-view-loader',
+              query:{
+                viewportWidth: 1080,
+                viewportUnit: 'vw',
+                minPixelValue:1,
+                decimal:3
+              }
           }
           // {
           //   test: /\.component$/,

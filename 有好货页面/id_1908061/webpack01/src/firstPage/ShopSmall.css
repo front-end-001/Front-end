@@ -1,0 +1,59 @@
+.shop-small{
+    width:490px;
+    padding:35px 30px;
+    background-color:#ffffff;
+    box-sizing: border-box;
+    border-radius:20px;
+}
+.shop-small .shop .shop-top{
+    width:100%;
+    height:80px;
+}
+.shop-small .shop .shop-top .shop-icon{
+    width:80px;
+    height:80px;
+    float:left;
+ }
+.shop-small .shop .shop-top .shop-icon>img{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+}
+.shop-small .shop .shop-top .shop-name{
+    margin-left:15px;
+    float:left;     
+}
+.shop-small .shop .shop-top .shop-name .text{
+    font-size:35px;
+}
+.shop-small .shop .shop-top .shop-name .tag{
+    width:65px;
+    height:30px;
+    background-color: #ee0507;
+    border-radius:15px;
+    font-size:22px;
+    color:#ffffff; 
+    text-align: center;
+    margin-top: 5px;
+}
+.shop-small .shop .shop-bottom{
+    width:100%;
+    height:200px;
+    margin-top:25px;
+}
+.shop-small .shop .shop-bottom .left-img{
+    width:200px;
+    height:200px;
+    float:left; 
+}
+.shop-small .shop .shop-bottom .right-img{
+    width:200px;
+    height:200px;
+    float:right; 
+}
+.shop-small .shop .shop-bottom .left-img>img,
+.shop-small .shop .shop-bottom .right-img>img{
+    width:100%;
+    height:100%;
+    border-radius:10px;
+}
