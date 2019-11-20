@@ -1,42 +1,51 @@
-import enableGesture from '../js/enableGesture';
-import Component, { PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL, EVENT_SYMBOL, STATE_SYMBOL } from './Component';
+import enableGesture from './js/enableGesture';
 
+const PROPERTY_SYMBOL = Symbol("property");
+const ATTRIBUTE_SYMBOL = Symbol("attribute");
+const EVENT_SYMBOL = Symbol("event");
+const STATE_SYMBOL = Symbol("state");
 
-
-/* props
-* data
-* width
-* height
-* dots
-* easing
-* autoplay
-* effect
-* easing
-* */
-
-
-// state
-
-
-
-// attribute
-
-
-/** config
- *
- *
- * */
-
-/** Event
- *  beforeChange 切换前回调
- *  afterChange 切换后回调
- * */
-
-/** methods
- * next()
- * prev()
- * goTo(slideNumber, dontAnimate)
- * */
+class Component {
+    constructor() {
+        this[ATTRIBUTE_SYMBOL] = Object.create(null);
+        this[PROPERTY_SYMBOL] = Object.create(null);
+        this[STATE_SYMBOL] = Object.create(null);
+        this[EVENT_SYMBOL] = Object.create(null);
+    }
+    created() {
+        throw new Error('should define in subclass');
+    }
+    mounted(){
+        throw new Error('should define in subclass');
+    }
+    unmounted(){
+        throw new Error('should define in subclass');
+    }
+    update(){
+        throw new Error('should define in subclass');
+    }
+    getAttribute(name){
+        return this[ATTRIBUTE_SYMBOL][name]
+    }
+    setAttribute(name, value){
+        return this[ATTRIBUTE_SYMBOL][name] = value;
+    }
+    addEventListener(type, listener){
+        if(!this[EVENT_SYMBOL][type])
+            this[EVENT_SYMBOL][type] = new Set;
+        this[EVENT_SYMBOL][type].add(listener);
+    }
+    removeEventListener(type, listener){
+        if(!this[EVENT_SYMBOL][type])
+            return;
+        this[EVENT_SYMBOL][type].delete(listener);
+    }
+    triggerEvent(type){
+        if(!this[EVENT_SYMBOL][type]) return;
+        for(let event of this[EVENT_SYMBOL][type])
+            event.call(this);
+    }
+}
 
 export class Carousel extends Component {
     constructor() {
@@ -52,17 +61,18 @@ export class Carousel extends Component {
     }
 
     set data(val) {
-        return this[PROPERTY_SYMBOL].data = val;
+        return this[ATTRIBUTE_SYMBOL].data = val;
     }
     get data() {
-        return this[PROPERTY_SYMBOL].data;
+        return this[ATTRIBUTE_SYMBOL].data;
     }
 
     set auto(val) {
-        return this[PROPERTY_SYMBOL].auto = val;
+        // debugger;
+        return this[ATTRIBUTE_SYMBOL].auto = val;
     }
     get auto() {
-        return this[PROPERTY_SYMBOL].auto;
+        return true; // this[ATTRIBUTE_SYMBOL].auto;
     }
 
     set position(val) {
@@ -99,6 +109,7 @@ export class Carousel extends Component {
     }
     /** 轮播宽度 */
     get width() {
+        console.log(this.container.offsetWidth);
         return this.container.offsetWidth;
     }
     mount(container) {
@@ -108,6 +119,7 @@ export class Carousel extends Component {
         for (let src of data) {
             const item = document.createElement('img');
             item.src = src;
+            item.style = "width: 7.04rem";
             this[PROPERTY_SYMBOL].children.push(item);
         }
         this.container = container;
@@ -121,22 +133,26 @@ export class Carousel extends Component {
     mounted() {
         this.position = 0;
         // 注释此行禁止原始拖动代码
-        // enableGesture(this.container);
+        enableGesture(this.container);
         this.container.addEventListener('pan', this.panHandler.bind(this));
         this.container.addEventListener('flick', this.flickHandler.bind(this));
         this.container.addEventListener('panend', this.panendHandler.bind(this));
         this.container.addEventListener('mousedown', (event) => {
             event.preventDefault();
         });
-
+        this.container.addEventListener('touchmove', (event) => {
+            event.stopPropagation();
+        });
+        // setTimeout(this.nextFrame.bind(this), 1000);
     }
     render() {
         // 将子元素转化为普通数组
     }
     panHandler(event) {
+        console.log('pan');
         this.disX = event.clientX - this.startX;
         for (let child of this[PROPERTY_SYMBOL].children) {
-            child.style.transition = 'ease 0s';
+            child.style.transition = 'all 0s ease 0s';
             child.style.transform = `translate(${-this.position * this.width + event.dx}px)`;
         }
     }
@@ -195,25 +211,23 @@ export class Carousel extends Component {
     nextFrame() {
         /** 下一轮播位置 */
         let nextPosition = this.position + 1;
-        nextPosition = nextPosition % children.length;
-
+        nextPosition = nextPosition % this[PROPERTY_SYMBOL].children.length;
         /** 当前轮播元素 */
-        const current = children[this.position];
-
+        const current = this[PROPERTY_SYMBOL].children[this.position];
         /** 下一轮播元素 */
-        const next = children[nextPosition];
+        const next = this[PROPERTY_SYMBOL].children[nextPosition];
 
-        next.style.transition = 'ease 0s';
+        next.style.transition = 'ease 1s';
         next.style.transform = `translate(${ -nextPosition * 100 + 100 }%)`;
 
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 current.style.transform = `translate(${ -100 - 100 * this.position }%)`;
-                next.style.transition = '';
+                next.style.transition = 'ease 1s';
                 next.style.transform = `translate(${ -nextPosition * 100 }%)`;
                 this.position = nextPosition;
             });
         });
-        this.timer = setTimeout(nextFrame, 3000);
+        // this.timer = setTimeout(this.nextFrame.bind(this), 1000);
     }
 }

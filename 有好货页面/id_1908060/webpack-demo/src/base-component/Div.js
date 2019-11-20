@@ -3,17 +3,13 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-export default class Tab {
+export default class Div {
     constructor(config){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-
-
         this[PROPERTY_SYMBOL].children = [];
-        this[PROPERTY_SYMBOL].headers = [];
-
         this.created();
     }
 
@@ -24,13 +20,6 @@ export default class Tab {
 
     created(){
         this.root = document.createElement("div");
-        this.headerContainer = document.createElement("div");
-        this.contentContainer = document.createElement("div");
-        this.contentContainer.style.whiteSpace = "nowrap";
-        this.contentContainer.style.overflow = "hidden";
-        this.contentContainer.style.height = "100%";
-        this.root.appendChild(this.headerContainer);
-        this.root.appendChild(this.contentContainer);
         this[STATE_SYMBOL].h = 0;
     }
     mounted(){
@@ -45,20 +34,7 @@ export default class Tab {
 
     appendChild(child){
         this.children.push(child);
-
-        let title = child.getAttribute("tab-title") || "";
-        this[PROPERTY_SYMBOL].headers.push(title);
-
-        let header = document.createElement("header");
-        header.innerText = title;
-        this.headerContainer.appendChild(header);
-        child.appendTo(this.contentContainer);
-        for(let i = 0; i < this.contentContainer.length; i ++) {
-            this.contentContainer.children[i].style.width = "100%";
-            this.contentContainer.children[i].style.height = "100%";
-            this.contentContainer.children[i].style.display = "inline-block";
-        }
-
+        child.appendTo(this.root);
     }
 
 
@@ -74,10 +50,10 @@ export default class Tab {
     setAttribute(name, value){
         if(name == "style") {
             this.root.setAttribute("style", value);
-
-
         }
-
+        if(name == "class") {
+            this.root.setAttribute("class", value);
+        }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
     addEventListener(type, listener){

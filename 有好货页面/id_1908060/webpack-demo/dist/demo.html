@@ -7,10 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        .carousel {
-            /*width: 500px;*/
-            /*overflow: hidden;*/
-            /*white-space: nowrap;*/
+        /*.carousel-wrap {*/
+        /*    background: url("http://images.koolearn.com/fe_upload/2019/11/2019-11-16-1573892701765.png");*/
+        /*}*/
+        .carousel > div > div {
+            background: #eee url("http://images.koolearn.com/fe_upload/2019/11/2019-11-16-1573892701765.png") 0 -3rem no-repeat;
+            background-size: 7.5rem;
         }
         .tab-nav {
             display: flex;
@@ -28,8 +30,9 @@
         }
 
         .tab-header {
-            color: #333;
-            line-height: 45px;
+            color: #fff;
+            font-size: .32rem;
+            margin: 0 .24rem .2rem;
 
         }
         .tab-header header {
@@ -45,12 +48,22 @@
             display: block;
             position: absolute;
             width: 20px;
-            border-bottom: 5px solid;
-            margin: -5px auto 0;
+            border-bottom: 3px solid;
+            margin: 0 auto 0;
+            border-radius: 5px;
             left: 0;
             right: 0;
         }
+
+        .list-title {
+            margin: .5rem .24rem;
+            font-size: .32rem;
+        }
+        html {
+            background: #eee;
+        }
     </style>
+    <script src="//static.koocdn.com/project/m-teach/1.x/common/wap-resize/wap-resize.js"></script>
 </head>
 <body>
 
