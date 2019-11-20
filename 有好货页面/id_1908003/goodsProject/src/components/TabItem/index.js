@@ -1,5 +1,11 @@
-import Component, { PROP_SYMBOL, ATTR_SYMBOL, EVENT_SYMBOL, STATUS_SYMBOL } from '../component';
+import Component, {
+  PROP_SYMBOL,
+  ATTR_SYMBOL,
+  EVENT_SYMBOL,
+  STATUS_SYMBOL
+} from '../component';
 import createComponent from '../createComponent';
+import './index.scss';
 
 export default class TabItem extends Component {
   constructor(attrs) {
@@ -8,9 +14,7 @@ export default class TabItem extends Component {
 
   render() {
     const children = this.children;
-    const tabItem = <div class="o-tab-item">
-      {children}
-    </div>;
+    const tabItem = <div class="o-tab-item">{children}</div>;
 
     return tabItem;
   }
@@ -32,4 +36,4 @@ export default class TabItem extends Component {
     if (!this.$el) return;
     this.$el.classList.remove('active');
   }
-};
+}

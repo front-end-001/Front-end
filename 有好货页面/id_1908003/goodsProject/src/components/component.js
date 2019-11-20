@@ -155,9 +155,18 @@ export default class Component {
     // style class id title
     const commonAttr = ['id', 'class', 'style', 'title'];
     commonAttr.forEach((attrName) => {
-      if (this[PROP_SYMBOL][attrName]) {
-        newEl.setAttribute(attrName, this[PROP_SYMBOL][attrName]);
+      if (!this[PROP_SYMBOL][attrName]) {
+        return;
       }
+      if (attrName === 'class' && typeof this[PROP_SYMBOL][attrName] === 'string') {
+        const calsses = this[PROP_SYMBOL][attrName].split(' ');
+        calsses.forEach((item) => {
+          if (!item) return;
+          newEl.classList.add(item);
+        });
+        return;
+      }
+      newEl.setAttribute(attrName, this[PROP_SYMBOL][attrName]);
     });
 
     const currentEl = this[STATUS_SYMBOL].$el;
@@ -189,9 +198,15 @@ export default class Component {
   appendChild(child) {
     if (!child) return;
 
-    if (!this.validateChild(child)) return;
+    let children = child;
+    if (!Array.isArray(child)) {
+      children = [child];
+    }
 
-    this[STATUS_SYMBOL].children.push(child);
+    children.forEach(item => {
+      if (!this.validateChild(item)) return;
+      this[STATUS_SYMBOL].children.push(item);
+    });
 
     // 还未初始化
     if (!this.$el) {
@@ -251,6 +266,18 @@ export default class Component {
     doDestroy(this);
     this.$el.remove();
     this.triggerEvent('destroyed');
+
+    // todo: 这里还需要父元素把本元素删除
+  }
+
+  removeChild(ele) {
+    if (!ele) return;
+    if (ele instanceof Element) {
+      this.$el.removeChild(ele);
+    } else if (ele.$el instanceof Element) {
+      this[STATUS_SYMBOL].children = this[STATUS_SYMBOL].children.filter(child => (child !== ele));
+      ele.remove();
+    }
   }
 
   /**
@@ -266,7 +293,7 @@ export default class Component {
 
   /**
    * 获取状态
-   * @param {string} name 状态名
+   * @param {string} [name] 状态名
    */
   $getProp(name) {
     if (name) {

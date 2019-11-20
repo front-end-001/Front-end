@@ -14,9 +14,9 @@ module.exports = {
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
       {
         test: /\.css$/i,
-        use: [require.resolve('./component-css-loader.js')],
+        // use: [require.resolve('./component-css-loader.js')],
         // use: ['to-string-loader', 'css-loader'],
-        // use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.s[ac]ss$/i,

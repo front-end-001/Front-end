@@ -1,0 +1,124 @@
+{
+  "total": 100,
+  "since": 0,
+  "list": [{
+    "shop_id": 1,
+    "shop_title": "InfoQ 官方旗舰店",
+    "shop_type": "天猫",
+    "desc": "大V推荐：坚持原创的手作，每一个款式都由创意和手头的材料决定，也都是天时地利的结合。",
+    "labels": ["高冷女王"],
+    "shop_icon": "/static/image/circle2.png",
+    "goods": [{
+      "goods_id": 123,
+      "goods_thumb": "/static/image/square_big_1.png"
+    }, {
+      "goods_id": 234,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }, {
+      "goods_id": 345,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }]
+  }, {
+    "shop_id": 1,
+    "shop_title": "InfoQ 官方旗舰店",
+    "shop_type": "天猫",
+    "desc": "大V推荐：坚持原创的手作，每一个款式都由创意和手头的材料决定，也都是天时地利的结合。",
+    "labels": ["高冷女王"],
+    "shop_icon": "/static/image/circle2.png",
+    "goods": [{
+      "goods_id": 123,
+      "goods_thumb": "/static/image/square_big_1.png"
+    }, {
+      "goods_id": 234,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }, {
+      "goods_id": 345,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }]
+  }, {
+    "shop_id": 1,
+    "shop_title": "InfoQ 官方旗舰店",
+    "shop_type": "天猫",
+    "desc": "大V推荐：坚持原创的手作，每一个款式都由创意和手头的材料决定，也都是天时地利的结合。",
+    "labels": ["高冷女王"],
+    "shop_icon": "/static/image/circle2.png",
+    "goods": [{
+      "goods_id": 123,
+      "goods_thumb": "/static/image/square_big_1.png"
+    }, {
+      "goods_id": 234,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }, {
+      "goods_id": 345,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }]
+  }, {
+    "shop_id": 1,
+    "shop_title": "InfoQ 官方旗舰店",
+    "shop_type": "天猫",
+    "desc": "大V推荐：坚持原创的手作，每一个款式都由创意和手头的材料决定，也都是天时地利的结合。",
+    "labels": ["高冷女王"],
+    "shop_icon": "/static/image/circle2.png",
+    "goods": [{
+      "goods_id": 123,
+      "goods_thumb": "/static/image/square_big_1.png"
+    }, {
+      "goods_id": 234,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }, {
+      "goods_id": 345,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }]
+  }, {
+    "shop_id": 1,
+    "shop_title": "InfoQ 官方旗舰店",
+    "shop_type": "天猫",
+    "desc": "大V推荐：坚持原创的手作，每一个款式都由创意和手头的材料决定，也都是天时地利的结合。",
+    "labels": ["高冷女王"],
+    "shop_icon": "/static/image/circle2.png",
+    "goods": [{
+      "goods_id": 123,
+      "goods_thumb": "/static/image/square_big_1.png"
+    }, {
+      "goods_id": 234,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }, {
+      "goods_id": 345,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }]
+  }, {
+    "shop_id": 1,
+    "shop_title": "InfoQ 官方旗舰店",
+    "shop_type": "天猫",
+    "desc": "大V推荐：坚持原创的手作，每一个款式都由创意和手头的材料决定，也都是天时地利的结合。",
+    "labels": ["高冷女王"],
+    "shop_icon": "/static/image/circle2.png",
+    "goods": [{
+      "goods_id": 123,
+      "goods_thumb": "/static/image/square_big_1.png"
+    }, {
+      "goods_id": 234,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }, {
+      "goods_id": 345,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }]
+  }, {
+    "shop_id": 1,
+    "shop_title": "InfoQ 官方旗舰店",
+    "shop_type": "天猫",
+    "desc": "大V推荐：坚持原创的手作，每一个款式都由创意和手头的材料决定，也都是天时地利的结合。",
+    "labels": ["高冷女王"],
+    "shop_icon": "/static/image/circle2.png",
+    "goods": [{
+      "goods_id": 123,
+      "goods_thumb": "/static/image/square_big_1.png"
+    }, {
+      "goods_id": 234,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }, {
+      "goods_id": 345,
+      "goods_thumb": "/static/image/square_small_1.png"
+    }]
+  }]
+}
