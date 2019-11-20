@@ -1,3 +1,5 @@
+import '../styles/scrollView.scss'
+
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
@@ -9,7 +11,7 @@ export default class ScrollView {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        
+
 
         this[PROPERTY_SYMBOL].children = [];
 
@@ -25,7 +27,7 @@ export default class ScrollView {
         this.root = document.createElement("div");
         this.placeHolder = document.createElement("div");
         // this.placeHolder.innerText = '加载更多';
-        this.placeHolder.style.backgroundColor = 'lightgreen';
+        this.placeHolder.classList.add('scroll-container');
         this.root.appendChild(this.placeHolder);
 
         let triggered = false;
@@ -60,7 +62,7 @@ export default class ScrollView {
 
     appendChild(child){
         this.children.push(child);
-        child.appendTo(this.root);
+        child.appendTo(this.placeHolder);
         this.root.appendChild(this.placeHolder);
     }
 

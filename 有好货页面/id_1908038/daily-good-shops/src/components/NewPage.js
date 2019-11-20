@@ -1,17 +1,12 @@
-import {create} from "../create.js";//使用jsx
-import css from "../styles/listView.css"
+import {create} from "../create.js"; //使用jsx
+import "../styles/newPage.scss";
 
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-/* vue scoped */
-// let styleElement = document.createElement("style");
-// styleElement.innerHTML = css;
-// document.getElementsByTagName("head")[0].appendChild(styleElement);
-
-export default class ListView {
+export default class NewPage {
     constructor(config) {
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -31,7 +26,7 @@ export default class ListView {
 
     created() {
         this.root = document.createElement("div");
-        this.root.classList.add("list-view");
+        this.root.classList.add("new-page");
         this.render().appendTo(this.root);
     }
     mounted() {
@@ -47,15 +42,36 @@ export default class ListView {
 
     render() {
         let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        console.log(data);
+
         return <div>
-            hello
-            {
+            <div class="item-box">{
                 data.map(item => (
-                    // <div><span class="x" > {item.a} </span><span class="x">{item.b}</span></div>
-                    <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
+                    <div class="item">
+                        <div class="top">
+                            <img class="icon" src={item.icon} />
+                            <div class="attention">
+                                <img src="http://static001.geekbang.org/univer/classes/js_dev/static/icon/follow.svg" />
+                                该店已被3.9万人关注啦
+                            </div>
+                        </div>
+                        <div class="center">
+                            <div>
+                                <div class="name">{item.name}</div>
+                                <div class="promotion">{item.promotion}</div>
+                            </div>
+                            <div class="enter">进店&nbsp;></div>
+                        </div>
+                        <div class="bottom">{
+                            item.items.map(i => (
+                                <img src={i.image} />
+                            ))
+                        }</div>
+                    </div>
                 ))
             }
             </div>
+        </div>
     }
 
     get style() {
@@ -83,7 +99,7 @@ export default class ListView {
         if (name == "style") {
             this.root.setAttribute("style", value);
         }
-        if (name == "data") {//获取data之后，调用render
+        if (name == "data") { //获取data之后，调用render
             this[ATTRIBUTE_SYMBOL][name] = value;
 
             this.root.innerHTML = "";

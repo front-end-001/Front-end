@@ -18,7 +18,7 @@
     let x = 0,
       y = 0;
     main.addEventListener('pan', event => {
-      console.log(event.dx, event.dy);
+      // console.log(event.dx, event.dy);
       main.style.transform = `translate(${event.dx + x}px, ${event.dy + y}px)`;
     })
     main.addEventListener('panned', event => {
