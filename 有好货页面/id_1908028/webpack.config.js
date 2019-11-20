@@ -1,40 +1,63 @@
 /*
  * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-09-15 20:20:07
- * @LastEditTime: 2019-10-17 20:26:20
+ * @Date: 2019-09-07 18:02:02
+ * @LastEditTime: 2019-09-19 15:19:45
  * @LastEditors: Please set LastEditors
  */
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = {
-  entry: "./script.js",
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js"
+  },
+  devtool: "source-map",
+  mode: "development",
+  devServer: {
+    contentBase: "./dist",
+    open: true
+  },
   module: {
     rules: [
       {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: "postcss-loader"
+          }
+        ]
+      },
+      {
         test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env"],
             plugins: [
-              ["babel-plugin-transform-react-jsx", { pragma: "create" }]
+              ["@babel/plugin-transform-react-jsx", { pragma: "create" }]
             ]
           }
-        }
-      },
-      {
-        test: /\.component$/,
-        use: {
-          loader: require.resolve("./component-loader.js")
         }
       }
     ]
   },
-  mode: "development",
-  devServer: {
-    contentBase: "./dist",
-    hot: true
-  },
-  optimization: {
-    minimize: false
-  }
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./public/index.html"
+    })
+  ]
 };
