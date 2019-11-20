@@ -1,4 +1,4 @@
-import {enableGesture} from './gesture.js'
+import {enableGesture} from './tools/gesture.js'
 // 使用symbol私有唯一化
 const PROPERTY_SYMBOL = Symbol('property');
 const ATTRIBUTE_SYMBOL = Symbol('attribute');
