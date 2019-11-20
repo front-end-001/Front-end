@@ -1,8 +1,5 @@
 import BaseComponent from '../Base/BaseComponent';
 import { createElement } from '../../babel/babelTransformToJSX';
-import { Title } from '../index';
-import { spawn } from 'child_process';
-
 class ListView extends BaseComponent {
   constructor() {
     super();
@@ -50,24 +47,29 @@ class ListView extends BaseComponent {
           this.appendChild(child);
         }
       }
+    } else if (name === 'direction' && this.root) {
+      if (value === 'row') {
+        this.root.classList.remove('listView')
+        this.root.classList.add('listView_row')
+      }
     }
   }
 
   generateChildItem(data: any) {
+
     if (this.ATTRIBUTE.renderItem) {
-      return this.ATTRIBUTE.renderItem(data)
+      return (
+        <div class={this.PROPERTY.itemStyle ? this.PROPERTY.itemStyle : 'list-item'}>
+          {
+            this.ATTRIBUTE.renderItem(data)
+          }
+        </div>
+      );
     }
-    debugger
     let childRoot = (
       <div class='list-item'>
 
-        <div class='list-item_title'>
-          <img src={data.icon} class='list-item_title_image' ></img>
-          <Title level="4" class='list-item_title_content'>{data.title}</Title>
-        </div>
 
-
-        <div class='list-item_content'>{data.content}</div>
       </div>
     );
     return childRoot;

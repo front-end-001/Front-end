@@ -37,18 +37,16 @@
       } */
 
       .header {
-        height: 0.574rem;
+        height: 0.6rem;
         background-color: #892bfd;
         margin: 0 0 0 0;
-        padding: 0.48rem 0 0 0;
+        padding: 0.5em 0 0.2em 0em;
         display: flex;
         justify-content: center;
       }
 
       .icon-header {
-        width: 1.99rem;
-        height: 0.574rem;
-        background-image: url('../imgs/dailyShops/mipmap-xxhdpi/icon 每日好店.png');
+        height: 100%;
       }
     </style>
 
@@ -62,13 +60,13 @@
       //   e.preventDefault();
       // });
       //避免上下滚屏
-      // document.addEventListener(
-      //   'touchmove',
-      //   function(e) {
-      //     if (e.touches.length == 2) e.preventDefault();
-      //   },
-      //   { passive: false }
-      // );
+      document.addEventListener(
+        'touchmove',
+        function(e) {
+          if (e.touches.length == 2) e.preventDefault();
+        },
+        { passive: false }
+      );
       document.addEventListener(
         'touchmove',
         function(e) {
@@ -82,9 +80,9 @@
   </head>
   <body>
     <div id="root" class="root">
-      <!-- <h1 id="header" class="header">
-        <i class="icon-header" alt="每日好店"></i>
-      </h1> -->
+      <!-- <div id="header" class="header">
+        <img src='../imgs/dailyShops/mipmap-hdpi/icon 每日好店.png' class="icon-header" alt="每日好店"></i>
+      </div> -->
       <div id="content" class="content"></div>
     </div>
   </body>

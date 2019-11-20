@@ -49,7 +49,7 @@ class Tab extends BaseComponent {
       this.triggerEvent('activeIndexChange');
     });
   }
-
+  
   activeIndexChange() {
     if (!this.contentContainer) return;
     // 删除所有子节点

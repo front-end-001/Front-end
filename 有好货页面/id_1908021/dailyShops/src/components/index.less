@@ -3,7 +3,90 @@
 @import './carousel/carousel.less';
 @import './ListView/listView.less';
 @import './title/title.less';
+@import './shop/shop.less';
 
 .hbw-ListView {
   margin: 1em 0.333rem;
+}
+
+.shop_fans {
+  display: flex;
+  background-color: rgba(245, 245, 245, 1);
+  border-radius: 16px;
+  padding: 0.25em;
+  margin-bottom: 0.5em;
+  align-items: flex-start;
+  img {
+    align-self: center;
+    width: 1em;
+    height: 1em;
+  }
+  span {
+    align-self: center;
+    margin-left: 1em;
+    color: #333333;
+    font-weight: 400;
+    font-size: 32px;
+  }
+}
+
+.fansTag {
+  position: absolute;
+  top: 5%;
+  right: 0px;
+  font-size: 28px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 35px 0px 0px 35px;
+  padding: 0.5em 1em;
+  img {
+    vertical-align: middle;
+  }
+}
+
+.enterBtn {
+  position: absolute;
+  top: 20%;
+  right: 1em;
+  font-size: 36px;
+  font-weight: 500;
+  font-family: PingFangSC-Medium, Microsoft YaHei, sans-serif;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 36px;
+  padding: 0.3em 0.8em;
+  img {
+    vertical-align: middle;
+  }
+}
+
+.enterBtnYellow {
+  position: absolute;
+  top: 5%;
+  right: 1em;
+  padding: 0.35em 0.8em;
+  background: linear-gradient(360deg, #fec900, #ffac00);
+  background: -webkit-linear-gradient(360deg, #fec900, #ffac00);
+  color: white;
+  font-size: 32px;
+  border-radius: 1em;
+}
+
+.gradientBgListItem {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0.5em 0.5em;
+  margin: 0.5em 0.5em;
+  border-radius: 0.15rem;
+  background-image: url(../../imgs/dailyShops/mipmap-hdpi/itemBgImage03.png);
+  background-size: 100% 100%;
+  .hbw-shop-items {
+    img {
+      width: 405px;
+      height: 405px;
+    }
+  }
 }

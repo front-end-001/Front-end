@@ -43,6 +43,10 @@ module.exports = {
             loader: 'less-loader' // compiles Less to CSS
           }
         ]
+      },
+      {
+        test: /\.(png|jpg)$/,
+        use: 'url-loader'
       }
     ]
   }
