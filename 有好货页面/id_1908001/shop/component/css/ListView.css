@@ -1,3 +1,97 @@
-.color {
-    color: blue;
+.main {
+    white-space: nowrap;
+}
+.shop {
+    background-color: white;
+    margin-bottom: 20px;
+    border-radius: 18px;
+    padding: 15px;
+    height: 360px;
+}
+.shopInfo {
+    background-color: white;
+    width: 39%;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    border-radius: 18px;
+    padding: 15px;
+    display: inline-block;
+    height: 100px;
+}
+.topGoodInfo {
+
+}
+.topGoodImg {
+    width: 50%;
+    float: left;
+}
+.topShopName {
+    vertical-align: top;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+.topIcon {
+    width: 20px;
+    vertical-align: middle;
+}
+.topTmallImg {
+    width: 20px;
+    display: block;
+}
+.shopName {
+    vertical-align: top;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 20px;
+}
+.tmallImg {
+    width: 30px;
+    display: block;
+}
+.goToShopButton {
+    background-color: #ffab0f;
+    margin-top: 4px;
+    width: 23%;
+    height: 35px;
+    float: right;
+    border-radius: 10px;
+    border: 0;
+    color: white;
+    font-size: 17px;
+}
+.icon {
+    width: 40px;
+    vertical-align: middle;
+}
+.goodShopIcon {
+    width: 20px;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+.shopDesc {
+    background-color: #EFEFEF;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+}
+.goods {
+
+}
+.goodsFirstDiv {
+    display: block;
+    width: 67.3%;
+    overflow: hidden;
+    float: left;
+}
+.goodsSecondDiv {
+    display: block;
+    height: 50%;
+    overflow: hidden;
+}
+.goodImg {
+    width: 100%;
 }

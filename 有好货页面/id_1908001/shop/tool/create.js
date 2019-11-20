@@ -1,5 +1,5 @@
-import Text from "../component/Text"
-import Wrapper from "../component/Wrapper"
+import Text from "../component/base/Text"
+import Wrapper from "../component/base/Wrapper"
 
 export function myCreate (Class, attributes, ...children) {
     let object = null

@@ -1,10 +1,94 @@
-[{
-  "a": 1,
-  "b": 2
-}, {
-  "a": 3,
-  "b": 4
-}, {
-  "a": 5,
-  "b": 6
-}]
+{
+  "topShops": [{
+    "id": "789",
+    "name": "infoQ官方旗舰店",
+    "icon": "circle2.png",
+    "desc": "好店君: 该店已被1.3万人关注, 快来关注吧!",
+    "goods": [{
+      "id": "7891",
+      "img": "list-one@2x.png"
+    },
+      {
+        "id": "1231",
+        "img": "list-one@2x.png"
+      },
+      {
+        "id": "1231",
+        "img": "list-one@2x.png"
+      }]
+  },
+    {
+      "id": "789",
+      "name": "infoQ官方旗舰店",
+      "icon": "circle2.png",
+      "desc": "好店君: 该店已被1.3万人关注, 快来关注吧!",
+      "goods": [{
+        "id": "7891",
+        "img": "list-one@2x.png"
+      },
+        {
+          "id": "1231",
+          "img": "list-one@2x.png"
+        },
+        {
+          "id": "1231",
+          "img": "list-one@2x.png"
+        }]
+    }],
+  "shops": [
+    {
+      "id": "123",
+      "name": "极客时间旗舰店",
+      "icon": "circle4.png",
+      "desc": "好店君: 该店已被1.3万人关注, 快来关注吧!",
+      "goods": [
+        {
+          "id": "1231",
+          "img": "list-one@2x.png"
+        },
+        {
+          "id": "1231",
+          "img": "list-one-one@2x.png"
+        },
+        {
+          "id": "1231",
+          "img": "list-one-two@2x.png"
+        }
+      ]},
+    {
+      "id": "456",
+      "name": "极客大学天猫店",
+      "icon": "circle3.png",
+      "desc": "好店君: 该店已被1.3万人关注, 快来关注吧!",
+      "goods": [{
+        "id": "4561",
+        "img": "list-two@2x.png"
+      },
+        {
+          "id": "1231",
+          "img": "list-two-one@2x.png"
+        },
+        {
+          "id": "1231",
+          "img": "list-two-two@2x.png"
+        }]
+    },
+    {
+      "id": "789",
+      "name": "infoQ官方旗舰店",
+      "icon": "circle2.png",
+      "desc": "好店君: 该店已被1.3万人关注, 快来关注吧!",
+      "goods": [{
+        "id": "7891",
+        "img": "list-one@2x.png"
+      },
+        {
+          "id": "1231",
+          "img": "list-one@2x.png"
+        },
+        {
+          "id": "1231",
+          "img": "list-one@2x.png"
+        }]
+    }]
+}

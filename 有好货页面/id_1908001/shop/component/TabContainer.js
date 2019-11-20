@@ -1,37 +1,28 @@
-const PROPERTY_SYMBOL = Symbol("property")
-const ATTRIBUTE_SYMBOL = Symbol("property")
-const STATE_SYMBOL = Symbol("state")
 import initGesture from '../tool/gesture'
-export default class TabContainer {
-    constructor() {
-        this[PROPERTY_SYMBOL] = Object.create(null)
-        this[ATTRIBUTE_SYMBOL] = Object.create(null)
-        this[STATE_SYMBOL] = Object.create(null)
-        this[PROPERTY_SYMBOL].children = []
-        this[PROPERTY_SYMBOL].headers = []
-        this.init()
-    }
-    init () {
-        this.container = document.createElement('div')
-        this.container.addEventListener('touchmove', (e) => {
+import Component from './base/Component'
+
+export default class TabContainer extends Component {
+    // TODO 此处需再重构, 改造为return
+    render () {
+        this.tabContainer = document.createElement('div')
+        this.tabContainer.addEventListener('touchmove', (e) => {
             e.cancelBubble = true
             e.stopImmediatePropagation()
         }, {
             passive:false
         })
-        this.container.style.height = '100%'
+        this.tabContainer.style.height = '100%'
 
         this.headerContainer = document.createElement('div')
         this.headerContainer.style.height = '93px'
-        this.container.appendChild(this.headerContainer)
+        this.tabContainer.appendChild(this.headerContainer)
 
         this.contentContainer = document.createElement('div')
-        this.contentContainer.style.overflow = 'hidden'
         this.contentContainer.style.whiteSpace = 'nowrap'
         this.contentContainer.style.flex = '1'
-        this.container.appendChild(this.contentContainer)
+        this.tabContainer.appendChild(this.contentContainer)
         initGesture(this.contentContainer)
-        this[STATE_SYMBOL].position = 0
+        this.setState('position', 0)
         this.contentContainer.addEventListener('pan', event => {
             if (event.isVertical) {
                 return
@@ -78,9 +69,10 @@ export default class TabContainer {
                 this.contentContainer.children[i].style.transform = `translateX(${- width * position}px)`
             }
         })
-    }
-    appendTo (body) {
-        body.appendChild(this.container)
+        this.tabContainer.appendTo = (body) => {
+            body.appendChild(this.tabContainer)
+        }
+        return this.tabContainer
     }
     appendChild (child) {
         const title = child.getAttribute('tabTitle')
@@ -89,55 +81,33 @@ export default class TabContainer {
         }
         const header = document.createElement('div')
         header.innerText = title
-        // header.id = this.children.length
-        const n = this.children.length
+        const n = this.contentContainer.children.length
+        // TODO 拿出去
         header.style.display = 'inline-block'
         header.style.height = '93px'
         header.style.fontFamily = 'PingFang SC'
-        header.style.fontSize = '20px'
-        header.style.margin = '20px 35px 0 35px'
+        header.style.fontSize = '23px'
+        header.style.color = 'white'
+        header.style.margin = '25px 35px 0 0'
         header.addEventListener('click', e => {
             /*child.setAttribute("style", ``)
             const current = this.children[this[STATE_SYMBOL].position]
             current.setAttribute("style", ``)
             this[STATE_SYMBOL].position = header.id
             */
-            this[STATE_SYMBOL].position = n
-            console.log('++++n----', n, this.contentContainer.children.length)
+            this.setState('position', n)
             for(let i = 0; i < this.contentContainer.children.length; i ++) {
                 this.contentContainer.children[i].style.transition = "ease 0.5s"
                 this.contentContainer.children[i].style.transform = `translateX(${-n * 100}%)`
             }
         })
         this.headerContainer.appendChild(header)
-        this.headers.push(header)
-        this.children.push(child)
         child.appendTo(this.contentContainer)
         for(let i = 0; i < this.contentContainer.children.length; i ++) {
             this.contentContainer.children[i].style.display = "inline-block"
             this.contentContainer.children[i].style.width = "100%"
-            this.contentContainer.children[i].style.verticalAlign = "true"
             this.contentContainer.children[i].style.height = "100%"
+            this.contentContainer.children[i].style.verticalAlign = "true"
         }
-    }
-    get children () {
-        return this[PROPERTY_SYMBOL].children
-    }
-    get headers () {
-        return this[PROPERTY_SYMBOL].headers
-    }
-    setAttribute (name, value) {
-        if (name === 'className') {
-            this.container.classList.add(value)
-        }
-        if (name === 'style') {
-            this.container.setAttribute('style', value)
-        }
-        this.container.style.display = "flex"
-        this.container.style.flexDirection = "column"
-        return this[ATTRIBUTE_SYMBOL].name = value
-    }
-    getAttribute (name) {
-        return this[ATTRIBUTE_SYMBOL].name
     }
 }

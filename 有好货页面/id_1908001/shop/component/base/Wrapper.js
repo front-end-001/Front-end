@@ -24,6 +24,12 @@ export default class Wrapper {
                 this.container.style[p] = value[p]
             return
         }
+        if (name === 'className') {
+            this.container.classList.add(value)
+        }
+        if (name === 'src') {
+            this.container.src = value
+        }
         this.container.setAttribute(name, value)
     }
     getAttribute (name) {

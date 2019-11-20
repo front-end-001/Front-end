@@ -9,7 +9,7 @@ export default class Text {
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
         this[EVENT_SYMBOL] = Object.create(null);
         this[STATE_SYMBOL] = Object.create(null);
-        
+
         this.text = config || "";
 
         this[PROPERTY_SYMBOL].children = [];
@@ -47,14 +47,17 @@ export default class Text {
         return this[PROPERTY_SYMBOL].children;
     }
     getAttribute(name){
-        if(name == "style") {
+        if(name === 'style') {
             return this.root.getAttribute("style");
         }
         return this[ATTRIBUTE_SYMBOL][name]
     }
     setAttribute(name, value){
-        if(name == "style") {
+        if(name === 'style') {
             this.root.setAttribute("style", value);
+        }
+        if (name === 'className') {
+            this.root.classList.add(value)
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
     }
