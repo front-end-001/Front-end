@@ -1,5 +1,14 @@
+import { Text } from './Text';
+import { Wrapper } from './Wrapper';
+import flatten from '_array-flatten@2.1.2@array-flatten';
 export function h(component, props, ...children) {
-  const instance = new component;
+  let instance = null;
+  if (typeof component === 'string') {
+    instance = new Wrapper(component);
+  } else {
+    instance = new component;
+  }
+  instance.created();
   for (let [name, val] of Object.entries(props || {})) {
     if (/^on-([\s\S]+)/.exec(name)) {
       instance.addEventListener(RegExp.$1, val);
@@ -7,11 +16,16 @@ export function h(component, props, ...children) {
       instance.setAttribute(name, val);
     }
   }
-  instance.appendChildren(children);
+  for (let child of flatten(children || [])) {
+    if (['string', 'number'].indexOf(typeof (child)) > -1) {
+      child = new Text(child);
+    }
+    instance.appendChild(child);
+  }
   return instance;
 }
 export const ATTR_SYMBOL = Symbol('attr');
-export const PROP_SYMBOL = Symbol('prop');
+export const PROP_SYMBOL = Symbol('prop');// ？ 定义
 export const STATE_SYMBOL = Symbol('state');
 export const EVENT_SYMBOL = Symbol('event');
 export class BaseComponent {
@@ -20,7 +34,7 @@ export class BaseComponent {
     this[ATTR_SYMBOL] = Object.create(null);
     this[PROP_SYMBOL] = Object.create(null);
     this[EVENT_SYMBOL] = Object.create(null);
-    this.created();
+    this[PROP_SYMBOL].children = [];
   }
   created() {
     this.root = document.createElement('div');
@@ -33,6 +47,12 @@ export class BaseComponent {
 
   }
   setAttribute(name, val) {
+    if (name === 'class') {
+      for (let _val of val.split(/\s+/).filter(s => s !== '')) {
+        this.root.classList.add(_val);
+      }
+      return val;
+    }
     return this[ATTR_SYMBOL][name] = val;
   }
   getAttribute(name) {
@@ -54,10 +74,12 @@ export class BaseComponent {
       }
     }
   }
-
-  appendChildren(children) {
-    for (let child of children) {
-      child.mount(this.root);
-    }
+  appendChild(child) {
+    this[PROP_SYMBOL].children.push(child);
+    child.mount(this.root);
   }
 }
+/*
+ constructor,created 执行顺序调整：先 constructor ，再 created
+ ? appendChild 与 mount
+*/
