@@ -1,0 +1,1 @@
+export const getList = () => fetch('../data/list.json').then(r => r.json())

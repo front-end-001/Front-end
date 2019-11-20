@@ -1,15 +1,15 @@
-import { enableGesture  } from '../utils/gesture'
+import { enableGesture } from '../utils/gesture'
 
-const ATTRIBUTE_SYMBOL = Symbol('arrtibute')
+const ATTRIBUTE_SYMBOL = Symbol('attribute')
 const PROPERTY_SYMBOL = Symbol('property')
 const STATE_SYMBOL = Symbol('state')
 
-export default class TavView {
+export default class TabView {
     constructor() {
         this[ATTRIBUTE_SYMBOL] = Object.create(null)
         this[PROPERTY_SYMBOL] = Object.create(null)
         this[STATE_SYMBOL] = Object.create(null)
-        
+
         this[PROPERTY_SYMBOL].children = []
         this[PROPERTY_SYMBOL].headers = []
 
@@ -30,90 +30,85 @@ export default class TavView {
 
     create() {
         this.root = document.createElement('div')
-
         this.contentContainer = document.createElement('div')
-        this.contentContainer.classList.add('tab-content')
-
+        this.contentContainer.className = 'tab-content'
         this.listContainer = document.createElement('div')
-        this.listContainer.classList.add('tab-container-list')
-
+        this.listContainer.className = 'tab-content-list'
         this.contentContainer.appendChild(this.listContainer)
-
         this.headerContainer = document.createElement('div')
-        this.headerContainer.classList.add('tab-header')
-
+        this.headerContainer.className = 'tab-header'
         this.root.appendChild(this.headerContainer)
         this.root.appendChild(this.contentContainer)
 
         enableGesture(this.listContainer)
-
         this[STATE_SYMBOL].position = 0
-
-        this.root.addEventListener('touchmove', e => {
-            e.cancelBubble = true
-            e.stopImmediatePropagation()
+        this.root.addEventListener('touchmove', event => {
+            event.cancelBubble = true
+            event.stopImmediatePropagation()
         }, { passive: false })
 
-        this.listContainer.addEventListener('pan', e => {
-            if (e.isVertical) return 
-            
+        this.listContainer.addEventListener("pan", event => {
+            if (event.isVertical) return
             let width = this.contentContainer.getBoundingClientRect().width
-            let dx = e.dx
-            
-            if (this[STATE_SYMBOL].position === 0 && e.dx > 0) {
-                dx /= 2
+            let dx = event.dx
+            if (this[STATE_SYMBOL].position === 0 && event.dx > 0) {
+                dx = dx / 2
             }
-
-            if (this[STATE_SYMBOL].position === this.listContainer.children.length - 1 && e.dx > 0) {
-                dx /= 2
+            if (this[STATE_SYMBOL].position === this.listContainer.children.length - 1 && event.dx > 0) {
+                dx = dx / 2
             }
-
             for (let i = 0; i < this.listContainer.children.length; i++) {
                 this.listContainer.children[i].style.transition = 'ease 0s'
                 this.listContainer.children[i].style.transform = `translateX(${dx - width * this[STATE_SYMBOL].position}px)`
             }
         })
 
-        this.listContainer.addEventListener('panedn', e => {
-            if (e.isVertical) return 
-
-            e.preventDefault()
+        this.listContainer.addEventListener("panend", event => {
+            if (event.isVertical) return
             let position = this[STATE_SYMBOL].position
             let width = this.listContainer.getBoundingClientRect().width / 3
+            event.preventDefault()
             let isLeft
-
-            if (e.isFlick) {
-                if (e.dx > 0) {
+            if (event.isFlick) {
+                if (event.dx > 0) {
                     position--
                     isLeft = true
-                } else {
+                }
+                if (event.dx < 0) {
                     position++
                     isLeft = false
                 }
             } else {
-                if (e.dx > width / 2) {
+                if (event.dx > width / 2) {
                     position--
                     isLeft = true
-                } else if (e.dx < -(width / 2)) {
+                } else if (event.dx < -(width / 2)) {
                     position++
                     isLeft = false
-                } else if (e.dx > 0) {
+                } else if (event.dx > 0) {
                     isLeft = false
                 } else {
                     isLeft = true
                 }
             }
-
-            if (position < 0) position = 0
-            if (position >= this.listContainer.children.length) position = this.listContainer.children.length - 1
-            
+            if (position < 0) {
+                position = 0
+            }
+            if (position >= this.listContainer.children.length) {
+                position = this.listContainer.children.length - 1
+            }
             for (let i = 0; i < this.listContainer.children.length; i++) {
                 this.listContainer.children[i].style.transition = 'ease 0s'
-                this.listContainer.children[i].style.transform = `translateX(${-width * position}px)`
+                this.listContainer.children[i].style.transform = `translateX(${-width * (position)}px)`
             }
-
             this[STATE_SYMBOL].position = position
-
+            for (let i = 0; i < this.headerContainer.children.length; i++) {
+                if (i === position) {
+                    this.headerContainer.children[i].classList.add('tab-active')
+                } else {
+                    this.headerContainer.children[i].classList.remove('tab-active')
+                }
+            }
         })
     }
 
@@ -135,35 +130,30 @@ export default class TavView {
     }
 
     appendChild(child) {
-        const len = this.children.length
-
+        const n = this.children.length
         this.children.push(child)
-        child.setAttribute('index', len)
+        child.setAttribute('index', n)
         child.appendTo(this.listContainer)
         this.listContainer.style.width = `${this.children.length}00%`
 
         let title = child.getAttribute('tab-title') || ''
         this.headers.push(title)
-
         let header = document.createElement('span')
         header.innerText = title
         this.headerContainer.appendChild(header)
         this.headerContainer.children[0].classList.add('tab-active')
 
         header.addEventListener('click', e => {
-            this[STATE_SYMBOL].position = len
-
+            this[STATE_SYMBOL].position = n
             for (let i = 0; i < this.listContainer.children.length; i++) {
                 this.listContainer.children[i].style.width = '100%'
                 this.listContainer.children[i].style.height = '100%'
-                this.listContainer.children[i].style.transition = 'ease 0s'
-                this.listContainer.children[i].style.transform = `translateX(${-len * 100}%)`
+                this.listContainer.children[i].style.transition = 'ease 0.5s'
+                this.listContainer.children[i].style.transform = `translateX(${-n * (100)}%)`
             }
-
-            for (let i = 0; i < this.headerContainer.children; i++) {
+            for (let i = 0; i < this.headerContainer.children.length; i++) {
                 this.headerContainer.children[i].classList.remove('tab-active')
             }
-
             header.classList.add('tab-active')
         })
 
@@ -172,5 +162,15 @@ export default class TavView {
             this.listContainer.children[i].style.height = '100%'
         }
     }
-    
-}
+
+    toggleTab(e) {
+        let children = Array.from(e.currentTarget.parentElement.children)
+        children.map(val => val.classList.remove('tab-active'))
+        e.currentTarget.classList.add('tab-active')
+        this.moveContent(children.findIndex(val => val == e.currentTarget))
+    }
+
+    moveContent(idx) {
+        this.listContainer.style.transform = `translateX(${idx * -(100 / this.children.length)}%)`
+    }
+} 
