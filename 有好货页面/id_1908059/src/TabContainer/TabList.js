@@ -1,7 +1,7 @@
 import MyCreate, { Component } from "MyCreate";
 import cx from "classnames";
 import EventBus from "eventbusjs";
-import "./TabList.css";
+import "./TabList.common.css";
 
 export const list = ["推荐", "有趣的店", "品牌新店"];
 

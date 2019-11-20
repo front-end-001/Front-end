@@ -7,9 +7,9 @@ import {
   ease
 } from "~/lib/animation";
 import ListContainer from "./ListContainer";
-import mockListData from "./mockListData";
+import mockListData from "./tabConfig";
 
-import "./Swiper.css";
+import "./Swiper.common.css";
 
 export default class Swiper extends Component {
   componentDidMount() {
@@ -173,13 +173,14 @@ export default class Swiper extends Component {
   }
 
   render() {
+    console.log(mockListData)
     return (
       <div className="Swiper">
         <div className="SwiperHeader" />
         <div className="Swiper-container">
-          <ListContainer data={mockListData} index={1} />
-          {/*<ListContainer data={mockListData[1]} index={2} />*/}
-          {/*<ListContainer data={mockListData[2]} index={3} />*/}
+          <ListContainer data={mockListData[0]} index={1} />
+          <ListContainer data={mockListData[1]} index={2} />
+          <ListContainer data={mockListData[2]} index={3} />
         </div>
       </div>
     );

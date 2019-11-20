@@ -1,8 +1,8 @@
 const data = [
-  "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-  "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-  "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-  "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+  "https://gdp.alicdn.com/imgextra/i2/890482188/O1CN01tUgCjv1S299yk5IhF_!!890482188.jpg",
+  "https://gdp.alicdn.com/imgextra/i3/928417138/O1CN014QBKDO22bFgaCq2PE_!!928417138.jpg",
+  "https://gdp.alicdn.com/imgextra/i3/925649214/O1CN01V8mbod2Hw3uzDCDhs_!!925649214.jpg",
+  "https://gdp.alicdn.com/imgextra/i3/661559176/O1CN014RdRyW2HeertAYR0q_!!661559176.jpg"
 ];
 
 const PROPERTY_SYMBOL = Symbol("property");
@@ -13,7 +13,7 @@ const STATE_SYMBOL = Symbol("color");
 export default class Carousel {
   constructor({
     container,
-    duration = 3000, // porp
+    duration = 3000, // prop
     elementWidth = 500, // prop
     transitionMethod = linear,
     transitionDuration = 500, //
@@ -268,7 +268,7 @@ export default class Carousel {
 
   created() {
     this.createChildren();
-    // this.appendTo(this[PROPERTY_SYMBOL].container);
+    this.appendTo(this[PROPERTY_SYMBOL].container);
   }
 
   mounted() {

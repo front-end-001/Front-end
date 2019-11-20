@@ -24,7 +24,7 @@
 
 .Swiper-item {
   width: 100vw;
-  height: 200vh;
+  min-height: 100vh;
   flex-direction: column;
   padding: 34px 17px 0;
   box-sizing: border-box;

@@ -134,16 +134,19 @@ function enableGesture(main) {
   main.addEventListener("mousedown", mousedown);
 
   let touchstart = event => {
+    event.stopPropagation()
     for (let touch of event.changedTouches) {
       contexts[touch.identifier] = Object.create(null);
       start(touch, contexts[touch.identifier]);
     }
   };
   let touchmove = event => {
+    event.stopPropagation()
     for (let touch of event.changedTouches)
       move(touch, contexts[touch.identifier]);
   };
   let touchend = event => {
+    event.stopPropagation()
     for (let touch of event.changedTouches) {
       end(touch, contexts[touch.identifier]);
       delete contexts[touch.identifier];
