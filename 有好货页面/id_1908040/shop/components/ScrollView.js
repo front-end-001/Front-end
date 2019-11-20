@@ -6,6 +6,10 @@ import {
     PROPERTY_SYMBOL,
     ATTRIBUTE_SYMBOL
   } from './Component.js';
+import ScrollViewCss from './css/ScrollView.scss?classname=scroll-view';
+let styleElement = document.createElement('style');
+styleElement.innerHTML = ScrollViewCss;
+document.getElementsByTagName('head')[0].appendChild(styleElement);
 
 class ScrollView extends Component {
   constructor() {
@@ -14,8 +18,9 @@ class ScrollView extends Component {
   }
   created () {
     this[PROPERTY_SYMBOL].root = document.createElement('div');
+    this[PROPERTY_SYMBOL].root.classList.add('scroll-view');
     this[PROPERTY_SYMBOL].placeHolder = document.createElement('div');
-    this[PROPERTY_SYMBOL].placeHolder.style.backgroundColor = 'lightgreen';
+    this[PROPERTY_SYMBOL].placeHolder.classList.add('scroll-bottom-holder');
     this[PROPERTY_SYMBOL].root.appendChild(this[PROPERTY_SYMBOL].placeHolder);
 
     this[PROPERTY_SYMBOL].root.addEventListener('scroll', e => {

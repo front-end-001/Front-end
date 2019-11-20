@@ -1,0 +1,48 @@
+/* 加上.list-view相当于一个命名空间，只在当前组件内生效 */
+.list-wrap {
+  padding: 0 11px;
+}
+
+.list-shop {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.shop-info {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 9px;
+}
+
+.tag {
+  width: 22px;
+  padding: 2px;
+  font-size: 9px;
+  color: white;
+  background: #ee0507;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.to-shop {
+  position: absolute;
+  right: 10px;
+  padding: 6px 11px;
+  border-radius: 12px;
+  font-size: 13px;
+  background: #fec900;
+  color: #fff;
+}
+
+.focus-info {
+  margin-bottom:10px;
+  padding:8px;
+  border-radius:5px;
+  font-size:12px;
+  color:#333;
+}

@@ -9,6 +9,9 @@ import {
 } from './Component.js';
 import enableGesture from '../lib/gesture.js';
 
+// 测试是否只加载一次
+// import RecommendItemView from './RecommendListView.js';
+
 class TabView extends Component {
   constructor() {
     super();
@@ -138,9 +141,12 @@ class TabView extends Component {
       // 设置tab-title样式
       for (let i = 0; i < this.headContainer.children.length; i++) {
         if (i === this[STATE_SYMBOL].position) {
-          this.headContainer.children[i].style.borderBottom = '1px solid black';
+          this.headContainer.children[i].style.borderBottom = '2px solid white';
+          this.headContainer.children[i].style.fontSize = '23px';
+          this.headContainer.children[i].style.fontWeight = 'normal';
         } else {
           this.headContainer.children[i].style.borderBottom = 'none';
+          this.headContainer.children[i].style.fontWeight = 'lighter';
         }
       }
     });

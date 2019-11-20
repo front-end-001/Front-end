@@ -1,0 +1,111 @@
+@import './variables';
+
+.shop-box {
+  width: 1012rem/$r;
+  margin: {
+    bottom: 12px;
+  }
+  // padding: 12px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background: #fff;
+
+  &:nth-child(even) {
+    .shop {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+.shop {
+  display:flex;
+  justify-content:space-between;
+}
+
+.shop-main {
+  position: relative;
+  width: 4.6rem;
+}
+
+.main-img {
+  display: block;
+  width: 100%;
+}
+
+.shop-info {
+  position: absolute;
+  bottom: .2rem;
+  left: .2rem;
+  font-size: .32rem;
+  color: #fff;
+}
+
+.shop-link {
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.2rem;
+  padding: 0.1rem .4rem;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.3);
+  font-size: 0.32rem;
+  border-radius: .3rem;
+}
+
+.shop-sub-link {
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.2rem;
+  font-size: 0.32rem;
+  color: #fff;
+}
+
+.shop-sub {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // width: 326rem/$r - 26rem/$r;
+  width: 2.3rem;
+}
+
+.shop-sub-item {
+  position: relative;
+}
+
+.diamond {
+  width: .35rem;
+  height: .27rem;
+}
+
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  color: $white;
+  margin-bottom: .5rem;
+}
+
+.top-intro {
+  font-size: .36rem;
+}
+
+.top-tab {
+  display: flex;
+  /* padding: 0.14rem 0.55rem; */
+  border-radius: 0.3rem;
+  font-size: 0.24rem;
+  background-color: #fff;
+  color: #ff7d31;
+  width: 3rem;
+  height: .6rem;
+  line-height: .6rem;
+  text-align: center;
+}
+
+.top-tab-item {
+  width: 1rem;
+  text-align: center;
+  &.active {
+    background-color: $orange;
+    color: #fff;
+    border-radius: .3rem;
+  }
+}

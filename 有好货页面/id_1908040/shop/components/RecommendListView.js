@@ -1,7 +1,10 @@
 import { Component, PROPERTY_SYMBOL, ATTRIBUTE_SYMBOL } from './Component.js';
+import Img from './Img.js';
 import { create } from '../lib/create.js';
+import RecommendListViewCss from './css/RecommendListView.css?classname=recommend-listview';
+// import RecommendListViewCss from './RecommendListView.css';
 
-import RecommendListViewCss from './RecommendListView.css';
+// console.log('RecommendListViewCss', RecommendListViewCss);
 
 // debugger;
 // import只会被加载一次，单例的，所以不用加标志位防止重复加载
@@ -23,7 +26,7 @@ import RecommendListViewCss from './RecommendListView.css';
   // window.LIST_VIEW_STYLE_ELEMENT = true;
 // }
 
-export default class ListView extends Component {
+export default class RecommendListView extends Component {
   constructor(config) {
     super();
     this.created();
@@ -32,7 +35,7 @@ export default class ListView extends Component {
     this[PROPERTY_SYMBOL].root = document.createElement('div');
 
     // 添加list-view class
-    this[PROPERTY_SYMBOL].root.classList.add('recommend-listView');
+    this[PROPERTY_SYMBOL].root.classList.add('recommend-listview');
 
     // <div></div>  jsx会传string给create
     this.render().appendTo(this[PROPERTY_SYMBOL].root);
@@ -57,42 +60,27 @@ export default class ListView extends Component {
   }
   render() {
     let data = this[ATTRIBUTE_SYMBOL]['data'] || [];
-    console.log(data);
     return (
       <div style="padding: 0 11px;">
         {data.map(item => {
           return (
-            <div  class="list">
-              <div style="display: flex;
-                align-items: center;
-                position: relative;
-                margin-bottom:9px;">
-                  <img style="width:26px;height:26px;margin-right:5px;" src={item.logo}></img>
+            <div class="list-shop">
+              <div class="shop-info">
+                  <Img style="width:26px;height:26px;margin-right:5px;" src={item.logo}></Img>
                   <div style="display:flex;flex-direction:column;">
                     <div style="font-size:12px;">{item.title}</div>
-                    <div style="width:22px;
-                    padding: 2px;
-                    font-size:9px;
-                    color:white;
-                    background:#EE0507;
-                    border-radius:10px;
-                    text-align:center;">{item.tag}</div>
+                    <div class="tag">{item.tag}</div>
                   </div>
-                  <div style="position:absolute;right:10px;padding:6px 11px;border-radius:12px;font-size:13px;background:#FEC900;color:#fff;">进店&nbsp;></div>
+                  <div class="to-shop">进店&nbsp;></div>
                 </div>
-                <div class="x" style="margin-bottom:10px;
-                  padding:8px;
-                  border-radius:5px;
-                  font-size:12px;
-                  color:#333;
-                  background:#eee;">好店君：该店已被{(item.count / 10000).toFixed(1)}万人关注，快来关注吧！</div>
+                <div class="focus-info">好店君：该店已被{(item.count / 10000).toFixed(1)}万人关注，快来关注吧！</div>
+                  {/* <div style={RecommendListViewCss.x}>哈哈哈～</div> */}
                 <div style="display:flex;justify-content:space-between;">
-                  <img src={item.img01} style="width:calc(66% - 9px);"></img>
+                  <Img src={item.img01} style="width:calc(66% - 9px);"></Img>
                   <div style="width:calc(33% - 9px);">
-                    <img style="width:100%;" src={item.img02}></img>
-                    <img style="width:100%;" src={item.img03}></img>
+                    <Img style="width:100%;" src={item.img02}></Img>
+                    <Img style="width:100%;" src={item.img03}></Img>
                   </div>
-                  
                 </div>
             </div>
           );
@@ -110,6 +98,7 @@ export default class ListView extends Component {
 
       this[PROPERTY_SYMBOL].root.innerHTML = '';
       this.render().appendTo(this[PROPERTY_SYMBOL].root);
+      // this.addStyle();
 
       return value;
     }
