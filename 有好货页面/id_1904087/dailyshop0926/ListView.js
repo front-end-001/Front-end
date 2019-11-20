@@ -1,11 +1,22 @@
 import {create} from "./create.js";
 import Div from "./Div.js";
-
+import css from "./ListView.css"
 // save value of width
 const PROPERTY_SYMBOL = Symbol("property");
 const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
+
+
+// if(!window.LIST_VIEW_STYLE_ELEMENT_FLAG) {
+//     window.LIST_VIEW_STYLE_ELEMENT_FLAG = true;
+// }
+
+let styleElement = document.createElement("style");
+styleElement.innerHTML = css; //`@import "ListView.css"`;
+//this.styleElement.scoped = true;
+//styleElement.setAttribute("scoped", "");
+document.getElementsByTagName("head")[0].appendChild(styleElement);
 
 
 
@@ -29,7 +40,18 @@ export default class ListView {
 
     created() {
         this.root = document.createElement("div");
+        this.root.classList.add("list-view");
         this.render().appendTo(this.root);
+        this.addStyle();
+    }
+
+    addStyle() {
+        // this.styleElement = document.createElement("style");
+        // this.styleElement.innerHTML = css; //`@import "ListView.css"`;
+        // //this.styleElement.scoped = true;
+        // this.styleElement.setAttribute("scoped", "");
+
+        // this.root.appendChild(this.styleElement);
     }
 
     mounted() {
@@ -53,12 +75,17 @@ export default class ListView {
         // <div> <img style="width:30px;height:50px"></img>abc</div>;
 
         return <div> 
-                {
-                    data.map(item => (
-                        <div><span>{item.a}</span><span>{item.b}</span></div>
-                    ))
-                }
+            plain hello
+            {
+                data.map(item => (
+                    <div><span style={css.x}>{item.a}</span><span style={css.x}>{item.b}</span></div>
+                ))
+            }
         </div>;
+    }
+
+    get style(){
+        return this.root.style;
     }
 
     appendChild(child) {
@@ -90,6 +117,7 @@ export default class ListView {
 
             this.root.innerHTML = "";
             this.render().appendTo(this.root);
+            this.addStyle();
             return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;

@@ -15,11 +15,16 @@ module.exports = {
             {
                 test: /\.component$/,
                 use: {
-                    loader: require.resolve('./component-loader')
-                    
+                    loader: require.resolve('./component-loader.js') 
                 }
-            }
-
+            },
+            {
+                test: /\.css$/,
+                //use: ['to-string-loader', 'css-loader']
+                use: {
+                    loader: require.resolve('./component-css-loader.js') 
+                }
+            },
         ]
     },
     mode: "development",

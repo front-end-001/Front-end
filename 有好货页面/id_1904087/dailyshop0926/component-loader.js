@@ -95,7 +95,7 @@ module.exports = function (source, map) {
     function tagOpen(c) {
         if(c == "/") {
             return endTagOpen
-        }else if(c.match(/^[a-zA-z]$/)) {
+        }else if(c.match(/^[a-zA-Z]$/)) {
             currentToken = {
                 type: "startTag",
                 tagName: ""
@@ -117,10 +117,10 @@ module.exports = function (source, map) {
         if(c.match(/^[\t\n\f ]$/)) {
             return beforeAttributeName;
         }else if( c == "/") {
-            return selfCloseingStartTag;
+            return selfClosingStartTag;
         }else if( c.match(/^[A-Z]$/)) {
             //currentToken.tagName = c.toLowerCase();
-            currentToken.tagName = c;//保留大小写
+            currentToken.tagName += c;//保留大小写
             return tagName;
         }else if( c == ">") {
             emit(currentToken);
