@@ -86,7 +86,7 @@ function hanppen(object,type,config) {
 void async function(){
     let [obj,event]=await Promise.all([
         (async ()=>{
-            return await (await fetch('./list.json')).json()
+            return await (await fetch('./data/list.json')).json()
         })(),
         hanppen(document, 'DOMContentLoaded'),
         loadScript('./main.js')
@@ -98,6 +98,12 @@ void async function(){
 
 
 <style type="text/css">
+*{
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust:none;
+}
 html,body {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -108,11 +114,13 @@ body {
     -webkit-user-select: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-touch-callout: none;
+    background: #f7f7f7;
+    font-size: 12px;
+}
+body::before{
+    border-radius: 0 0 50% 50%/50%;
 }
 
-* {
-    -webkit-text-size-adjust:none;
-}
 </style>
 
 <link rel="stylesheet" href="./index.css">
