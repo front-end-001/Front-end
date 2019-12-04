@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<!--禁止电话号码和邮箱识别
+<meta content="telephone=no,email=no" name="format-detection"/>
+-->
+<!--TODO:添加一个网页标题-->
+<title>A sample of HTML5 game</title>
+
+<!--TODO:改成你想要的缩放比例
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+-->
+<script>
+
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            let scriptElement = document.createElement('script')
+            scriptElement.src = src
+            scriptElement.addEventListener('load', resolve)
+            document.getElementsByTagName('head')[0].appendChild(scriptElement)
+        })
+    }
+
+    function happen(object, event, config) {
+        return new Promise((resolve, reject) => {
+            object.addEventListener(event, resolve, config)
+        })
+    }
+
+    // happen(document, 'DOMContentLoaded').then(() => {
+    //     console.log(document.body)
+    // })
+
+    // fetch('./data.json').then(response => response.json())
+
+
+    // Promise.all([
+    //     happen(document, 'DOMContentLoaded'),
+    //     fetch('./data.json').then(response => response.json())
+    // ]).then((results) => {
+    //     console.log(results)
+    // })
+
+    //IIFE
+    void async function() {
+        //let object = (await (await fetch("./data.json")).json());
+        let [obj, event] = await Promise.all([
+            (async () => {
+                return await (await fetch("./data.json")).json()
+            })(),
+            happen(document, "DOMContentLoaded"),
+            loadScript("./main.js"),
+        ]);
+
+        // window.render(obj, document.body);
+    }();
+    
+    // void async function(){
+    //     let [obj, event] = await Promise.all([
+    //         // fetch('./data.json').then(response => response.json()),
+    //         (async () => {
+    //             return await (await fetch('./data.json')).json()
+    //         })(),
+    //         happen(document, 'DOMContentLoaded'),
+    //         loadScript('./test.js')
+    //     ]);
+    //     window.render(obj, document.body)
+    //     // document.render(obj, document.body)
+    // }()
+
+
+    // let data = null
+    // let domReady = false 
+
+    // function check() {
+    //     if (!data) return 
+    //     if (!domReady) return 
+    //     render()
+    // }
+
+    // function render() {
+    //     console.log(data)
+    //     console.log(document.body)
+    // }
+
+    // document.addEventListener('DOMContentLoaded', event => {
+    //     domReady = true
+    // })
+
+    // window.addEventListener('load', event => {
+
+    // })
+
+    // let request = new XMLHttpRequest()
+    // request.open('get', './data.json', true)
+    // request.send(null)
+
+    // request.addEventListener('readystatechange', event => {
+    //     if (request.readyState == 4) {
+    //         data = request.responseText
+    //         domReady = true
+    //         check()
+    //     }
+    // })
+
+</script>
+
+<style type="text/css">
+html,body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    width:100%;
+    height:100%;
+}
+/*body {
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+}
+
+* {
+    -webkit-text-size-adjust:none;
+}*/
+</style>
+
+<script type="text/javascript">
+    //关闭选择
+    //document.addEventListener("selectstart",function(e){ e.preventDefault(); });
+    //避免鼠标变成文本选择形状
+    //document.addEventListener("mousedown",function(e){ e.preventDefault(); });
+    //避免上下滚屏
+    /*document.addEventListener("touchmove",function(e){ 
+        if(e.touches.length == 2) 
+            e.preventDefault(); 
+    }, {passive:false});
+    document.addEventListener("touchmove",function(e){ 
+        if(e.touches.length == 1) 
+            e.preventDefault(); 
+    }, {passive:false});
+    document.addEventListener("touchstart",function(e){ 
+        e.preventDefault(); 
+    }, {passive:false});*/
+    document.addEventListener("touchmove",function(e){ 
+        if(e.touches.length == 1) 
+            e.preventDefault(); 
+    }, {
+        passive:false
+    })
+
+</script>
+</head>
+<body>
+<script src="./main.js"></script>
+</body>
+</html>

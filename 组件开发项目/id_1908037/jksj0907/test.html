@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+</head>
+<body>
+<script type="text/javascript" src="component.js"></script>
+<script type="text/javascript">
+
+	let urls = [
+	    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+	    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+	    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+	    "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+	];
+
+    var c = new Carousel();
+    c.width = 400;
+	c.urls = urls;
+	c.created();
+	c.appendTo(document.getElementsByTagName('body')[0]);
+	
+	//var myArray = { 'a': 'aa', 'b': 'bb', 'c': 'cc' };//[ 1, 2, 3 ];
+
+
+	/*for (var i = 0; i < myArray.length; i++ ) {
+		console.log( i );
+	}
+
+	for (var k in myArray ) {
+		console.log( k );
+	} */
+
+	/*for (var j of myArray ) {
+	 	console.log( j );
+		// console.log( myArray[j] );
+	}*/
+
+
+	/*Array.prototype.forEach.call( myArray, function( value, index ){
+		console.log( value, index );
+		// if( index == 1){
+			// return index; 
+		// }
+	})*/
+
+	/*myArray.every( function( value, index , test ) {
+		console.log( value, index, test );
+		// return index !== 3;
+	})*/
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+.tabview > div:first-child {
+    padding-top: 40px;
+    color: #fff;
+    font-size: 15px;
+    background: #7424fd url('../image/title.png') no-repeat center 10px;
+}

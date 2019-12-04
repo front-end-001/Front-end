@@ -1,0 +1,120 @@
+.card2-container {
+  width: 93.6vw;
+  margin: 5vw auto;
+  display: flex;
+  border-radius: 6px;
+  font-size: 0;
+
+  img,
+  .image-ele {
+    border-radius: 6px;
+  }
+
+  &.odd {
+    .left-colum {
+      .image-ele {
+        width: 61.9vw;
+        height: 61.9vw;
+      }
+    }
+
+    .right-colum {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .image-ele {
+        width: 30.1vw;
+        height: 30.1vw;
+      }
+    }
+  }
+
+  &.even {
+    .left-colum {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .image-ele {
+        width: 30.1vw;
+        height: 30.1vw;
+      }
+    }
+
+    .right-colum {
+      .image-ele {
+        width: 61.9vw;
+        height: 61.9vw;
+      }
+    }
+  }
+}
+
+.tab-top {
+  display: flex;
+  align-items: center;
+  padding: 0 3.2vw;
+  margin-top: 5vw;
+
+  .title {
+    flex: 1;
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    font-family: PingFangSC-Medium;
+  }
+
+  .btns {
+    border-radius: 21px;
+    background-color: white;
+    position: relative;
+
+    .btn {
+      position: relative;
+      display: inline-block;
+      font-size: 12px;
+      color: rgb(255, 122, 44);
+      text-align: center;
+      width: 56px;
+      padding: 2px;
+      z-index: 1;
+    }
+
+    &:after {
+      content: ' ';
+      position: absolute;
+      border-radius: 21px;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 56px;
+      background: rgb(255, 122, 44);
+      transition: all .2s;
+    }
+
+    &.active-1 {
+      .btn:nth-child(1) {
+        color: white;
+      }
+      &:after {
+        left: 0;
+      }
+    }
+    &.active-2 {
+      .btn:nth-child(2) {
+        color: white;
+      }
+      &:after {
+        left: 56px;
+      }
+    }
+    &.active-3 {
+      .btn:nth-child(3) {
+        color: white;
+      }
+      &:after {
+        left: 112px;
+      }
+    }
+  }
+}

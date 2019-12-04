@@ -1,0 +1,7 @@
+.mainform{
+    height: 100%;
+    background-color: rgb(237,237,237)
+}
+.tabview{
+   height: calc(100% - 105px);
+}

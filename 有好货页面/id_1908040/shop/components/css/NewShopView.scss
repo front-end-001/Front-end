@@ -1,0 +1,86 @@
+@import './variables';
+
+.list {
+  padding: 0 .34rem;
+}
+
+.shop {
+  padding: .3rem;
+  background-color: #523B26;
+  background-image: linear-gradient(#271E15, #523B26, #79736E, #fff);
+  margin-bottom: .3rem;
+  border-radius: .36rem;
+}
+
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .2rem;
+  font-size: .32rem;
+}
+
+.shop-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .4rem;
+  font-size: .4rem;
+  color: $white;
+}
+
+.shop-link {
+  font-size: .4rem;
+  padding: .2rem;
+  background-color: rgba(255, 255, 255, .3);
+  border-radius: .4rem;
+}
+
+.shop-title {
+  font-size: .46rem;
+}
+
+.shop-tag {
+  font-size: .32rem;
+}
+
+.shop-product {
+  display: flex;
+  align-items: center;
+  div {
+    width: 50%;
+    border-radius: .2rem;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+    &:first-child {
+      margin-right: .2rem;
+    }
+  }
+}
+
+.logo {
+  width: 1.16rem;
+  height: 1.16rem;
+}
+
+.statistics {
+  right: 0;
+  img {
+    height: .34rem;
+    vertical-align: middle;
+  }
+  span {
+    vertical-align: middle;
+  }
+  height: 0.69rem;
+  line-height: 0.69rem;
+  font-size: 0.32rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.345rem 0 0 0.345rem;
+  width: 4.48rem;
+  text-align: center;
+  color: #fff;
+  margin-right: -.3rem;
+}

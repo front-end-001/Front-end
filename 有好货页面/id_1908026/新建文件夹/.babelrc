@@ -1,0 +1,34 @@
+{
+  /*
+    插件在 Presets 前运行。
+    插件顺序从前往后排列。
+    Preset 顺序是颠倒的（从后往前）。
+  */
+  "presets": [
+    [
+      "@babel/env",
+      {
+        // "targets": {
+        //   "edge": "17",
+        //   "firefox": "60",
+        //   "chrome": "67",
+        //   "safari": "11.1"
+        // },
+        "useBuiltIns": "usage"
+      }
+    ], // 增加es6的babel preset配置
+    "@babel/preset-react" // 增加react的babel preset配置
+  ],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-syntax-dynamic-import",
+    [
+      "@babel/plugin-transform-react-jsx",
+      {
+        "pragma": "createComponent" // default pragma is React.createElement
+        // "pragmaFrag": "Preact.Fragment", // default is React.Fragment
+        // "throwIfNamespace": false // defaults to true
+      }
+    ]
+  ]
+}

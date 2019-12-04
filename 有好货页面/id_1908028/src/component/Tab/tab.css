@@ -1,0 +1,35 @@
+.tab_header {
+  padding-left: 25px;
+  padding-right: 25px;
+  display: flex;
+  height: 93px;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 93px;
+}
+
+.tab_content {
+  display: flex;
+  height: calc(100vh - 93px - 149px);
+}
+
+.headerItem {
+  font-size: 32px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 1);
+  margin-right: 52px;
+  position: relative;
+}
+
+.headerItem.active::after {
+  content: "";
+  width: 42px;
+  height: 4px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 2px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 13px;
+  margin: 0 auto;
+}

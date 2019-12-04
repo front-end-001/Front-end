@@ -1,0 +1,37 @@
+{
+  "name": "wpk",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-transform-react-jsx-source": "^7.5.0",
+    "@babel/preset-env": "^7.6.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "css": "^2.2.4",
+    "css-loader": "^3.2.0",
+    "to-string-loader": "^1.1.5",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.6.0",
+    "babel-preset-spritejsx": "^1.0.7",
+    "require": "^2.4.20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/songzxDev/wpk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/songzxDev/wpk/issues"
+  },
+  "homepage": "https://github.com/songzxDev/wpk#readme",
+  "description": ""
+}

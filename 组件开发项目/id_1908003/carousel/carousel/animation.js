@@ -51,7 +51,6 @@ const anime = (function () {
 
       // 已结束
       if (finished) {
-        console.log('时间线已结束');
         this.pauseTime = 0;
         this.paused = false;
         if (this.onFinish) {

@@ -42,28 +42,30 @@
           e.src = d;
           this._container.appendChild(e);
         }
-        let children = Array.prototype.slice.call(container.children);//变为普通数组
+        let children = Array.prototype.slice.call(container.children);//取出所有元素 变为普通数组
+        console.log(children);
+
         let position = 0;
         let nextFrame =() => {
           let nextPosition = position + 1;
 
-          nextPosition = nextPosition % children.length;
-          
+          nextPosition = nextPosition % children.length;//不会超出轮播范围
+
           let current = children[position],
               next = children[nextPosition];//当前和下一个的位置
-          //把next摆到正确的位置
+          //把next摆到正确的位置——挪进
           next.style.transition = 'ease 0s';//停止动画
           next.style.transform = `translate(${100 - 100 * nextPosition}%)`;
           //当前transition放回去
           setTimeout(() => {
-            //把current挪出视口
+            //把current挪出视口——摆正
             current.style.transition = '';//置空，应用style里的transition
             current.style.transform = `translate(${-100 - 100 * position}%)`;
-            //把next挪进视口
+            //把next挪进视口——挪走
             next.style.transition = '';
             next.style.transform = `translate(${- 100 * nextPosition}%)`;
             position = nextPosition;
-          }, 16);
+          }, 16);//setTimeout 一帧是16ms
 
           // for (let child of children) {
           //   child.style.transform = `translate(${-100 * position}%)`;

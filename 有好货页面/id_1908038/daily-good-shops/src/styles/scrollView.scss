@@ -1,0 +1,14 @@
+.scroll {
+    height: 100%;
+    overflow: auto;
+
+    .scroll-container {
+        background-image: url('/static/image/bg_1.png');
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position-y: -113pt; // 顶部部分宽度
+        background-color: #EFEFEF;
+        min-height: 100%;
+        padding: 0 3.148vw;
+    }
+}

@@ -1,0 +1,40 @@
+.menu-wrap{
+    width:344px;
+    height:42px;
+    background:rgba(254,254,254,1);
+    border-radius:21px;
+    display: flex;
+    color: #ff7d31;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    .item{
+        width: 114px;
+        font-size:24px;
+        font-family:PingFangSC; 
+        font-weight:400;
+        color:rgba(255,125,49,1);
+        line-height:18px;
+        width: 100%;
+        text-align: center;
+        z-index: 10;
+    }
+    .active{
+        height:42px;
+        line-height: 43px;
+        background:linear-gradient(90deg,rgba(253,147,1,1),rgba(250,129,1,1));
+        border-radius:21px;
+        color: white;
+    }
+    .animate{
+        width: 114px;
+        height:42px;
+        line-height: 43px;
+        background:linear-gradient(90deg,rgba(253,147,1,1),rgba(250,129,1,1));
+        border-radius:21px;
+        color: white;
+        position: absolute;
+        transition: all .3s;
+        z-index: 9;
+    }
+}

@@ -14,7 +14,6 @@
         height: 300px;
         overflow: hidden;
         white-space: nowrap;
-        outline: solid 1px blue;
     }
 
     .carousel > img {
@@ -275,11 +274,10 @@
             this._container.addEventListener('mousedown', (event) => {
                 event.preventDefault();
             });
-
         }
     }
 
-    const carousel = new Carousel(document.getElementById('carousel'));
+    const carousel = new Carousel(document.getElementById('container'));
     carousel.data = imgList;
     carousel.render();
 

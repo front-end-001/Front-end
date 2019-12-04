@@ -1,0 +1,38 @@
+.comt-scroll {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  .scroll_inner {
+    box-sizing: border-box;
+    padding-top: 8px;
+    background: url("http://gw.alicdn.com/tfs/TB1wClHaDZmx1VjSZFGXXax2XXa-1500-1200.png_790x10000.jpg_.webp") 0 -174px   no-repeat ;
+    background-size: 100% auto;
+  }
+  .scroll_footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 212px;
+    margin: 20px auto;
+    font-size: 15px;
+    color: rgb(153, 153, 153);
+  }
+}
+.back-top {
+  position: absolute;
+  bottom: 100px;
+  right: 10px;
+  width: 54px;
+  height: 54px;
+  z-index: 99999;
+  display: none;
+  opacity: 1;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}

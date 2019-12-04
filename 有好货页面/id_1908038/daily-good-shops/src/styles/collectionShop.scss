@@ -1,0 +1,53 @@
+.collection-shop {
+    .title {
+        height: 3.981vh;
+        font-family: PingFangSC-Medium;
+        line-height: 3.981vh;
+        letter-spacing: 0px;
+        color: #333333;
+        font-weight:500;
+    }
+    .item-box {
+        display: flex;
+        justify-content: space-between;
+        .item {
+            width: 45.833vw;
+            height: 33.425vw;
+            background-color: #fefefe;
+            border-radius: 1.666vw;
+            overflow: hidden;
+            .top {
+                display: flex;
+                .icon {
+                    width:7.222vw;
+                    height:auto;
+                    margin: 3.055vw 1.388vw 2.314vw 3.425vw;
+                    border-radius:50%;
+                }
+                .name {
+                    width:23.055vw;
+                    height:1.77vh;
+                    margin-top: 2.592vw;
+                    font-size:3.333vw;
+                    font-family:PingFang SC;
+                    font-weight:400;
+                    color:rgba(51, 51, 51, 1);
+                    line-height:1.77vh;
+                }
+                .tmall {
+                    width:6.944vw;
+                    height:auto;
+                    margin-top: 1.574vw;
+                }
+            }
+            .bottom {
+                img {
+                    width: 18.425vw;
+                    height: auto;
+                    margin-left: 3.24vw;
+                }
+
+            }
+        }
+    }
+}
