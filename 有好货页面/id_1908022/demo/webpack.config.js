@@ -33,10 +33,21 @@ module.exports = {
                       plugins: [['babel-plugin-transform-react-jsx', {pragma:"create"}]]
                     }
                 }
-            },
+            }, 
+            {
+              test:  /\.component$/,
+              use: {
+                loader: require.resolve('./component-loader.js')
+              }
+            }, 
             {
               test: /\.(png|jpg|jpeg|gif|bmp)$/,
               use: 'url-loader'
+            }, 
+            {
+              test: /\.css$/,
+              use: [require.resolve('./component-css-loader.js')]
+              // use: ['to-string-loader' , 'css-loader']
             }
         ]
   },

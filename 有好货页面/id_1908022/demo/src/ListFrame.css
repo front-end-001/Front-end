@@ -1,0 +1,26 @@
+.filename.root {
+    /* width: 100%; */
+    padding: 32px 35px;
+    border-radius: 20px;
+    background: #fff;
+    position: relative;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.list-attention-box {
+    width: 100%;
+    margin-top: 26px;
+}
+
+
+.list-img-permutation-box{
+    width: 100%;
+    margin-top: 30px;
+}
+
+
+

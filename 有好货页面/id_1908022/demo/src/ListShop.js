@@ -1,6 +1,6 @@
 import {create} from './create.js';
-import Div from './div.js';
-import css from './ListView.css';
+import ListFrame from './ListFrame.js';
+import css from './ListShop.css';
 
 
 const PROPERTY_SYMBOL = Symbol("property");
@@ -8,14 +8,14 @@ const ATTRIBUTE_SYMBOL = Symbol("attribute");
 const EVENT_SYMBOL = Symbol("event");
 const STATE_SYMBOL = Symbol("state");
 
-if(!window.LIST_VIEW_STYLE_ELEMENT){
+if(!window.LIST_SHOP_STYLE_ELEMENT){
     let styleElement = document.createElement('style');
     styleElement.innerHTML = css;
     document.getElementsByTagName('head')[0].appendChild(styleElement);
-    window.LIST_VIEW_STYLE_ELEMENT = true;
+    window.LIST_SHOP_STYLE_ELEMENT = true;
 }
 
-export default class ListView {
+export default class ListShop {
     constructor(text){
         this[PROPERTY_SYMBOL] = Object.create(null);
         this[ATTRIBUTE_SYMBOL] = Object.create(null);
@@ -34,9 +34,28 @@ export default class ListView {
 
     created(text){
         this.root = document.createElement("div");
-        this.root.classList.add('list-view');
-        // console.log(this.render().appendTo);
-        this.render().appendTo(this.root);
+        this.root.classList.add('list-shop');
+        this.root.classList.add('root');
+        /* setTimeout(() => {
+            console.log(this.root.parentElement.parentElement.triggerEvent('scrollToBottom', '加载中123'));
+        },0) */
+
+       /*  setTimeout(() => {
+            window.getJSON("../data.json").then( data => {
+                // this[ATTRIBUTE_SYMBOL]["data"].push(data[2]);
+                
+                this.render([data[2]]).appendTo(this.root);
+            }).catch(
+                err => {
+                    console.log(err);
+                    return err;
+                }
+            )
+        }, 5000) */
+        
+        setTimeout(() => {
+            this.render(this[ATTRIBUTE_SYMBOL]["data"] || []).appendTo(this.root);
+        },0)
         
     }
     mounted(){
@@ -49,12 +68,17 @@ export default class ListView {
 
     }
 
-    render() {
-        let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+    render(data) {
+        // let data = this[ATTRIBUTE_SYMBOL]["data"] || [];
+        console.log(data);
         return <div>
             {
                 data.map(item => {
-                   return <div><span class="x">{item.aaa}</span><span>{item.bbb}</span></div>;
+                   return <div class="frame-box">
+                        {
+                            <ListFrame data={item}></ListFrame>
+                        }
+                   </div>;
                 })
             }
         </div>;
@@ -95,7 +119,7 @@ export default class ListView {
         if(name == 'data'){
             this[ATTRIBUTE_SYMBOL][name] = value;
             this.root.innerHTML = '';
-            this.render().appendTo(this.root);
+            // this.render().appendTo(this.root);
             return value;
         }
         return this[ATTRIBUTE_SYMBOL][name] = value;
