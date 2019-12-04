@@ -1,0 +1,122 @@
+.new-shop {
+  padding: 0 12px;
+  .new-shop_item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    padding:  12px;
+    margin-bottom: 12px;
+    .bc1 {
+      width: 100%;
+      height: 122px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      object-fit: cover;
+    }
+    .bc2 {
+      width: 100%;
+      height: 275px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 12px;
+    }
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+
+    .shop_item_title {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      >img {
+        width: 40px;
+        height: 40px;
+        border-radius: 40px;
+        overflow: hidden;
+        background-color: white;
+      }
+      .shop_item_title_desc {
+        position: absolute;
+        right: -12px;
+        display: flex;
+        align-items: center;
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 0 12px;
+        font-size: 11px;
+        color: #FFFFFF;
+        height: 24px;
+        span {
+
+        }
+      }
+    }
+    .shop_item_desc {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 7.5px;
+      .shop_item_desc_left {
+
+        .shop_item_desc_left_name {
+          font-size: 15px;
+          max-width: 270px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: rgb(255, 255, 255);
+          font-weight: 500;
+        }
+        .shop_item_desc_left_tags {
+          margin-top: 4px;
+          font-size: 11px;
+          color: rgb(255, 255, 255);
+          font-weight: 400;
+          overflow: hidden;
+        }
+      }
+      .shop_item_desc_right {
+        display: flex;
+        align-items: center;
+        height: 25px;
+        background-color: rgba(255, 255, 255, 0.2);
+        font-size: 14px;
+        color: rgb(255, 255, 255);
+        font-weight: 400;
+        padding: 0 7.5px 0 10px;
+        border-radius: 50px;
+        margin-right: 12px;
+        img {
+          width: 5px;
+          height: 10px;
+          margin-left: 4px;
+        }
+      }
+    }
+    .shop_item_content {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 11.5px;
+      .shop_item_content_item {
+        width: 159px;
+        height: 159px;
+        border-radius: 6px;
+        overflow: hidden;
+        >:not(:last-child) {
+          margin-right: 12px;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}

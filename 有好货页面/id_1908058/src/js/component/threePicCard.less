@@ -1,0 +1,102 @@
+
+.wrap{
+    padding: 20px 24px;
+    width:703px;
+    height:728px;
+    background:rgba(254,254,254,1);
+    border-radius:25px;
+    box-sizing: border-box;    
+    margin-top: 24px;  
+    .header{
+        display: flex;
+        justify-content: space-between;
+        img{
+            width:74px;
+            height:74px;
+        }
+        span{
+            color: #333333;
+            font-size: 32px;
+        }
+        div{
+            span:last-child{
+                width:52px;
+                height:25px;
+                border-radius:13px;
+                // margin-top: 10px;
+            }
+        }
+        .enter-btn{
+            width:111px;
+            height:50px;
+            background:linear-gradient(90deg,rgba(255,172,0,1),rgba(254,201,0,1));
+            border-radius:25px;
+            box-sizing: border-box;
+            display: inline-block;
+            text-align: center;
+            span{
+                width:53px;
+                height:26px;
+                font-size:28px;
+                font-family:PingFangSC;
+                font-weight:400;
+                color:rgba(255,255,255,1);
+                // line-height:17px;
+                box-sizing: border-box;
+            }
+        }
+    }
+    .info{
+        width:654px;
+        height:68px;
+        background:rgba(245,245,245,1);
+        border-radius:11px;
+        margin-top: 17px;
+        box-sizing: border-box;
+        padding: 14px 18px;
+        .info-logo{
+            width:37px;
+            height:37px;
+            background:rgba(255,172,0,1);
+            background-image: url(../../image/dianpu-info.png); 
+            border-radius:50%;
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin-right: 12px;
+        }
+        .info-text{
+            color: #333333;
+            font-size: 25px;
+            vertical-align: top;
+        }
+    }
+    .content{
+        margin-top: 20px; 
+        display: flex;
+        justify-content: space-between;          
+        .content-left{
+            width:434px;
+            height:434px;
+            border-radius:25px;
+            float: left;
+        }
+        .content-right{
+            width: 214px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height:434px;
+            img{
+                border-radius: 25px;
+            }
+        }
+    }
+    .link{
+        margin-top: 27px;
+        color: #888888;
+        font-size: 22px;
+        text-align: right;
+    }
+
+}

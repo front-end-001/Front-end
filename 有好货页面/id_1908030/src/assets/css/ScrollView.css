@@ -1,0 +1,13 @@
+.scrollView {
+    display: flex;
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    font-size:36px;
+}
+.scrollView:before{
+    content:'-----\00a0\00a0';
+}
+.scrollView::after{
+    content:'\00a0\00a0-----';
+}

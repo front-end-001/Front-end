@@ -2,8 +2,8 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-25 18:54:12
- * @LastEditTime: 2019-08-25 18:54:15
- * @LastEditors: Please set LastEditors
+ * @lastTime: 2019-09-07 17:03:28
+ * @LastAuthor: Do not edit
  -->
 <style>
         .carousel{
@@ -23,8 +23,10 @@
         <div id="container">
         
         </div>
-        <script src="gesture.js"></script>
-        <script src="animation.js"></script>
+        <script src="../../gesture.js"></script>
+        <script src="./DomElementStyleNumberAnimation_Fix_Keyframe.js"></script>
+        <script src="./Timeline_RAF.js"></script>
+        <script src="./CubicBezier.js"></script>
         <script>
         let data = [
         "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
@@ -32,7 +34,8 @@
         "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
         "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
         ];
-        
+        let ease = cubicBezier(.17,.67,.83,.67);
+
         class Carousel {
             constructor(container){
                 this._container = container;
@@ -48,10 +51,9 @@
                     e.src = d;
                     this._container.appendChild(e);
                     e.style.zIndex = i ++;
-                    e.onclick = event => 
-                        console.log(d);
+                    e.onclick = event => console.log(d);
                 }
-                var tl = new Timeline;
+                let tl = new Timeline_RAF;
         
                 let children = Array.prototype.slice.call(container.children);
                 let position = 0;
@@ -69,14 +71,14 @@
                     
                     offsetTimeStart = Date.now();
         
-                    tl.addAnimation(new DOMElementStyleNumberAnimation(
+                    tl.addAnimation(new DomElementStyleNumberAnimation_Fix_Keyframe(
                         current,
                         "transform",
                         0, - 500 * position,
                         1000, - 500 - 500 * position,
                         (v) => `translateX(${v}px)`
                     ));
-                    tl.addAnimation(new DOMElementStyleNumberAnimation(
+                    tl.addAnimation(new DomElementStyleNumberAnimation_Fix_Keyframe(
                         next,
                         "transform",
                         0, 500 - 500 * nextPosition,
@@ -103,9 +105,9 @@
                     //for(let child of children) {
                     //    child.style.transform = `translate(${-100 * position}%)`;
                     //}
-                    nextPicTimer = setTimeout(nextPic, 3000);
+                    nextPicTimer = setTimeout(nextPic, 2000);
                 }
-                let nextPicTimer = setTimeout(nextPic,3000);
+                let nextPicTimer = setTimeout(nextPic,2000);
         
                 /*let startX;
                 let startTransform;
@@ -157,7 +159,8 @@
                     clearTimeout(nextPicTimer);
                 });
                 this._container.addEventListener("pan", event => {
-                    event.origin.preventDefault();
+                    // event.origin.preventDefault();
+                    event.preventDefault();
                     let current = children[position];
         
                     let nextPosition = (position + 1) % children.length;
@@ -174,15 +177,16 @@
                     current.style.transform = `translate(${- 500 * position + event.dx + offset}px)`
                 });
                 this._container.addEventListener("panend", event => {
-                    event.origin.preventDefault();
+                    // event.origin.preventDefault();
+                    event.preventDefault();
                     let isLeft;
                     if(event.isFlick) {
-                        if(event.vx > 0) {
+                        if(event.dx > 0) {
                             position --;
                             isLeft = true;
                         }
                         
-                        if(event.vx < 0) {
+                        if(event.dx < 0) {
                             position ++;
                             isLeft = false;
                         }

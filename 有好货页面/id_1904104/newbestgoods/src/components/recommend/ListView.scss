@@ -1,0 +1,118 @@
+
+.listContainer {
+   background: url('../res/images/carouselBg.png') no-repeat; 
+   background-size: 100% 120px;
+}
+
+
+.favSection {
+    padding-left: 16px;
+    margin-bottom: 20px;
+}
+
+.favTitle {
+    font-size:20px;
+    font-family:PingFang SC;
+    font-weight:500;
+    color:rgba(51,51,51,1);
+    line-height:20px;
+}
+
+.favContainer {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 46% 46%;
+    grid-template-rows: auto;
+    gap: 12px;
+}
+
+.carouselContainer {
+    padding: 16px 16px 0px 16px;
+}
+
+.interestTitle {
+    font-size:18px;
+    font-family:PingFangSC;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:18px;
+}
+
+.interestItem {
+    display: flex;
+    flex-direction: row;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    .interestItemBig {
+        width: 66%;
+        display: inline-flex;
+        position: relative;
+    }
+
+    .columnSection {
+        display: inline-flex; 
+        width: 33%;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .toLeft {
+        margin-left: 8px;
+    }
+
+    .toRight {
+        margin-right: 8px;
+    }
+
+}
+
+.interestItemFooterBig {
+    background:rgba(0,0,0,0.3);
+    // opacity:0.3; //opacity 影响所有子元素，rgba 就不影响
+    border-bottom-left-radius:18px;
+    border-bottom-right-radius: 18px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interestHeader {
+    flex-direction: column;
+    margin-left: 16px;
+
+    .shopName {
+        font-size:12px;
+        font-family:PingFangSC;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:10px;
+    }
+}
+
+.interestEntry {
+    background:rgba(254,254,254,0.3);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 13px;
+    border-radius: 15px;
+    margin-right: 16px;
+
+    .interestEntryName {
+        font-size:12px;
+        font-weight:400;
+        color:rgb(255,255,255);
+        line-height:12px;
+    }
+}
+
+
+

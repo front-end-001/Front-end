@@ -1,0 +1,87 @@
+.tab-view{
+    display : flex;
+    flex-direction : column;
+    background-image : url('../image/background.png');
+    background-color:#eeeeee;
+}
+
+.tab-view .top-title{
+    height : 60px;
+    padding-top : 160px;
+    padding-bottom : 40px;
+    line-height: 60px;
+}
+
+.tab-view .top-title .backIcon{
+    display : inline-block;
+    width : 25px;
+    height : 52px;
+    text-align: center;
+    /* background-image : url('../image/icon.png'); */
+}
+
+.tab-view .top-title .titleIcon{
+    display : inline-block;
+    width : 215px;
+    height : 60px;
+    margin-left:360px;
+    /* background-image : url('../image/icon.png'); */
+}
+
+.tab-view .top-title .moreIcon{
+    display : inline-block;
+    float : right;
+    width : 48px;
+    height : 10px;
+    /* background-image : url("../image/icon.png"); */
+}
+
+.tab-view .top-title .shareIcon{
+    display : inline-block;
+    float : right;
+    width : 53px;
+    height : 53px;
+    margin-right:80px;
+    /* background-image : url("../image/icon.png"); */
+}
+
+.tab-view .top-title .backIcon>img,
+.tab-view .top-title .titleIcon>img,
+.tab-view .top-title .moreIcon>img,
+.tab-view .top-title .shareIcon>img{
+    width:100%;
+    height:100%;
+}
+
+.tab-view .header-container{
+    height : 93px;
+}
+
+.tab-view .header-container .header{
+    display : inline-block;
+    height : 93px;
+    font-family : PingFang SC;
+    font-size : 46px;
+    color: #fff;
+    margin : 20px 35px 0 35px;
+    position: relative;
+}
+
+.tab-view .header-container .header:first-of-type{
+    font-weight : bold;
+    margin-left : 0px;
+}
+.tab-view .header-container .header:first-of-type>.line{
+    display: block;
+}
+.tab-view .header-container .header .line{
+    width:60px;
+    height:6px;
+    border-radius:2px;
+    background-color: #fff;
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,320%);
+    display: none;
+}

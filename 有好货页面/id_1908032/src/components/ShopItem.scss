@@ -1,0 +1,27 @@
+.shop-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3.15vw 1.67vw 3.15vw;
+    .left-part {
+        width: 62.31vw;
+        height: 62.31vw;
+        border-radius: 1.67vw;
+        overflow: hidden;
+    }
+    .right-part {
+        width: 30.19vw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .item {
+            width: 30.19vw;
+            height: 30.19vw;
+            border-radius: 1.67vw;
+            overflow: hidden;
+        }
+    }
+    &.reverse {
+        flex-direction: row-reverse;
+    }
+}

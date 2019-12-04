@@ -1,0 +1,48 @@
+.smallShopItem {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 13px;
+}
+.smallShop_content {
+  padding: 20px 24px;
+}
+.smallShopItem_top {
+  display: flex;
+  margin-bottom: 18px;
+}
+.smallShopItem_logo {
+  width: 54px;
+  height: 54px;
+  background: red;
+  margin-right: 13px;
+  border-radius: 50%;
+}
+.smallShopItem_title {
+  font-size: 25px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+}
+.smallShopItem_subTitle {
+  width: 70px;
+  height: 30px;
+  line-height: 30px;
+  background: rgba(238, 5, 7, 1);
+  border-radius: 10px;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+}
+
+.smallShopItem_img {
+  display: flex;
+  justify-content: space-between;
+}
+
+.smallShopItem_img_left,
+.smallShopItem_img_right {
+  width: 138px;
+  height: 138px;
+  border-radius: 13px;
+  background: red;
+}

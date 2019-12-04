@@ -1,0 +1,101 @@
+.imgs{
+    margin-left: 34px;
+    margin-right: 34px;
+    margin-bottom: 35px;
+    height: 58vw;
+    border-radius:36px;
+    position: relative;
+    display:flex;
+}
+.img {
+    border-radius:36px;
+    position: absolute;
+    overflow: hidden;
+}
+.oddpic1{
+    left: 0;
+    width: 66%;
+    height: 100%;
+}
+.oddpic2{
+    right: 0;
+    width: 32%;
+    height: 48%;
+}
+.oddpic3{
+    right: 0;
+    top: 51%;
+    width: 32%;
+    height: 48%;
+}
+
+.evenpic1{
+    right: 0;
+    width: 66%;
+    height: 100%;
+}
+.evenpic2{ 
+    left: 0;
+    width: 32%;
+    height: 48%;
+}
+.evenpic3{
+    left: 0;
+    top: 51%;
+    width: 32%;
+    height: 48%;
+}
+.bottom{
+    position: absolute;
+    padding-left: 23px;
+    padding-right: 23px;
+    bottom: 0px;
+    height:115px;
+    width: calc(100% - 46px);
+    background:rgba(0,0,0,1);
+    opacity:0.5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.bottomleft{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.shopName{
+    height:23px;
+    font-size:32px;
+    font-family:PingFangSC;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:26px;
+}
+.shopImg{
+    width:151px;
+    height:27px;
+}
+.maxEnterShop{
+    margin-top: 10px;
+    width:142px;
+    height:62px;
+    background:rgb(177, 167, 167);
+    border-radius:26px;
+    font-size:40px;
+    font-family:PingFangSC;
+    font-weight:400;
+    color:#FFFFFF;
+    line-height:24px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.minEnterShop{
+    font-size:40px;
+    font-family:PingFangSC;
+    font-weight:400;
+    color:#FFFFFF;
+    line-height:24px;
+}

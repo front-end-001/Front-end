@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Carousel</title>
+    <style>
+        .carousel {
+            width: 500px;
+            height: 300px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        let data = [
+                "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+                "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+                "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+                "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg"
+            ];
+        class Carousel {
+            constructor(container) {
+                this._container = container;
+                this._container.classList.add("carousel");
+                this._handler = null;
+                this.data = null;
+            }
+
+            render() {
+                for (let d of data) {
+                    let e = document.createElement("img");//挂载元素
+                    e.src = d;
+                    this._container.appendChild(e);
+                }
+
+
+            }
+        }
+
+        let carousel = new Carousel(document.getElementById("container"));//有明确的ID的场景，id有索引，性能差距明显
+        carousel.render();
+    </script>
+</body>
+</html>

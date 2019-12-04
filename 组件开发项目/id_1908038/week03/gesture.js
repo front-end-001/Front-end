@@ -8,9 +8,9 @@ function enableGesture(main) {
 
     context.startTime = Date.now();
 
-    context.isTap = true;
-    context.isPan = false;
-    context.isPress = false;
+    context.isTap = true;//点击
+    context.isPan = false;//拖拽
+    context.isPress = false;//按住
 
     context.pressHandler = setTimeout(() => {
       context.isPress = true;
@@ -27,7 +27,7 @@ function enableGesture(main) {
     let dx = point.clientX - context.startX,
       dy = point.clientY - context.startY; //displacementX, displacementY差值
     if (dx * dx + dy * dy > 100) {
-      
+
       if (context.pressHandler !== null) {
         clearTimeout(context.pressHandler);
         context.pressHandler = null;
@@ -39,7 +39,7 @@ function enableGesture(main) {
       }
 
       context.isTap = false;
-      
+
       if (context.isPan == false) {
         //垂直和水平的逻辑
         if (Math.abs(dx) > Math.abs(dy)) {
@@ -149,6 +149,7 @@ function enableGesture(main) {
       contexts[touch.identifier] = Object.create(null);
       start(touch, contexts[touch.identifier]);
     }
+    console.log(contexts);
 
   };
 

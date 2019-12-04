@@ -1,0 +1,16 @@
+.carousel{
+    width: calc(100% - 68px); 
+    height: 50vm;
+    margin-left: 34px;
+    margin-right: 34px;
+    margin-bottom: 50px;
+    z-index: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    border-radius: 36px
+}
+.img{
+    height: 100%;
+    width: 100%;
+    border-radius: 36px
+}

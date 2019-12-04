@@ -1,0 +1,9 @@
+.shop-title{
+    width:100%;
+    margin-top:65px;
+}
+.shop-title .title{
+    font-size: 43px;
+    font-weight: bolder;
+    color:#333;
+}

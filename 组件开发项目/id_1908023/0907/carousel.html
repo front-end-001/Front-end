@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <div id="container"></div>
+
+  <script src="./gesture.js"></script>
+  <script src="./carousel-interface.js"></script>
+  <script>
+    let data = [
+      "http://pix1.tvzhe.com/stills/drama/84/135/b/MB8nW70tKnB.jpg",
+      "http://pix1.tvzhe.com/stills/drama/84/135/b/MB8nW78nMR-.jpg",
+      "http://pix1.tvzhe.com/stills/drama/84/135/b/MBOqW7OqKnD.jpg",
+      "http://pix1.tvzhe.com/stills/drama/84/135/b/MBOqW7OqL7D.jpg",
+    ];
+    new Carousel(document.getElementById('container'), data).render();
+  </script>
+</body>
+
+</html>

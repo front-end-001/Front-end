@@ -1,0 +1,28 @@
+.tab-button {
+    height: 5.56vw;
+    background-color: rgba(254, 254, 254, 1);
+    border-radius: 2.78vw;
+    display: flex;
+    .button-item {
+        position: relative;
+        z-index: 500;
+        width: 16.02vw;
+        height: 5.56vw;
+        border-radius: 2.78vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 34px;
+        color: rgba(255, 125, 49, 1);
+        &.curr {
+            color: #fff;
+            background-image: linear-gradient(90deg, 
+                rgba(253, 147, 1, 1) 0%, 
+                rgba(252, 138, 1, 1) 50%, 
+                rgba(250, 129, 1, 1) 100%), 
+            linear-gradient(
+                rgba(254, 254, 254, 1), 
+                rgba(254, 254, 254, 1));
+        }
+    }
+}

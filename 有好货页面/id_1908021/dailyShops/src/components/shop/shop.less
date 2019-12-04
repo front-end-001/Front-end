@@ -1,0 +1,105 @@
+.hbw-shop {
+  display: flex;
+  flex-direction: column;
+  .shop-title_row {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0em 0 0.5em 0;
+    .shop-title_icon {
+      align-self: center;
+      border-radius: 2em;
+      width: 2em;
+      height: 2em;
+    }
+    .shop-title_name {
+      display: flex;
+      width: 65%;
+      flex-direction: column;
+      .shop-title_name_text {
+        font-size: 46px;
+        font-family: 'SimHe';
+        font-weight: 500;
+      }
+      .shop-title_name_icon {
+        width: 63px;
+      }
+    }
+  }
+
+  .shop-title_col {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0em 0 0.5em 0;
+    width: 55%;
+    .shop-title_icon {
+      align-self: flex-start;
+      border-radius: 2em;
+      width: 2em;
+      height: 2em;
+    }
+    .shop-title_name {
+      display: flex;
+      flex-direction: column;
+      .shop-title_name_text {
+        font-size: 46px;
+        font-family: 'SimHe';
+        font-weight: 500;
+      }
+      .shop-title_name_icon {
+        width: 63px;
+      }
+    }
+  }
+  .shop-title_promotion {
+    font-size: 32px;
+    font-weight: 100;
+  }
+
+  .shop_content_normal {
+    display: flex;
+    justify-content: space-between;
+    .shop_content_col1 {
+      margin-right: 0.2em;
+    }
+
+    img {
+      border-radius: 0.5em;
+      width: 100%;
+    }
+  }
+  .shop_content_flex {
+    display: flex;
+    .shop_content_col1 {
+      flex: 0 1 auto;
+      img {
+        align-self: flex-start;
+        border-radius: 0.5em;
+        height: 556px;
+        width: 556px;
+      }
+    }
+    .shop_content_col2 {
+      margin-left: 0.5em;
+      flex: 0 2 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      img {
+        align-self: center;
+        border-radius: 0.5em;
+        width: 100%;
+      }
+    }
+  }
+
+  a {
+    text-decoration: none;
+    display: flex;
+  }
+
+  a:hover {
+    cursor: pointer;
+  }
+}

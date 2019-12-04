@@ -80,13 +80,16 @@
                     setTimeout(nextFrame, 3000);
                 }
                 //setTimeout(nextFrame,3000);
+
+
                 //鼠标事件
-                let startX;
-                let startTransform;
+                let startX;//记录初始位置
+                let startTransform;//记录上一次的transform
                 let start = event => {
                     event.preventDefault();
                     startX = event.clientX;
                     startTransform = -position * 500;
+                    //用document防止数据在container之类粘粘——拖拽常识
                     document.addEventListener("mousemove", move);
                     document.addEventListener("mouseup", end);
                 }
@@ -105,7 +108,7 @@
 
                     position = -(Math.round((startTransform + event.clientX - startX) / 500));
 
-
+                    //上下界检测，阻止变白
                     position = Math.max(0, Math.min(position, children.length - 1));
 
                     for (let child of children) {
@@ -114,7 +117,7 @@
                     }
                 }
                 //事件入口
-                document.addEventListener("mousedown", start);
+                this._container.addEventListener("mousedown", start);
 
 
             }

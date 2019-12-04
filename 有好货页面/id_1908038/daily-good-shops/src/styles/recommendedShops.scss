@@ -1,0 +1,109 @@
+@import './index.scss';
+.recommended-Shops {
+    .item-box {
+        .item {
+            height: 97.037vw;
+            margin-top: px2vw(35px);
+            padding: 0 px2vw(35px);
+            background-color: #fefefe;
+            border-radius: 1.666vw;
+            overflow: hidden;
+            .top {
+                display: flex;
+                .icon {
+                    width: px2vw(106px);
+                    height: auto;
+                    margin: 3.055vw 1.388vw 2.314vw 0;
+                    border-radius: 50%;
+                }
+                .name {
+                    width: px2vw(319px);
+                    height: px2vw(44px);
+                    margin-top: px2vw(40px);
+                    font-size: px2vw(46px);
+                    font-family: PingFang SC;
+                    font-weight: 400;
+                    color: rgba(51, 51, 51, 1);
+                    line-height: px2vw(35px);
+                }
+
+                .tmall {
+                    width: px2vw(51px);
+                    height: auto;
+                    margin-top: 1.574vw;
+                }
+                .enter{
+                    width: 14.814vw;
+                    height: px2vw(72px);
+                    margin: px2vw(43px) 0 0 px2vw(340px);
+                    background-image: linear-gradient(90deg,
+                        #fec900 0%,
+                        #feac00 100%),
+                    linear-gradient(#ffffff,
+                        #ffffff);
+                    background-blend-mode: normal,
+                    normal;
+                    border-radius: px2vw(36px);
+                    font-size: px2vw(40px);
+                    font-family:PingFang SC;
+                    font-weight:400;
+                    color:rgba(255, 255, 255, 1);
+                    line-height:px2vw(72px);
+                    text-align: center;
+                }
+            }
+            .center {
+                width: px2vw(942px);
+                height: px2vw(98px);
+                background-color: #f5f5f5;
+                border-radius: px2vw(16px);
+                line-height: px2vw(98px);
+                img {
+                    width: px2vw(53px);
+                    height: auto;
+                    margin: px2vw(24px) px2vw(18px) 0 px2vw(26px);
+                }
+                span {
+                    display: inline-block;
+                    font-family: PingFangSC-Light;
+                    font-size: px2vw(36px);
+                    line-height: 100%;
+                    letter-spacing: 0px;
+                    color: #333333;
+                    vertical-align: top;
+                    margin-top: px2vw(31px);
+                }
+            }
+            .bottom {
+                margin: px2vw(29px) 0 0 0;
+                overflow: hidden;
+                img {
+                    float: left;
+                    border-radius: px2vw(36px);
+                    &:nth-child(1) {
+                        width: px2vw(626px);
+                        margin-right: px2vw(8px);
+                    }
+                    &:nth-child(2) {
+                        width: px2vw(308px);
+                    }
+                    &:nth-child(3) {
+                        width: px2vw(308px);
+                    }
+                }
+            }
+            .similar-shop {
+                span {
+                    display: block;
+                    margin-top: px2vw(41px);
+                    font-family: PingFangSC-Light;
+                    font-size: px2vw(32px);
+                    line-height: px2vw(35px);
+                    letter-spacing: 0px;
+                    color: #888888;
+                    text-align: right;
+                }
+            }
+        }
+    }
+}

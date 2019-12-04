@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<!--禁止电话号码和邮箱识别-->
+<meta content="telephone=no,email=no" name="format-detection"/>
+
+<!--TODO:添加一个网页标题-->
+<title>每日好店</title>
+
+<!--TODO:改成你想要的缩放比例-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+
+<!-- 异步加载main.js loadScript -->
+<!-- <script src="main.js"></script> -->
+<!-- script 放 head 会 拖过 body 加载 ? head里的script拖后的是body的渲染但是不会拖后下载 -->
+<!-- loadscript 这么加载的脚本会不会阻塞页面解析呢 圈圈问 -->
+<script>
+
+void function () {
+  var resizeEvt = "orientationchange" in window ? "orientationchange" : "resize"
+  var docEl = document.documentElement
+  function resizeFn() {
+    var docW = docEl.clientWidth
+    if (docW > 750) {
+      docW = 750
+    }
+    docEl.style.fontSize = (docW * 100) / 750 + "px"
+  }
+  resizeFn()
+  window.addEventListener(resizeEvt, resizeFn)
+}()
+
+  let data = null;
+  let domReady = false;
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      let script = document.createElement('script');
+      script.src = src;
+      script.addEventListener('load', resolve);
+      // document.documentElement.appendChild(script);
+      document.getElementsByTagName('head')[0].appendChild(script);
+    });
+  }
+
+  /*
+  loadScript('./a.js').then( () => {
+    console.log('b');
+  });
+  */
+
+  function check() {
+    if (!data)
+      return;
+    if (!domReady)
+      return;
+    render();
+  }
+
+  function render() {
+    console.log(222);
+    console.log(document.body);
+    console.log(data);
+  }
+
+  /*
+  const contentLoaded = () => {
+    new Promise((resolve, reject) => {
+      return document.addEventListener('DOMContentLoaded', event => {
+        // domReady = true;
+        // check();
+        resolve('done');
+      });
+    });
+  }
+  */
+
+  // addEventListener的Promise版通用封装
+  function happen(obj, type, config) {
+    return new Promise((resolve, reject) => {
+      obj.addEventListener(type, resolve, config);
+    });
+  }
+
+  /*
+  happen(document, 'DOMContentLoaded').then(() => {
+    console.log(document.body);
+  });
+  */
+
+  /*
+  Promise.all([
+    happen(document, 'DOMContentLoaded'),
+    fetch('./data.json').then(res => res.json)
+  ]).then(res => {
+    console.log(res);
+  });
+  */
+
+  /*
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOMContentLoaded');
+  });
+  */
+
+  void async function() {
+    // console.log('run');
+    // let obj = await ((await fetch('./data.json')).json());
+    // let domReady = await happen(document, 'DOMContentLoaded');
+
+    // 同时await obj和domReady
+    // 这么写会出现白屏，但可以用骨架屏解决   node skeleton.js   https://blog.csdn.net/twowind/article/details/9094037
+    let [obj, event] = await Promise.all([
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+      // (await fetch('./data.json')).json(),  // 这么写没有并行，因为返回的不是promise
+      // 强制并行，async函数一定返回promise
+      // (await (async () => {
+      //   return await (await fetch('./data.json')).json()
+      // }))(),
+      fetch('./data.json').then(res => res.json()), // promise，追求极致性能可以把js内联，fetch放在最前，因为一般fetch最慢
+      happen(document, 'DOMContentLoaded'),
+      // loadScript('./main.js'), // promise
+      // loadScript('./a.js')
+    ]);
+    // console.log('2223', obj, event);
+    window.render(obj, document.body);
+  }();
+
+    // dom解析完，但图片没解析完，大部分时间用这个
+    /*
+    document.addEventListener('DOMContentLoaded', event => {
+      domReady = true;
+      check();
+    });
+    */
+  
+    // fetch兼容性不够好
+    /*
+    fetch('./data.json')
+      .then(res => res.json())
+      .then(obj => {
+        console.log(obj);
+    });
+    */
+
+    /*
+    let request = new XMLHttpRequest();
+    request.open('get', './data.json', true);
+    request.send(null);
+  
+    request.addEventListener('readystatechange', event => {
+      if (event.readyState === 4) {
+        data = request.responseText;
+        check();
+      }
+    });
+    */
+  
+    /*
+    // 图片加载完，性能埋点时用
+    window.addEventListener('load', event => {
+  
+    });
+    */
+  </script>
+  <!-- <script src="main.js"></script> -->
+<style type="text/css">
+html,body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    width:100%;
+    height:100%;
+}
+body {
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+}
+
+* {
+    -webkit-text-size-adjust:none;
+}
+
+body {
+  background-image: url(./static/top-bg.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% 244px;
+  background-color: #eee;
+}
+</style>
+
+<script type="text/javascript">
+    document.addEventListener("touchmove",function(e){
+        if(e.touches.length == 1) 
+          e.preventDefault(); 
+    }, {passive:false});
+</script>
+</head>
+<body>
+</body>
+</html>
