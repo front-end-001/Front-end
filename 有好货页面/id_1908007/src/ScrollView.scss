@@ -1,0 +1,22 @@
+.scroll {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+    vertical-align: top;
+    overflow: scroll;
+    background: rgba(238, 238, 238, 1.00);
+}
+
+// .active {
+//     height: 100%;
+//     width: 100%;
+//     display: inline-block;
+//     vertical-align: top;
+// }
+
+.footer {
+    background: rgba(238, 238, 238, 1.00);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4px;
+}
